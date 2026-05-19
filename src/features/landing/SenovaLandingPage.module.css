@@ -1,0 +1,555 @@
+.page {
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: #07110f;
+  color: #ffffff;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  isolation: isolate;
+}
+
+.page ::selection {
+  background: #a7f3d0;
+  color: #07110f;
+}
+
+.sceneLayer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.95;
+}
+
+.glow {
+  pointer-events: none;
+  position: fixed;
+  left: 50%;
+  top: 33%;
+  z-index: 0;
+  width: min(34rem, 80vw);
+  height: min(34rem, 80vw);
+  border-radius: 999px;
+  background: rgba(249, 168, 212, 0.1);
+  filter: blur(72px);
+  transform: translateX(-50%);
+}
+
+.scrim {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  background:
+    radial-gradient(circle at 50% 12%, rgba(244, 114, 182, 0.16), transparent 34%),
+    linear-gradient(to bottom, rgba(7, 17, 15, 0.05), rgba(7, 17, 15, 0.92) 74%, #07110f);
+}
+
+.header {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 30;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(6, 16, 14, 0.5);
+  backdrop-filter: blur(24px);
+}
+
+.headerInner {
+  display: flex;
+  max-width: 80rem;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1rem 1.5rem;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.brandMark {
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
+.brandIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #a7f3d0;
+}
+
+.brandName {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+}
+
+.brandTagline {
+  margin: 0;
+  color: rgba(209, 250, 229, 0.6);
+  font-size: 0.75rem;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  font-size: 0.875rem;
+}
+
+.nav a {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  transition: color 160ms ease;
+}
+
+.nav a:hover {
+  color: #ffffff;
+}
+
+.headerCta,
+.buttonPrimary,
+.buttonSecondary,
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background 160ms ease,
+    color 160ms ease,
+    border-color 160ms ease;
+  white-space: nowrap;
+}
+
+.headerCta {
+  border: 1px solid rgba(167, 243, 208, 0.3);
+  background: rgba(167, 243, 208, 0.1);
+  padding: 0.5rem 1.25rem;
+  color: #ecfdf5;
+  font-size: 0.875rem;
+  box-shadow: 0 0 35px rgba(110, 231, 183, 0.14);
+}
+
+.headerCta:hover {
+  background: rgba(167, 243, 208, 0.2);
+}
+
+.section {
+  position: relative;
+  z-index: 10;
+  padding: 7rem 1.5rem;
+}
+
+.hero {
+  min-height: 100vh;
+  overflow: hidden;
+  padding-top: 9rem;
+}
+
+.heroGrid,
+.conceptGrid,
+.impactGrid {
+  display: grid;
+  max-width: 80rem;
+  margin: 0 auto;
+  gap: 3rem;
+}
+
+.heroGrid {
+  align-items: center;
+}
+
+.heroContent {
+  max-width: 48rem;
+}
+
+.eyebrowPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.5rem 1rem;
+  color: rgba(209, 250, 229, 0.8);
+  font-size: 0.875rem;
+  backdrop-filter: blur(24px);
+}
+
+.eyebrowIcon,
+.buttonIcon {
+  width: 1rem;
+  height: 1rem;
+  flex: none;
+}
+
+.heroTitle {
+  margin: 0;
+  color: #ffffff;
+  font-size: clamp(3rem, 8vw, 4.5rem);
+  font-weight: 700;
+  line-height: 1.02;
+}
+
+.heroDescription {
+  max-width: 42rem;
+  margin: 1.75rem 0 0;
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 1.125rem;
+  line-height: 1.8;
+}
+
+.buttonRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 2.25rem;
+}
+
+.buttonPrimary,
+.buttonSecondary {
+  padding: 0.75rem 1.5rem;
+}
+
+.buttonPrimary {
+  background: #ffffff;
+  color: #07110f;
+}
+
+.buttonPrimary:hover {
+  background: #d1fae5;
+}
+
+.buttonSecondary {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  backdrop-filter: blur(24px);
+}
+
+.buttonSecondary:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.heroSpacer {
+  display: none;
+}
+
+.scrollHint {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  z-index: 20;
+  transform: translateX(-50%);
+  color: rgba(255, 255, 255, 0.42);
+  font-size: 0.75rem;
+  letter-spacing: 0.28em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.conceptGrid {
+  gap: 2rem;
+}
+
+.featurePanel,
+.impactPanel {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 2rem;
+  background: rgba(255, 255, 255, 0.055);
+  padding: 2rem;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(32px);
+}
+
+.sectionEyebrow {
+  margin: 0;
+  color: rgba(167, 243, 208, 0.7);
+  font-size: 0.875rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+.sectionTitle,
+.centerTitle,
+.ctaTitle {
+  margin: 1rem 0 0;
+  color: #ffffff;
+  font-weight: 700;
+  line-height: 1.08;
+}
+
+.sectionTitle {
+  font-size: clamp(2.5rem, 6vw, 3rem);
+}
+
+.sectionDescription,
+.cardText,
+.timelineText,
+.impactDescription,
+.ctaDescription {
+  color: rgba(255, 255, 255, 0.64);
+  line-height: 1.75;
+}
+
+.sectionDescription {
+  margin: 1.5rem 0 0;
+}
+
+.pillarGrid {
+  display: grid;
+  gap: 1rem;
+}
+
+.pillarCard,
+.timelineItem,
+.impactCard {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(12, 31, 26, 0.7);
+  backdrop-filter: blur(24px);
+}
+
+.pillarCard {
+  border-radius: 1.6rem;
+  padding: 1.5rem;
+}
+
+.cardIconWrap {
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
+  border-radius: 1rem;
+  background: rgba(167, 243, 208, 0.1);
+  box-shadow: inset 0 0 0 1px rgba(209, 250, 229, 0.15);
+}
+
+.cardIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #d1fae5;
+}
+
+.cardTitle {
+  margin: 1.25rem 0 0;
+  color: #ffffff;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.cardText {
+  margin: 0.75rem 0 0;
+  font-size: 0.875rem;
+}
+
+.centered {
+  max-width: 64rem;
+  margin: 0 auto;
+}
+
+.centerEyebrow {
+  margin: 0;
+  color: rgba(255, 221, 235, 0.6);
+  font-size: 0.875rem;
+  letter-spacing: 0.28em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.centerTitle {
+  max-width: 48rem;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: clamp(2.5rem, 6vw, 3.75rem);
+  text-align: center;
+}
+
+.timelineList {
+  display: grid;
+  gap: 1rem;
+  margin-top: 3.5rem;
+}
+
+.timelineItem {
+  display: grid;
+  gap: 1.25rem;
+  border-radius: 1.6rem;
+  background: rgba(255, 255, 255, 0.055);
+  padding: 1.5rem;
+  backdrop-filter: blur(32px);
+}
+
+.timelineNumber {
+  color: rgba(209, 250, 229, 0.8);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.timelineTitle {
+  margin: 0;
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.timelineText {
+  margin: 0;
+}
+
+.impactPanel {
+  max-width: 80rem;
+  margin: 0 auto;
+  border-radius: 2.2rem;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.09), rgba(110, 231, 183, 0.055));
+}
+
+.impactGrid {
+  align-items: end;
+  gap: 2.5rem;
+}
+
+.impactDescription {
+  margin: 0;
+}
+
+.impactCards {
+  display: grid;
+  gap: 1rem;
+  margin-top: 2.5rem;
+}
+
+.impactCard {
+  border-radius: 1.5rem;
+  background: rgba(6, 16, 14, 0.5);
+  padding: 1.5rem;
+}
+
+.impactNumber {
+  margin: 0;
+  color: rgba(209, 250, 229, 0.5);
+  font-size: 0.875rem;
+}
+
+.ctaSection {
+  padding-bottom: 8rem;
+}
+
+.ctaContent {
+  max-width: 56rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.ctaTitle {
+  font-size: clamp(3rem, 8vw, 4.5rem);
+}
+
+.ctaDescription {
+  max-width: 42rem;
+  margin: 1.75rem auto 0;
+  font-size: 1.125rem;
+}
+
+.ctaButtonWrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 2.5rem;
+}
+
+.ctaButton {
+  background: #d1fae5;
+  padding: 1rem 1.75rem;
+  color: #07110f;
+  box-shadow: 0 0 55px rgba(167, 243, 208, 0.24);
+}
+
+.ctaButton:hover {
+  background: #ffffff;
+}
+
+.loadingText {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.875rem;
+}
+
+@media (min-width: 640px) {
+  .pillarGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .buttonRow {
+    flex-wrap: nowrap;
+  }
+}
+
+@media (min-width: 768px) {
+  .timelineItem {
+    grid-template-columns: 0.18fr 0.22fr 1fr;
+    align-items: center;
+  }
+
+  .impactCards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .heroGrid {
+    grid-template-columns: 1.05fr 0.95fr;
+  }
+
+  .heroSpacer {
+    display: block;
+    min-height: 34rem;
+  }
+
+  .conceptGrid {
+    grid-template-columns: 0.9fr 1.1fr;
+  }
+
+  .impactGrid {
+    grid-template-columns: 0.85fr 1.15fr;
+  }
+}
+
+@media (max-width: 767px) {
+  .headerInner {
+    padding: 0.875rem 1rem;
+  }
+
+  .nav {
+    display: none;
+  }
+
+  .headerCta {
+    padding: 0.5rem 0.875rem;
+  }
+
+  .brandTagline {
+    display: none;
+  }
+
+  .section {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
