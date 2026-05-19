@@ -1,5 +1,12 @@
-import SenovaLandingPage from './pages/SenovaLandingPage'
+import SenovaLandingPage from "./pages/SenovaLandingPage";
+import SitePage from "./pages/SitePage";
 
 export default function App() {
-  return <SenovaLandingPage />
+  const path = window.location.pathname;
+
+  if (path !== "/") {
+    return <SitePage path={path} />;
+  }
+
+  return <SenovaLandingPage />;
 }

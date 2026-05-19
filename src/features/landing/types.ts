@@ -7,6 +7,11 @@ export type LandingNavItem = {
   href: string;
 };
 
+export type LandingFooterGroup = {
+  title: string;
+  links: LandingNavItem[];
+};
+
 export type LandingChapter = {
   id: string;
   eyebrow: string;
@@ -29,5 +34,9 @@ export type LandingContent = {
     description: string;
     label: string;
     href: string;
+  };
+  footer: {
+    tagline: string;
+    groups: LandingFooterGroup[];
   };
 };

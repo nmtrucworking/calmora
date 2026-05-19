@@ -2,9 +2,10 @@ import type { LandingContent } from "../types";
 
 export const landingContent: LandingContent = {
   nav: [
-    { label: "Búp", href: "#top" },
-    { label: "Nở", href: "#bloom" },
-    { label: "Tàn", href: "#wither" },
+    { label: "Trang chủ", href: "#top" },
+    { label: "Sản phẩm", href: "/products" },
+    { label: "Câu chuyện", href: "/story" },
+    { label: "Nghi thức", href: "/ritual" },
   ],
   hero: {
     eyebrow: "Senova",
@@ -38,5 +39,34 @@ export const landingContent: LandingContent = {
     description: "Một landing page đặt hoa sen làm trung tâm trải nghiệm, để sản phẩm được cảm trước khi được giải thích.",
     label: "Liên hệ thử nghiệm",
     href: "mailto:hello@senova.vn",
+  },
+  footer: {
+    tagline: "Senova tôn vinh vẻ đẹp của sen Việt qua trà, nghi thức và trải nghiệm thị giác.",
+    groups: [
+      {
+        title: "Khám phá",
+        links: [
+          { label: "Vòng đời hoa sen", href: "#top" },
+          { label: "Bộ sưu tập trà", href: "/products" },
+          { label: "Câu chuyện Senova", href: "/story" },
+        ],
+      },
+      {
+        title: "Trải nghiệm",
+        links: [
+          { label: "Nghi thức pha trà", href: "/ritual" },
+          { label: "Không gian 3D", href: "#bloom" },
+          { label: "Mùa sen", href: "/seasonal" },
+        ],
+      },
+      {
+        title: "Kết nối",
+        links: [
+          { label: "Liên hệ", href: "mailto:hello@senova.vn" },
+          { label: "Đặt mẫu thử", href: "/contact" },
+          { label: "Hợp tác", href: "/partners" },
+        ],
+      },
+    ],
   },
 };

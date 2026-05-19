@@ -37,7 +37,7 @@ export function LotusScene({ scrollProgressRef }: LotusSceneProps) {
     camera.lookAt(0, 0.08 - wither * 0.18, 0);
 
     if (modelGroupRef.current) {
-      modelGroupRef.current.position.set(0, (isMobile ? -0.64 : 0.04) + wither * 0.34, 0);
+      modelGroupRef.current.position.set(0, (isMobile ? -0.64 : 0.04) + wither * 0.58, 0);
       modelGroupRef.current.scale.setScalar(isMobile ? 0.86 : 1);
     }
 

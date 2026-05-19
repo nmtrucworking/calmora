@@ -9,6 +9,7 @@ type LotusLightParticlesProps = {
 
 const particleVertexShader = `
   uniform float uBloom;
+  uniform float uPrelude;
   uniform float uTime;
   uniform float uWither;
 
@@ -23,17 +24,18 @@ const particleVertexShader = `
   }
 
   void main() {
-    float bloom = clamp((uBloom - aDelay) / max(0.001, 1.0 - aDelay), 0.0, 1.0);
+    float bloom = clamp((uBloom - aDelay * 0.78) / max(0.001, 1.0 - aDelay * 0.78), 0.0, 1.0);
     bloom = ease(bloom);
-    float drift = bloom * (1.15 + aDelay * 0.9);
+    float prelude = ease(uPrelude);
+    float drift = bloom * (1.35 + aDelay * 1.25) + prelude * 0.28;
     vec3 pos = position + aDirection * drift;
-    pos.y += sin(uTime * 0.9 + aDelay * 18.0) * 0.035 + bloom * 0.18;
-    pos.xz += normalize(aDirection.xz + vec2(0.001)) * sin(uTime * 0.55 + aDelay * 21.0) * 0.025;
+    pos.y += sin(uTime * 1.18 + aDelay * 18.0) * (0.028 + prelude * 0.045) + bloom * 0.22 + prelude * 0.08;
+    pos.xz += normalize(aDirection.xz + vec2(0.001)) * sin(uTime * 0.72 + aDelay * 21.0) * (0.025 + bloom * 0.026);
 
-    vAlpha = bloom * (1.0 - uWither * 0.72) * (1.0 - aDelay * 0.32);
+    vAlpha = (prelude * 0.42 + bloom * 1.08) * (1.0 - uWither * 0.64) * (1.0 - aDelay * 0.2);
 
     vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-    gl_PointSize = aSize * (390.0 / -mvPosition.z) * (0.85 + bloom * 0.45);
+    gl_PointSize = aSize * (430.0 / -mvPosition.z) * (1.05 + bloom * 0.62 + prelude * 0.28);
     gl_Position = projectionMatrix * mvPosition;
   }
 `;
@@ -49,8 +51,8 @@ const particleFragmentShader = `
 
     float core = smoothstep(0.25, 0.0, dist);
     float glow = smoothstep(0.5, 0.05, dist);
-    vec3 color = mix(vec3(1.0, 0.7, 0.28), vec3(1.0, 0.96, 0.74), core);
-    gl_FragColor = vec4(color, glow * vAlpha);
+    vec3 color = mix(vec3(1.0, 0.64, 0.2), vec3(1.0, 0.98, 0.78), core);
+    gl_FragColor = vec4(color, glow * vAlpha * 1.24);
   }
 `;
 
@@ -66,11 +68,11 @@ function buildParticleGeometry() {
   const delays: number[] = [];
   const sizes: number[] = [];
 
-  for (let index = 0; index < 180; index += 1) {
+  for (let index = 0; index < 520; index += 1) {
     const angle = index * 2.399963229728653;
-    const radius = Math.sqrt(index / 180) * 0.28;
-    const height = -0.34 + Math.sin(index * 1.27) * 0.08;
-    const spread = 0.55 + (index % 17) / 17;
+    const radius = Math.sqrt((index % 260) / 260) * 0.36;
+    const height = -0.38 + Math.sin(index * 1.27) * 0.12;
+    const spread = 0.62 + (index % 31) / 24;
     const direction = new THREE.Vector3(
       Math.cos(angle) * spread,
       0.08 + ((index % 11) / 11) * 0.36,
@@ -79,8 +81,8 @@ function buildParticleGeometry() {
 
     positions.push(Math.cos(angle) * radius, height, Math.sin(angle) * radius);
     directions.push(direction.x, direction.y, direction.z);
-    delays.push((index % 29) / 46);
-    sizes.push(0.038 + ((index % 9) / 9) * 0.036);
+    delays.push((index % 47) / 58);
+    sizes.push(0.044 + ((index % 13) / 13) * 0.054);
   }
 
   const geometry = new THREE.BufferGeometry();
@@ -96,6 +98,7 @@ function buildParticleMaterial() {
   return new THREE.ShaderMaterial({
     uniforms: {
       uBloom: { value: 0 },
+      uPrelude: { value: 0 },
       uTime: { value: 0 },
       uWither: { value: 0 },
     },
@@ -118,7 +121,8 @@ export function LotusLightParticles({ scrollValue }: LotusLightParticlesProps) {
     if (!pointsRef.current) return;
 
     pointsRef.current.material.uniforms.uTime.value = clock.getElapsedTime();
-    pointsRef.current.material.uniforms.uBloom.value = smoothRange(0.26, 0.64, progress);
+    pointsRef.current.material.uniforms.uPrelude.value = smoothRange(0.1, 0.24, progress) * (1 - smoothRange(0.48, 0.7, progress) * 0.2);
+    pointsRef.current.material.uniforms.uBloom.value = smoothRange(0.18, 0.56, progress);
     pointsRef.current.material.uniforms.uWither.value = smoothRange(0.78, 1, progress);
   });
 

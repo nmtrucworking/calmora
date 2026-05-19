@@ -95,7 +95,7 @@
 .nav {
   display: flex;
   align-items: center;
-  gap: 1.7rem;
+  gap: 1.45rem;
   font-size: 0.82rem;
 }
 
@@ -107,6 +107,12 @@
 
 .nav a:hover {
   color: #fffaf0;
+}
+
+.headerActions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
 }
 
 .headerCta,
@@ -312,6 +318,172 @@
   font-size: 0.875rem;
 }
 
+.soundToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  border: 1px solid rgba(255, 250, 240, 0.16);
+  border-radius: 999px;
+  background: rgba(255, 250, 240, 0.06);
+  padding: 0.52rem 0.9rem;
+  color: rgba(255, 250, 240, 0.82);
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 700;
+  backdrop-filter: blur(18px);
+  transition:
+    background 160ms ease,
+    color 160ms ease,
+    border-color 160ms ease;
+}
+
+.soundToggle:hover {
+  border-color: rgba(248, 223, 147, 0.34);
+  background: rgba(255, 250, 240, 0.1);
+  color: #fffaf0;
+}
+
+.soundToggle[aria-pressed="true"] {
+  border-color: rgba(248, 223, 147, 0.42);
+  color: #f8df93;
+}
+
+.soundIcon {
+  width: 1rem;
+  height: 1rem;
+  flex: none;
+}
+
+.sitePage {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 72% 24%, rgba(184, 83, 113, 0.16), transparent 32%),
+    radial-gradient(circle at 22% 76%, rgba(79, 159, 101, 0.12), transparent 34%),
+    #07110f;
+}
+
+.siteHero {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  min-height: 78vh;
+  max-width: 82rem;
+  margin: 0 auto;
+  flex-direction: column;
+  justify-content: center;
+  padding: 9rem 1.5rem 5rem;
+}
+
+.siteTitle {
+  max-width: 12ch;
+  margin: 1rem 0 0;
+  color: #fffaf0;
+  font-size: clamp(3rem, 7vw, 6rem);
+  font-weight: 650;
+  line-height: 1;
+}
+
+.siteDescription {
+  max-width: 34rem;
+  margin: 1.4rem 0 0;
+  color: rgba(255, 250, 240, 0.64);
+  font-size: 1.08rem;
+  line-height: 1.75;
+}
+
+.siteBackLink {
+  width: fit-content;
+  margin-top: 2rem;
+  border: 1px solid rgba(255, 250, 240, 0.18);
+  border-radius: 999px;
+  background: rgba(255, 250, 240, 0.08);
+  padding: 0.78rem 1.15rem;
+  color: #fffaf0;
+  font-size: 0.92rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.footer {
+  position: relative;
+  z-index: 10;
+  padding: 4rem 1.5rem 2.5rem;
+  background: linear-gradient(180deg, rgba(7, 17, 15, 0), rgba(7, 17, 15, 0.86));
+}
+
+.footerInner {
+  display: grid;
+  max-width: 82rem;
+  margin: 0 auto;
+  gap: 3rem;
+  border-top: 1px solid rgba(255, 250, 240, 0.12);
+  padding-top: 2.5rem;
+}
+
+.footerBrand {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.footerMark {
+  display: grid;
+  width: 2.4rem;
+  height: 2.4rem;
+  flex: none;
+  place-items: center;
+  border: 1px solid rgba(255, 250, 240, 0.14);
+  border-radius: 0.75rem;
+  background: rgba(255, 250, 240, 0.06);
+}
+
+.footerName {
+  margin: 0;
+  color: #fffaf0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+}
+
+.footerTagline {
+  max-width: 23rem;
+  margin: 0.75rem 0 0;
+  color: rgba(255, 250, 240, 0.56);
+  font-size: 0.94rem;
+  line-height: 1.7;
+}
+
+.footerNav {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.footerGroup {
+  display: grid;
+  align-content: start;
+  gap: 0.72rem;
+}
+
+.footerGroupTitle {
+  margin: 0 0 0.3rem;
+  color: rgba(248, 223, 147, 0.74);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.footerGroup a {
+  color: rgba(255, 250, 240, 0.62);
+  font-size: 0.92rem;
+  text-decoration: none;
+  transition: color 160ms ease;
+}
+
+.footerGroup a:hover {
+  color: #fffaf0;
+}
+
 @media (min-width: 900px) {
   .heroGrid {
     grid-template-columns: 0.68fr 1.32fr;
@@ -320,6 +492,14 @@
   .heroSpacer {
     display: block;
     min-height: 34rem;
+  }
+
+  .footerInner {
+    grid-template-columns: 1fr 1.4fr;
+  }
+
+  .footerNav {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
@@ -331,16 +511,44 @@
   }
 
   .headerInner {
+    position: relative;
     padding: 0.85rem 1rem;
   }
 
-  .nav,
   .brandTagline {
     display: none;
   }
 
+  .nav {
+    position: absolute;
+    top: 4.25rem;
+    right: 1rem;
+    left: 1rem;
+    justify-content: space-between;
+    gap: 0.5rem;
+    overflow-x: auto;
+    border: 1px solid rgba(255, 250, 240, 0.12);
+    border-radius: 999px;
+    background: rgba(7, 17, 15, 0.56);
+    padding: 0.55rem 0.75rem;
+    font-size: 0.72rem;
+    backdrop-filter: blur(18px);
+  }
+
+  .nav a {
+    flex: none;
+  }
+
   .headerCta {
     padding: 0.48rem 0.82rem;
+  }
+
+  .soundToggle {
+    padding: 0.48rem;
+  }
+
+  .soundToggle span {
+    display: none;
   }
 
   .section,
@@ -350,7 +558,7 @@
   }
 
   .hero {
-    padding-top: 7.5rem;
+    padding-top: 10rem;
   }
 
   .heroGrid {
@@ -390,5 +598,19 @@
   .ctaContent {
     margin-right: 0;
     margin-left: 0;
+  }
+
+  .footer {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+
+  .siteHero {
+    min-height: 72vh;
+    padding: 11rem 1rem 4rem;
+  }
+
+  .footerNav {
+    grid-template-columns: 1fr;
   }
 }

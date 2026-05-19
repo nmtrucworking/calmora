@@ -128,10 +128,12 @@ function buildBudGeometry() {
   const positions: number[] = [];
   const colors: number[] = [];
   const indices: number[] = [];
-  const blush = new THREE.Color("#d98aa0");
-  const rose = new THREE.Color("#b95f81");
-  const coolShadow = new THREE.Color("#5f7f78");
+  const blush = new THREE.Color("#e78aa5");
+  const rose = new THREE.Color("#bf5278");
+  const pearl = new THREE.Color("#ffe8df");
+  const coolShadow = new THREE.Color("#667f78");
   const sepalGreen = new THREE.Color("#4e8b6d");
+  const petalGreen = new THREE.Color("#79a875");
 
   for (let yIndex = 0; yIndex <= heightSegments; yIndex += 1) {
     const u = yIndex / heightSegments;
@@ -152,11 +154,17 @@ function buildBudGeometry() {
       const x = Math.sin(theta) * shapedRadius;
       const z = Math.cos(theta) * shapedRadius * (0.94 + smoothRange(0.4, 1, u) * 0.06);
       const edgeShadow = smoothRange(0.45, 1, groove);
+      const pearlLift = smoothRange(0.18, 0.62, u) * (1 - smoothRange(0.8, 1, u)) * (0.2 + seam * 0.28);
+      const greenPetalLayer =
+        smoothRange(0.46, 0.08, u) * 0.56 +
+        smoothRange(0.18, 0.5, u) * (1 - smoothRange(0.58, 0.82, u)) * groove * 0.18;
       const color = blush
         .clone()
         .lerp(rose, smoothRange(0.44, 1, u) * 0.42 + seam * 0.16)
+        .lerp(pearl, pearlLift)
         .lerp(coolShadow, edgeShadow * 0.28)
-        .lerp(sepalGreen, smoothRange(0.24, 0, u) * 0.58);
+        .lerp(petalGreen, greenPetalLayer)
+        .lerp(sepalGreen, smoothRange(0.22, 0, u) * 0.62);
 
       positions.push(x, y, z);
       colors.push(color.r, color.g, color.b);
@@ -258,8 +266,8 @@ export function LotusFlower({ scrollValue }: LotusFlowerProps) {
         emissiveIntensity: 0.035,
         metalness: 0,
         opacity: 1,
-        roughness: 0.64,
-        sheen: 0.32,
+        roughness: 0.58,
+        sheen: 0.48,
         side: THREE.DoubleSide,
         transparent: true,
         vertexColors: true,
