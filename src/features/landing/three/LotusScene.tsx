@@ -1,53 +1,78 @@
-import { Environment, Float, OrbitControls, Sparkles } from "@react-three/drei";
+import { Environment, Float } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { useMemo } from "react";
+import { useRef } from "react";
+import * as THREE from "three";
 import type { ScrollProgressRef } from "../types";
+import { LotusBackdrop } from "./LotusBackdrop";
+import { LotusFlower } from "./LotusFlower";
 import { LotusLeaf } from "./LotusLeaf";
-import { Petal } from "./Petal";
+import { LotusLightParticles } from "./LotusLightParticles";
 import { TeaCore } from "./TeaCore";
 
 type LotusSceneProps = {
   scrollProgressRef: ScrollProgressRef;
 };
 
+function smoothRange(start: number, end: number, value: number) {
+  const t = THREE.MathUtils.clamp((value - start) / (end - start), 0, 1);
+
+  return t * t * (3 - 2 * t);
+}
+
 export function LotusScene({ scrollProgressRef }: LotusSceneProps) {
-  const petals = useMemo(() => Array.from({ length: 34 }, (_, index) => index), []);
+  const modelGroupRef = useRef<THREE.Group>(null);
+  const keyLightRef = useRef<THREE.PointLight>(null);
+  const rimLightRef = useRef<THREE.PointLight>(null);
+  const topLightRef = useRef<THREE.SpotLight>(null);
 
-  useFrame(({ camera }) => {
-    const burst = scrollProgressRef.current;
+  useFrame(({ camera, size }) => {
+    const progress = scrollProgressRef.current;
+    const bloom = smoothRange(0.18, 0.62, progress);
+    const fullBloom = smoothRange(0.5, 0.72, progress);
+    const wither = smoothRange(0.78, 1, progress);
+    const isMobile = size.width < 640;
 
-    camera.position.z = 5.7 + burst * 1.8;
-    camera.position.y = 1.15 + burst * 0.65;
-    camera.lookAt(0, 0, 0);
+    camera.position.z = 5.25 + bloom * 0.48 + wither * 0.74 + (isMobile ? 0.55 : 0);
+    camera.position.y = 1.08 + bloom * 0.28 - wither * 0.08;
+    camera.lookAt(0, 0.08 - wither * 0.18, 0);
+
+    if (modelGroupRef.current) {
+      modelGroupRef.current.position.set(0, (isMobile ? -0.64 : 0.04) + wither * 0.34, 0);
+      modelGroupRef.current.scale.setScalar(isMobile ? 0.86 : 1);
+    }
+
+    if (keyLightRef.current) {
+      keyLightRef.current.intensity = 14 + fullBloom * 10 - wither * 3.5;
+      keyLightRef.current.position.y = 2.6 + bloom * 0.6;
+    }
+
+    if (rimLightRef.current) {
+      rimLightRef.current.intensity = 5.5 + bloom * 5 - wither * 1.5;
+    }
+
+    if (topLightRef.current) {
+      topLightRef.current.intensity = 8 + fullBloom * 9 - wither * 2;
+    }
   });
 
   return (
     <>
       <color attach="background" args={["#07110f"]} />
-      <fog attach="fog" args={["#07110f", 5.5, 13]} />
-      <ambientLight intensity={0.55} />
-      <pointLight position={[2.7, 2.9, 2.4]} color="#ffd3e5" intensity={22} distance={8} />
-      <pointLight position={[-3.4, -1.1, -1.2]} color="#82f7c8" intensity={12} distance={8} />
-      <spotLight position={[0, 5, 3]} angle={0.44} penumbra={0.7} intensity={18} castShadow />
-      <Sparkles count={120} scale={[7, 5, 7]} size={2.1} speed={0.45} opacity={0.58} color="#fff4c7" />
-      <Float speed={1.2} rotationIntensity={0.25} floatIntensity={0.35}>
-        <group position={[0, 0.03, 0]}>
+      <fog attach="fog" args={["#07110f", 5.8, 12.5]} />
+      <ambientLight intensity={0.42} />
+      <pointLight ref={keyLightRef} position={[2.2, 2.8, 2.7]} color="#ffd3df" intensity={14} distance={8} />
+      <pointLight ref={rimLightRef} position={[-3.2, -0.4, -1.8]} color="#8fe2bd" intensity={6} distance={9} />
+      <spotLight ref={topLightRef} position={[0, 5.2, 2.2]} angle={0.42} penumbra={0.78} intensity={9} castShadow />
+      <Float speed={0.55} rotationIntensity={0.08} floatIntensity={0.14}>
+        <group ref={modelGroupRef} position={[0, 0.04, 0]}>
+          <LotusBackdrop scrollValue={scrollProgressRef} />
           <LotusLeaf scrollValue={scrollProgressRef} />
-          {petals.map((petal) => (
-            <Petal key={petal} index={petal} total={petals.length} scrollValue={scrollProgressRef} />
-          ))}
+          <LotusFlower scrollValue={scrollProgressRef} />
+          <LotusLightParticles scrollValue={scrollProgressRef} />
           <TeaCore scrollValue={scrollProgressRef} />
         </group>
       </Float>
       <Environment preset="night" />
-      <OrbitControls
-        autoRotate
-        autoRotateSpeed={0.25}
-        enablePan={false}
-        enableZoom={false}
-        maxPolarAngle={Math.PI / 1.8}
-        minPolarAngle={Math.PI / 3}
-      />
     </>
   );
 }

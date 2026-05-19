@@ -19,7 +19,7 @@ export function Header({ navItems }: HeaderProps) {
             <span className={styles.brandTagline}>Sen + Innovation</span>
           </span>
         </a>
-        <nav className={styles.nav} aria-label="Landing page">
+        <nav className={styles.nav} aria-label="Vòng đời hoa sen">
           {navItems.map((item) => (
             <a key={item.href} href={item.href}>
               {item.label}
@@ -27,7 +27,7 @@ export function Header({ navItems }: HeaderProps) {
           ))}
         </nav>
         <a href="#cta" className={styles.headerCta}>
-          Khám phá sản phẩm
+          Liên hệ
         </a>
       </div>
     </header>
