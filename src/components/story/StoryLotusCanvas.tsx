@@ -8,34 +8,53 @@ import styles from "./StoryLotusCanvas.module.css";
 
 type StoryLotusCanvasProps = {
   className?: string;
+  /**
+   * Change this number to restart the lotus animation cycle. Bump a counter to trigger a replay.
+   */
+  restartSignal?: number;
 };
 
-export function StoryLotusCanvas({ className }: StoryLotusCanvasProps) {
+export function StoryLotusCanvas({ className, restartSignal = 0 }: StoryLotusCanvasProps) {
   const progressRef = useRef(0) as ScrollProgressRef;
+  const animRef = useRef({ frameId: 0, startTime: 0, duration: 14000 });
 
   useEffect(() => {
-    let frameId = 0;
-    const startTime = performance.now();
-    const duration = 14000;
+    let mounted = true;
+    const current = animRef.current;
 
-    const animate = () => {
-      const elapsed = performance.now() - startTime;
-      const rawProgress = Math.min(1, elapsed / duration);
-      const easedProgress = THREE.MathUtils.smoothstep(rawProgress, 0, 1);
+    const start = () => {
+      current.startTime = performance.now();
 
-      progressRef.current = easedProgress;
+      let localFrameId = 0;
 
-      if (rawProgress < 1) {
-        frameId = window.requestAnimationFrame(animate);
-      }
+      const loop = () => {
+        if (!mounted) return;
+        const elapsed = performance.now() - current.startTime;
+        const rawProgress = Math.min(1, elapsed / current.duration);
+        const easedProgress = THREE.MathUtils.smoothstep(rawProgress, 0, 1);
+
+        progressRef.current = easedProgress;
+
+        if (rawProgress < 1) {
+          localFrameId = window.requestAnimationFrame(loop);
+          current.frameId = localFrameId;
+        }
+      };
+
+      // kick off loop
+      localFrameId = window.requestAnimationFrame(loop);
+      current.frameId = localFrameId;
     };
 
-    frameId = window.requestAnimationFrame(animate);
+    // start on mount or when restartSignal changes
+    start();
 
     return () => {
-      window.cancelAnimationFrame(frameId);
+      mounted = false;
+      const toCancel = current.frameId;
+      if (toCancel) window.cancelAnimationFrame(toCancel);
     };
-  }, []);
+  }, [restartSignal]);
 
   return (
     <div className={`${styles.canvasShell} ${className ?? ""}`.trim()}>

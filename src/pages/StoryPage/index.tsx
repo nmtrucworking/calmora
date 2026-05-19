@@ -4,8 +4,11 @@ import { InfoCard } from "../../components/ui/InfoCard";
 import { SectionHeading } from "../../components/ui/SectionHeading";
 import { StoryLotusCanvas } from "../../components/story/StoryLotusCanvas";
 import styles from "./StoryPage.module.css";
+import { RotateCw } from "lucide-react";
+import { useState } from "react";
 
 export default function StoryPage() {
+  const [restartSignal, setRestartSignal] = useState(0);
   return (
     <SiteFrame navItems={brandNavigation} footerGroups={brandFooterGroups}>
       <div className={styles.page}>
@@ -43,11 +46,18 @@ export default function StoryPage() {
 
           <div className={styles.visualShell}>
             <div className={styles.visualFrame}>
-              <StoryLotusCanvas className={styles.visualCanvas} />
+              <StoryLotusCanvas className={styles.visualCanvas} restartSignal={restartSignal} />
             </div>
-            <p className={styles.visualCaption}>
-              Hoạt cảnh tự chạy, không phụ thuộc cuộn trang, và được cố định ở hero.
-            </p>
+            <div className={styles.visualActions}>
+              <button
+                className={styles.restartBtn}
+                aria-label="Khởi động lại hoạt cảnh"
+                onClick={() => setRestartSignal((s) => s + 1)}
+              >
+                <RotateCw className={styles.restartIcon} />
+                <span className={styles.restartText}>Khởi động lại</span>
+              </button>
+            </div>
           </div>
         </section>
       </div>
