@@ -1,0 +1,94 @@
+.page {
+  display: grid;
+  gap: 2.5rem;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
+  gap: 1.75rem;
+  align-items: start;
+  min-height: calc(100svh - 11rem);
+  padding: 2.75rem 0 1.25rem;
+}
+
+.copy {
+  max-width: 42rem;
+}
+
+.kicker {
+  margin: 0 0 1rem;
+  color: var(--accent-gold);
+  font-size: 0.75rem;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+}
+
+.body {
+  max-width: 38rem;
+  margin: 1.2rem 0 0;
+  color: var(--text-muted);
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.timeline {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.9rem;
+  margin-top: 1.8rem;
+}
+
+.timeline article {
+  padding: 1rem 1rem 0.95rem;
+}
+
+.visualShell {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 0.9rem;
+}
+
+.visualFrame {
+  position: sticky;
+  top: 6.4rem;
+}
+
+.visualCanvas {
+  min-height: 39rem;
+}
+
+.visualCaption {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 0.84rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.visualShell > * {
+  position: sticky;
+  top: 6.4rem;
+}
+
+@media (max-width: 980px) {
+  .hero,
+  .timeline {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    min-height: auto;
+  }
+
+  .visualFrame,
+  .visualShell > * {
+    position: relative;
+    top: auto;
+  }
+
+  .visualCanvas {
+    min-height: 30rem;
+  }
+}

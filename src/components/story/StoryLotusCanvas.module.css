@@ -1,0 +1,26 @@
+.canvasShell {
+  width: 100%;
+  min-height: 100%;
+  aspect-ratio: 1 / 1.05;
+  border: 1px solid var(--border);
+  border-radius: clamp(1.5rem, 2vw, 2rem);
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 25%, rgba(248, 223, 147, 0.16), transparent 18%),
+    radial-gradient(circle at 48% 35%, rgba(200, 234, 211, 0.16), transparent 28%),
+    linear-gradient(180deg, rgba(255, 250, 240, 0.08), rgba(255, 250, 240, 0.03));
+  box-shadow: var(--shadow-lg);
+}
+
+@media (max-width: 980px) {
+  .canvasShell {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+.loadingText {
+  color: var(--text);
+  font-size: 0.9rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
