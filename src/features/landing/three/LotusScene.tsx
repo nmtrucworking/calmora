@@ -42,27 +42,27 @@ export function LotusScene({ scrollProgressRef }: LotusSceneProps) {
     }
 
     if (keyLightRef.current) {
-      keyLightRef.current.intensity = 14 + fullBloom * 10 - wither * 3.5;
+      keyLightRef.current.intensity = 10 + fullBloom * 7 - wither * 2;
       keyLightRef.current.position.y = 2.6 + bloom * 0.6;
     }
 
     if (rimLightRef.current) {
-      rimLightRef.current.intensity = 5.5 + bloom * 5 - wither * 1.5;
+      rimLightRef.current.intensity = 4 + bloom * 3.5 - wither;
     }
 
     if (topLightRef.current) {
-      topLightRef.current.intensity = 8 + fullBloom * 9 - wither * 2;
+      topLightRef.current.intensity = 6 + fullBloom * 6 - wither * 1.5;
     }
   });
 
   return (
     <>
-      <color attach="background" args={["#07110f"]} />
-      <fog attach="fog" args={["#07110f", 5.8, 12.5]} />
-      <ambientLight intensity={0.42} />
-      <pointLight ref={keyLightRef} position={[2.2, 2.8, 2.7]} color="#F8DF93" intensity={14} distance={8} />
-      <pointLight ref={rimLightRef} position={[-3.2, -0.4, -1.8]} color="#79a875" intensity={6} distance={9} />
-      <spotLight ref={topLightRef} position={[0, 5.2, 2.2]} angle={0.42} penumbra={0.78} intensity={9} castShadow />
+      <color attach="background" args={["#F7F3E8"]} />
+      <fog attach="fog" args={["#F7F3E8", 6.2, 13.5]} />
+      <ambientLight intensity={0.88} />
+      <pointLight ref={keyLightRef} position={[2.2, 2.8, 2.7]} color="#F1D7AD" intensity={10} distance={8} />
+      <pointLight ref={rimLightRef} position={[-3.2, -0.4, -1.8]} color="#77927E" intensity={4} distance={9} />
+      <spotLight ref={topLightRef} position={[0, 5.2, 2.2]} angle={0.42} penumbra={0.78} intensity={6} castShadow />
       <Float speed={0.55} rotationIntensity={0.08} floatIntensity={0.14}>
         <group ref={modelGroupRef} position={[0, 0.04, 0]}>
           <LotusBackdrop scrollValue={scrollProgressRef} />
@@ -72,7 +72,7 @@ export function LotusScene({ scrollProgressRef }: LotusSceneProps) {
           <TeaCore scrollValue={scrollProgressRef} />
         </group>
       </Float>
-      <Environment preset="night" />
+      <Environment preset="studio" />
     </>
   );
 }
