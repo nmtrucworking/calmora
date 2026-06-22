@@ -1,0 +1,225 @@
+{
+  "brand": {
+    "name": "CALMORA",
+    "tagline": "Sen + Innovation",
+    "summary": "Một hệ website tối giản, cân bằng giữa cảm giác thủ công, chất liệu sen và tinh thần thử nghiệm hiện đại của Calmora.",
+    "footerTagline": "Một ngôn ngữ thương hiệu thống nhất cho những trang đang mở rộng dần.",
+    "navigation": [
+      { "label": "Trang chủ", "href": "/" },
+      { "label": "Giới thiệu", "href": "/about" },
+      { "label": "Sản phẩm", "href": "/products" },
+      { "label": "Câu chuyện", "href": "/story" },
+      { "label": "Nghi thức", "href": "/ritual" },
+      { "label": "Mùa sen", "href": "/seasonal" }
+    ],
+    "footerGroups": [
+      {
+        "title": "Khám phá",
+        "links": [
+          { "label": "Giới thiệu Calmora", "href": "/about" },
+          { "label": "Bộ sưu tập trà", "href": "/products" },
+          { "label": "Câu chuyện Calmora", "href": "/story" }
+        ]
+      },
+      {
+        "title": "Trải nghiệm",
+        "links": [
+          { "label": "Nghi thức pha trà", "href": "/ritual" },
+          { "label": "Mùa sen", "href": "/seasonal" },
+          { "label": "Đối tác", "href": "/partners" }
+        ]
+      },
+      {
+        "title": "Kết nối",
+        "links": [
+          { "label": "Liên hệ", "href": "mailto:hello@senova.vn" },
+          { "label": "Đặt mẫu thử", "href": "/contact" },
+          { "label": "Hợp tác", "href": "/partners" }
+        ]
+      }
+    ],
+    "principles": [
+      {
+        "label": "Tông màu",
+        "title": "Lá non, sen trầm, nền tối",
+        "text": "Sắc độ giữ chất tĩnh và ấm để mọi trang cùng đi chung một nhịp thị giác."
+      },
+      {
+        "label": "Nhịp điệu",
+        "title": "Khoảng thở lớn, chữ gọn",
+        "text": "Bố cục nhấn vào khoảng trống và thứ bậc để brand đọc được ngay từ lướt nhìn đầu tiên."
+      },
+      {
+        "label": "Giọng điệu",
+        "title": "Tinh tế, chậm, rõ",
+        "text": "Lời thoại ngắn gọn nhưng không lạnh, đủ hiện đại để mở rộng sang các trang sau."
+      }
+    ]
+  },
+  "landing": {
+    "nav": [
+      { "label": "Trang chủ", "href": "#top" },
+      { "label": "Giới thiệu", "href": "/about" },
+      { "label": "Sản phẩm", "href": "/products" },
+      { "label": "Câu chuyện", "href": "/story" },
+      { "label": "Nghi thức", "href": "/ritual" },
+      { "label": "Mùa sen", "href": "/seasonal" }
+    ],
+    "hero": {
+      "eyebrow": "Calmora",
+      "title": "Calmora",
+      "description": "Một búp sen mở ra trong nhịp trà, rồi dịu dàng buông cánh.",
+      "scrollHint": "Cuộn để hoa nở"
+    },
+    "chapters": [
+      {
+        "id": "bud",
+        "eyebrow": "01 / Búp",
+        "title": "Khép",
+        "text": "Hình hài đầu tiên giữ lại sự tĩnh lặng của sen trước bình minh."
+      },
+      {
+        "id": "bloom",
+        "eyebrow": "02 / Nở",
+        "title": "Mở",
+        "text": "Từng lớp cánh tách ra, để ánh trà ấm hiện lên từ lõi hoa."
+      },
+      {
+        "id": "wither",
+        "eyebrow": "03 / Tàn",
+        "title": "Buông",
+        "text": "Vẻ đẹp cuối cùng không biến mất; nó lắng xuống thành ký ức thanh nhẹ."
+      }
+    ],
+    "cta": {
+      "eyebrow": "Trải nghiệm Calmora",
+      "title": "Trà sen, nhìn bằng một vòng đời.",
+      "description": "Một không gian đặt hoa sen làm trung tâm trải nghiệm, để sản phẩm được cảm nhận trước khi được giải thích.",
+      "label": "Tìm hiểu thương hiệu",
+      "href": "/about"
+    },
+    "footer": {
+      "tagline": "Calmora tôn vinh vẻ đẹp của sen Việt qua trà, nghi thức và trải nghiệm thị giác."
+    }
+  },
+  "routes": {
+    "/about": {
+      "eyebrow": "Giới thiệu",
+      "title": "Về Calmora - Câu chuyện thương hiệu.",
+      "text": "Nơi di sản trà sen truyền thống hội ngộ cùng khoa học hiện đại."
+    },
+    "/products": {
+      "eyebrow": "Bộ sưu tập",
+      "title": "Trà sen trong hình hài mới.",
+      "text": "Không gian này sẽ giới thiệu các dòng trà, hộp quà và phiên bản mùa sen của Calmora."
+    },
+    "/story": {
+      "eyebrow": "Câu chuyện",
+      "title": "Từ hồ sen đến nghi thức trà.",
+      "text": "Trang câu chuyện dành cho nguồn cảm hứng, chất liệu bản địa và tinh thần thiết kế của Calmora."
+    },
+    "/ritual": {
+      "eyebrow": "Nghi thức",
+      "title": "Pha trà bằng nhịp chậm của sen.",
+      "text": "Trang nghi thức sẽ mô tả cách nhìn, mở, pha và chia sẻ trà sen như một trải nghiệm cảm quan."
+    },
+    "/seasonal": {
+      "eyebrow": "Mùa sen",
+      "title": "Những phiên bản theo mùa.",
+      "text": "Nơi lưu giữ các concept giới hạn theo mùa nở, mùa thu hoạch và mùa quà tặng."
+    },
+    "/contact": {
+      "eyebrow": "Liên hệ",
+      "title": "Bắt đầu một thử nghiệm với Calmora.",
+      "text": "Gửi yêu cầu mẫu thử, đặt lịch trao đổi hoặc đề xuất hợp tác phát triển sản phẩm."
+    },
+    "/partners": {
+      "eyebrow": "Hợp tác",
+      "title": "Cùng mở rộng giá trị của sen Việt.",
+      "text": "Trang dành cho đối tác nguyên liệu, sản xuất, phân phối và trải nghiệm thương hiệu."
+    }
+  },
+  "storyPage": {
+    "kicker": "Story / lotus sequence",
+    "eyebrow": "Câu chuyện",
+    "title": "Từ búp đến tàn, bông sen tự kể nhịp thời gian của mình.",
+    "description": "Hero được giữ cố định trong tầm nhìn đầu tiên để người xem đọc được chuỗi chuyển động ngay lập tức, thay vì phải cuộn để hiểu câu chuyện.",
+    "body": "Không gian này giữ một nhịp kể chậm và có kiểm soát. Lotus 3D chạy một vòng tự động qua búp, nở rồi tàn, giúp story page có chiều sâu mà vẫn tách biệt hoàn toàn khỏi landing.",
+    "timeline": [
+      {
+        "label": "01",
+        "title": "Búp",
+        "text": "Giữ cấu trúc khép, tối giản và tĩnh để mở màn bằng sự chờ đợi."
+      },
+      {
+        "label": "02",
+        "title": "Nở",
+        "text": "Cánh bung ra, ánh sáng mở rộng và tâm điểm của hero được đẩy lên cao nhất."
+      },
+      {
+        "label": "03",
+        "title": "Tàn",
+        "text": "Nhịp lắng xuống, để lại một kết thúc mềm và có ký ức thị giác rõ ràng."
+      }
+    ]
+  },
+  "aboutPage": {
+    "hero": {
+      "eyebrow": "Giới thiệu thương hiệu",
+      "title": "Calmora — Hương sắc bản địa, tinh hoa thiết kế",
+      "description": "Nơi câu chuyện di sản trà sen truyền thống giao thoa với công nghệ nghiên cứu và chế tác hiện đại."
+    },
+    "mission": {
+      "label": "Sứ mệnh",
+      "title": "Hương sắc Việt Nam",
+      "text": "Calmora sinh ra từ mong muốn bảo tồn và nâng tầm các giá trị văn hóa bản địa. Chúng tôi không chỉ làm trà; chúng tôi kiến tạo một không gian trải nghiệm cảm quan, nơi mỗi búp sen kể về hành trình tĩnh lặng của đất trời, hồ sen đêm sâu thẳm, và nghệ thuật thưởng trà ung dung.",
+      "quote": "Uống một tách trà Calmora là bước vào một nghi thức chậm, cảm nhận sự lắng dịu của tâm trí và kết nối sâu sắc với tự nhiên.",
+      "quoteAuthor": "— Calmora Tea Masters"
+    },
+    "tech": {
+      "eyebrow": "Quy trình công nghệ",
+      "title": "Khoa học đằng sau chén trà sen hảo hạng",
+      "description": "Sự tỉ mỉ của nghệ nhân kết hợp cùng các công nghệ hiện đại giúp tối ưu hóa giá trị dược liệu và hương thơm tự nhiên.",
+      "cards": [
+        {
+          "title": "Computer Vision phân loại",
+          "text": "Mỗi hạt sen và búp hoa được quét qua hệ thống thị giác máy tính thông minh để phân loại nghiêm ngặt thành 3 lớp chất lượng: Lớp lụa, lớp già, và lớp đen, đảm bảo chỉ những nguyên liệu hoàn hảo nhất mới được sử dụng."
+        },
+        {
+          "title": "Công nghệ sấy thăng hoa",
+          "text": "Sử dụng công nghệ sấy thăng hoa (Freeze-drying) tiên tiến ở nhiệt độ âm sâu, giúp làm khô cánh sen mà không làm mất đi các hoạt chất alkaloid thư giãn và flavonoid chống oxy hóa quý giá."
+        },
+        {
+          "title": "Lưu giữ trọn vẹn hương vị",
+          "text": "Trà sen giữ nguyên cấu trúc tự nhiên, búp sen mở ra dịu dàng khi ngâm nước nóng, giải phóng làn hương tinh khiết mang đậm hồn cốt của hồ sen hồ Tây sớm mai."
+        }
+      ]
+    },
+    "ritual": {
+      "title": "Nghi thức Trải nghiệm Calmora",
+      "items": [
+        {
+          "number": "01 / Nhìn",
+          "title": "Chiêm ngưỡng đời sen",
+          "text": "Quan sát búp sen sấy khô chuyển mình từ khép kín sang bung nở nhẹ nhàng trong tách trà thủy tinh."
+        },
+        {
+          "number": "02 / Ngửi",
+          "title": "Thưởng làn hương mỏng",
+          "text": "Cảm nhận hương thơm dịu nhẹ, thanh khiết của sen kết hợp với vị ấm nồng của trà cổ thụ."
+        },
+        {
+          "number": "03 / Thưởng",
+          "title": "Lắng nghe khoảnh khắc",
+          "text": "Nhấp ngụm trà chậm, để vị ngọt hậu đọng lại nơi cổ họng và đưa tâm hồn về trạng thái tĩnh tại."
+        }
+      ]
+    },
+    "cta": {
+      "title": "Khởi đầu một trải nghiệm cảm quan",
+      "text": "Calmora chào đón bạn đến thử nghiệm mẫu trà sen thiết kế và trải nghiệm nghi thức thiền trà đặc quyền của chúng tôi.",
+      "btnText": "Liên hệ thử nghiệm",
+      "secondaryBtnText": "Xem Bộ sưu tập Trà"
+    }
+  }
+}

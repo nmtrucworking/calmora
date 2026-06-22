@@ -2,6 +2,9 @@ import type { ReactNode } from "react";
 import { BrandMark } from "../branding/BrandMark";
 import { brandName, brandTagline, type BrandFooterGroup, type BrandNavItem } from "../../constants/brand";
 import styles from "./SiteFrame.module.css";
+import { Link } from "../../contexts/RouterContext";
+
+import { AmbientSoundButton } from "../../features/landing/sections/AmbientSoundButton";
 
 type SiteFrameProps = {
   navItems: BrandNavItem[];
@@ -10,27 +13,35 @@ type SiteFrameProps = {
 };
 
 export function SiteFrame({ navItems, footerGroups, children }: SiteFrameProps) {
+  const pathname = window.location.pathname;
+
   return (
     <main className={styles.page}>
       <header className={styles.header}>
         <div className={styles.headerInner}>
-          <a href="/" className={styles.brand}>
-            <BrandMark />
+          <Link href="/" className={styles.brand}>
+            <BrandMark size="sm" />
             <span>
               <span className={styles.brandName}>{brandName}</span>
               <span className={styles.brandTagline}>{brandTagline}</span>
             </span>
-          </a>
+          </Link>
           <nav className={styles.nav} aria-label="Điều hướng chính">
-            {navItems.map((item) => (
-              <a key={item.href} href={item.href}>
-                {item.label}
-              </a>
-            ))}
+            {navItems.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <Link key={item.href} href={item.href} className={isActive ? styles.activeNav : ""}>
+                  {item.label}
+                </Link>
+              );
+            })}
           </nav>
-          <a href="mailto:hello@senova.vn" className={styles.headerCta}>
-            Liên hệ
-          </a>
+          <div className={styles.headerActions}>
+            <AmbientSoundButton />
+            <a href="mailto:hello@senova.vn" className={styles.headerCta}>
+              Liên hệ
+            </a>
+          </div>
         </div>
       </header>
 
@@ -52,9 +63,9 @@ export function SiteFrame({ navItems, footerGroups, children }: SiteFrameProps) 
               <div key={group.title} className={styles.footerGroup}>
                 <h2 className={styles.footerGroupTitle}>{group.title}</h2>
                 {group.links.map((link) => (
-                  <a key={link.href} href={link.href}>
+                  <Link key={link.href} href={link.href}>
                     {link.label}
-                  </a>
+                  </Link>
                 ))}
               </div>
             ))}
@@ -64,3 +75,4 @@ export function SiteFrame({ navItems, footerGroups, children }: SiteFrameProps) 
     </main>
   );
 }
+

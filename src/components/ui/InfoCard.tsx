@@ -1,4 +1,5 @@
 import styles from "./InfoCard.module.css";
+import { Link } from "../../contexts/RouterContext";
 
 type InfoCardProps = {
   label: string;
@@ -19,11 +20,12 @@ export function InfoCard({ label, title, text, href }: InfoCardProps) {
 
   if (href) {
     return (
-      <a className={styles.card} href={href}>
+      <Link className={styles.card} href={href}>
         {content}
-      </a>
+      </Link>
     );
   }
 
   return <article className={styles.card}>{content}</article>;
 }
+

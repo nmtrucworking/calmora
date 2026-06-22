@@ -2,17 +2,20 @@
   display: grid;
   gap: 0.7rem;
   padding: 1.2rem;
-  border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  background: linear-gradient(180deg, rgba(255, 250, 240, 0.08), rgba(255, 250, 240, 0.05));
-  box-shadow: var(--shadow-md);
+  background: rgba(255, 250, 240, 0.03);
   color: inherit;
   text-decoration: none;
+  transition: background-color 200ms ease;
+}
+
+.card:hover {
+  background: rgba(255, 250, 240, 0.06);
 }
 
 .label {
   margin: 0;
-  color: var(--accent);
+  color: var(--accent-gold);
   font-size: 0.72rem;
   letter-spacing: 0.24em;
   text-transform: uppercase;

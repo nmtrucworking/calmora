@@ -30,7 +30,7 @@
   z-index: 30;
   backdrop-filter: blur(22px);
   background: linear-gradient(180deg, rgba(7, 17, 15, 0.9), rgba(7, 17, 15, 0.66));
-  border-bottom: 1px solid rgba(255, 250, 240, 0.08);
+  border-bottom: none;
 }
 
 .headerInner,
@@ -45,7 +45,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 1.25rem;
-  padding: 1rem 1.5rem;
+  padding: 0.65rem 1.5rem;
 }
 
 .brand {
@@ -57,23 +57,23 @@
 
 .brandName {
   display: block;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   font-weight: 700;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.24em;
 }
 
 .brandTagline {
   display: block;
-  margin-top: 0.14rem;
+  margin-top: 0.08rem;
   color: var(--text-soft);
-  font-size: 0.72rem;
+  font-size: 0.62rem;
 }
 
 .nav {
   display: flex;
   align-items: center;
-  gap: 1.1rem;
-  font-size: 0.84rem;
+  gap: 1rem;
+  font-size: 0.78rem;
 }
 
 .nav a {
@@ -86,26 +86,34 @@
   color: var(--text);
 }
 
+.nav a.activeNav {
+  color: var(--accent-gold);
+  font-weight: 600;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
 .headerCta {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid var(--border);
+  border: none;
   border-radius: 999px;
   background: rgba(255, 250, 240, 0.08);
-  padding: 0.52rem 1rem;
+  padding: 0.42rem 0.9rem;
   color: var(--text);
-  font-size: 0.84rem;
+  font-size: 0.78rem;
   font-weight: 600;
   text-decoration: none;
-  transition:
-    background 160ms ease,
-    border-color 160ms ease;
+  transition: background 160ms ease;
 }
 
 .headerCta:hover {
-  border-color: var(--border-strong);
-  background: rgba(255, 250, 240, 0.12);
+  background: rgba(255, 250, 240, 0.14);
 }
 
 .content {

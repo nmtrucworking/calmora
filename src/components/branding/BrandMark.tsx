@@ -1,4 +1,3 @@
-import { Leaf } from "lucide-react";
 import styles from "./BrandMark.module.css";
 
 type BrandMarkProps = {
@@ -8,7 +7,11 @@ type BrandMarkProps = {
 export function BrandMark({ size = "md" }: BrandMarkProps) {
   return (
     <span className={`${styles.mark} ${styles[size]}`} aria-hidden="true">
-      <Leaf className={styles.icon} />
+      <img
+        src="/calmora-mark-original-look.svg"
+        alt="Calmora Mark"
+        className={styles.icon}
+      />
     </span>
   );
 }

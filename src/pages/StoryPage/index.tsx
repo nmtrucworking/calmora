@@ -6,42 +6,37 @@ import { StoryLotusCanvas } from "../../components/story/StoryLotusCanvas";
 import styles from "./StoryPage.module.css";
 import { RotateCw } from "lucide-react";
 import { useState } from "react";
+import content from "../../data/content.json";
+import { StaggerContainer, StaggerItem } from "../../components/ui/ZenMotion";
 
 export default function StoryPage() {
   const [restartSignal, setRestartSignal] = useState(0);
+  const storyData = content.storyPage;
+
   return (
     <SiteFrame navItems={brandNavigation} footerGroups={brandFooterGroups}>
       <div className={styles.page}>
         <section className={styles.hero}>
           <div className={styles.copy}>
-            <p className={styles.kicker}>Story / lotus sequence</p>
+            <p className={styles.kicker}>{storyData.kicker}</p>
             <SectionHeading
-              eyebrow="Câu chuyện"
-              title="Từ búp đến tàn, bông sen tự kể nhịp thời gian của mình."
-              description="Hero được giữ cố định trong tầm nhìn đầu tiên để người xem đọc được chuỗi chuyển động ngay lập tức, thay vì phải cuộn để hiểu câu chuyện."
+              eyebrow={storyData.eyebrow}
+              title={storyData.title}
+              description={storyData.description}
             />
-            <p className={styles.body}>
-              Không gian này giữ một nhịp kể chậm và có kiểm soát. Lotus 3D chạy một vòng tự động qua
-              búp, nở rồi tàn, giúp story page có chiều sâu mà vẫn tách biệt hoàn toàn khỏi landing.
-            </p>
+            <p className={styles.body}>{storyData.body}</p>
 
-            <div className={styles.timeline} aria-label="Các giai đoạn của bông sen">
-              <InfoCard
-                label="01"
-                title="Búp"
-                text="Giữ cấu trúc khép, tối giản và tĩnh để mở màn bằng sự chờ đợi."
-              />
-              <InfoCard
-                label="02"
-                title="Nở"
-                text="Cánh bung ra, ánh sáng mở rộng và tâm điểm của hero được đẩy lên cao nhất."
-              />
-              <InfoCard
-                label="03"
-                title="Tàn"
-                text="Nhịp lắng xuống, để lại một kết thúc mềm và có ký ức thị giác rõ ràng."
-              />
-            </div>
+            <StaggerContainer className={styles.timeline} aria-label="Các giai đoạn của bông sen">
+              {storyData.timeline.map((item) => (
+                <StaggerItem key={item.label}>
+                  <InfoCard
+                    label={item.label}
+                    title={item.title}
+                    text={item.text}
+                  />
+                </StaggerItem>
+              ))}
+            </StaggerContainer>
           </div>
 
           <div className={styles.visualShell}>

@@ -1,11 +1,9 @@
 .mark {
   display: grid;
   place-items: center;
-  border: 1px solid var(--border);
-  border-radius: 0.9rem;
-  background: rgba(7, 17, 15, 0.45);
+  border-radius: 0.75rem;
+  background: rgba(255, 250, 240, 0.04);
   backdrop-filter: blur(18px);
-  box-shadow: var(--shadow-md);
 }
 
 .sm {
@@ -19,7 +17,12 @@
 }
 
 .icon {
-  width: 1.05rem;
-  height: 1.05rem;
-  color: var(--accent);
+  width: 1.4rem;
+  height: 1.4rem;
+  object-fit: contain;
+}
+
+.sm .icon {
+  width: 1.15rem;
+  height: 1.15rem;
 }

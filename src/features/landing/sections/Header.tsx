@@ -1,7 +1,8 @@
-import { Leaf } from "lucide-react";
+import { BrandMark } from "../../../components/branding/BrandMark";
 import { AmbientSoundButton } from "./AmbientSoundButton";
 import styles from "../SenovaLandingPage.module.css";
 import type { LandingNavItem } from "../types";
+import { Link } from "../../../contexts/RouterContext";
 
 type HeaderProps = {
   navItems: LandingNavItem[];
@@ -9,24 +10,37 @@ type HeaderProps = {
 };
 
 export function Header({ navItems, showSound = false }: HeaderProps) {
+  const pathname = window.location.pathname;
+
   return (
     <header className={styles.header}>
       <div className={styles.headerInner}>
-        <a href="#top" className={styles.brand}>
-          <span className={styles.brandMark} aria-hidden="true">
-            <Leaf className={styles.brandIcon} />
-          </span>
+        <Link href="/" className={styles.brand}>
+          <BrandMark size="sm" />
           <span>
-            <span className={styles.brandName}>SENOVA</span>
+            <span className={styles.brandName}>CALMORA</span>
             <span className={styles.brandTagline}>Sen + Innovation</span>
           </span>
-        </a>
+        </Link>
         <nav className={styles.nav} aria-label="Điều hướng chính">
-          {navItems.map((item) => (
-            <a key={item.href} href={item.href}>
-              {item.label}
-            </a>
-          ))}
+          {navItems.map((item) => {
+            const isActive =
+              (item.href === "#top" || item.href === "/") && (pathname === "/" || pathname === "");
+            
+            if (item.href.startsWith("#")) {
+              return (
+                <a key={item.href} href={item.href} className={isActive ? styles.activeNav : ""}>
+                  {item.label}
+                </a>
+              );
+            }
+
+            return (
+              <Link key={item.href} href={item.href} className={isActive ? styles.activeNav : ""}>
+                {item.label}
+              </Link>
+            );
+          })}
         </nav>
         <div className={styles.headerActions}>
           {showSound ? <AmbientSoundButton /> : null}
@@ -38,3 +52,4 @@ export function Header({ navItems, showSound = false }: HeaderProps) {
     </header>
   );
 }
+

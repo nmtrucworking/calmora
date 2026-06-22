@@ -1,7 +1,11 @@
 import { Html } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { Suspense, useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import * as THREE from "three";
+import {
+  LotusGLBExporter,
+  type LotusGLBExporterHandle,
+} from "../../features/landing/three/LotusGLBExporter";
 import { LotusScene } from "../../features/landing/three/LotusScene";
 import type { ScrollProgressRef } from "../../features/landing/types";
 import styles from "./StoryLotusCanvas.module.css";
@@ -16,7 +20,10 @@ type StoryLotusCanvasProps = {
 
 export function StoryLotusCanvas({ className, restartSignal = 0 }: StoryLotusCanvasProps) {
   const progressRef = useRef(0) as ScrollProgressRef;
+  const exporterRef = useRef<LotusGLBExporterHandle>(null);
+  const exportInProgressRef = useRef(false);
   const animRef = useRef({ frameId: 0, startTime: 0, duration: 14000 });
+  const [isExporting, setIsExporting] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -29,6 +36,13 @@ export function StoryLotusCanvas({ className, restartSignal = 0 }: StoryLotusCan
 
       const loop = () => {
         if (!mounted) return;
+
+        if (exportInProgressRef.current) {
+          localFrameId = window.requestAnimationFrame(loop);
+          current.frameId = localFrameId;
+          return;
+        }
+
         const elapsed = performance.now() - current.startTime;
         const rawProgress = Math.min(1, elapsed / current.duration);
         const easedProgress = THREE.MathUtils.smoothstep(rawProgress, 0, 1);
@@ -56,6 +70,26 @@ export function StoryLotusCanvas({ className, restartSignal = 0 }: StoryLotusCan
     };
   }, [restartSignal]);
 
+  const handleExportGLB = async () => {
+    if (!exporterRef.current || exportInProgressRef.current) return;
+
+    exportInProgressRef.current = true;
+    setIsExporting(true);
+
+    try {
+      await exporterRef.current.exportGLB({
+        filename: "senova-lotus-full-bloom.glb",
+        progress: 0.72,
+      });
+    } catch (error) {
+      console.error("Export GLB failed:", error);
+      window.alert("Không thể xuất file GLB. Vui lòng kiểm tra console.");
+    } finally {
+      exportInProgressRef.current = false;
+      setIsExporting(false);
+    }
+  };
+
   return (
     <div className={`${styles.canvasShell} ${className ?? ""}`.trim()}>
       <Canvas shadows dpr={[1, 1.8]} camera={{ position: [0, 1.15, 5.7], fov: 43 }}>
@@ -67,8 +101,18 @@ export function StoryLotusCanvas({ className, restartSignal = 0 }: StoryLotusCan
           }
         >
           <LotusScene scrollProgressRef={progressRef} />
+          <LotusGLBExporter ref={exporterRef} progressRef={progressRef} />
         </Suspense>
       </Canvas>
+
+      <button
+        type="button"
+        className={styles.exportButton}
+        onClick={handleExportGLB}
+        disabled={isExporting}
+      >
+        {isExporting ? "Đang xuất..." : "Tải GLB"}
+      </button>
     </div>
   );
 }

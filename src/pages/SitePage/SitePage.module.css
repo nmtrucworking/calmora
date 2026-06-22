@@ -52,24 +52,22 @@
 }
 
 .secondaryAction {
-  border: 1px solid var(--border);
-  background: rgba(255, 250, 240, 0.05);
+  border: none;
+  background: rgba(255, 250, 240, 0.08);
   color: var(--text);
 }
 
 .primaryAction:hover,
 .secondaryAction:hover {
-  transform: translateY(-1px);
+  opacity: 0.88;
 }
 
 .heroPanel {
   display: grid;
   gap: 1rem;
   padding: 1.2rem;
-  border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  background: rgba(255, 250, 240, 0.04);
-  box-shadow: var(--shadow-lg);
+  background: rgba(255, 250, 240, 0.03);
 }
 
 .panelKicker {

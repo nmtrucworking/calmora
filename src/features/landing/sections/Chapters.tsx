@@ -19,7 +19,7 @@ export function Chapters({ chapters }: ChaptersProps) {
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: false, amount: 0.45 }}
-            transition={{ duration: 0.65, ease: "easeOut" }}
+            transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
             className={styles.chapterText}
           >
             <p className={styles.chapterEyebrow}>{chapter.eyebrow}</p>

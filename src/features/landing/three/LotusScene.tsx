@@ -60,8 +60,8 @@ export function LotusScene({ scrollProgressRef }: LotusSceneProps) {
       <color attach="background" args={["#07110f"]} />
       <fog attach="fog" args={["#07110f", 5.8, 12.5]} />
       <ambientLight intensity={0.42} />
-      <pointLight ref={keyLightRef} position={[2.2, 2.8, 2.7]} color="#ffd3df" intensity={14} distance={8} />
-      <pointLight ref={rimLightRef} position={[-3.2, -0.4, -1.8]} color="#8fe2bd" intensity={6} distance={9} />
+      <pointLight ref={keyLightRef} position={[2.2, 2.8, 2.7]} color="#F8DF93" intensity={14} distance={8} />
+      <pointLight ref={rimLightRef} position={[-3.2, -0.4, -1.8]} color="#79a875" intensity={6} distance={9} />
       <spotLight ref={topLightRef} position={[0, 5.2, 2.2]} angle={0.42} penumbra={0.78} intensity={9} castShadow />
       <Float speed={0.55} rotationIntensity={0.08} floatIntensity={0.14}>
         <group ref={modelGroupRef} position={[0, 0.04, 0]}>
