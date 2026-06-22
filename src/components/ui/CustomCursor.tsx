@@ -1,11 +1,21 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import styles from "./CustomCursor.module.css";
 
+interface Sparkle {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  size: number;
+  alpha: number;
+  decay: number;
+}
 
 export function CustomCursor() {
   const [hovered, setHovered] = useState(false);
-  const [hidden, setHidden] = useState(true);
+  const [isMoving, setIsMoving] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
@@ -15,25 +25,137 @@ export function CustomCursor() {
   const cursorRingX = useSpring(cursorX, springConfig);
   const cursorRingY = useSpring(cursorY, springConfig);
 
-  useEffect(() => {
-    // Detect touch device
-    const isTouchDevice = window.matchMedia("(hover: none)").matches;
-    if (isTouchDevice) return;
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const particlesRef = useRef<Sparkle[]>([]);
+  const isLoopingRef = useRef(false);
+  const moveTimeoutRef = useRef<number | null>(null);
 
-    const moveCursor = (e: MouseEvent) => {
-      cursorX.set(e.clientX);
-      cursorY.set(e.clientY);
-      if (hidden) setHidden(false);
+  // 1. Initial check for desktop environment
+  useEffect(() => {
+    const isTouchDevice = window.matchMedia("(hover: none)").matches;
+    if (!isTouchDevice) {
+      setIsDesktop(true);
+    }
+  }, []);
+
+  // 2. Register event listeners and canvas setup only when isDesktop is true
+  useEffect(() => {
+    if (!isDesktop) return;
+
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const handleResize = () => {
+      canvas.width = window.innerWidth * window.devicePixelRatio;
+      canvas.height = window.innerHeight * window.devicePixelRatio;
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
+      const ctx = canvas.getContext("2d");
+      if (ctx) {
+        ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    // Particle rendering loop
+    const renderParticles = () => {
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+
+      // Clear rect
+      ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+      const particles = particlesRef.current;
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.035; // slight gravity
+        p.alpha -= p.decay;
+
+        if (p.alpha <= 0) {
+          particles.splice(i, 1);
+          continue;
+        }
+
+        // Draw a simple, beautiful gold circle particle
+        ctx.fillStyle = `rgba(248, 223, 147, ${p.alpha})`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      if (particles.length > 0) {
+        requestAnimationFrame(renderParticles);
+      } else {
+        isLoopingRef.current = false;
+        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+      }
     };
 
-    const handleMouseLeave = () => setHidden(true);
-    const handleMouseEnter = () => setHidden(false);
+    const spawnSparkle = (x: number, y: number) => {
+      const particles = particlesRef.current;
+      if (particles.length > 95) return; // slightly increased cap for richer trail
+
+      // Create a nice variation of big and small particles (1.2px to 4.8px)
+      const size = 1.2 + Math.random() * 3.6;
+      
+      const angle = Math.random() * Math.PI * 2;
+      const speed = 0.15 + Math.random() * 1.0;
+      
+      particles.push({
+        x,
+        y,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed - 0.15,
+        size,
+        alpha: 0.85 + Math.random() * 0.15,
+        decay: 0.012 + Math.random() * 0.016, // Fades smoothly
+      });
+
+      if (!isLoopingRef.current) {
+        isLoopingRef.current = true;
+        requestAnimationFrame(renderParticles);
+      }
+    };
+
+    let lastX = 0;
+    let lastY = 0;
+
+    const moveCursor = (e: MouseEvent) => {
+      const clientX = e.clientX;
+      const clientY = e.clientY;
+
+      cursorX.set(clientX);
+      cursorY.set(clientY);
+
+      // Set moving state
+      setIsMoving(true);
+      if (moveTimeoutRef.current) {
+        window.clearTimeout(moveTimeoutRef.current);
+      }
+      moveTimeoutRef.current = window.setTimeout(() => {
+        setIsMoving(false);
+      }, 150);
+
+      // Sparkle spawn logic based on distance
+      const dx = clientX - lastX;
+      const dy = clientY - lastY;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist > 8) {
+        spawnSparkle(clientX, clientY);
+        if (dist > 25) {
+          spawnSparkle(lastX + dx * 0.5, lastY + dy * 0.5);
+        }
+        lastX = clientX;
+        lastY = clientY;
+      }
+    };
 
     window.addEventListener("mousemove", moveCursor);
-    document.addEventListener("mouseleave", handleMouseLeave);
-    document.addEventListener("mouseenter", handleMouseEnter);
 
-    // Event listeners to handle hover state
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       const isInteractive =
@@ -42,7 +164,7 @@ export function CustomCursor() {
         target.closest("a") ||
         target.closest("button") ||
         target.closest("[role='button']") ||
-        target.closest("canvas"); // 3D Canvas interacts with cursor
+        target.closest("canvas");
 
       if (isInteractive) {
         setHovered(true);
@@ -54,41 +176,48 @@ export function CustomCursor() {
     document.addEventListener("mouseover", handleMouseOver);
 
     return () => {
+      window.removeEventListener("resize", handleResize);
       window.removeEventListener("mousemove", moveCursor);
-      document.removeEventListener("mouseleave", handleMouseLeave);
-      document.removeEventListener("mouseenter", handleMouseEnter);
       document.removeEventListener("mouseover", handleMouseOver);
+      if (moveTimeoutRef.current) {
+        window.clearTimeout(moveTimeoutRef.current);
+      }
     };
-  }, [cursorX, cursorY, hidden]);
+  }, [isDesktop]);
 
-  if (hidden) return null;
+  if (!isDesktop) return null;
 
   return (
     <>
-      {/* Outer cursor ring */}
+      <canvas
+        ref={canvasRef}
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          pointerEvents: "none",
+          zIndex: 9998,
+        }}
+      />
       <motion.div
         className={styles.cursorRing}
         style={{
           x: cursorRingX,
           y: cursorRingY,
-          translateX: "-50%",
-          translateY: "-50%",
         }}
         animate={{
-          scale: hovered ? 1.6 : 1,
+          scale: hovered ? 1.6 : (isMoving ? 0 : 1),
+          opacity: isMoving ? 0 : 1,
           borderColor: hovered ? "var(--accent)" : "rgba(248, 223, 147, 0.4)",
           backgroundColor: hovered ? "rgba(185, 86, 114, 0.15)" : "rgba(185, 86, 114, 0)",
         }}
         transition={{ type: "tween", ease: "backOut", duration: 0.3 }}
       />
-      {/* Inner cursor dot */}
       <motion.div
         className={styles.cursorDot}
         style={{
           x: cursorX,
           y: cursorY,
-          translateX: "-50%",
-          translateY: "-50%",
         }}
         animate={{
           scale: hovered ? 0.6 : 1,

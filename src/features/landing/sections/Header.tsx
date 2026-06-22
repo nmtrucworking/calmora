@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { BrandMark } from "../../../components/branding/BrandMark";
 import { AmbientSoundButton } from "./AmbientSoundButton";
 import styles from "../SenovaLandingPage.module.css";
@@ -11,9 +12,20 @@ type HeaderProps = {
 
 export function Header({ navItems, showSound = false }: HeaderProps) {
   const pathname = window.location.pathname;
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
-    <header className={styles.header}>
+    <header className={`${styles.header} ${scrolled ? styles.headerScrolled : ""}`}>
       <div className={styles.headerInner}>
         <Link href="/" className={styles.brand}>
           <BrandMark size="sm" />
@@ -52,4 +64,5 @@ export function Header({ navItems, showSound = false }: HeaderProps) {
     </header>
   );
 }
+
 

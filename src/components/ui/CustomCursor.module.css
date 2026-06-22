@@ -4,11 +4,12 @@
   left: 0;
   width: 28px;
   height: 28px;
+  margin-left: -14px;
+  margin-top: -14px;
   border: 1.5px solid rgba(248, 223, 147, 0.4);
   border-radius: 50%;
   pointer-events: none;
   z-index: 9999;
-  mix-blend-mode: screen;
 }
 
 .cursorDot {
@@ -17,11 +18,12 @@
   left: 0;
   width: 6px;
   height: 6px;
+  margin-left: -3px;
+  margin-top: -3px;
   background-color: var(--accent-gold);
   border-radius: 50%;
   pointer-events: none;
   z-index: 10000;
-  mix-blend-mode: screen;
 }
 
 /* Hide default cursor on desktop when custom cursor is active */

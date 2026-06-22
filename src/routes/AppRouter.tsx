@@ -2,6 +2,7 @@ import { RouterProvider, useRouter } from "../contexts/RouterContext";
 import SenovaLandingPage from "../pages/SenovaLandingPage";
 import StoryPage from "../pages/StoryPage";
 import AboutPage from "../pages/AboutPage";
+import ProductsPage from "../pages/ProductsPage";
 import SitePage from "../pages/SitePage";
 import { landingPath } from "./siteRoutes";
 import { AnimatePresence, motion } from "framer-motion";
@@ -16,6 +17,8 @@ function AppRoutes() {
     pageComponent = <AboutPage />;
   } else if (pathname === "/story") {
     pageComponent = <StoryPage />;
+  } else if (pathname === "/products") {
+    pageComponent = <ProductsPage />;
   } else {
     pageComponent = <SitePage path={pathname} />;
   }
