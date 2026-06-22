@@ -1,0 +1,178 @@
+/*
+ * Compatibility layer for legacy dark CSS modules.
+ * Keep this file imported after App so semantic light tokens override hard-coded dark values.
+ */
+
+[class*="_pageContainer_"],
+[class*="_sitePage_"],
+[class*="_page_"] {
+  color: var(--text) !important;
+}
+
+[class*="_pageContainer_"] {
+  background:
+    radial-gradient(circle at 12% 8%, rgba(201, 122, 141, 0.1), transparent 26%),
+    radial-gradient(circle at 88% 10%, rgba(53, 92, 74, 0.1), transparent 28%),
+    linear-gradient(180deg, #f8f4ea 0%, #f1eadc 52%, #ebe1d0 100%) !important;
+}
+
+[class*="_sitePage_"] {
+  background:
+    radial-gradient(circle at 72% 24%, rgba(201, 122, 141, 0.1), transparent 32%),
+    radial-gradient(circle at 22% 76%, rgba(53, 92, 74, 0.09), transparent 34%),
+    var(--page-bg) !important;
+}
+
+[class*="_scrim_"] {
+  background:
+    linear-gradient(90deg, rgba(247, 243, 232, 0.9) 0%, rgba(247, 243, 232, 0.52) 34%, rgba(247, 243, 232, 0.1) 58%, rgba(247, 243, 232, 0.44) 100%),
+    linear-gradient(180deg, rgba(247, 243, 232, 0.2) 0%, rgba(247, 243, 232, 0.02) 46%, rgba(238, 231, 216, 0.82) 100%) !important;
+}
+
+[class*="_headerScrolled_"] {
+  background-color: rgba(247, 243, 232, 0.9) !important;
+  border-color: var(--border) !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+[class*="_brandMark_"] {
+  background: rgba(255, 253, 248, 0.78) !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+[class*="_brandIcon_"] {
+  color: var(--primary) !important;
+}
+
+[class*="_brandTagline_"],
+[class*="_nav_"] a,
+[class*="_scrollHint_"] {
+  color: var(--text-muted) !important;
+}
+
+[class*="_nav_"] a:hover,
+[class*="_nav_"] a[class*="activeNav"] {
+  color: var(--primary) !important;
+}
+
+[class*="_headerCta_"] {
+  background: var(--primary) !important;
+  border: 1px solid var(--primary) !important;
+  color: var(--on-primary) !important;
+}
+
+[class*="_heroTitle_"],
+[class*="_chapterTitle_"],
+[class*="_ctaTitle_"],
+[class*="_siteTitle_"],
+[class*="_orbitTitle_"],
+[class*="_detailName_"],
+[class*="_stepTitle_"],
+[class*="_classicTitle_"],
+[class*="_giftSetTitle_"],
+[class*="_journeyHeadline_"] {
+  color: var(--text) !important;
+  text-shadow: none !important;
+}
+
+[class*="_heroDescription_"],
+[class*="_heroSubtitle_"],
+[class*="_chapterCopy_"],
+[class*="_ctaDescription_"],
+[class*="_siteDescription_"],
+[class*="_detailDescription_"],
+[class*="_stepDescription_"],
+[class*="_classicDescription_"],
+[class*="_giftSetDescription_"],
+[class*="_pillarText_"],
+[class*="_popoverDescription_"] {
+  color: var(--text-muted) !important;
+}
+
+[class*="_heroEyebrow_"],
+[class*="_chapterEyebrow_"],
+[class*="_centerEyebrow_"],
+[class*="_orbitLabel_"],
+[class*="_detailEyebrow_"],
+[class*="_classicKicker_"],
+[class*="_giftSetKicker_"],
+[class*="_bubbleRole_"],
+[class*="_layerLabel_"] {
+  color: var(--accent-gold) !important;
+}
+
+[class*="_orbitSection_"],
+[class*="_classicSection_"],
+[class*="_giftSetSection_"] {
+  background: transparent !important;
+}
+
+[class*="_orbitItemCard_"],
+[class*="_orbitDetailGrid_"],
+[class*="_revealTitleBadge_"],
+[class*="_revealDisplayStage_"],
+[class*="_classicTableSurface_"],
+[class*="_explodedImageWrapper_"],
+[class*="_convergeBubble_"],
+[class*="_hotspotPopover_"] {
+  background: rgba(255, 253, 248, 0.78) !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+[class*="_orbitActive_"] [class*="_orbitItemCard_"] {
+  background: var(--surface-strong) !important;
+  border-color: var(--border-strong) !important;
+}
+
+[class*="_detailTagline_"],
+[class*="_classicTagline_"],
+[class*="_giftSetTagline_"] {
+  color: var(--accent) !important;
+}
+
+[class*="_classicShadow_"] {
+  background: radial-gradient(ellipse at 50% 72%, rgba(107, 74, 50, 0.18), transparent 70%) !important;
+}
+
+[class*="_classicCup_"] {
+  background: rgba(255, 253, 248, 0.86) !important;
+  border-color: rgba(53, 92, 74, 0.38) !important;
+}
+
+[class*="_cupRim_"] {
+  background: var(--surface-strong) !important;
+  border-color: rgba(53, 92, 74, 0.38) !important;
+}
+
+[class*="_ctaButton_"],
+[class*="_journeyPrimaryBtn_"] {
+  background: var(--primary) !important;
+  border-color: var(--primary) !important;
+  color: var(--on-primary) !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+[class*="_journeySecondaryBtn_"],
+[class*="_soundToggle_"] {
+  background: rgba(255, 253, 248, 0.74) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text) !important;
+}
+
+[class*="_hotspotBtnActive_"] {
+  background: var(--accent) !important;
+  color: var(--on-primary) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
