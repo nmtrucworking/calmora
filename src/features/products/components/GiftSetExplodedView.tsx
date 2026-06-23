@@ -73,7 +73,13 @@ export function GiftSetExplodedView() {
         <div className={styles.explodedStage}>
           <div className={styles.explodedImageWrapper}>
             <div className={styles.explodedGlow} />
-            <img src={giftSet.image} alt="Senova Gift Set Exploded View" className={styles.explodedImage} />
+            <img
+              src={giftSet.image}
+              alt="Senova Gift Set Exploded View"
+              className={styles.explodedImage}
+              loading="lazy"
+              decoding="async"
+            />
 
             {/* Hotspot buttons */}
             {hotspots.map((hs) => {

@@ -1,5 +1,3 @@
-import { brandFooterGroups, brandNavigation } from "../../constants/brand";
-import { SiteFrame } from "../../components/layout/SiteFrame";
 import { InfoCard } from "../../components/ui/InfoCard";
 import { SectionHeading } from "../../components/ui/SectionHeading";
 import { StoryLotusCanvas } from "../../components/story/StoryLotusCanvas";
@@ -14,8 +12,7 @@ export default function StoryPage() {
   const storyData = content.storyPage;
 
   return (
-    <SiteFrame navItems={brandNavigation} footerGroups={brandFooterGroups}>
-      <div className={styles.page}>
+    <div className={styles.page}>
         <section className={styles.hero}>
           <div className={styles.copy}>
             <p className={styles.kicker}>{storyData.kicker}</p>
@@ -55,7 +52,6 @@ export default function StoryPage() {
             </div>
           </div>
         </section>
-      </div>
-    </SiteFrame>
+    </div>
   );
 }

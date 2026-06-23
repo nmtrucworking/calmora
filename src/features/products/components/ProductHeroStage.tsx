@@ -82,7 +82,13 @@ export function ProductHeroStage() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
             >
-              <img src={giftSet.image} alt={giftSet.name} className={styles.productImage} />
+              <img
+                src={giftSet.image}
+                alt={giftSet.name}
+                className={styles.productImage}
+                decoding="async"
+                fetchPriority="high"
+              />
               <div className={styles.layerLabel}>{giftSet.role}</div>
             </motion.div>
           )}
@@ -96,7 +102,13 @@ export function ProductHeroStage() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
             >
-              <img src={classic.image} alt={classic.name} className={styles.productImage} />
+              <img
+                src={classic.image}
+                alt={classic.name}
+                className={styles.productImage}
+                decoding="async"
+                fetchPriority="high"
+              />
               <div className={styles.layerLabel}>{classic.role}</div>
             </motion.div>
           )}
@@ -110,7 +122,13 @@ export function ProductHeroStage() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
             >
-              <img src={petalPack.image} alt={petalPack.name} className={styles.productImage} />
+              <img
+                src={petalPack.image}
+                alt={petalPack.name}
+                className={styles.productImage}
+                decoding="async"
+                fetchPriority="high"
+              />
               <div className={styles.layerLabel}>{petalPack.role}</div>
             </motion.div>
           )}

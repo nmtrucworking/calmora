@@ -10,7 +10,8 @@ type ScrollBinderProps = {
 
 export function ScrollBinder({ scrollYProgress, targetRef }: ScrollBinderProps) {
   useFrame(() => {
-    targetRef.current = THREE.MathUtils.lerp(targetRef.current, scrollYProgress.get(), 0.11);
+    const nextProgress = window.scrollY <= 2 ? 0 : scrollYProgress.get();
+    targetRef.current = THREE.MathUtils.lerp(targetRef.current, nextProgress, 0.11);
   });
 
   return null;

@@ -4,6 +4,7 @@ import { AmbientSoundButton } from "./AmbientSoundButton";
 import styles from "../SenovaLandingPage.module.css";
 import type { LandingNavItem } from "../types";
 import { Link } from "../../../contexts/RouterContext";
+import { useRouter } from "../../../contexts/RouterState";
 
 type HeaderProps = {
   navItems: LandingNavItem[];
@@ -11,7 +12,7 @@ type HeaderProps = {
 };
 
 export function Header({ navItems, showSound = false }: HeaderProps) {
-  const pathname = window.location.pathname;
+  const { pathname } = useRouter();
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -64,5 +65,3 @@ export function Header({ navItems, showSound = false }: HeaderProps) {
     </header>
   );
 }
-
-

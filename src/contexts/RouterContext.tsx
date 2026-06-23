@@ -1,19 +1,13 @@
-import React, { createContext, useContext, useState, useEffect, type ReactNode, type MouseEvent } from "react";
-
-type RouterContextType = {
-  pathname: string;
-  navigate: (path: string) => void;
-};
-
-const RouterContext = createContext<RouterContextType | undefined>(undefined);
-
-export function useRouter() {
-  const context = useContext(RouterContext);
-  if (!context) {
-    throw new Error("useRouter must be used within a RouterProvider");
-  }
-  return context;
-}
+import React, {
+  startTransition,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+  type MouseEvent,
+} from "react";
+import { RouterContext, useRouter } from "./RouterState";
 
 type RouterProviderProps = {
   children: ReactNode;
@@ -23,8 +17,16 @@ export function RouterProvider({ children }: RouterProviderProps) {
   const [pathname, setPathname] = useState(window.location.pathname);
 
   useEffect(() => {
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+  }, []);
+
+  useEffect(() => {
     const handlePopState = () => {
-      setPathname(window.location.pathname);
+      startTransition(() => {
+        setPathname(window.location.pathname);
+      });
     };
 
     window.addEventListener("popstate", handlePopState);
@@ -33,17 +35,20 @@ export function RouterProvider({ children }: RouterProviderProps) {
     };
   }, []);
 
-  const navigate = (path: string) => {
+  const navigate = useCallback((path: string) => {
     if (window.location.pathname !== path) {
       window.history.pushState({}, "", path);
-      setPathname(path);
-      // Scroll to top on page navigation
-      window.scrollTo(0, 0);
+      startTransition(() => {
+        setPathname(path);
+      });
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
     }
-  };
+  }, []);
+
+  const value = useMemo(() => ({ pathname, navigate }), [pathname, navigate]);
 
   return (
-    <RouterContext.Provider value={{ pathname, navigate }}>
+    <RouterContext.Provider value={value}>
       {children}
     </RouterContext.Provider>
   );
@@ -54,12 +59,21 @@ type LinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
   children: ReactNode;
 };
 
-export function Link({ href, children, ...props }: LinkProps) {
+export function Link({ href, children, onClick, target, ...props }: LinkProps) {
   const { navigate } = useRouter();
 
   const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
-    // If user command-clicks or control-clicks, allow default browser behavior
-    if (e.metaKey || e.ctrlKey || e.shiftKey) {
+    onClick?.(e);
+
+    if (
+      e.defaultPrevented ||
+      !href.startsWith("/") ||
+      e.metaKey ||
+      e.ctrlKey ||
+      e.shiftKey ||
+      e.altKey ||
+      target
+    ) {
       return;
     }
 
@@ -68,7 +82,7 @@ export function Link({ href, children, ...props }: LinkProps) {
   };
 
   return (
-    <a href={href} onClick={handleClick} {...props}>
+    <a href={href} target={target} onClick={handleClick} {...props}>
       {children}
     </a>
   );

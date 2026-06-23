@@ -1,126 +1,88 @@
-import { motion } from "framer-motion";
-import { brandFooterGroups, brandNavigation } from "../../constants/brand";
-import { SiteFrame } from "../../components/layout/SiteFrame";
 import { SectionHeading } from "../../components/ui/SectionHeading";
 import styles from "./AboutPage.module.css";
-import { Award, Eye, ThermometerSnowflake, ShieldCheck } from "lucide-react";
+import { Award, Eye, ThermometerSnowflake, ShieldCheck, type LucideIcon } from "lucide-react";
 import content from "../../data/content.json";
 import { Link } from "../../contexts/RouterContext";
 
 
 export default function AboutPage() {
   const aboutData = content.aboutPage;
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.28,
-        delayChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 24 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 1.0,
-        ease: [0.16, 1, 0.3, 1] as const,
-      },
-    },
-  };
-
-  const techIcons = [
-    <Eye className={styles.techIcon} />,
-    <ThermometerSnowflake className={styles.techIcon} />,
-    <Award className={styles.techIcon} />
-  ];
+  const techIcons: LucideIcon[] = [Eye, ThermometerSnowflake, Award];
 
   return (
-    <SiteFrame navItems={brandNavigation} footerGroups={brandFooterGroups}>
-      <motion.div
-        className={styles.page}
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        {/* Hero Section */}
+    <div className={styles.page}>
         <section className={styles.hero} aria-labelledby="about-hero-title">
-          <motion.div className={styles.heroCopy} variants={itemVariants}>
+          <div className={`${styles.heroCopy} ${styles.introReveal}`}>
             <SectionHeading
               eyebrow={aboutData.hero.eyebrow}
               title={aboutData.hero.title}
               description={aboutData.hero.description}
             />
-          </motion.div>
+          </div>
         </section>
 
-        {/* Brand Mission Section */}
         <section className={styles.missionSection}>
           <div className={styles.gridTwoCols}>
-            <motion.div className={styles.missionCopy} variants={itemVariants}>
+            <div className={`${styles.missionCopy} ${styles.revealOnView}`}>
               <p className={styles.sectionLabel}>{aboutData.mission.label}</p>
               <h2 className={styles.sectionTitle}>{aboutData.mission.title}</h2>
               <p className={styles.bodyText}>
                 {aboutData.mission.text}
               </p>
-            </motion.div>
-            <motion.div className={styles.quoteCard} variants={itemVariants}>
+            </div>
+            <div className={`${styles.quoteCard} ${styles.revealOnView}`}>
               <p className={styles.quoteText}>
                 &ldquo;{aboutData.mission.quote}&rdquo;
               </p>
               <p className={styles.quoteAuthor}>{aboutData.mission.quoteAuthor}</p>
-            </motion.div>
+            </div>
           </div>
         </section>
 
-        {/* Science & Technology Section */}
         <section className={styles.techSection}>
-          <motion.div className={styles.techHeader} variants={itemVariants}>
+          <div className={`${styles.techHeader} ${styles.revealOnView}`}>
             <SectionHeading
               eyebrow={aboutData.tech.eyebrow}
               title={aboutData.tech.title}
               description={aboutData.tech.description}
               align="center"
             />
-          </motion.div>
+          </div>
 
           <div className={styles.techGrid}>
-            {aboutData.tech.cards.map((card, index) => (
-              <motion.div key={card.title} className={styles.techCard} variants={itemVariants}>
+            {aboutData.tech.cards.map((card, index) => {
+              const TechIcon = techIcons[index] ?? Award;
+
+              return (
+              <article key={card.title} className={`${styles.techCard} ${styles.revealOnView}`}>
                 <div className={styles.techIconWrapper}>
-                  {techIcons[index] || <Award className={styles.techIcon} />}
+                  <TechIcon className={styles.techIcon} />
                 </div>
                 <h3 className={styles.techCardTitle}>{card.title}</h3>
                 <p className={styles.techCardText}>{card.text}</p>
-              </motion.div>
-            ))}
+              </article>
+              );
+            })}
           </div>
         </section>
 
-        {/* Principles Section */}
         <section className={styles.principlesSection}>
-          <motion.div className={styles.principlesHeader} variants={itemVariants}>
+          <div className={`${styles.principlesHeader} ${styles.revealOnView}`}>
             <h2 className={styles.principlesTitle}>{aboutData.ritual.title}</h2>
-          </motion.div>
+          </div>
           <div className={styles.principlesGrid}>
             {aboutData.ritual.items.map((item) => (
-              <motion.div key={item.number} className={styles.principleItem} variants={itemVariants}>
+              <article key={item.number} className={`${styles.principleItem} ${styles.revealOnView}`}>
                 <span className={styles.principleNumber}>{item.number}</span>
                 <h4 className={styles.principleItemTitle}>{item.title}</h4>
                 <p className={styles.principleItemText}>{item.text}</p>
-              </motion.div>
+              </article>
             ))}
           </div>
         </section>
 
-        {/* Contact Flow Section */}
-        <section className={styles.ctaSection}>
-          <motion.div className={styles.ctaInner} variants={itemVariants}>
+        <section className={`${styles.ctaSection} ${styles.revealOnView}`}>
+          <div className={styles.ctaInner}>
             <ShieldCheck className={styles.ctaIcon} />
             <h2 className={styles.ctaTitle}>{aboutData.cta.title}</h2>
             <p className={styles.ctaText}>
@@ -134,9 +96,8 @@ export default function AboutPage() {
                 {aboutData.cta.secondaryBtnText}
               </Link>
             </div>
-          </motion.div>
+          </div>
         </section>
-      </motion.div>
-    </SiteFrame>
+    </div>
   );
 }

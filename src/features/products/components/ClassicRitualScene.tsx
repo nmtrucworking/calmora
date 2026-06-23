@@ -41,7 +41,13 @@ export function ClassicRitualScene() {
               viewport={{ once: true }}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
             >
-              <img src={classicProduct.image} alt={classicProduct.name} className={styles.classicBoxImage} />
+              <img
+                src={classicProduct.image}
+                alt={classicProduct.name}
+                className={styles.classicBoxImage}
+                loading="lazy"
+                decoding="async"
+              />
             </motion.div>
 
             {/* Floating Tea Packet sliding on curve */}

@@ -1,22 +1,24 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { products } from "../data/products";
 import styles from "../../../pages/ProductsPage/ProductsPage.module.css";
 import { ArrowRight } from "lucide-react";
 
 
+type ProductId = "classic" | "petal-pack" | "gift-set";
+
+function getInitialProductId(): ProductId {
+  const hash = window.location.hash.replace("#", "");
+  if (hash === "classic" || hash === "petal-pack" || hash === "gift-set") {
+    return hash;
+  }
+  return "petal-pack";
+}
+
 export function LotusOrbitNav() {
-  const [activeId, setActiveId] = useState<"classic" | "petal-pack" | "gift-set">("petal-pack");
+  const [activeId, setActiveId] = useState<ProductId>(() => getInitialProductId());
 
-  useEffect(() => {
-    // Read hash from URL if present
-    const hash = window.location.hash.replace("#", "");
-    if (hash === "classic" || hash === "petal-pack" || hash === "gift-set") {
-      setActiveId(hash);
-    }
-  }, []);
-
-  const handleSelect = (id: "classic" | "petal-pack" | "gift-set") => {
+  const handleSelect = (id: ProductId) => {
     setActiveId(id);
     // Update hash without triggering a page reload
     window.history.pushState(null, "", `#${id}`);
@@ -68,7 +70,13 @@ export function LotusOrbitNav() {
                   aria-label={`Xem sản phẩm ${p.name}`}
                 >
                   <div className={styles.orbitItemCard}>
-                    <img src={p.image} alt={p.name} className={styles.orbitItemImage} />
+                    <img
+                      src={p.image}
+                      alt={p.name}
+                      className={styles.orbitItemImage}
+                      loading="lazy"
+                      decoding="async"
+                    />
                     <span className={styles.orbitItemLabel}>{p.name}</span>
                   </div>
                 </button>
@@ -108,6 +116,8 @@ export function LotusOrbitNav() {
                   src={activeProduct.image}
                   alt={activeProduct.name}
                   className={styles.detailImage}
+                  loading="lazy"
+                  decoding="async"
                 />
               </div>
             </motion.div>

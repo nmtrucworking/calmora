@@ -15,7 +15,7 @@ interface Sparkle {
 export function CustomCursor() {
   const [hovered, setHovered] = useState(false);
   const [isMoving, setIsMoving] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(false);
+  const [isDesktop] = useState(() => !window.matchMedia("(hover: none)").matches);
 
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
@@ -30,15 +30,7 @@ export function CustomCursor() {
   const isLoopingRef = useRef(false);
   const moveTimeoutRef = useRef<number | null>(null);
 
-  // 1. Initial check for desktop environment
-  useEffect(() => {
-    const isTouchDevice = window.matchMedia("(hover: none)").matches;
-    if (!isTouchDevice) {
-      setIsDesktop(true);
-    }
-  }, []);
-
-  // 2. Register event listeners and canvas setup only when isDesktop is true
+  // Register event listeners and canvas setup only when isDesktop is true
   useEffect(() => {
     if (!isDesktop) return;
 
@@ -183,7 +175,7 @@ export function CustomCursor() {
         window.clearTimeout(moveTimeoutRef.current);
       }
     };
-  }, [isDesktop]);
+  }, [cursorX, cursorY, isDesktop]);
 
   if (!isDesktop) return null;
 

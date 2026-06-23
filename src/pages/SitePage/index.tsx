@@ -1,5 +1,4 @@
-import { brandFooterGroups, brandNavigation, brandPrinciples, brandSummary } from "../../constants/brand";
-import { SiteFrame } from "../../components/layout/SiteFrame";
+import { brandNavigation, brandPrinciples, brandSummary } from "../../constants/brand";
 import { InfoCard } from "../../components/ui/InfoCard";
 import { SectionHeading } from "../../components/ui/SectionHeading";
 import { getSitePageContent, siteRoutes } from "../../routes/siteRoutes";
@@ -15,8 +14,7 @@ export default function SitePage({ path }: SitePageProps) {
   const content = getSitePageContent(path);
 
   return (
-    <SiteFrame navItems={brandNavigation} footerGroups={brandFooterGroups}>
-      <div className={styles.page}>
+    <div className={styles.page}>
         <section className={styles.hero}>
           <div className={styles.heroCopy}>
             <SectionHeading
@@ -78,8 +76,6 @@ export default function SitePage({ path }: SitePageProps) {
             })}
           </StaggerContainer>
         </section>
-      </div>
-    </SiteFrame>
+    </div>
   );
 }
-

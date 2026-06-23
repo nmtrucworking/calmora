@@ -11,6 +11,8 @@ export function BrandMark({ size = "md" }: BrandMarkProps) {
         src="/calmora-mark-original-look.svg"
         alt="Calmora Mark"
         className={styles.icon}
+        decoding="async"
+        fetchPriority="high"
       />
     </span>
   );

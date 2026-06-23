@@ -1,19 +1,30 @@
 import type { ReactNode } from "react";
-import { BrandMark } from "../branding/BrandMark";
-import { brandName, brandTagline, type BrandFooterGroup, type BrandNavItem } from "../../constants/brand";
-import styles from "./SiteFrame.module.css";
-import { Link } from "../../contexts/RouterContext";
+import { BrandMark } from "../components/branding/BrandMark";
+import {
+  brandFooterGroups,
+  brandName,
+  brandNavigation,
+  brandTagline,
+  type BrandFooterGroup,
+  type BrandNavItem,
+} from "../constants/brand";
+import { Link } from "../contexts/RouterContext";
+import { useRouter } from "../contexts/RouterState";
+import { AmbientSoundButton } from "../features/landing/sections/AmbientSoundButton";
+import styles from "./SiteLayout.module.css";
 
-import { AmbientSoundButton } from "../../features/landing/sections/AmbientSoundButton";
-
-type SiteFrameProps = {
-  navItems: BrandNavItem[];
-  footerGroups: BrandFooterGroup[];
+type SiteLayoutProps = {
   children: ReactNode;
+  navItems?: BrandNavItem[];
+  footerGroups?: BrandFooterGroup[];
 };
 
-export function SiteFrame({ navItems, footerGroups, children }: SiteFrameProps) {
-  const pathname = window.location.pathname;
+export function SiteLayout({
+  children,
+  navItems = brandNavigation,
+  footerGroups = brandFooterGroups,
+}: SiteLayoutProps) {
+  const { pathname } = useRouter();
 
   return (
     <main className={styles.page}>
@@ -75,4 +86,3 @@ export function SiteFrame({ navItems, footerGroups, children }: SiteFrameProps) 
     </main>
   );
 }
-
