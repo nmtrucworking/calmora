@@ -1,25 +1,41 @@
 :root {
-  color-scheme: dark;
+  color-scheme: light;
+
   --font-sans:
-    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    sans-serif;
+    "Be Vietnam Pro", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
   --font-display:
-    "Playfair Display", "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia,
-    serif;
-  --page-bg: #07110f;
-  --page-bg-soft: #0f1b18;
-  --surface: rgba(255, 250, 240, 0.06);
-  --surface-strong: rgba(255, 250, 240, 0.1);
-  --border: rgba(255, 250, 240, 0.14);
-  --border-strong: rgba(255, 250, 240, 0.22);
-  --text: #fffaf0;
-  --text-muted: rgba(255, 250, 240, 0.68);
-  --text-soft: rgba(255, 250, 240, 0.52);
-  --accent: #B95672;
-  --accent-strong: #e8b89f;
-  --accent-gold: #f8df93;
-  --shadow-lg: 0 28px 70px rgba(0, 0, 0, 0.28);
-  --shadow-md: 0 16px 36px rgba(0, 0, 0, 0.22);
+    "Noto Serif Display", "Playfair Display", "Iowan Old Style", "Palatino Linotype",
+    Palatino, "Book Antiqua", Georgia, serif;
+
+  /* Cultural palette: giấy dó, lá sen, cánh sen, nước trà và sơn son thếp vàng. */
+  --page-bg: #f7f3e8;
+  --page-bg-soft: #eee7d8;
+  --surface: rgba(255, 253, 248, 0.76);
+  --surface-strong: #fffdf8;
+  --surface-tint: #e7eee6;
+  --border: rgba(53, 92, 74, 0.16);
+  --border-strong: rgba(53, 92, 74, 0.3);
+
+  --text: #24302a;
+  --text-muted: rgba(36, 48, 42, 0.74);
+  --text-soft: rgba(36, 48, 42, 0.56);
+
+  --primary: #355c4a;
+  --primary-strong: #284638;
+  --on-primary: #fffaf2;
+  --accent: #9b405d;
+  --accent-strong: #7a3048;
+  --accent-soft: #ead3da;
+  --accent-gold: #89631f;
+  --gold-decorative: #b78a45;
+  --tea-brown: #6b4a32;
+  --lotus-mist: #dfe9df;
+
+  --shadow-sm: 0 8px 22px rgba(74, 58, 38, 0.09);
+  --shadow-md: 0 18px 42px rgba(74, 58, 38, 0.12);
+  --shadow-lg: 0 30px 72px rgba(74, 58, 38, 0.15);
+
   --radius-lg: 1.5rem;
   --radius-md: 1rem;
   --radius-sm: 0.75rem;
@@ -28,8 +44,9 @@
 
 body {
   background:
-    radial-gradient(circle at top, rgba(200, 234, 211, 0.08), transparent 34%),
-    linear-gradient(180deg, var(--page-bg) 0%, #0b1512 42%, #120f0d 100%);
+    radial-gradient(circle at 12% 0%, rgba(201, 122, 141, 0.11), transparent 28%),
+    radial-gradient(circle at 88% 8%, rgba(53, 92, 74, 0.11), transparent 30%),
+    linear-gradient(180deg, var(--page-bg) 0%, #f3eddf 58%, #ebe2d1 100%);
   color: var(--text);
   font-family: var(--font-sans);
 }
@@ -39,6 +56,6 @@ a {
 }
 
 ::selection {
-  background: rgba(245, 200, 214, 0.88);
-  color: var(--page-bg);
+  background: rgba(201, 122, 141, 0.34);
+  color: var(--text);
 }
