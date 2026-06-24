@@ -23,11 +23,11 @@ const SitePage = lazy(loadSitePage);
 let didSchedulePreload = false;
 
 const productImagePaths = [
-  "/assets/products/classic-pack.png",
-  "/assets/products/petal-pack.png",
-  "/assets/products/gift-set.png",
+  "/assets/products/classic-pack.jpg",
+  "/assets/products/petal-pack.jpg",
+  "/assets/products/gift-set.jpg",
 ];
-const sharedImagePaths = ["/calmora-mark-original-look.svg"];
+const sharedImagePaths = ["/assets/brand/calmora-mark.png"];
 
 function RouteFallback() {
   return <div style={{ minHeight: "60vh" }} />;
@@ -36,6 +36,13 @@ function RouteFallback() {
 function getRouteImagePaths(pathname: string) {
   if (pathname === "/products") {
     return [...sharedImagePaths, ...productImagePaths];
+  }
+
+  if (pathname.startsWith("/products/")) {
+    const productSlug = pathname.replace("/products/", "").split("/")[0];
+    const product = getProductBySlug(productSlug);
+
+    return product ? [...sharedImagePaths, product.image] : sharedImagePaths;
   }
 
   return sharedImagePaths;
@@ -73,19 +80,32 @@ function preloadSecondaryRoutes() {
   if (didSchedulePreload) return;
   didSchedulePreload = true;
 
-  window.setTimeout(() => {
-    void preloadImages([...sharedImagePaths, ...productImagePaths], {
-      priority: "low",
-      timeoutMs: 3200,
-    });
+  const scheduleIdle = (callback: IdleRequestCallback, options: IdleRequestOptions) => {
+    if ("requestIdleCallback" in window) {
+      return window.requestIdleCallback(callback, options);
+    }
 
-    void Promise.allSettled([
-      loadAboutPage(),
-      loadStoryPage(),
-      loadProductsPage(),
-      loadProductDetailPage(),
-      loadSitePage(),
-    ]);
+    return globalThis.setTimeout(() => callback({ didTimeout: false, timeRemaining: () => 0 }), 1);
+  };
+
+  window.setTimeout(() => {
+    scheduleIdle(
+      () => {
+        void preloadImages([...sharedImagePaths, ...productImagePaths], {
+          priority: "low",
+          timeoutMs: 3200,
+        });
+
+        void Promise.allSettled([
+          loadAboutPage(),
+          loadStoryPage(),
+          loadProductsPage(),
+          loadProductDetailPage(),
+          loadSitePage(),
+        ]);
+      },
+      { timeout: 1800 },
+    );
   }, 900);
 }
 

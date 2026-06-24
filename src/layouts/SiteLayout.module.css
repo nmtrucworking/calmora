@@ -24,7 +24,7 @@
 .landingPage {
   background:
     linear-gradient(180deg, rgba(236, 229, 213, 0.3) 0%, rgba(226, 217, 196, 0.42) 58%, rgba(216, 205, 180, 0.72) 100%),
-    url("../assets/landing.png") center top / cover fixed,
+    url("../assets/landing-optimized.jpg") center top / cover fixed,
     linear-gradient(180deg, var(--page-bg) 0%, var(--page-bg-soft) 58%, #d8cdb4 100%);
 }
 
@@ -263,7 +263,7 @@
   .landingPage {
     background:
       linear-gradient(180deg, rgba(236, 229, 213, 0.38) 0%, rgba(226, 217, 196, 0.5) 58%, rgba(216, 205, 180, 0.8) 100%),
-      url("../assets/landing.png") center top / cover scroll,
+      url("../assets/landing-optimized.jpg") center top / cover scroll,
       linear-gradient(180deg, var(--page-bg) 0%, var(--page-bg-soft) 58%, #d8cdb4 100%);
   }
 

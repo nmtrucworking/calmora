@@ -44,7 +44,7 @@ export const products: SenovaProduct[] = [
     shortDescription: "Dành cho những khoảng lặng có thể lặp lại mỗi ngày.",
     role: "Giữ",
     href: "/products/classic",
-    image: "/assets/products/classic-pack.png",
+    image: "/assets/products/classic-pack.jpg",
     status: "active",
     primaryAction: {
       label: "Đăng ký nhận thông tin",
@@ -95,7 +95,7 @@ export const products: SenovaProduct[] = [
       "Phần trà một ly trong hình dáng búp sen, biến thao tác pha trà thành trải nghiệm giác quan.",
     role: "Mở",
     href: "/products/petal-pack",
-    image: "/assets/products/petal-pack.png",
+    image: "/assets/products/petal-pack.jpg",
     status: "active",
     primaryAction: {
       label: "Bắt đầu trải nghiệm",
@@ -156,7 +156,7 @@ export const products: SenovaProduct[] = [
       "Bộ quà trà sen kết hợp sản phẩm, trải nghiệm và câu chuyện văn hóa trong một hành trình hoàn chỉnh.",
     role: "Trao",
     href: "/products/gift-set",
-    image: "/assets/products/gift-set.png",
+    image: "/assets/products/gift-set.jpg",
     status: "draft",
     primaryAction: {
       label: "Đăng ký nhận thông tin",
