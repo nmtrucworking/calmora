@@ -71,10 +71,10 @@ export function ProductHeroStage() {
         <div className={styles.heroText}>
           <p className={styles.heroEyebrow}>SENOVA COLLECTION / 01—03</p>
           <h1 id="hero-title" className={styles.heroTitle}>
-            <TextReveal text="Ba hình hài của một hương sen Việt." />
+            <TextReveal text="Ba hình hài của một câu chuyện trà sen." />
           </h1>
           <p className={styles.heroSubtitle}>
-            Một tách trà mỗi ngày. Một nghi thức để ghi nhớ. Một món quà để trao đi.
+            Một tách trà để giữ. Một cánh sen để mở. Một món quà để trao.
           </p>
         </div>
 

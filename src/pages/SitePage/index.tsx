@@ -34,10 +34,10 @@ export default function SitePage({ path }: SitePageProps) {
           </div>
 
           <aside className={styles.heroPanel} aria-label="Tóm tắt định hướng thương hiệu">
-            <p className={styles.panelKicker}>Brand system</p>
-            <h2 className={styles.panelTitle}>Cùng một ngôn ngữ thị giác cho toàn website.</h2>
+            <p className={styles.panelKicker}>Giữ - Mở - Trao</p>
+            <h2 className={styles.panelTitle}>Một mạch kể chung cho toàn bộ trải nghiệm Senova.</h2>
             <p className={styles.panelText}>
-              Các trang ngoài landing sẽ dùng chung tone, nhịp chữ và khung tương tác để mở rộng an toàn.
+              Mỗi trang mở một lát cắt khác nhau, nhưng cùng trở về trà hương sen, thao tác trải nghiệm và câu chuyện được trao đi.
             </p>
             <StaggerContainer className={styles.principleList}>
               {brandPrinciples.map((principle) => (
@@ -55,9 +55,9 @@ export default function SitePage({ path }: SitePageProps) {
 
         <section className={styles.catalog}>
           <SectionHeading
-            eyebrow="Lối đi"
-            title="Các trang trong hệ thống"
-            description="Thêm trang mới vào đây mà không phải đụng vào landing page hoặc khối 3D."
+            eyebrow="Khám phá thêm"
+            title="Tiếp tục hành trình Senova"
+            description="Chọn một trang để đi sâu hơn vào sản phẩm, câu chuyện văn hóa hoặc nghi thức trải nghiệm."
             align="center"
           />
           <StaggerContainer className={styles.catalogGrid}>

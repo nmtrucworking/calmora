@@ -59,7 +59,7 @@ export function ProductJourney() {
               style={{ x: classicTranslateX, opacity: classicOpacity }}
             >
               <span className={styles.bubbleLabel}>Classic</span>
-              <p className={styles.bubbleRole}>Dùng hằng ngày</p>
+              <p className={styles.bubbleRole}>Giữ</p>
             </motion.div>
 
             {/* Petal Pack Icon bubble (Center peak) */}
@@ -68,7 +68,7 @@ export function ProductJourney() {
               style={{ y: petalPackTranslateY, opacity: petalPackOpacity }}
             >
               <span className={styles.bubbleLabel}>Petal Pack</span>
-              <p className={styles.bubbleRole}>Trải nghiệm</p>
+              <p className={styles.bubbleRole}>Mở</p>
             </motion.div>
 
             {/* Gift Set Icon bubble */}
@@ -77,7 +77,7 @@ export function ProductJourney() {
               style={{ x: giftSetTranslateX, opacity: giftSetOpacity }}
             >
               <span className={styles.bubbleLabel}>Gift Set</span>
-              <p className={styles.bubbleRole}>Trao tặng</p>
+              <p className={styles.bubbleRole}>Trao</p>
             </motion.div>
           </div>
 
@@ -101,8 +101,8 @@ export function ProductJourney() {
         {/* Final copy */}
         <div className={styles.journeyCopy}>
           <h2 className={styles.journeyHeadline}>
-            Không chỉ chọn một loại trà.<br />
-            Hãy chọn cách bạn muốn chạm vào hương sen Việt.
+            Câu chuyện không kết thúc khi tách trà cạn.<br />
+            Nó tiếp tục khi được hiểu và kể lại.
           </h2>
 
           <div className={styles.journeyActions}>
@@ -110,7 +110,7 @@ export function ProductJourney() {
               Khám phá Petal Pack
             </Link>
             <a href="mailto:hello@senova.vn" className={styles.journeySecondaryBtn}>
-              Nhận thông tin sản phẩm
+              Nhận thông tin Senova
             </a>
           </div>
 

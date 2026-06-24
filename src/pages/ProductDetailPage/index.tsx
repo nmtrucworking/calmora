@@ -126,14 +126,14 @@ export default function ProductDetailPage({ product }: ProductDetailPageProps) {
           <QrCode aria-hidden="true" />
           <div>
             <p className={styles.eyebrow}>QR động</p>
-            <h2>Sẵn sàng nối bao bì vật lý với câu chuyện số.</h2>
+            <h2>Nối sản phẩm vật lý với câu chuyện số.</h2>
             <p>
-              Route `/q/[code]` trong tài liệu sẽ ghi nhận lượt quét, xác định pack và chuyển đến
-              trang trải nghiệm Petal Pack tương ứng.
+              Sau khi mở Petal Pack, người dùng có thể quét QR để đọc câu chuyện ngắn, xem lại
+              hướng dẫn trải nghiệm và gửi phản hồi.
             </p>
           </div>
           <Link href="/trai-nghiem/petal-pack/mo-canh-sen" className={styles.primaryButton}>
-            Xem landing QR mẫu
+            Mở trải nghiệm QR
             <ArrowRight aria-hidden="true" />
           </Link>
         </section>

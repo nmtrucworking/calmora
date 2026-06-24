@@ -31,36 +31,36 @@ export function GiftSetExplodedView() {
       id: 1,
       top: "35%",
       left: "30%",
-      title: "Trà khô nguyên bản",
-      description: "Trà hữu cơ hảo hạng thấm đượm hương nhị hoa sen tự nhiên thanh lọc kỹ lưỡng.",
+      title: "Senova Classic",
+      description: "Phần trà hương sen nền tảng, giúp người nhận bắt đầu bằng một tách trà có thể pha thường xuyên.",
     },
     {
       id: 2,
       top: "48%",
       left: "48%",
       title: "Senova Petal Pack",
-      description: "Cấu trúc búp trà bọc cánh sen sấy khô đại diện cho đỉnh cao trải nghiệm của Calmora.",
+      description: "Điểm nhấn mở cánh, giúp người nhận tiếp xúc với sản phẩm qua hình dáng, thao tác và giác quan.",
     },
     {
       id: 3,
       top: "62%",
       left: "25%",
       title: "Thẻ câu chuyện",
-      description: "Ấn phẩm nghệ thuật kể lại hành trình di sản văn hóa hoa sen của Calmora.",
+      description: "Nội dung ngắn giải thích hành trình Giữ - Mở - Trao và mở đường đến câu chuyện số qua QR.",
     },
     {
       id: 4,
       top: "30%",
       left: "70%",
-      title: "Bao bì hộp gỗ di sản",
-      description: "Gia công thủ công từ gỗ óc chó cao cấp sang trọng, biểu tượng cho lòng hiếu khách bản địa.",
+      title: "Bao bì đồng bộ",
+      description: "Không gian sắp đặt các thành phần theo một trình tự rõ ràng, để phần trang trí không lấn át sản phẩm.",
     },
     {
       id: 5,
       top: "65%",
       left: "65%",
-      title: "Nghi thức pha trà",
-      description: "Tài liệu in ép kim hướng dẫn chi tiết các bước để chuẩn bị một chén trà sen chuẩn vị.",
+      title: "Hướng dẫn pha",
+      description: "Chỉ dẫn người nhận bắt đầu đúng với từng phiên bản sản phẩm, thay vì phải tự tìm thông tin.",
     },
   ];
 
@@ -76,7 +76,7 @@ export function GiftSetExplodedView() {
           <h2 className={styles.giftSetTitle}>{giftSet.name}</h2>
           <p className={styles.giftSetTagline}>&ldquo;{giftSet.tagline}&rdquo;</p>
           <p className={styles.giftSetDescription}>
-            Không chỉ là một hộp trà. Senova Gift Set kết hợp sản phẩm thượng hạng, ấn phẩm hướng dẫn nghi thức pha trà và thẻ câu chuyện văn hóa trong một kết cấu hộp gỗ di sản sang trọng.
+            Gift Set kết hợp Classic, Petal Pack, hướng dẫn pha và thẻ câu chuyện trong một bộ quà thống nhất. Điều được trao đi là thời gian chuẩn bị, sự lựa chọn có chủ đích và lời mời người nhận dành cho mình một khoảng lặng.
           </p>
         </div>
 

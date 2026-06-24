@@ -130,7 +130,7 @@ export function LotusOrbitNav() {
                 
                 <div className={styles.detailActions}>
                   <Link href={activeProduct.href} className={styles.detailCta}>
-                    Khám phá nghi thức {activeProduct.role.toLowerCase()}
+                    Xem {activeProduct.name}
                     <ArrowRight className={styles.detailCtaIcon} />
                   </Link>
                 </div>

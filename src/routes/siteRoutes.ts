@@ -29,9 +29,9 @@ export const siteRoutes: SiteRoute[] = content.brand.navigation
   });
 
 export const defaultSitePageContent: SitePageContent = {
-  eyebrow: "CALMORA",
+  eyebrow: "Calmora | Senova",
   title: "Trang đang được chuẩn bị.",
-  text: "Quay lại trang chủ để xem vòng đời hoa sen và trải nghiệm prototype hiện tại.",
+  text: "Nội dung trang này đang được biên tập để bám cùng mạch Giữ - Mở - Trao của Senova.",
 };
 
 export function getSitePageContent(pathname: string): SitePageContent {

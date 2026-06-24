@@ -83,7 +83,7 @@ export function ClassicRitualScene() {
           <h2 className={styles.classicTitle}>{classicProduct.name}</h2>
           <p className={styles.classicTagline}>&ldquo;{classicProduct.tagline}&rdquo;</p>
           <p className={styles.classicDescription}>
-            Một nhịp trà có thể lặp lại mỗi ngày. Senova Classic giữ hương sen thanh trong một hình thức dễ pha, dễ sử dụng và đủ gần gũi để trở thành thói quen cân bằng mỗi buổi sáng của bạn.
+            Classic là điểm bắt đầu của Senova: trà hương sen được trình bày trong hình thức thuận tiện để người dùng có thể pha và thưởng thức thường xuyên.
           </p>
 
           <div className={styles.classicPillars}>
@@ -93,7 +93,7 @@ export function ClassicRitualScene() {
               </div>
               <div>
                 <h4 className={styles.pillarTitle}>Mở gói</h4>
-                <p className={styles.pillarText}>Bao bì giấy kraft tráng bạc mộc mạc, bảo quản trà tối đa.</p>
+                <p className={styles.pillarText}>Lấy một phần trà đã được định lượng, giữ thao tác gọn và sạch.</p>
               </div>
             </div>
             <div className={styles.pillarItem}>
@@ -101,8 +101,8 @@ export function ClassicRitualScene() {
                 <Droplets className={styles.pillarIcon} />
               </div>
               <div>
-                <h4 className={styles.pillarTitle}>Ngâm trà</h4>
-                <p className={styles.pillarText}>Túi lọc tam giác phân hủy sinh học, giải phóng tối đa hương vị.</p>
+                <h4 className={styles.pillarTitle}>Pha trà</h4>
+                <p className={styles.pillarText}>Đặt phần trà vào cốc và thực hiện theo hướng dẫn in trên bao bì.</p>
               </div>
             </div>
             <div className={styles.pillarItem}>
@@ -111,7 +111,7 @@ export function ClassicRitualScene() {
               </div>
               <div>
                 <h4 className={styles.pillarTitle}>Dành một khoảng chậm</h4>
-                <p className={styles.pillarText}>3 phút chờ đợi là khoảng thời gian tĩnh lặng bắt đầu ngày mới.</p>
+                <p className={styles.pillarText}>Chờ hương sen và vị trà dần hiện ra trước khi thưởng thức.</p>
               </div>
             </div>
           </div>

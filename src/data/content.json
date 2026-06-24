@@ -1,9 +1,9 @@
 {
   "brand": {
     "name": "CALMORA",
-    "tagline": "Sen + Innovation",
-    "summary": "Một hệ website tối giản, cân bằng giữa cảm giác thủ công, chất liệu sen và tinh thần thử nghiệm hiện đại của Calmora.",
-    "footerTagline": "Một ngôn ngữ thương hiệu thống nhất cho những trang đang mở rộng dần.",
+    "tagline": "Mở một cánh sen. Giữ một khoảng lặng. Trao một câu chuyện Việt.",
+    "summary": "Senova là dự án trà sen trải nghiệm do Calmora phát triển, kết nối trà hương sen, thiết kế mở cánh và câu chuyện văn hóa trong hành trình Giữ - Mở - Trao.",
+    "footerTagline": "Một cánh sen, một khoảng lặng và một câu chuyện Việt được tiếp tục sau mỗi lần thưởng trà.",
     "navigation": [
       { "label": "Trang chủ", "href": "/" },
       { "label": "Giới thiệu", "href": "/about" },
@@ -16,43 +16,43 @@
       {
         "title": "Khám phá",
         "links": [
-          { "label": "Giới thiệu Calmora", "href": "/about" },
-          { "label": "Bộ sưu tập trà", "href": "/products" },
-          { "label": "Câu chuyện Calmora", "href": "/story" }
+          { "label": "Giới thiệu Senova", "href": "/about" },
+          { "label": "Bộ sản phẩm", "href": "/products" },
+          { "label": "Câu chuyện văn hóa", "href": "/story" }
         ]
       },
       {
         "title": "Trải nghiệm",
         "links": [
-          { "label": "Nghi thức pha trà", "href": "/ritual" },
+          { "label": "Nghi thức thưởng trà", "href": "/ritual" },
           { "label": "Mùa sen", "href": "/seasonal" },
-          { "label": "Đối tác", "href": "/partners" }
+          { "label": "Petal Pack", "href": "/products/petal-pack" }
         ]
       },
       {
         "title": "Kết nối",
         "links": [
           { "label": "Liên hệ", "href": "mailto:hello@senova.vn" },
-          { "label": "Đặt mẫu thử", "href": "/contact" },
+          { "label": "Đăng ký nhận thông tin", "href": "/dat-truoc" },
           { "label": "Hợp tác", "href": "/partners" }
         ]
       }
     ],
     "principles": [
       {
-        "label": "Tông màu",
-        "title": "Lá non, sen trầm, nền tối",
-        "text": "Sắc độ giữ chất tĩnh và ấm để mọi trang cùng đi chung một nhịp thị giác."
+        "label": "Giữ",
+        "title": "Một giá trị còn sống",
+        "text": "Trà hương sen được đặt trong hình thức dễ tiếp cận để người dùng hôm nay có thể sử dụng và tìm thấy ý nghĩa."
       },
       {
-        "label": "Nhịp điệu",
-        "title": "Khoảng thở lớn, chữ gọn",
-        "text": "Bố cục nhấn vào khoảng trống và thứ bậc để brand đọc được ngay từ lướt nhìn đầu tiên."
+        "label": "Mở",
+        "title": "Một trải nghiệm giác quan",
+        "text": "Hình dáng, thao tác, hương và vị cùng dẫn người dùng bước vào một khoảng thưởng trà có chủ đích."
       },
       {
-        "label": "Giọng điệu",
-        "title": "Tinh tế, chậm, rõ",
-        "text": "Lời thoại ngắn gọn nhưng không lạnh, đủ hiện đại để mở rộng sang các trang sau."
+        "label": "Trao",
+        "title": "Một câu chuyện được gửi đi",
+        "text": "Món quà mang theo lời nhắn, sự chuẩn bị và một bối cảnh đủ rõ để người nhận tiếp tục chia sẻ."
       }
     ]
   },
@@ -66,71 +66,71 @@
       { "label": "Mùa sen", "href": "/seasonal" }
     ],
     "hero": {
-      "eyebrow": "Calmora",
+      "eyebrow": "Calmora | Senova",
       "title": "Senova",
-      "description": "Một búp sen mở ra trong nhịp trà, rồi dịu dàng buông cánh.",
-      "scrollHint": "Cuộn để hoa nở"
+      "description": "Một cánh sen mở ra trà hương sen, trải nghiệm giác quan và câu chuyện Việt trong hành trình Giữ - Mở - Trao.",
+      "scrollHint": "Cuộn để mở câu chuyện"
     },
     "chapters": [
       {
         "id": "bud",
-        "eyebrow": "01 / Búp",
-        "title": "Khép",
-        "text": "Hình hài đầu tiên giữ lại sự tĩnh lặng của sen trước bình minh."
+        "eyebrow": "01 / Giữ",
+        "title": "Giữ",
+        "text": "Giữ hương trà sen trong một hình thức dễ tiếp cận và có thể trở thành một phần của đời sống hằng ngày."
       },
       {
         "id": "bloom",
-        "eyebrow": "02 / Nở",
+        "eyebrow": "02 / Mở",
         "title": "Mở",
-        "text": "Từng lớp cánh tách ra, để ánh trà ấm hiện lên từ lõi hoa."
+        "text": "Mở cánh sen, mở giác quan và dành sự chú ý cho từng bước của quá trình pha trà."
       },
       {
         "id": "wither",
-        "eyebrow": "03 / Tàn",
-        "title": "Buông",
-        "text": "Vẻ đẹp cuối cùng không biến mất; nó lắng xuống thành ký ức thanh nhẹ."
+        "eyebrow": "03 / Trao",
+        "title": "Trao",
+        "text": "Trao một món quà có lời nhắn, có câu chuyện và có khả năng tiếp tục được chia sẻ."
       }
     ],
     "cta": {
-      "eyebrow": "Trải nghiệm Calmora",
-      "title": "Trà sen, nhìn bằng một vòng đời.",
-      "description": "Một không gian đặt hoa sen làm trung tâm trải nghiệm, để sản phẩm được cảm nhận trước khi được giải thích.",
-      "label": "Tìm hiểu thương hiệu",
-      "href": "/about"
+      "eyebrow": "Câu chuyện Senova",
+      "title": "Một cánh sen không kể hết Việt Nam.",
+      "description": "Nhưng trong khoảnh khắc một người rót trà mời người khác ngồi lại, ta nhận ra một cách rất Việt để bắt đầu câu chuyện.",
+      "label": "Khám phá câu chuyện",
+      "href": "/story"
     },
     "footer": {
-      "tagline": "Calmora tôn vinh vẻ đẹp của sen Việt qua trà, nghi thức và trải nghiệm thị giác."
+      "tagline": "Calmora phát triển Senova như một dự án trà sen trải nghiệm: có sản phẩm để uống, có thao tác để cảm nhận và có câu chuyện để trao đi."
     }
   },
   "routes": {
     "/about": {
       "eyebrow": "Giới thiệu",
-      "title": "Về Calmora - Câu chuyện thương hiệu.",
-      "text": "Nơi di sản trà sen truyền thống hội ngộ cùng khoa học hiện đại."
+      "title": "Calmora | Senova - trà sen trải nghiệm trong một câu chuyện Việt thống nhất.",
+      "text": "Senova đưa trà hương sen, thiết kế trải nghiệm và nội dung văn hóa vào một hệ sản phẩm có thể sử dụng, cảm nhận và trao tặng."
     },
     "/products": {
-      "eyebrow": "Bộ sưu tập",
-      "title": "Trà sen trong hình hài mới.",
-      "text": "Không gian này sẽ giới thiệu các dòng trà, hộp quà và phiên bản mùa sen của Calmora."
+      "eyebrow": "Bộ sản phẩm",
+      "title": "Ba hình hài của một câu chuyện trà sen.",
+      "text": "Một tách trà để giữ. Một cánh sen để mở. Một món quà để trao."
     },
     "/story": {
-      "eyebrow": "Câu chuyện",
-      "title": "Từ hồ sen đến nghi thức trà.",
-      "text": "Trang câu chuyện dành cho nguồn cảm hứng, chất liệu bản địa và tinh thần thiết kế của Calmora."
+      "eyebrow": "Câu chuyện văn hóa",
+      "title": "Một cánh sen mở ra một câu chuyện Việt.",
+      "text": "Từ lời mời trà đến hành trình Giữ - Mở - Trao, Senova đưa văn hóa sen và thưởng trà vào một trải nghiệm hiện đại."
     },
     "/ritual": {
-      "eyebrow": "Nghi thức",
-      "title": "Pha trà bằng nhịp chậm của sen.",
-      "text": "Trang nghi thức sẽ mô tả cách nhìn, mở, pha và chia sẻ trà sen như một trải nghiệm cảm quan."
+      "eyebrow": "Nghi thức trải nghiệm",
+      "title": "Mở - cảm nhận - pha - chờ - thưởng thức.",
+      "text": "Một chuỗi thao tác do Senova thiết kế để người dùng dành sự chú ý cho hình dáng, hương vị và khoảng thời gian thưởng trà."
     },
     "/seasonal": {
       "eyebrow": "Mùa sen",
-      "title": "Những phiên bản theo mùa.",
-      "text": "Nơi lưu giữ các concept giới hạn theo mùa nở, mùa thu hoạch và mùa quà tặng."
+      "title": "Những thời điểm để hương, ký ức và câu chuyện gặp nhau.",
+      "text": "Không gian nội dung theo mùa của Senova, nơi bối cảnh văn hóa được giới thiệu mà không biến địa danh thành nhãn trang trí cho sản phẩm."
     },
     "/contact": {
       "eyebrow": "Liên hệ",
-      "title": "Bắt đầu một thử nghiệm với Calmora.",
+      "title": "Bắt đầu một trải nghiệm với Senova.",
       "text": "Gửi yêu cầu mẫu thử, đặt lịch trao đổi hoặc đề xuất hợp tác phát triển sản phẩm."
     },
     "/partners": {
@@ -140,86 +140,86 @@
     }
   },
   "storyPage": {
-    "kicker": "Story / lotus sequence",
-    "eyebrow": "Câu chuyện",
-    "title": "Từ búp đến tàn, bông sen tự kể nhịp thời gian của mình.",
-    "description": "Hero được giữ cố định trong tầm nhìn đầu tiên để người xem đọc được chuỗi chuyển động ngay lập tức, thay vì phải cuộn để hiểu câu chuyện.",
-    "body": "Không gian này giữ một nhịp kể chậm và có kiểm soát. Lotus 3D chạy một vòng tự động qua búp, nở rồi tàn, giúp story page có chiều sâu mà vẫn tách biệt hoàn toàn khỏi landing.",
+    "kicker": "Story / Giữ - Mở - Trao",
+    "eyebrow": "Câu chuyện văn hóa",
+    "title": "Một cánh sen mở ra một câu chuyện Việt.",
+    "description": "Từ lời mời trà đến hành trình Giữ - Mở - Trao, Senova đưa văn hóa sen và thưởng trà vào một trải nghiệm hiện đại, có thể sử dụng và trao tặng.",
+    "body": "Senova không cố tái tạo nguyên vẹn một nghi thức cổ, cũng không gắn mỗi sản phẩm với một địa danh chỉ để tạo cảm giác bản địa. Dự án chọn cách kết nối những giá trị có thể tiếp tục sống trong hiện tại: giữ một hương vị quen, mở ra một trải nghiệm mới và trao đi một câu chuyện có ý nghĩa.",
     "timeline": [
       {
         "label": "01",
-        "title": "Búp",
-        "text": "Giữ cấu trúc khép, tối giản và tĩnh để mở màn bằng sự chờ đợi."
+        "title": "Giữ",
+        "text": "Senova Classic giữ trà hương sen ở vị trí nền tảng: một thức uống có thể pha thuận tiện và trở thành một phần của nhịp sống hằng ngày."
       },
       {
         "label": "02",
-        "title": "Nở",
-        "text": "Cánh bung ra, ánh sáng mở rộng và tâm điểm của hero được đẩy lên cao nhất."
+        "title": "Mở",
+        "text": "Senova Petal Pack biến việc pha một ly trà thành chuỗi thao tác mở - cảm nhận - pha - chờ - thưởng thức."
       },
       {
         "label": "03",
-        "title": "Tàn",
-        "text": "Nhịp lắng xuống, để lại một kết thúc mềm và có ký ức thị giác rõ ràng."
+        "title": "Trao",
+        "text": "Senova Gift Set kết nối trà, Petal Pack, hướng dẫn pha và thẻ nội dung trong một món quà có câu chuyện."
       }
     ]
   },
   "aboutPage": {
     "hero": {
-      "eyebrow": "Giới thiệu thương hiệu",
-      "title": "Calmora — Hương sắc bản địa, tinh hoa thiết kế",
-      "description": "Nơi câu chuyện di sản trà sen truyền thống giao thoa với công nghệ nghiên cứu và chế tác hiện đại."
+      "eyebrow": "Giới thiệu",
+      "title": "Calmora | Senova - trà sen trải nghiệm trong một câu chuyện Việt thống nhất.",
+      "description": "Senova đưa trà hương sen, thiết kế trải nghiệm và nội dung văn hóa vào một hệ sản phẩm có thể sử dụng, cảm nhận và trao tặng."
     },
     "mission": {
-      "label": "Sứ mệnh",
-      "title": "Hương sắc Việt Nam",
-      "text": "Calmora sinh ra từ mong muốn bảo tồn và nâng tầm các giá trị văn hóa bản địa. Chúng tôi không chỉ làm trà; chúng tôi kiến tạo một không gian trải nghiệm cảm quan, nơi mỗi búp sen kể về hành trình tĩnh lặng của đất trời, hồ sen đêm sâu thẳm, và nghệ thuật thưởng trà ung dung.",
-      "quote": "Uống một tách trà Calmora là bước vào một nghi thức chậm, cảm nhận sự lắng dịu của tâm trí và kết nối sâu sắc với tự nhiên.",
-      "quoteAuthor": "— Calmora Tea Masters"
+      "label": "Senova là gì?",
+      "title": "Từ sản phẩm đến trải nghiệm",
+      "text": "Senova là dự án trà sen trải nghiệm do Calmora phát triển. Dự án lấy trà hương sen làm sản phẩm lõi và tái thiết kế cách người dùng tiếp xúc với sản phẩm: từ một tách trà hằng ngày, đến thao tác mở cánh sen có chủ đích, rồi trở thành một món quà có câu chuyện.",
+      "quote": "Senova bắt đầu từ một hành động nhỏ: rót trà và mời một người khác ngồi lại.",
+      "quoteAuthor": "Calmora | Senova"
     },
     "tech": {
-      "eyebrow": "Quy trình công nghệ",
-      "title": "Khoa học đằng sau chén trà sen hảo hạng",
-      "description": "Sự tỉ mỉ của nghệ nhân kết hợp cùng các công nghệ hiện đại giúp tối ưu hóa giá trị dược liệu và hương thơm tự nhiên.",
+      "eyebrow": "Mạch kể sản phẩm",
+      "title": "Một bộ sản phẩm, một hành trình chung",
+      "description": "Ba dòng sản phẩm không đại diện cho ba vùng miền. Chúng đảm nhiệm ba vai trò bổ trợ trong cùng một câu chuyện Giữ - Mở - Trao.",
       "cards": [
         {
-          "title": "Computer Vision phân loại",
-          "text": "Mỗi hạt sen và búp hoa được quét qua hệ thống thị giác máy tính thông minh để phân loại nghiêm ngặt thành 3 lớp chất lượng: Lớp lụa, lớp già, và lớp đen, đảm bảo chỉ những nguyên liệu hoàn hảo nhất mới được sử dụng."
+          "title": "Giữ",
+          "text": "Senova Classic giữ trà hương sen trong nhịp sống hằng ngày, như một khoảng nghỉ gọn và có thể lặp lại."
         },
         {
-          "title": "Công nghệ sấy thăng hoa",
-          "text": "Sử dụng công nghệ sấy thăng hoa (Freeze-drying) tiên tiến ở nhiệt độ âm sâu, giúp làm khô cánh sen mà không làm mất đi các hoạt chất alkaloid thư giãn và flavonoid chống oxy hóa quý giá."
+          "title": "Mở",
+          "text": "Senova Petal Pack mở trải nghiệm bằng hình dáng, thao tác và giác quan, giúp người dùng chú ý hơn đến khoảnh khắc pha trà."
         },
         {
-          "title": "Lưu giữ trọn vẹn hương vị",
-          "text": "Trà sen giữ nguyên cấu trúc tự nhiên, búp sen mở ra dịu dàng khi ngâm nước nóng, giải phóng làn hương tinh khiết mang đậm hồn cốt của hồ sen hồ Tây sớm mai."
+          "title": "Trao",
+          "text": "Senova Gift Set trao trà sen như một món quà có lời nhắn, có hướng dẫn và có câu chuyện để người nhận tiếp tục chia sẻ."
         }
       ]
     },
     "ritual": {
-      "title": "Nghi thức Trải nghiệm Calmora",
+      "title": "Những giá trị Senova lựa chọn kể",
       "items": [
         {
-          "number": "01 / Nhìn",
-          "title": "Chiêm ngưỡng đời sen",
-          "text": "Quan sát búp sen sấy khô chuyển mình từ khép kín sang bung nở nhẹ nhàng trong tách trà thủy tinh."
+          "number": "01 / Sen",
+          "title": "Chất liệu ký ức",
+          "text": "Sen trở thành hình dáng, chất liệu và thao tác giúp người dùng bước vào trải nghiệm, không chỉ là biểu tượng trang trí."
         },
         {
-          "number": "02 / Ngửi",
-          "title": "Thưởng làn hương mỏng",
-          "text": "Cảm nhận hương thơm dịu nhẹ, thanh khiết của sen kết hợp với vị ấm nồng của trà cổ thụ."
+          "number": "02 / Trà",
+          "title": "Một lời mời ngồi lại",
+          "text": "Chén trà tạo ra khoảng thời gian chung, mở đầu lời hỏi thăm và dành sự chú ý cho người đang hiện diện."
         },
         {
-          "number": "03 / Thưởng",
-          "title": "Lắng nghe khoảnh khắc",
-          "text": "Nhấp ngụm trà chậm, để vị ngọt hậu đọng lại nơi cổ họng và đưa tâm hồn về trạng thái tĩnh tại."
+          "number": "03 / Quà",
+          "title": "Sự trân trọng có chuẩn bị",
+          "text": "Giá trị món quà nằm ở dụng ý, cách chuẩn bị và câu chuyện đi cùng, không chỉ ở vật được trao."
         }
       ]
     },
     "cta": {
-      "title": "Khởi đầu một trải nghiệm cảm quan",
-      "text": "Calmora chào đón bạn đến thử nghiệm mẫu trà sen thiết kế và trải nghiệm nghi thức thiền trà đặc quyền của chúng tôi.",
-      "btnText": "Liên hệ thử nghiệm",
-      "secondaryBtnText": "Xem Bộ sưu tập Trà"
+      "title": "Bắt đầu bằng một cánh sen",
+      "text": "Từ một tách trà hằng ngày đến một món quà có câu chuyện, Senova mời người dùng giữ lại điều đáng quý, mở một trải nghiệm mới và trao điều đó cho người khác.",
+      "btnText": "Liên hệ trải nghiệm",
+      "secondaryBtnText": "Xem bộ sản phẩm"
     }
   }
 }

@@ -23,25 +23,25 @@ export function PetalPackReveal() {
       num: "01",
       label: "MỞ",
       title: "Mở một cánh sen",
-      text: "Trải nghiệm bắt đầu bằng việc mở búp sen khô được định hình thủ công, bảo vệ từng búp trà bên trong.",
+      text: "Mở nhẹ từng lớp cánh để quan sát cấu trúc Petal Pack và lấy phần trà bên trong.",
     },
     {
       num: "02",
-      label: "CHẠM",
-      title: "Chạm vào chất liệu thật",
-      text: "Cánh sen thật sấy lạnh bao quanh búp trà, cho phép bạn cảm nhận độ xơ nhẹ và hương thơm nguyên bản ngay trên đầu ngón tay.",
+      label: "CẢM",
+      title: "Cảm nhận trước khi pha",
+      text: "Dành một khoảnh khắc để nhìn hình dáng, nhận biết chất liệu và cảm nhận hương trước khi rót nước.",
     },
     {
       num: "03",
       label: "PHA",
-      title: "Nghi thức rót nước",
-      text: "Định lượng trà hoàn hảo cho một lần pha. Đặt túi trà vào tách và để nước sôi đánh thức các lớp hương hoa sen ẩn giấu.",
+      title: "Pha theo hướng dẫn",
+      text: "Đặt phần trà vào cốc và thực hiện theo hướng dẫn in trên bao bì của phiên bản sản phẩm.",
     },
     {
       num: "04",
       label: "THƯỞNG",
-      title: "Thưởng thức hương vị",
-      text: "Một nhịp thở chậm lại. Hơi nước bốc lên mang theo hương thơm thanh tao của sen và vị đậm đà của trà hữu cơ.",
+      title: "Thưởng thức trong nhịp chậm",
+      text: "Quan sát màu nước, cảm nhận hương và vị, rồi ghi lại phản hồi về trải nghiệm.",
     },
   ];
 
@@ -117,7 +117,7 @@ export function PetalPackReveal() {
                   <path d="M50 20 C32 48 38 72 45 82" stroke="var(--accent)" strokeWidth="0.95" strokeDasharray="2 2" />
                   <path d="M50 20 C68 48 62 72 55 82" stroke="var(--accent)" strokeWidth="0.95" strokeDasharray="2 2" />
                 </svg>
-                <p className={styles.revealStepHint}>Búp sen khép mình tĩnh lặng</p>
+                <p className={styles.revealStepHint}>Búp sen là điểm bắt đầu của trải nghiệm</p>
               </motion.div>
 
               {/* Layer 2: Peeling Petals (State 2) */}
@@ -132,7 +132,7 @@ export function PetalPackReveal() {
                   <path d="M50 28 C78 38 80 68 70 80 C62 76 56 60 50 85" fill="rgba(185, 86, 114, 0.12)" stroke="var(--accent)" strokeWidth="1.6" />
                   <path d="M50 28 C72 45 68 62 62 74" stroke="var(--accent-gold)" strokeWidth="1" strokeOpacity="0.75" />
                 </svg>
-                <p className={styles.revealStepHint}>Cánh sen bắt đầu hé nở</p>
+                <p className={styles.revealStepHint}>Từng lớp cánh mở ra phần trà bên trong</p>
               </motion.div>
 
               {/* Layer 3: Brewing / Tea core (State 3) */}
@@ -146,7 +146,7 @@ export function PetalPackReveal() {
                   <rect x="46" y="42" width="8" height="11" rx="1.5" fill="rgba(255, 250, 240, 0.05)" stroke="var(--text)" strokeWidth="1.1" />
                   <path d="M50 42 L50 22" stroke="var(--accent-gold)" strokeWidth="0.9" strokeDasharray="2 2" />
                 </svg>
-                <p className={styles.revealStepHint}>Trà hòa mình vào nước ấm</p>
+                <p className={styles.revealStepHint}>Pha theo thông số trên bao bì</p>
               </motion.div>
 
               {/* Layer 4: Steaming Cup (State 4) */}
@@ -178,7 +178,7 @@ export function PetalPackReveal() {
                     transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
                   />
                 </svg>
-                <p className={styles.revealStepHint}>Hương thơm lan tỏa trọn vẹn</p>
+                <p className={styles.revealStepHint}>Hương và vị dần hiện ra</p>
               </motion.div>
             </div>
           </div>
