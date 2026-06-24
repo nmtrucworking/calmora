@@ -6,6 +6,7 @@ import { landingPath } from "./siteRoutes";
 import { AnimatePresence, motion } from "framer-motion";
 import { preloadImages } from "../utils/imagePreload";
 import { getProductBySlug } from "../features/products/data/products";
+import productsBackgroundUrl from "../assets/products-background-optimized.jpg";
 
 const loadLandingPage = () => import("../pages/SenovaLandingPage");
 const loadStoryPage = () => import("../pages/StoryPage");
@@ -35,7 +36,7 @@ function RouteFallback() {
 
 function getRouteImagePaths(pathname: string) {
   if (pathname === "/products") {
-    return [...sharedImagePaths, ...productImagePaths];
+    return [productsBackgroundUrl, ...sharedImagePaths, ...productImagePaths];
   }
 
   if (pathname.startsWith("/products/")) {

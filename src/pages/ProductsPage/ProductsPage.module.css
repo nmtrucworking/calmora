@@ -1,5 +1,9 @@
 .pageContainer {
-  background: linear-gradient(180deg, #07110f 0%, #0d1a16 50%, #090e0c 100%);
+  background:
+    linear-gradient(180deg, rgba(7, 17, 15, 0.84) 0%, rgba(13, 26, 22, 0.74) 48%, rgba(9, 14, 12, 0.92) 100%),
+    linear-gradient(90deg, rgba(7, 17, 15, 0.72) 0%, rgba(7, 17, 15, 0.18) 46%, rgba(7, 17, 15, 0.66) 100%),
+    url("../../assets/products-background-optimized.jpg") center top / cover fixed,
+    linear-gradient(180deg, #07110f 0%, #0d1a16 50%, #090e0c 100%);
   color: var(--text);
   min-height: 100vh;
   position: relative;
@@ -1244,6 +1248,14 @@
 }
 
 @media (max-width: 600px) {
+  .pageContainer {
+    background:
+      linear-gradient(180deg, rgba(7, 17, 15, 0.88) 0%, rgba(13, 26, 22, 0.78) 48%, rgba(9, 14, 12, 0.94) 100%),
+      linear-gradient(90deg, rgba(7, 17, 15, 0.76) 0%, rgba(7, 17, 15, 0.22) 46%, rgba(7, 17, 15, 0.7) 100%),
+      url("../../assets/products-background-optimized.jpg") center top / cover scroll,
+      linear-gradient(180deg, #07110f 0%, #0d1a16 50%, #090e0c 100%);
+  }
+
   .stageFrame {
     height: 20rem;
     min-height: 20rem;
