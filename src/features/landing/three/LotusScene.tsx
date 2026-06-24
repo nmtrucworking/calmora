@@ -10,7 +10,10 @@ import { LotusLightParticles } from "./LotusLightParticles";
 import { TeaCore } from "./TeaCore";
 
 type LotusSceneProps = {
+  backgroundColor?: string | null;
+  fogColor?: string | null;
   scrollProgressRef: ScrollProgressRef;
+  showBackdrop?: boolean;
 };
 
 function smoothRange(start: number, end: number, value: number) {
@@ -19,7 +22,12 @@ function smoothRange(start: number, end: number, value: number) {
   return t * t * (3 - 2 * t);
 }
 
-export function LotusScene({ scrollProgressRef }: LotusSceneProps) {
+export function LotusScene({
+  backgroundColor = null,
+  fogColor = null,
+  scrollProgressRef,
+  showBackdrop = false,
+}: LotusSceneProps) {
   const modelGroupRef = useRef<THREE.Group>(null);
   const keyLightRef = useRef<THREE.PointLight>(null);
   const rimLightRef = useRef<THREE.PointLight>(null);
@@ -57,15 +65,15 @@ export function LotusScene({ scrollProgressRef }: LotusSceneProps) {
 
   return (
     <>
-      <color attach="background" args={["#ece5d5"]} />
-      <fog attach="fog" args={["#ece5d5", 6.2, 13.5]} />
+      {backgroundColor ? <color attach="background" args={[backgroundColor]} /> : null}
+      {fogColor ? <fog attach="fog" args={[fogColor, 6.2, 13.5]} /> : null}
       <ambientLight intensity={0.64} />
       <pointLight ref={keyLightRef} position={[2.2, 2.8, 2.7]} color="#F1D7AD" intensity={7.5} distance={8} />
       <pointLight ref={rimLightRef} position={[-3.2, -0.4, -1.8]} color="#77927E" intensity={3.2} distance={9} />
       <spotLight ref={topLightRef} position={[0, 5.2, 2.2]} angle={0.42} penumbra={0.78} intensity={4.5} castShadow />
       <Float speed={0.55} rotationIntensity={0.08} floatIntensity={0.14}>
         <group ref={modelGroupRef} position={[0, 0.04, 0]}>
-          <LotusBackdrop scrollValue={scrollProgressRef} />
+          {showBackdrop ? <LotusBackdrop scrollValue={scrollProgressRef} /> : null}
           <LotusLeaf scrollValue={scrollProgressRef} />
           <LotusFlower scrollValue={scrollProgressRef} />
           <LotusLightParticles scrollValue={scrollProgressRef} />

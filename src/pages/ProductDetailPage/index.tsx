@@ -22,7 +22,7 @@ function ProductNotFound() {
         Mã đường dẫn này chưa có nội dung công khai. Bạn có thể quay về bộ sản phẩm Senova để
         tiếp tục khám phá.
       </p>
-      <Link href="/san-pham" className={styles.primaryButton}>
+      <Link href="/products" className={styles.primaryButton}>
         Về trang sản phẩm
       </Link>
     </section>
@@ -39,7 +39,7 @@ export default function ProductDetailPage({ product }: ProductDetailPageProps) {
   return (
     <article className={styles.page}>
       <div className={styles.breadcrumb}>
-        <Link href="/san-pham">
+        <Link href="/products">
           <ArrowLeft aria-hidden="true" />
           Sản phẩm
         </Link>

@@ -44,7 +44,7 @@ export const products: SenovaProduct[] = [
     shortDescription:
       "Một lựa chọn ổn định cho người muốn giữ nghi thức trà sen trong lịch sinh hoạt thường nhật.",
     role: "Dòng nền tảng",
-    href: "/san-pham/classic",
+    href: "/products/classic",
     image: "/assets/products/classic-pack.png",
     status: "active",
     primaryAction: {
@@ -53,7 +53,7 @@ export const products: SenovaProduct[] = [
     },
     secondaryAction: {
       label: "Xem Petal Pack",
-      href: "/san-pham/petal-pack",
+      href: "/products/petal-pack",
     },
     heroAlt: "Hộp trà Senova Classic",
     suitableFor: ["Dùng hằng ngày", "Văn phòng", "Người mới bắt đầu uống trà sen"],
@@ -89,7 +89,7 @@ export const products: SenovaProduct[] = [
     shortDescription:
       "Sản phẩm ưu tiên cho hành trình QR: mở pack, pha trà, đọc câu chuyện văn hóa và gửi phản hồi.",
     role: "Dòng chủ đạo",
-    href: "/san-pham/petal-pack",
+    href: "/products/petal-pack",
     image: "/assets/products/petal-pack.png",
     status: "active",
     primaryAction: {
@@ -139,7 +139,7 @@ export const products: SenovaProduct[] = [
     shortDescription:
       "Dòng mở rộng cho quà tặng cá nhân, doanh nghiệp và các dịp cần một câu chuyện bản địa chỉn chu.",
     role: "Dòng trao tặng",
-    href: "/san-pham/gift-set",
+    href: "/products/gift-set",
     image: "/assets/products/gift-set.png",
     status: "draft",
     primaryAction: {
@@ -148,7 +148,7 @@ export const products: SenovaProduct[] = [
     },
     secondaryAction: {
       label: "Xem Petal Pack",
-      href: "/san-pham/petal-pack",
+      href: "/products/petal-pack",
     },
     heroAlt: "Bộ quà Senova Gift Set",
     suitableFor: ["Quà tặng đối tác", "Quà lưu niệm bản địa", "Phiên bản theo mùa"],

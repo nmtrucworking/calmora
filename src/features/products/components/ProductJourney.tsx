@@ -106,7 +106,7 @@ export function ProductJourney() {
           </h2>
 
           <div className={styles.journeyActions}>
-            <Link href="/san-pham/petal-pack" className={styles.journeyPrimaryBtn}>
+            <Link href="/products/petal-pack" className={styles.journeyPrimaryBtn}>
               Khám phá Petal Pack
             </Link>
             <a href="mailto:hello@senova.vn" className={styles.journeySecondaryBtn}>

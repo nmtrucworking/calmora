@@ -11,14 +11,23 @@ import type { ScrollProgressRef } from "../../features/landing/types";
 import styles from "./StoryLotusCanvas.module.css";
 
 type StoryLotusCanvasProps = {
+  backgroundColor?: string | null;
   className?: string;
+  fogColor?: string | null;
   /**
    * Change this number to restart the lotus animation cycle. Bump a counter to trigger a replay.
    */
   restartSignal?: number;
+  showBackdrop?: boolean;
 };
 
-export function StoryLotusCanvas({ className, restartSignal = 0 }: StoryLotusCanvasProps) {
+export function StoryLotusCanvas({
+  backgroundColor = null,
+  className,
+  fogColor = null,
+  restartSignal = 0,
+  showBackdrop = false,
+}: StoryLotusCanvasProps) {
   const progressRef = useRef(0) as ScrollProgressRef;
   const exporterRef = useRef<LotusGLBExporterHandle>(null);
   const exportInProgressRef = useRef(false);
@@ -92,7 +101,15 @@ export function StoryLotusCanvas({ className, restartSignal = 0 }: StoryLotusCan
 
   return (
     <div className={`${styles.canvasShell} ${className ?? ""}`.trim()}>
-      <Canvas shadows dpr={[1, 1.8]} camera={{ position: [0, 1.15, 5.7], fov: 43 }}>
+      <Canvas
+        shadows
+        dpr={[1, 1.8]}
+        camera={{ position: [0, 1.15, 5.7], fov: 43 }}
+        gl={{ alpha: true }}
+        onCreated={({ gl }) => {
+          gl.setClearColor(0x000000, 0);
+        }}
+      >
         <Suspense
           fallback={
             <Html center>
@@ -100,7 +117,12 @@ export function StoryLotusCanvas({ className, restartSignal = 0 }: StoryLotusCan
             </Html>
           }
         >
-          <LotusScene scrollProgressRef={progressRef} />
+          <LotusScene
+            backgroundColor={backgroundColor}
+            fogColor={fogColor}
+            scrollProgressRef={progressRef}
+            showBackdrop={showBackdrop}
+          />
           <LotusGLBExporter ref={exporterRef} progressRef={progressRef} />
         </Suspense>
       </Canvas>

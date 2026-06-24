@@ -34,7 +34,7 @@ function RouteFallback() {
 }
 
 function getRouteImagePaths(pathname: string) {
-  if (pathname === "/products" || pathname.startsWith("/san-pham")) {
+  if (pathname === "/products") {
     return [...sharedImagePaths, ...productImagePaths];
   }
 
@@ -92,8 +92,8 @@ function preloadSecondaryRoutes() {
 function AppRoutes() {
   const { pathname } = useRouter();
   const normalizedPath = pathname.length > 1 ? pathname.replace(/\/+$/, "") : pathname;
-  const productSlug = normalizedPath.startsWith("/san-pham/")
-    ? normalizedPath.replace("/san-pham/", "").split("/")[0]
+  const productSlug = normalizedPath.startsWith("/products/")
+    ? normalizedPath.replace("/products/", "").split("/")[0]
     : "";
 
   useEffect(() => {
@@ -107,7 +107,7 @@ function AppRoutes() {
     pageComponent = <AboutPage />;
   } else if (normalizedPath === "/story") {
     pageComponent = <StoryPage />;
-  } else if (normalizedPath === "/products" || normalizedPath === "/san-pham") {
+  } else if (normalizedPath === "/products") {
     pageComponent = <ProductsPage />;
   } else if (productSlug) {
     pageComponent = <ProductDetailPage product={getProductBySlug(productSlug)} />;

@@ -11,7 +11,7 @@ export type BrandFooterGroup = {
 };
 
 function normalizeRoute(item: BrandNavItem): BrandNavItem {
-  return item.href === "/products" ? { ...item, href: "/san-pham" } : item;
+  return item.href === "/products" ? { ...item, href: "/products" } : item;
 }
 
 export const brandName = content.brand.name;
