@@ -5,7 +5,6 @@ import { Sparkles } from "lucide-react";
 
 export function PetalPackReveal() {
   const containerRef = useRef<HTMLDivElement>(null);
-  
   // Track scroll inside container
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -18,7 +17,6 @@ export function PetalPackReveal() {
   const step2Opacity = useTransform(scrollYProgress, [0.2, 0.3, 0.5, 0.55], [0, 1, 1, 0]);
   const step3Opacity = useTransform(scrollYProgress, [0.45, 0.55, 0.75, 0.8], [0, 1, 1, 0]);
   const step4Opacity = useTransform(scrollYProgress, [0.7, 0.8, 1], [0, 1, 1]);
-
 
   const stepsData = [
     {
@@ -47,6 +45,52 @@ export function PetalPackReveal() {
     },
   ];
 
+  const getStepSvg = (num: string) => {
+    switch (num) {
+      case "01":
+        return (
+          <svg viewBox="0 0 100 100" fill="none">
+            <path d="M50 15 C35 45 40 75 50 88 C60 75 65 45 50 15 Z" fill="rgba(185, 86, 114, 0.05)" stroke="var(--accent)" strokeWidth="1" />
+            <path d="M50 20 C40 45 42 75 50 85 C58 75 60 45 50 20 Z" fill="rgba(185, 86, 114, 0.16)" stroke="var(--accent)" strokeWidth="1.6" />
+            <path d="M50 20 C46 42 47 68 50 85" stroke="var(--accent-gold)" strokeWidth="1.1" strokeOpacity="0.8" />
+            <path d="M50 20 C54 42 53 68 50 85" stroke="var(--accent-gold)" strokeWidth="1.1" strokeOpacity="0.8" />
+            <path d="M50 20 C32 48 38 72 45 82" stroke="var(--accent)" strokeWidth="0.95" strokeDasharray="2 2" />
+            <path d="M50 20 C68 48 62 72 55 82" stroke="var(--accent)" strokeWidth="0.95" strokeDasharray="2 2" />
+          </svg>
+        );
+      case "02":
+        return (
+          <svg viewBox="0 0 100 100" fill="none">
+            <path d="M50 28 C45 45 45 72 50 85 C55 72 55 45 50 28 Z" fill="rgba(185, 86, 114, 0.22)" stroke="var(--accent)" strokeWidth="1.2" />
+            <path d="M50 28 C22 38 20 68 30 80 C38 76 44 60 50 85" fill="rgba(185, 86, 114, 0.12)" stroke="var(--accent)" strokeWidth="1.6" />
+            <path d="M50 28 C28 45 32 62 38 74" stroke="var(--accent-gold)" strokeWidth="1" strokeOpacity="0.75" />
+            <path d="M50 28 C78 38 80 68 70 80 C62 76 56 60 50 85" fill="rgba(185, 86, 114, 0.12)" stroke="var(--accent)" strokeWidth="1.6" />
+            <path d="M50 28 C72 45 68 62 62 74" stroke="var(--accent-gold)" strokeWidth="1" strokeOpacity="0.75" />
+          </svg>
+        );
+      case "03":
+        return (
+          <svg viewBox="0 0 100 100" fill="none">
+            <path d="M30 65 C30 80 70 80 70 65 L72 52 L28 52 Z" fill="rgba(255, 250, 240, 0.03)" stroke="var(--text-soft)" strokeWidth="1.5" />
+            <path d="M31 58 C45 61 55 56 69 58 L68 65 C68 76 32 76 32 65 Z" fill="rgba(248, 223, 147, 0.15)" stroke="var(--accent-gold)" strokeWidth="1" />
+            <rect x="46" y="42" width="8" height="11" rx="1.5" fill="rgba(255, 250, 240, 0.05)" stroke="var(--text)" strokeWidth="1.1" />
+            <path d="M50 42 L50 22" stroke="var(--accent-gold)" strokeWidth="0.9" strokeDasharray="2 2" />
+          </svg>
+        );
+      case "04":
+      default:
+        return (
+          <svg viewBox="0 0 100 100" fill="none">
+            <path d="M30 65 C30 80 70 80 70 65 L72 52 L28 52 Z" fill="rgba(255, 250, 240, 0.05)" stroke="var(--text)" strokeWidth="1.8" />
+            <path d="M31 58 C45 61 55 56 69 58 L68 65 C68 76 32 76 32 65 Z" fill="rgba(248, 223, 147, 0.35)" stroke="var(--accent-gold)" strokeWidth="1" />
+            <path d="M40 44 Q43 38 40 32 T40 20" stroke="rgba(248, 223, 147, 0.35)" strokeWidth="1.2" />
+            <path d="M50 44 Q47 36 50 28 T50 16" stroke="rgba(248, 223, 147, 0.45)" strokeWidth="1.2" />
+            <path d="M60 44 Q63 38 60 32 T60 20" stroke="rgba(248, 223, 147, 0.35)" strokeWidth="1.2" />
+          </svg>
+        );
+    }
+  };
+
   return (
     <div id="petal-pack" ref={containerRef} className={styles.petalPackTrack}>
       <div className={styles.petalPackSticky}>
@@ -66,9 +110,12 @@ export function PetalPackReveal() {
               <motion.div className={styles.revealLayer} style={{ opacity: step1Opacity }}>
                 <svg className={styles.revealSvg} viewBox="0 0 100 100" fill="none">
                   {/* Outer bud petals */}
-                  <path d="M50 20 C42 45 42 75 50 85 C58 75 58 45 50 20 Z" fill="rgba(185, 86, 114, 0.2)" stroke="var(--accent)" strokeWidth="1.5" />
-                  <path d="M50 20 C32 48 38 72 45 82" stroke="var(--accent)" strokeWidth="1.2" strokeDasharray="1 1" />
-                  <path d="M50 20 C68 48 62 72 55 82" stroke="var(--accent)" strokeWidth="1.2" strokeDasharray="1 1" />
+                  <path d="M50 15 C35 45 40 75 50 88 C60 75 65 45 50 15 Z" fill="rgba(185, 86, 114, 0.05)" stroke="var(--accent)" strokeWidth="1" />
+                  <path d="M50 20 C40 45 42 75 50 85 C58 75 60 45 50 20 Z" fill="rgba(185, 86, 114, 0.16)" stroke="var(--accent)" strokeWidth="1.6" />
+                  <path d="M50 20 C46 42 47 68 50 85" stroke="var(--accent-gold)" strokeWidth="1.1" strokeOpacity="0.8" />
+                  <path d="M50 20 C54 42 53 68 50 85" stroke="var(--accent-gold)" strokeWidth="1.1" strokeOpacity="0.8" />
+                  <path d="M50 20 C32 48 38 72 45 82" stroke="var(--accent)" strokeWidth="0.95" strokeDasharray="2 2" />
+                  <path d="M50 20 C68 48 62 72 55 82" stroke="var(--accent)" strokeWidth="0.95" strokeDasharray="2 2" />
                 </svg>
                 <p className={styles.revealStepHint}>Búp sen khép mình tĩnh lặng</p>
               </motion.div>
@@ -77,11 +124,13 @@ export function PetalPackReveal() {
               <motion.div className={styles.revealLayer} style={{ opacity: step2Opacity }}>
                 <svg className={styles.revealSvg} viewBox="0 0 100 100" fill="none">
                   {/* Bud opening up */}
-                  <path d="M50 32 C48 50 48 78 50 85 C52 78 52 50 50 32 Z" fill="rgba(185, 86, 114, 0.4)" stroke="var(--accent)" strokeWidth="1.5" />
+                  <path d="M50 28 C45 45 45 72 50 85 C55 72 55 45 50 28 Z" fill="rgba(185, 86, 114, 0.22)" stroke="var(--accent)" strokeWidth="1.2" />
                   {/* Left peeling petal */}
-                  <path d="M50 32 C25 40 22 70 32 80 C40 76 46 62 50 85" fill="rgba(185, 86, 114, 0.15)" stroke="var(--accent)" strokeWidth="1.2" />
+                  <path d="M50 28 C22 38 20 68 30 80 C38 76 44 60 50 85" fill="rgba(185, 86, 114, 0.12)" stroke="var(--accent)" strokeWidth="1.6" />
+                  <path d="M50 28 C28 45 32 62 38 74" stroke="var(--accent-gold)" strokeWidth="1" strokeOpacity="0.75" />
                   {/* Right peeling petal */}
-                  <path d="M50 32 C75 40 78 70 68 80 C60 76 54 62 50 85" fill="rgba(185, 86, 114, 0.15)" stroke="var(--accent)" strokeWidth="1.2" />
+                  <path d="M50 28 C78 38 80 68 70 80 C62 76 56 60 50 85" fill="rgba(185, 86, 114, 0.12)" stroke="var(--accent)" strokeWidth="1.6" />
+                  <path d="M50 28 C72 45 68 62 62 74" stroke="var(--accent-gold)" strokeWidth="1" strokeOpacity="0.75" />
                 </svg>
                 <p className={styles.revealStepHint}>Cánh sen bắt đầu hé nở</p>
               </motion.div>
@@ -90,12 +139,12 @@ export function PetalPackReveal() {
               <motion.div className={styles.revealLayer} style={{ opacity: step3Opacity }}>
                 <svg className={styles.revealSvg} viewBox="0 0 100 100" fill="none">
                   {/* Tea cup */}
-                  <path d="M30 65 C30 80 70 80 70 65 L72 52 L28 52 Z" fill="rgba(255, 250, 240, 0.05)" stroke="var(--text-soft)" strokeWidth="1.5" />
+                  <path d="M30 65 C30 80 70 80 70 65 L72 52 L28 52 Z" fill="rgba(255, 250, 240, 0.03)" stroke="var(--text-soft)" strokeWidth="1.5" />
                   {/* Liquid inside */}
-                  <path d="M31 58 C45 61 55 56 69 58 L68 65 C68 76 32 76 32 65 Z" fill="rgba(248, 223, 147, 0.28)" />
+                  <path d="M31 58 C45 61 55 56 69 58 L68 65 C68 76 32 76 32 65 Z" fill="rgba(248, 223, 147, 0.15)" stroke="var(--accent-gold)" strokeWidth="1" />
                   {/* Tea bag sinking */}
-                  <rect x="46" y="42" width="8" height="11" rx="1" fill="rgba(255, 250, 240, 0.2)" stroke="var(--text)" strokeWidth="1" />
-                  <path d="M50 42 L50 25" stroke="var(--text-soft)" strokeWidth="0.8" strokeDasharray="2 2" />
+                  <rect x="46" y="42" width="8" height="11" rx="1.5" fill="rgba(255, 250, 240, 0.05)" stroke="var(--text)" strokeWidth="1.1" />
+                  <path d="M50 42 L50 22" stroke="var(--accent-gold)" strokeWidth="0.9" strokeDasharray="2 2" />
                 </svg>
                 <p className={styles.revealStepHint}>Trà hòa mình vào nước ấm</p>
               </motion.div>
@@ -137,7 +186,6 @@ export function PetalPackReveal() {
           {/* Right Side: Copy Content */}
           <div className={styles.revealTextContent}>
             {stepsData.map((step) => {
-              // We highlight the current step based on scroll
               return (
                 <div key={step.num} className={styles.revealTextStep}>
                   <div className={styles.stepHeader}>
@@ -145,6 +193,12 @@ export function PetalPackReveal() {
                     <span className={styles.stepTag}>{step.label}</span>
                   </div>
                   <h3 className={styles.stepTitle}>{step.title}</h3>
+                  
+                  {/* Inline SVG for mobile layout */}
+                  <div className={styles.revealMobileSvg}>
+                    {getStepSvg(step.num)}
+                  </div>
+
                   <p className={styles.stepDescription}>{step.text}</p>
                 </div>
               );

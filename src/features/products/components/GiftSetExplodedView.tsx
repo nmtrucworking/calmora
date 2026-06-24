@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "../../../pages/ProductsPage/ProductsPage.module.css";
 import { products } from "../data/products";
@@ -13,6 +13,17 @@ type Hotspot = {
 
 export function GiftSetExplodedView() {
   const [activeHotspot, setActiveHotspot] = useState<number | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const giftSet = products.find((p) => p.id === "gift-set");
 
   const hotspots: Hotspot[] = [
@@ -101,9 +112,9 @@ export function GiftSetExplodedView() {
                     <span className={styles.hotspotIcon}>+</span>
                   </button>
 
-                  {/* Popover overlay */}
+                  {/* Popover overlay (desktop only) */}
                   <AnimatePresence>
-                    {isActive && (
+                    {!isMobile && isActive && (
                       <motion.div
                         initial={{ opacity: 0, scale: 0.9, y: 10 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -121,6 +132,18 @@ export function GiftSetExplodedView() {
             })}
           </div>
         </div>
+
+        {/* Mobile Hotspot Detail Card */}
+        {isMobile && activeHotspot !== null && (
+          <div className={styles.mobileHotspotDetail}>
+            <h4 className={styles.mobileHotspotDetailTitle}>
+              {hotspots.find((h) => h.id === activeHotspot)?.title}
+            </h4>
+            <p className={styles.mobileHotspotDetailDesc}>
+              {hotspots.find((h) => h.id === activeHotspot)?.description}
+            </p>
+          </div>
+        )}
 
       </div>
     </section>

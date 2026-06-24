@@ -49,10 +49,10 @@ const particleFragmentShader = `
 
     if (dist > 0.5) discard;
 
-    float core = smoothstep(0.25, 0.0, dist);
-    float glow = smoothstep(0.5, 0.05, dist);
-    vec3 color = mix(vec3(1.0, 0.64, 0.2), vec3(1.0, 0.98, 0.78), core);
-    gl_FragColor = vec4(color, glow * vAlpha * 1.24);
+    float core = smoothstep(0.18, 0.0, dist);
+    float glow = smoothstep(0.5, 0.0, dist);
+    vec3 color = mix(vec3(1.0, 0.58, 0.04), vec3(1.0, 0.82, 0.18), core);
+    gl_FragColor = vec4(color, glow * vAlpha * 1.42);
   }
 `;
 

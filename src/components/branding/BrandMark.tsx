@@ -6,7 +6,7 @@ type BrandMarkProps = {
 
 export function BrandMark({ size = "md" }: BrandMarkProps) {
   return (
-    <span className={`${styles.mark} ${styles[size]}`} aria-hidden="true">
+    <span className={`${styles.mark} ${styles[size]}`} aria-hidden="false">
       <img
         src="/calmora-mark-original-look.svg"
         alt="Calmora Mark"

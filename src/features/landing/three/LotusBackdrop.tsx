@@ -13,9 +13,9 @@ function buildBackdropLeafGeometry() {
   const positions: number[] = [0, -0.05, 0];
   const colors: number[] = [];
   const indices: number[] = [];
-  const deep = new THREE.Color("#12372d");
-  const leaf = new THREE.Color("#4f9f65");
-  const vein = new THREE.Color("#91c88f");
+  const deep = new THREE.Color("#0a4d35");
+  const leaf = new THREE.Color("#2fae63");
+  const vein = new THREE.Color("#b9e976");
 
   colors.push(vein.r, vein.g, vein.b);
 
@@ -30,7 +30,7 @@ function buildBackdropLeafGeometry() {
       const z = Math.sin(theta) * radius * 0.9;
       const y = -0.05 + Math.pow(t, 0.75) * 0.12 + Math.sin(theta * 8) * Math.pow(t, 1.7) * 0.018;
       const veinMix = Math.pow(Math.max(0, Math.cos(theta * 18)), 16) * 0.28;
-      const color = deep.clone().lerp(leaf, 0.3 + (1 - t) * 0.28).lerp(vein, veinMix);
+      const color = deep.clone().lerp(leaf, 0.42 + (1 - t) * 0.32).lerp(vein, veinMix * 1.08);
 
       positions.push(x, y, z);
       colors.push(color.r, color.g, color.b);
@@ -73,9 +73,9 @@ function buildTeaLeafGeometry() {
   const positions: number[] = [];
   const colors: number[] = [];
   const indices: number[] = [];
-  const deep = new THREE.Color("#214f35");
-  const leaf = new THREE.Color("#6ab46a");
-  const vein = new THREE.Color("#c2e4aa");
+  const deep = new THREE.Color("#0f5a38");
+  const leaf = new THREE.Color("#39b95d");
+  const vein = new THREE.Color("#d4f28f");
 
   for (let yIndex = 0; yIndex <= lengthSegments; yIndex += 1) {
     const u = yIndex / lengthSegments;
@@ -91,7 +91,7 @@ function buildTeaLeafGeometry() {
       const veinMix = Math.max(0, 1 - edge * 10) * 0.55;
       const color = deep
         .clone()
-        .lerp(leaf, 0.48 + Math.sin(Math.PI * u) * 0.26)
+        .lerp(leaf, 0.58 + Math.sin(Math.PI * u) * 0.28)
         .lerp(vein, veinMix + Math.pow(edge, 2.2) * 0.08);
 
       positions.push(x, y, z);
@@ -127,7 +127,7 @@ export function LotusBackdrop({ scrollValue }: LotusBackdropProps) {
     () =>
       new THREE.MeshStandardMaterial({
         color: "#ffffff",
-        opacity: 0.32,
+        opacity: 0.42,
         roughness: 0.86,
         side: THREE.DoubleSide,
         transparent: true,
@@ -140,7 +140,7 @@ export function LotusBackdrop({ scrollValue }: LotusBackdropProps) {
       new THREE.MeshPhysicalMaterial({
         color: "#ffffff",
         metalness: 0,
-        opacity: 0.62,
+        opacity: 0.72,
         roughness: 0.66,
         sheen: 0.48,
         side: THREE.DoubleSide,
@@ -152,8 +152,8 @@ export function LotusBackdrop({ scrollValue }: LotusBackdropProps) {
   const stemMaterial = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: "#2a6d45",
-        opacity: 0.42,
+        color: "#167243",
+        opacity: 0.56,
         roughness: 0.82,
         transparent: true,
       }),
@@ -162,10 +162,10 @@ export function LotusBackdrop({ scrollValue }: LotusBackdropProps) {
   const budMaterial = useMemo(
     () =>
       new THREE.MeshPhysicalMaterial({
-        color: "#b95672",
-        emissive: "#2c1119",
-        emissiveIntensity: 0.03,
-        opacity: 0.38,
+        color: "#c21f63",
+        emissive: "#4e1028",
+        emissiveIntensity: 0.045,
+        opacity: 0.5,
         roughness: 0.72,
         sheen: 0.18,
         transparent: true,
@@ -175,8 +175,8 @@ export function LotusBackdrop({ scrollValue }: LotusBackdropProps) {
   const sepalMaterial = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: "#3f7a59",
-        opacity: 0.48,
+        color: "#278658",
+        opacity: 0.58,
         roughness: 0.86,
         transparent: true,
       }),

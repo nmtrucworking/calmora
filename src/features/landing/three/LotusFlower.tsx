@@ -57,11 +57,11 @@ function hash(value: number) {
 
 function makeLayerPalettes() {
   return [
-    { base: "#fff8ee", edge: "#f8cbd7", throat: "#ffe6a3" },
-    { base: "#fff2ea", edge: "#f7abc8", throat: "#ffe097" },
-    { base: "#ffe8e8", edge: "#ec7fad", throat: "#ffd176" },
-    { base: "#ffd8e0", edge: "#dc5c91", throat: "#f7bf56" },
-    { base: "#ffc8d6", edge: "#c65385", throat: "#e1aa4c" },
+    { base: "#ffc3d8", edge: "#ff3f8d", throat: "#ffc23d" },
+    { base: "#ff9fbe", edge: "#e91473", throat: "#f4a51e" },
+    { base: "#ff7daa", edge: "#c90061", throat: "#d98d12" },
+    { base: "#f75c95", edge: "#a9004f", throat: "#bd7309" },
+    { base: "#db3d7e", edge: "#81003e", throat: "#9f5f03" },
   ];
 }
 
@@ -72,9 +72,9 @@ function buildPetalGeometry(layer: number) {
   const colors: number[] = [];
   const indices: number[] = [];
   const palette = makeLayerPalettes()[layer];
-  const base = new THREE.Color(palette.base);
+  const base = layer === 0 ? new THREE.Color("#b7d68f") : new THREE.Color(palette.base);
   const edge = new THREE.Color(palette.edge);
-  const throat = new THREE.Color(palette.throat);
+  const throat = layer === 0 ? new THREE.Color("#2e945a") : new THREE.Color(palette.throat);
 
   for (let yIndex = 0; yIndex <= lengthSegments; yIndex += 1) {
     const u = yIndex / lengthSegments;
@@ -96,6 +96,12 @@ function buildPetalGeometry(layer: number) {
         .clone()
         .lerp(edge, Math.pow(edgeAmount, 1.45) * 0.5 + smoothRange(0.72, 1, u) * 0.32)
         .lerp(throat, smoothRange(0, 0.28, 1 - u) * (1 - edgeAmount) * 0.28);
+
+      // Delicate vertical veins on the petals
+      const veinWave = Math.sin(s * Math.PI * 8.0 + u * 2.0);
+      const veinStrength = Math.pow(Math.max(0, veinWave), 3.0) * (0.12 + smoothRange(0.2, 0.9, u) * 0.18) * (1 - smoothRange(0.92, 1, u) * 0.5);
+      const petalVeinColor = edge.clone().lerp(new THREE.Color("#900e42"), 0.35);
+      color.lerp(petalVeinColor, veinStrength);
 
       positions.push(x, y, z);
       colors.push(color.r, color.g, color.b);
@@ -128,20 +134,21 @@ function buildBudGeometry() {
   const positions: number[] = [];
   const colors: number[] = [];
   const indices: number[] = [];
-  const blush = new THREE.Color("#e78aa5");
-  const rose = new THREE.Color("#bf5278");
-  const pearl = new THREE.Color("#ffe8df");
-  const coolShadow = new THREE.Color("#667f78");
-  const sepalGreen = new THREE.Color("#4e8b6d");
-  const petalGreen = new THREE.Color("#79a875");
+  const blush = new THREE.Color("#ff4f90");
+  const rose = new THREE.Color("#bd0c5b");
+  const pearl = new THREE.Color("#ff9fc2");
+  const coolShadow = new THREE.Color("#664052");
+  const sepalGreen = new THREE.Color("#1e8a58");
+  const petalGreen = new THREE.Color("#59b145");
 
   for (let yIndex = 0; yIndex <= heightSegments; yIndex += 1) {
     const u = yIndex / heightSegments;
-    const taper = Math.pow(Math.sin(Math.PI * u), 0.5);
-    const shoulder = 1 - smoothRange(0.62, 1, u) * 0.14;
-    const baseCup = smoothRange(0, 0.18, u) * (1 - smoothRange(0.82, 1, u));
-    const radius = 0.012 + taper * shoulder * (0.47 + baseCup * 0.1);
-    const y = -0.7 + u * 2.04;
+    const lowerBelly = Math.pow(smoothRange(0, 0.34, u), 0.42);
+    const pointedTop = Math.pow(1 - smoothRange(0.42, 1, u), 0.75);
+    const ovalBase = 0.16 * (1 - smoothRange(0.02, 0.2, u));
+    const belly = 0.58 * lowerBelly * pointedTop;
+    const radius = 0.01 + ovalBase + belly;
+    const y = -0.74 + u * 2.16;
 
     for (let xIndex = 0; xIndex <= radialSegments; xIndex += 1) {
       const v = xIndex / radialSegments;
@@ -149,22 +156,39 @@ function buildBudGeometry() {
       const panelWave = Math.cos(theta * BUD_PANEL_COUNT + u * 1.4);
       const seam = Math.pow(Math.max(0, panelWave), 2.5);
       const groove = Math.pow(Math.max(0, -panelWave), 4);
-      const topFold = smoothRange(0.68, 1, u) * Math.sin(theta * BUD_PANEL_COUNT * 0.5) * 0.012;
-      const shapedRadius = radius * (1 + seam * 0.035 - groove * 0.045) + topFold;
+      const topFold = smoothRange(0.7, 1, u) * Math.sin(theta * BUD_PANEL_COUNT * 0.5) * 0.007;
+      const shapedRadius = radius * (1 + seam * 0.032 - groove * 0.038) + topFold;
       const x = Math.sin(theta) * shapedRadius;
-      const z = Math.cos(theta) * shapedRadius * (0.94 + smoothRange(0.4, 1, u) * 0.06);
+      const z = Math.cos(theta) * shapedRadius * (0.9 + smoothRange(0.3, 1, u) * 0.08);
       const edgeShadow = smoothRange(0.45, 1, groove);
       const pearlLift = smoothRange(0.18, 0.62, u) * (1 - smoothRange(0.8, 1, u)) * (0.2 + seam * 0.28);
       const greenPetalLayer =
         smoothRange(0.46, 0.08, u) * 0.56 +
         smoothRange(0.18, 0.5, u) * (1 - smoothRange(0.58, 0.82, u)) * groove * 0.18;
+      
+      const creamYellow = new THREE.Color("#f0d37a");
+      const creamLift = smoothRange(0.1, 0.45, u) * (1 - smoothRange(0.45, 0.75, u)) * 0.42;
+
       const color = blush
         .clone()
         .lerp(rose, smoothRange(0.44, 1, u) * 0.42 + seam * 0.16)
         .lerp(pearl, pearlLift)
+        .lerp(creamYellow, creamLift)
         .lerp(coolShadow, edgeShadow * 0.28)
         .lerp(petalGreen, greenPetalLayer)
         .lerp(sepalGreen, smoothRange(0.22, 0, u) * 0.62);
+
+      // High-frequency vertical veins (striations)
+      const veinFreq = 160;
+      const veinWave = Math.sin(theta * veinFreq + u * 5.0);
+      const veinStrength = Math.pow(Math.max(0, veinWave), 3.0) * (0.16 + smoothRange(0.2, 0.9, u) * 0.22) * (1 - smoothRange(0.9, 1, u) * 0.5);
+      
+      const isGreenArea = smoothRange(0.35, 0.05, u);
+      const veinColor = isGreenArea > 0.5
+        ? sepalGreen.clone().lerp(new THREE.Color("#0f4f35"), 0.5)
+        : rose.clone().lerp(new THREE.Color("#710034"), 0.4);
+
+      color.lerp(veinColor, veinStrength);
 
       positions.push(x, y, z);
       colors.push(color.r, color.g, color.b);
@@ -238,8 +262,8 @@ function buildFallingPetalConfigs(): FallingPetalConfig[] {
 function makePetalMaterial() {
   return new THREE.MeshPhysicalMaterial({
     color: "#ffffff",
-    emissive: "#2a111b",
-    emissiveIntensity: 0.03,
+    emissive: "#641234",
+    emissiveIntensity: 0.06,
     metalness: 0,
     opacity: 0.96,
     roughness: 0.56,
@@ -262,8 +286,8 @@ export function LotusFlower({ scrollValue }: LotusFlowerProps) {
     () =>
       new THREE.MeshPhysicalMaterial({
         color: "#ffffff",
-        emissive: "#2a151d",
-        emissiveIntensity: 0.035,
+        emissive: "#4a1028",
+        emissiveIntensity: 0.05,
         metalness: 0,
         opacity: 1,
         roughness: 0.58,
@@ -277,14 +301,15 @@ export function LotusFlower({ scrollValue }: LotusFlowerProps) {
   const sepalMaterial = useMemo(
     () =>
       new THREE.MeshPhysicalMaterial({
-        color: "#4f896c",
-        emissive: "#0b2118",
-        emissiveIntensity: 0.025,
+        color: "#ffffff",
+        emissive: "#123f2d",
+        emissiveIntensity: 0.045,
         metalness: 0,
-        opacity: 0.92,
-        roughness: 0.78,
+        opacity: 0.95,
+        roughness: 0.68,
         side: THREE.DoubleSide,
         transparent: true,
+        vertexColors: true,
       }),
     [],
   );
@@ -295,9 +320,9 @@ export function LotusFlower({ scrollValue }: LotusFlowerProps) {
   const fallingMaterial = useMemo(
     () =>
       new THREE.MeshPhysicalMaterial({
-        color: "#f0c8bd",
-        emissive: "#1b0c0b",
-        emissiveIntensity: 0.02,
+        color: "#f04d8d",
+        emissive: "#5f1231",
+        emissiveIntensity: 0.05,
         metalness: 0,
         opacity: 0,
         roughness: 0.74,
@@ -309,9 +334,9 @@ export function LotusFlower({ scrollValue }: LotusFlowerProps) {
     [],
   );
   const whiteTint = useMemo(() => new THREE.Color("#ffffff"), []);
-  const witherTint = useMemo(() => new THREE.Color("#bda99a"), []);
-  const bloomGlow = useMemo(() => new THREE.Color("#6b243f"), []);
-  const quietGlow = useMemo(() => new THREE.Color("#251018"), []);
+  const witherTint = useMemo(() => new THREE.Color("#b99591"), []);
+  const bloomGlow = useMemo(() => new THREE.Color("#c40063"), []);
+  const quietGlow = useMemo(() => new THREE.Color("#4a1028"), []);
   const dummy = useMemo(() => new THREE.Vector3(), []);
 
   useFrame(({ clock }) => {
@@ -348,19 +373,19 @@ export function LotusFlower({ scrollValue }: LotusFlowerProps) {
       const open = smoothRange(0.18, 0.42, progress);
       material.opacity = budPresence * 0.9;
       mesh.visible = budPresence > 0.02;
-      mesh.position.set(Math.sin(angle) * 0.18, -0.77, Math.cos(angle) * 0.18);
+      mesh.position.set(Math.sin(angle) * 0.15, -0.74, Math.cos(angle) * 0.15);
       mesh.rotation.order = "YXZ";
       mesh.rotation.y = angle;
-      mesh.rotation.x = -0.22 + open * 0.4;
-      mesh.rotation.z = (index % 2 === 0 ? 1 : -1) * 0.05;
-      mesh.scale.set(0.28, 0.98, 0.98);
+      mesh.rotation.x = 0.52 + open * 0.35;
+      mesh.rotation.z = (index % 2 === 0 ? 1 : -1) * 0.12;
+      mesh.scale.set(0.68, 1.15, 1.15);
     });
 
     petalMaterials.forEach((material, layer) => {
       const layerWarmth = layer / (PETAL_LAYERS.length - 1);
       material.color.copy(whiteTint).lerp(witherTint, wither * (0.68 + layerWarmth * 0.2));
       material.emissive.copy(quietGlow).lerp(bloomGlow, fullBloom * (0.3 + layerWarmth * 0.34));
-      material.emissiveIntensity = 0.025 + fullBloom * 0.085 - wither * 0.024;
+      material.emissiveIntensity = 0.052 + fullBloom * 0.15 - wither * 0.026;
       material.opacity = (0.95 - wither * 0.18) * petalPresence;
     });
 

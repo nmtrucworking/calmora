@@ -5,21 +5,20 @@ import { SiteLayout } from "../layouts/SiteLayout";
 import { landingPath } from "./siteRoutes";
 import { AnimatePresence, motion } from "framer-motion";
 import { preloadImages } from "../utils/imagePreload";
+import { getProductBySlug } from "../features/products/data/products";
 
-const loadLandingLayout = () => import("../layouts/LandingLayout");
 const loadLandingPage = () => import("../pages/SenovaLandingPage");
 const loadStoryPage = () => import("../pages/StoryPage");
 const loadAboutPage = () => import("../pages/AboutPage");
 const loadProductsPage = () => import("../pages/ProductsPage");
+const loadProductDetailPage = () => import("../pages/ProductDetailPage");
 const loadSitePage = () => import("../pages/SitePage");
 
-const LandingLayout = lazy(() =>
-  loadLandingLayout().then((module) => ({ default: module.LandingLayout })),
-);
 const SenovaLandingPage = lazy(loadLandingPage);
 const StoryPage = lazy(loadStoryPage);
 const AboutPage = lazy(loadAboutPage);
 const ProductsPage = lazy(loadProductsPage);
+const ProductDetailPage = lazy(loadProductDetailPage);
 const SitePage = lazy(loadSitePage);
 let didSchedulePreload = false;
 
@@ -35,7 +34,7 @@ function RouteFallback() {
 }
 
 function getRouteImagePaths(pathname: string) {
-  if (pathname === "/products") {
+  if (pathname === "/products" || pathname.startsWith("/san-pham")) {
     return [...sharedImagePaths, ...productImagePaths];
   }
 
@@ -84,6 +83,7 @@ function preloadSecondaryRoutes() {
       loadAboutPage(),
       loadStoryPage(),
       loadProductsPage(),
+      loadProductDetailPage(),
       loadSitePage(),
     ]);
   }, 900);
@@ -91,22 +91,28 @@ function preloadSecondaryRoutes() {
 
 function AppRoutes() {
   const { pathname } = useRouter();
+  const normalizedPath = pathname.length > 1 ? pathname.replace(/\/+$/, "") : pathname;
+  const productSlug = normalizedPath.startsWith("/san-pham/")
+    ? normalizedPath.replace("/san-pham/", "").split("/")[0]
+    : "";
 
   useEffect(() => {
     preloadSecondaryRoutes();
   }, []);
 
   let pageComponent;
-  if (pathname === landingPath) {
+  if (normalizedPath === landingPath) {
     pageComponent = <SenovaLandingPage />;
-  } else if (pathname === "/about") {
+  } else if (normalizedPath === "/about") {
     pageComponent = <AboutPage />;
-  } else if (pathname === "/story") {
+  } else if (normalizedPath === "/story") {
     pageComponent = <StoryPage />;
-  } else if (pathname === "/products") {
+  } else if (normalizedPath === "/products" || normalizedPath === "/san-pham") {
     pageComponent = <ProductsPage />;
+  } else if (productSlug) {
+    pageComponent = <ProductDetailPage product={getProductBySlug(productSlug)} />;
   } else {
-    pageComponent = <SitePage path={pathname} />;
+    pageComponent = <SitePage path={normalizedPath} />;
   }
 
   const routedPage = (
@@ -128,15 +134,7 @@ function AppRoutes() {
     </Suspense>
   );
 
-  if (pathname === landingPath) {
-    return (
-      <Suspense fallback={<RouteFallback />}>
-        <LandingLayout>{routedPage}</LandingLayout>
-      </Suspense>
-    );
-  }
-
-  return <SiteLayout>{routedPage}</SiteLayout>;
+  return <SiteLayout isLanding={pathname === landingPath}>{routedPage}</SiteLayout>;
 }
 
 export default function AppRouter() {

@@ -3,6 +3,8 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import styles from "../../../pages/ProductsPage/ProductsPage.module.css";
 import { products } from "../data/products";
 
+import { PackageOpen, Droplets, Timer } from "lucide-react";
+
 export function ClassicRitualScene() {
   const containerRef = useRef<HTMLDivElement>(null);
   const classicProduct = products.find((p) => p.id === "classic");
@@ -86,21 +88,27 @@ export function ClassicRitualScene() {
 
           <div className={styles.classicPillars}>
             <div className={styles.pillarItem}>
-              <span className={styles.pillarNum}>01</span>
+              <div className={styles.pillarIconWrap}>
+                <PackageOpen className={styles.pillarIcon} />
+              </div>
               <div>
                 <h4 className={styles.pillarTitle}>Mở gói</h4>
                 <p className={styles.pillarText}>Bao bì giấy kraft tráng bạc mộc mạc, bảo quản trà tối đa.</p>
               </div>
             </div>
             <div className={styles.pillarItem}>
-              <span className={styles.pillarNum}>02</span>
+              <div className={styles.pillarIconWrap}>
+                <Droplets className={styles.pillarIcon} />
+              </div>
               <div>
                 <h4 className={styles.pillarTitle}>Ngâm trà</h4>
                 <p className={styles.pillarText}>Túi lọc tam giác phân hủy sinh học, giải phóng tối đa hương vị.</p>
               </div>
             </div>
             <div className={styles.pillarItem}>
-              <span className={styles.pillarNum}>03</span>
+              <div className={styles.pillarIconWrap}>
+                <Timer className={styles.pillarIcon} />
+              </div>
               <div>
                 <h4 className={styles.pillarTitle}>Dành một khoảng chậm</h4>
                 <p className={styles.pillarText}>3 phút chờ đợi là khoảng thời gian tĩnh lặng bắt đầu ngày mới.</p>

@@ -1,25 +1,39 @@
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import styles from "../../../pages/ProductsPage/ProductsPage.module.css";
 import { Link } from "../../../contexts/RouterContext";
 
 export function ProductJourney() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start end", "end end"],
+    offset: ["start end", "end start"],
   });
 
   // Animate the icons converging to center on scroll
-  const classicTranslateX = useTransform(scrollYProgress, [0.1, 0.85], [-120, 0]);
+  const classicTranslateXVal = useTransform(scrollYProgress, [0.1, 0.85], [-120, 0]);
   const classicOpacity = useTransform(scrollYProgress, [0.1, 0.4, 0.85], [0, 0.8, 1]);
   
-  const giftSetTranslateX = useTransform(scrollYProgress, [0.1, 0.85], [120, 0]);
+  const giftSetTranslateXVal = useTransform(scrollYProgress, [0.1, 0.85], [120, 0]);
   const giftSetOpacity = useTransform(scrollYProgress, [0.1, 0.4, 0.85], [0, 0.8, 1]);
 
-  const petalPackTranslateY = useTransform(scrollYProgress, [0.1, 0.85], [40, 0]);
+  const petalPackTranslateYVal = useTransform(scrollYProgress, [0.1, 0.85], [40, 0]);
   const petalPackOpacity = useTransform(scrollYProgress, [0.1, 0.4, 0.85], [0, 0.9, 1]);
+
+  const classicTranslateX = isMobile ? 0 : classicTranslateXVal;
+  const giftSetTranslateX = isMobile ? 0 : giftSetTranslateXVal;
+  const petalPackTranslateY = isMobile ? 0 : petalPackTranslateYVal;
 
   // Lotus path morph / merge effect
   const logoScale = useTransform(scrollYProgress, [0.75, 0.95], [0.85, 1]);
@@ -92,9 +106,9 @@ export function ProductJourney() {
           </h2>
 
           <div className={styles.journeyActions}>
-            <a href="#petal-pack" className={styles.journeyPrimaryBtn}>
+            <Link href="/san-pham/petal-pack" className={styles.journeyPrimaryBtn}>
               Khám phá Petal Pack
-            </a>
+            </Link>
             <a href="mailto:hello@senova.vn" className={styles.journeySecondaryBtn}>
               Nhận thông tin sản phẩm
             </a>
