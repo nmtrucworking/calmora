@@ -15,7 +15,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem 4rem;
+  padding: clamp(1.5rem, 4vw, 4rem) clamp(1rem, 4vw, 4rem);
   overflow: hidden;
 }
 
@@ -24,9 +24,9 @@
   width: 100%;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
+  grid-template-columns: minmax(22rem, 0.82fr) minmax(38rem, 1.18fr);
   align-items: center;
-  gap: 3rem;
+  gap: clamp(2rem, 4vw, 4.5rem);
   z-index: 2;
 }
 
@@ -63,7 +63,10 @@
 /* 3D Parallax Stage Frame */
 .stageFrame {
   position: relative;
-  height: 28rem;
+  min-width: 0;
+  width: 100%;
+  height: clamp(28rem, 44vw, 38rem);
+  min-height: 28rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -87,11 +90,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  max-width: min(34rem, 54%);
 }
 
 .productImage {
-  max-height: 18rem;
-  width: auto;
+  width: 100%;
+  max-width: clamp(17rem, 26vw, 25rem);
+  max-height: clamp(13rem, 24vw, 22rem);
+  height: auto;
   object-fit: contain;
   filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.42));
 }
@@ -112,20 +118,22 @@
 
 .layerPetalPack {
   z-index: 5;
+  left: 33%;
+  top: 38%;
   transform: translateZ(30px);
 }
 
 .layerClassic {
   z-index: 4;
-  left: 8%;
-  bottom: 15%;
+  left: 0;
+  bottom: 11%;
   transform: translateZ(10px) scale(0.85);
 }
 
 .layerGiftSet {
   z-index: 3;
-  right: 8%;
-  top: 10%;
+  right: 0;
+  top: 8%;
   transform: translateZ(-20px) scale(0.9);
 }
 
@@ -1154,6 +1162,11 @@
     right: 4%;
   }
 
+  .layerPetalPack {
+    left: 32%;
+    top: 37%;
+  }
+
   .orbitStage {
     height: 30rem;
   }
@@ -1233,10 +1246,16 @@
 @media (max-width: 600px) {
   .stageFrame {
     height: 20rem;
+    min-height: 20rem;
   }
   
   .productImage {
+    max-width: clamp(8rem, 38vw, 10rem);
     max-height: 12rem;
+  }
+
+  .layerClassic {
+    bottom: 0;
   }
 
   .orbitItemCard {
