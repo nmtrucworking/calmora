@@ -3,8 +3,25 @@
   width: 100%;
   min-height: 100%;
   aspect-ratio: 1 / 1.05;
-  overflow: hidden;
+  overflow: visible;
   background: transparent; /* let page background show through */
+}
+
+.canvasViewport {
+  position: absolute;
+  inset: -8% 0 -10% -14%;
+}
+
+.canvasViewport > div,
+.canvasViewport > div > div {
+  width: 100%;
+  height: 100%;
+}
+
+.canvasViewport canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .exportButton {
@@ -51,6 +68,10 @@
 @media (max-width: 980px) {
   .canvasShell {
     aspect-ratio: 4 / 3;
+  }
+
+  .canvasViewport {
+    inset: -6% 0 -9%;
   }
 }
 

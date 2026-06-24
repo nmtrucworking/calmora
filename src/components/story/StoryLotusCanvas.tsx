@@ -101,10 +101,11 @@ export function StoryLotusCanvas({
 
   return (
     <div className={`${styles.canvasShell} ${className ?? ""}`.trim()}>
+      <div className={styles.canvasViewport}>
       <Canvas
         shadows
         dpr={[1, 1.8]}
-        camera={{ position: [0, 1.15, 5.7], fov: 43 }}
+        camera={{ position: [0, 1.15, 5.7], fov: 48 }}
         gl={{ alpha: true }}
         onCreated={({ gl }) => {
           gl.setClearColor(0x000000, 0);
@@ -126,6 +127,7 @@ export function StoryLotusCanvas({
           <LotusGLBExporter ref={exporterRef} progressRef={progressRef} />
         </Suspense>
       </Canvas>
+      </div>
 
       <button
         type="button"
