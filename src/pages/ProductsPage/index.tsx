@@ -8,7 +8,7 @@ import styles from "./ProductsPage.module.css";
 
 export default function ProductsPage() {
   return (
-    <div className={styles.pageContainer}>
+    <div className={styles.productsPage}>
       {/* Section 01: Hero perspective stage */}
       <ProductHeroStage />
 

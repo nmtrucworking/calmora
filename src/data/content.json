@@ -10,7 +10,8 @@
       { "label": "Sản phẩm", "href": "/products" },
       { "label": "Câu chuyện", "href": "/story" },
       { "label": "Nghi thức", "href": "/ritual" },
-      { "label": "Mùa sen", "href": "/seasonal" }
+      { "label": "Mùa sen", "href": "/seasonal" },
+      { "label": "Liên hệ", "href": "/contact" }
     ],
     "footerGroups": [
       {
@@ -18,23 +19,32 @@
         "links": [
           { "label": "Giới thiệu Senova", "href": "/about" },
           { "label": "Bộ sản phẩm", "href": "/products" },
-          { "label": "Câu chuyện văn hóa", "href": "/story" }
+          { "label": "Câu chuyện văn hóa", "href": "/story" },
+          { "label": "Nghi thức thưởng trà", "href": "/ritual" }
         ]
       },
       {
         "title": "Trải nghiệm",
         "links": [
-          { "label": "Nghi thức thưởng trà", "href": "/ritual" },
-          { "label": "Mùa sen", "href": "/seasonal" },
-          { "label": "Petal Pack", "href": "/products/petal-pack" }
+          { "label": "Senova Classic", "href": "/products/classic" },
+          { "label": "Senova Petal Pack", "href": "/products/petal-pack" },
+          { "label": "Senova Gift Set", "href": "/products/gift-set" },
+          { "label": "Mùa sen", "href": "/seasonal" }
         ]
       },
       {
         "title": "Kết nối",
         "links": [
-          { "label": "Liên hệ", "href": "mailto:hello@senova.vn" },
-          { "label": "Đăng ký nhận thông tin", "href": "/dat-truoc" },
+          { "label": "Đăng ký đặt trước", "href": "/pre-order" },
+          { "label": "Liên hệ", "href": "/contact" },
           { "label": "Hợp tác", "href": "/partners" }
+        ]
+      },
+      {
+        "title": "Chính sách",
+        "links": [
+          { "label": "Chính sách dữ liệu", "href": "/privacy" },
+          { "label": "Điều khoản sử dụng", "href": "/terms" }
         ]
       }
     ],

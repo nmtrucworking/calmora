@@ -30,9 +30,9 @@
 }
 
 [class*="_headerScrolled_"] {
-  background-color: rgba(236, 229, 213, 0.9) !important;
-  border-color: var(--border) !important;
-  box-shadow: var(--shadow-sm) !important;
+  background-color: rgba(255, 253, 248, 0.64) !important;
+  border-color: transparent !important;
+  box-shadow: 0 10px 30px rgba(37, 31, 21, 0.05) !important;
 }
 
 [class*="_brandMark_"] {

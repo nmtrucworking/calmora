@@ -132,7 +132,7 @@ export default function ProductDetailPage({ product }: ProductDetailPageProps) {
               hướng dẫn trải nghiệm và gửi phản hồi.
             </p>
           </div>
-          <Link href="/trai-nghiem/petal-pack/mo-canh-sen" className={styles.primaryButton}>
+          <Link href="/experience/petal-pack" className={styles.primaryButton}>
             Mở trải nghiệm QR
             <ArrowRight aria-hidden="true" />
           </Link>

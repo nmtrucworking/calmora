@@ -9,7 +9,7 @@ export type SenovaProduct = {
   tagline: string;
   description: string;
   shortDescription: string;
-  role: string;
+  role: "Giữ" | "Mở" | "Trao";
   href: string;
   image: string;
   status: "draft" | "active" | "archived";
@@ -29,7 +29,13 @@ export type SenovaProduct = {
     title: string;
     text: string;
   }[];
+  seo: {
+    title: string;
+    description: string;
+  };
 };
+
+export const productSlugs: ProductId[] = ["classic", "petal-pack", "gift-set"];
 
 export const products: SenovaProduct[] = [
   {
@@ -47,12 +53,12 @@ export const products: SenovaProduct[] = [
     image: "/assets/products/classic-pack.jpg",
     status: "active",
     primaryAction: {
-      label: "Đăng ký nhận thông tin",
-      href: "/dat-truoc",
+      label: "Mở trải nghiệm Classic",
+      href: "/experience/classic",
     },
     secondaryAction: {
-      label: "Xem Petal Pack",
-      href: "/products/petal-pack",
+      label: "Đăng ký đặt trước",
+      href: "/pre-order?product=classic",
     },
     heroAlt: "Hộp trà hương sen Senova Classic",
     suitableFor: [
@@ -64,7 +70,7 @@ export const products: SenovaProduct[] = [
     highlights: [
       "Phần trà được định lượng cho một lần pha",
       "Thao tác sử dụng gọn và dễ hình thành thói quen",
-      "Hương sen được đặt trong một trải nghiệm thưởng trà chậm, không cầu kỳ",
+      "Hương sen được đặt trong trải nghiệm thưởng trà chậm, không cầu kỳ",
       "Là điểm vào phù hợp cho người mới tiếp cận Senova",
     ],
     experienceSteps: [
@@ -81,6 +87,11 @@ export const products: SenovaProduct[] = [
         text: "Dành thời gian để hương sen và vị trà dần hiện ra trước khi thưởng thức.",
       },
     ],
+    seo: {
+      title: "Senova Classic | Calmora",
+      description:
+        "Senova Classic giữ trà hương sen trong một hình thức dễ tiếp cận cho nhịp thưởng trà hằng ngày.",
+    },
   },
   {
     id: "petal-pack",
@@ -99,11 +110,11 @@ export const products: SenovaProduct[] = [
     status: "active",
     primaryAction: {
       label: "Bắt đầu trải nghiệm",
-      href: "/trai-nghiem/petal-pack/mo-canh-sen",
+      href: "/experience/petal-pack",
     },
     secondaryAction: {
-      label: "Xem hướng dẫn",
-      href: "/ritual",
+      label: "Gửi phản hồi",
+      href: "/feedback/petal-pack",
     },
     batchLabel: "Lô thử nghiệm PP-2601-A",
     heroAlt: "Senova Petal Pack tạo hình búp sen với phần trà bên trong",
@@ -123,11 +134,11 @@ export const products: SenovaProduct[] = [
     experienceSteps: [
       {
         title: "Mở cánh sen",
-        text: "Mở nhẹ từng lớp cánh để quan sát cấu trúc Petal Pack và lấy phần trà bên trong.",
+        text: "Mở nhẹ từng lớp cánh để quan sát cấu trúc Petal Pack và cảm nhận hình dáng trước khi pha.",
       },
       {
         title: "Cảm nhận",
-        text: "Dành một khoảnh khắc để nhìn hình dáng, nhận biết chất liệu và cảm nhận hương trước khi pha.",
+        text: "Dành một khoảnh khắc để nhìn hình dáng, nhận biết chất liệu và cảm nhận hương trước khi rót nước.",
       },
       {
         title: "Pha trà",
@@ -142,6 +153,11 @@ export const products: SenovaProduct[] = [
         text: "Quan sát màu nước, cảm nhận hương và vị, rồi ghi lại phản hồi về trải nghiệm.",
       },
     ],
+    seo: {
+      title: "Senova Petal Pack | Calmora",
+      description:
+        "Senova Petal Pack mở trải nghiệm trà hương sen bằng hình dáng búp sen, thao tác cảm nhận và nội dung QR.",
+    },
   },
   {
     id: "gift-set",
@@ -151,7 +167,7 @@ export const products: SenovaProduct[] = [
     eyebrow: "TRAO / Quà tặng văn hóa",
     tagline: "Trao hương sen, gửi một lời trân trọng.",
     description:
-      "Bộ quà kết hợp trà hương sen, Petal Pack, hướng dẫn pha và thẻ câu chuyện trong một hành trình trao tặng thống nhất.",
+      "Bộ quà dự kiến kết hợp trà hương sen, Petal Pack, hướng dẫn pha và thẻ câu chuyện trong một hành trình trao tặng thống nhất.",
     shortDescription:
       "Bộ quà trà sen kết hợp sản phẩm, trải nghiệm và câu chuyện văn hóa trong một hành trình hoàn chỉnh.",
     role: "Trao",
@@ -160,11 +176,11 @@ export const products: SenovaProduct[] = [
     status: "draft",
     primaryAction: {
       label: "Đăng ký nhận thông tin",
-      href: "/dat-truoc",
+      href: "/pre-order?product=gift-set",
     },
     secondaryAction: {
-      label: "Xem Petal Pack",
-      href: "/products/petal-pack",
+      label: "Liên hệ tư vấn",
+      href: "/contact?topic=gift-set",
     },
     heroAlt: "Bộ quà trà sen Senova Gift Set",
     suitableFor: ["Quà tri ân", "Quà lưu niệm", "Quà đối tác", "Phiên bản theo mùa"],
@@ -192,9 +208,18 @@ export const products: SenovaProduct[] = [
         text: "Dùng thẻ hoặc QR để đọc thêm và chia sẻ lại ý nghĩa của món quà.",
       },
     ],
+    seo: {
+      title: "Senova Gift Set | Calmora",
+      description:
+        "Senova Gift Set là phiên bản quà tặng đang hoàn thiện, kết nối trà hương sen, lời nhắn và câu chuyện văn hóa.",
+    },
   },
 ];
 
 export function getProductBySlug(slug: string) {
   return products.find((product) => product.slug === slug);
+}
+
+export function isProductSlug(slug: string): slug is ProductId {
+  return productSlugs.includes(slug as ProductId);
 }

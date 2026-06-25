@@ -15,6 +15,7 @@ type RouterProviderProps = {
 
 export function RouterProvider({ children }: RouterProviderProps) {
   const [pathname, setPathname] = useState(window.location.pathname);
+  const [search, setSearch] = useState(window.location.search);
 
   useEffect(() => {
     if ("scrollRestoration" in window.history) {
@@ -26,6 +27,7 @@ export function RouterProvider({ children }: RouterProviderProps) {
     const handlePopState = () => {
       startTransition(() => {
         setPathname(window.location.pathname);
+        setSearch(window.location.search);
       });
     };
 
@@ -36,16 +38,19 @@ export function RouterProvider({ children }: RouterProviderProps) {
   }, []);
 
   const navigate = useCallback((path: string) => {
-    if (window.location.pathname !== path) {
-      window.history.pushState({}, "", path);
+    const url = new URL(path, window.location.origin);
+
+    if (window.location.pathname !== url.pathname || window.location.search !== url.search) {
+      window.history.pushState({}, "", `${url.pathname}${url.search}${url.hash}`);
       startTransition(() => {
-        setPathname(path);
+        setPathname(url.pathname);
+        setSearch(url.search);
       });
       window.scrollTo({ top: 0, left: 0, behavior: "auto" });
     }
   }, []);
 
-  const value = useMemo(() => ({ pathname, navigate }), [pathname, navigate]);
+  const value = useMemo(() => ({ pathname, search, navigate }), [pathname, search, navigate]);
 
   return (
     <RouterContext.Provider value={value}>

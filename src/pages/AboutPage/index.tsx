@@ -46,6 +46,7 @@ export default function AboutPage() {
               title={aboutData.tech.title}
               description={aboutData.tech.description}
               align="center"
+              level="h2"
             />
           </div>
 
@@ -89,9 +90,9 @@ export default function AboutPage() {
               {aboutData.cta.text}
             </p>
             <div className={styles.ctaButtonWrap}>
-              <a href="mailto:hello@senova.vn" className={styles.ctaBtn}>
+              <Link href="/contact" className={styles.ctaBtn}>
                 {aboutData.cta.btnText}
-              </a>
+              </Link>
               <Link href="/products" className={styles.ctaSecondaryBtn}>
                 {aboutData.cta.secondaryBtnText}
               </Link>

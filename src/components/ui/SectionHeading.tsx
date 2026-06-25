@@ -5,13 +5,22 @@ type SectionHeadingProps = {
   title: string;
   description?: string;
   align?: "left" | "center";
+  level?: "h1" | "h2";
 };
 
-export function SectionHeading({ eyebrow, title, description, align = "left" }: SectionHeadingProps) {
+export function SectionHeading({
+  eyebrow,
+  title,
+  description,
+  align = "left",
+  level = "h1",
+}: SectionHeadingProps) {
+  const TitleTag = level;
+
   return (
     <header className={`${styles.heading} ${styles[align]}`}>
       <p className={styles.eyebrow}>{eyebrow}</p>
-      <h1 className={styles.title}>{title}</h1>
+      <TitleTag className={styles.title}>{title}</TitleTag>
       {description ? <p className={styles.description}>{description}</p> : null}
     </header>
   );

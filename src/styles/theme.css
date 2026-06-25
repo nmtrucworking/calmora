@@ -42,8 +42,8 @@
   --radius-sm: 0.75rem;
   --page-max: 82rem;
 
-  --header-bg: rgba(255, 253, 248, 0.82);
-  --footer-bg: rgba(226, 217, 196, 0.92);
+  --header-bg: rgba(255, 253, 248, 0.58);
+  --footer-bg: rgba(255, 253, 248, 0.5);
 }
 
 body {

@@ -2,25 +2,45 @@ import { lazy, Suspense, useEffect, useMemo, useState, type ReactNode } from "re
 import { RouterProvider } from "../contexts/RouterContext";
 import { useRouter } from "../contexts/RouterState";
 import { SiteLayout } from "../layouts/SiteLayout";
-import { landingPath } from "./siteRoutes";
 import { AnimatePresence, motion } from "framer-motion";
 import { preloadImages } from "../utils/imagePreload";
 import { getProductBySlug } from "../features/products/data/products";
+import landingBackgroundUrl from "../assets/landing-optimized.jpg";
 import productsBackgroundUrl from "../assets/products-background-optimized.jpg";
+import { canonicalBaseUrl, pageSeo, standardPages, type SeoContent } from "../content/sitePages";
+import { trackEvent } from "../features/analytics/analytics";
+
+const landingPath = "/";
 
 const loadLandingPage = () => import("../pages/SenovaLandingPage");
 const loadStoryPage = () => import("../pages/StoryPage");
 const loadAboutPage = () => import("../pages/AboutPage");
 const loadProductsPage = () => import("../pages/ProductsPage");
 const loadProductDetailPage = () => import("../pages/ProductDetailPage");
-const loadSitePage = () => import("../pages/SitePage");
+const loadStandardPage = () => import("../pages/SystemPages/StandardPage");
+const loadExperiencePage = () => import("../pages/ExperiencePage");
+const loadFeedbackPage = () => import("../pages/FeedbackPage");
+const loadPreOrderPage = () => import("../pages/PreOrderPage");
+const loadContactPage = () => import("../pages/ContactPage");
+const loadPartnersPage = () => import("../pages/PartnersPage");
+const loadThankYouPage = () => import("../pages/ThankYouPage");
+const loadQrRedirectPage = () => import("../pages/QrRedirectPage");
+const loadNotFoundPage = () => import("../pages/NotFoundPage");
 
 const SenovaLandingPage = lazy(loadLandingPage);
 const StoryPage = lazy(loadStoryPage);
 const AboutPage = lazy(loadAboutPage);
 const ProductsPage = lazy(loadProductsPage);
 const ProductDetailPage = lazy(loadProductDetailPage);
-const SitePage = lazy(loadSitePage);
+const StandardPage = lazy(loadStandardPage);
+const ExperiencePage = lazy(loadExperiencePage);
+const FeedbackPage = lazy(loadFeedbackPage);
+const PreOrderPage = lazy(loadPreOrderPage);
+const ContactPage = lazy(loadContactPage);
+const PartnersPage = lazy(loadPartnersPage);
+const ThankYouPage = lazy(loadThankYouPage);
+const QrRedirectPage = lazy(loadQrRedirectPage);
+const NotFoundPage = lazy(loadNotFoundPage);
 let didSchedulePreload = false;
 
 const productImagePaths = [
@@ -35,12 +55,20 @@ function RouteFallback() {
 }
 
 function getRouteImagePaths(pathname: string) {
+  if (pathname === landingPath) {
+    return [landingBackgroundUrl, ...sharedImagePaths];
+  }
+
   if (pathname === "/products") {
     return [productsBackgroundUrl, ...sharedImagePaths, ...productImagePaths];
   }
 
-  if (pathname.startsWith("/products/")) {
-    const productSlug = pathname.replace("/products/", "").split("/")[0];
+  if (
+    pathname.startsWith("/products/") ||
+    pathname.startsWith("/experience/") ||
+    pathname.startsWith("/feedback/")
+  ) {
+    const productSlug = pathname.split("/")[2] ?? "";
     const product = getProductBySlug(productSlug);
 
     return product ? [...sharedImagePaths, product.image] : sharedImagePaths;
@@ -102,7 +130,15 @@ function preloadSecondaryRoutes() {
           loadStoryPage(),
           loadProductsPage(),
           loadProductDetailPage(),
-          loadSitePage(),
+          loadStandardPage(),
+          loadExperiencePage(),
+          loadFeedbackPage(),
+          loadPreOrderPage(),
+          loadContactPage(),
+          loadPartnersPage(),
+          loadThankYouPage(),
+          loadQrRedirectPage(),
+          loadNotFoundPage(),
         ]);
       },
       { timeout: 1800 },
@@ -110,16 +146,68 @@ function preloadSecondaryRoutes() {
   }, 900);
 }
 
+function upsertMeta(selector: string, attributes: Record<string, string>) {
+  let element = document.head.querySelector<HTMLMetaElement>(selector);
+
+  if (!element) {
+    element = document.createElement("meta");
+    document.head.appendChild(element);
+  }
+
+  Object.entries(attributes).forEach(([key, value]) => {
+    element?.setAttribute(key, value);
+  });
+}
+
+function updateMetadata(pathname: string) {
+  const productSlug = pathname.split("/")[2] ?? "";
+  const product =
+    pathname.startsWith("/products/") ||
+    pathname.startsWith("/experience/") ||
+    pathname.startsWith("/feedback/")
+      ? getProductBySlug(productSlug)
+      : undefined;
+  const seo: SeoContent = product?.seo ?? pageSeo[pathname] ?? pageSeo["/404"];
+  const canonicalPath = pageSeo[pathname] || product ? pathname : "/404";
+  const canonical = `${canonicalBaseUrl}${canonicalPath === "/" ? "" : canonicalPath}`;
+  const image = seo.image ?? `${canonicalBaseUrl}/assets/brand/calmora-mark.png`;
+
+  document.title = seo.title;
+  upsertMeta('meta[name="description"]', { name: "description", content: seo.description });
+  upsertMeta('meta[name="robots"]', { name: "robots", content: seo.robots ?? "index,follow" });
+  upsertMeta('meta[property="og:title"]', { property: "og:title", content: seo.title });
+  upsertMeta('meta[property="og:description"]', {
+    property: "og:description",
+    content: seo.description,
+  });
+  upsertMeta('meta[property="og:image"]', { property: "og:image", content: image });
+  upsertMeta('meta[property="og:url"]', { property: "og:url", content: canonical });
+  upsertMeta('meta[name="twitter:card"]', { name: "twitter:card", content: "summary_large_image" });
+
+  let canonicalLink = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+  if (!canonicalLink) {
+    canonicalLink = document.createElement("link");
+    canonicalLink.rel = "canonical";
+    document.head.appendChild(canonicalLink);
+  }
+  canonicalLink.href = canonical;
+}
+
 function AppRoutes() {
-  const { pathname } = useRouter();
+  const { pathname, search } = useRouter();
   const normalizedPath = pathname.length > 1 ? pathname.replace(/\/+$/, "") : pathname;
-  const productSlug = normalizedPath.startsWith("/products/")
-    ? normalizedPath.replace("/products/", "").split("/")[0]
-    : "";
+  const productSlug = normalizedPath.split("/")[2] ?? "";
+  const product = getProductBySlug(productSlug);
+  const qrCode = normalizedPath.startsWith("/q/") ? normalizedPath.replace("/q/", "") : "";
 
   useEffect(() => {
     preloadSecondaryRoutes();
   }, []);
+
+  useEffect(() => {
+    updateMetadata(normalizedPath);
+    trackEvent({ eventName: "page_view", path: `${normalizedPath}${search}` });
+  }, [normalizedPath, search]);
 
   let pageComponent;
   if (normalizedPath === landingPath) {
@@ -130,10 +218,32 @@ function AppRoutes() {
     pageComponent = <StoryPage />;
   } else if (normalizedPath === "/products") {
     pageComponent = <ProductsPage />;
-  } else if (productSlug) {
-    pageComponent = <ProductDetailPage product={getProductBySlug(productSlug)} />;
+  } else if (normalizedPath.startsWith("/products/")) {
+    pageComponent = product ? <ProductDetailPage product={product} /> : <NotFoundPage />;
+  } else if (normalizedPath.startsWith("/experience/")) {
+    pageComponent = product ? <ExperiencePage product={product} /> : <NotFoundPage />;
+  } else if (normalizedPath.startsWith("/feedback/")) {
+    pageComponent = product ? <FeedbackPage product={product} /> : <NotFoundPage />;
+  } else if (normalizedPath === "/pre-order") {
+    pageComponent = <PreOrderPage />;
+  } else if (normalizedPath === "/contact") {
+    pageComponent = <ContactPage />;
+  } else if (normalizedPath === "/partners") {
+    pageComponent = <PartnersPage />;
+  } else if (normalizedPath === "/thank-you") {
+    pageComponent = <ThankYouPage />;
+  } else if (normalizedPath === "/ritual") {
+    pageComponent = <StandardPage content={standardPages["/ritual"]} showProducts />;
+  } else if (normalizedPath === "/seasonal") {
+    pageComponent = <StandardPage content={standardPages["/seasonal"]} showProducts />;
+  } else if (normalizedPath === "/privacy") {
+    pageComponent = <StandardPage content={standardPages["/privacy"]} />;
+  } else if (normalizedPath === "/terms") {
+    pageComponent = <StandardPage content={standardPages["/terms"]} />;
+  } else if (qrCode) {
+    pageComponent = <QrRedirectPage code={qrCode} />;
   } else {
-    pageComponent = <SitePage path={normalizedPath} />;
+    pageComponent = <NotFoundPage />;
   }
 
   const routedPage = (
@@ -155,7 +265,11 @@ function AppRoutes() {
     </Suspense>
   );
 
-  return <SiteLayout isLanding={pathname === landingPath}>{routedPage}</SiteLayout>;
+  return (
+    <SiteLayout isLanding={pathname === landingPath} isProductsPage={normalizedPath === "/products"}>
+      {routedPage}
+    </SiteLayout>
+  );
 }
 
 export default function AppRouter() {

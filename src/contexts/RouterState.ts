@@ -2,6 +2,7 @@ import { createContext, useContext } from "react";
 
 export type RouterContextType = {
   pathname: string;
+  search: string;
   navigate: (path: string) => void;
 };
 

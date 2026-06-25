@@ -109,9 +109,9 @@ export function ProductJourney() {
             <Link href="/products/petal-pack" className={styles.journeyPrimaryBtn}>
               Khám phá Petal Pack
             </Link>
-            <a href="mailto:hello@senova.vn" className={styles.journeySecondaryBtn}>
+            <Link href="/pre-order" className={styles.journeySecondaryBtn}>
               Nhận thông tin Senova
-            </a>
+            </Link>
           </div>
 
           <div className={styles.journeyLinkWrap}>
