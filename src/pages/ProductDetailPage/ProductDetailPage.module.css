@@ -269,6 +269,118 @@
   font-weight: 750;
 }
 
+.gallerySection {
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 2rem);
+}
+
+.galleryHeader {
+  max-width: 46rem;
+}
+
+.galleryHeader h2 {
+  max-width: 16ch;
+  margin: 0.65rem 0 0;
+  color: var(--primary-strong);
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  line-height: 1.04;
+}
+
+.galleryHeader p:last-child {
+  max-width: 40rem;
+  margin: 1rem 0 0;
+  color: var(--text-muted);
+  line-height: 1.75;
+}
+
+.galleryGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.galleryCard {
+  position: relative;
+  display: grid;
+  min-height: 28rem;
+  align-content: space-between;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(255, 253, 248, 0.76), rgba(255, 253, 248, 0.54)),
+    var(--surface-strong);
+  padding: 1rem;
+  color: var(--text);
+  text-decoration: none;
+  box-shadow: var(--shadow-sm);
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.galleryCard:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.galleryCardActive {
+  border-color: rgba(179, 38, 93, 0.42);
+  background:
+    linear-gradient(180deg, rgba(255, 253, 248, 0.84), rgba(255, 253, 248, 0.62)),
+    rgba(179, 38, 93, 0.08);
+}
+
+.galleryRole {
+  position: relative;
+  z-index: 2;
+  justify-self: start;
+  border: 1px solid rgba(111, 85, 23, 0.22);
+  border-radius: 999px;
+  background: rgba(255, 253, 248, 0.72);
+  padding: 0.35rem 0.7rem;
+  color: var(--accent-gold);
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.galleryImageFrame {
+  display: grid;
+  min-height: 14rem;
+  place-items: center;
+  margin: 0.5rem 0 1rem;
+}
+
+.galleryImageFrame img {
+  width: min(82%, 16rem);
+  max-height: 15rem;
+  object-fit: contain;
+  filter: drop-shadow(0 20px 28px rgba(37, 31, 21, 0.18));
+}
+
+.galleryCardCopy {
+  position: relative;
+  z-index: 2;
+}
+
+.galleryCardCopy h3 {
+  margin: 0;
+  color: var(--primary-strong);
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 2.5vw, 2rem);
+  line-height: 1.1;
+}
+
+.galleryCardCopy p {
+  margin: 0.65rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
 .experienceSection {
   display: grid;
   gap: 1.5rem;
@@ -371,6 +483,14 @@
 
   .stepGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .galleryGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .galleryCard {
+    min-height: auto;
   }
 
   .qrPanel {

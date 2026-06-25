@@ -1,6 +1,6 @@
 import { ArrowLeft, ArrowRight, Check, QrCode, Sparkles } from "lucide-react";
 import { Link } from "../../contexts/RouterContext";
-import type { SenovaProduct } from "../../features/products/data/products";
+import { products, type SenovaProduct } from "../../features/products/data/products";
 import styles from "./ProductDetailPage.module.css";
 
 type ProductDetailPageProps = {
@@ -100,6 +100,41 @@ export default function ProductDetailPage({ product }: ProductDetailPageProps) {
               <span key={item}>{item}</span>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className={styles.gallerySection} aria-labelledby="product-gallery-title">
+        <div className={styles.galleryHeader}>
+          <p className={styles.eyebrow}>Bộ sản phẩm</p>
+          <h2 id="product-gallery-title">Ba hình thái trong cùng một câu chuyện trà sen.</h2>
+          <p>
+            Nhìn tổng thể Classic, Petal Pack và Gift Set để thấy vai trò Giữ - Mở - Trao
+            được triển khai qua từng hình thức sản phẩm.
+          </p>
+        </div>
+
+        <div className={styles.galleryGrid}>
+          {products.map((item) => {
+            const isCurrentProduct = item.id === product.id;
+
+            return (
+              <Link
+                key={item.id}
+                href={item.href}
+                className={`${styles.galleryCard} ${isCurrentProduct ? styles.galleryCardActive : ""}`}
+                aria-current={isCurrentProduct ? "page" : undefined}
+              >
+                <span className={styles.galleryRole}>{item.role}</span>
+                <div className={styles.galleryImageFrame}>
+                  <img src={item.image} alt={item.heroAlt} loading="lazy" decoding="async" />
+                </div>
+                <div className={styles.galleryCardCopy}>
+                  <h3>{item.name}</h3>
+                  <p>{item.shortDescription}</p>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </section>
 

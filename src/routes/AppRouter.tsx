@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useMemo, useState, type ReactNode } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { RouterProvider } from "../contexts/RouterContext";
 import { useRouter } from "../contexts/RouterState";
 import { SiteLayout } from "../layouts/SiteLayout";
@@ -49,9 +49,99 @@ const productImagePaths = [
   "/assets/products/gift-set.jpg",
 ];
 const sharedImagePaths = ["/assets/brand/calmora-mark.png"];
+const pageFocusSectionClass = "pageFocusSection";
+const pageFocusActiveClass = "pageFocusActive";
 
 function RouteFallback() {
   return <div style={{ minHeight: "60vh" }} />;
+}
+
+function FocusSections({ children, enabled }: { children: ReactNode; enabled: boolean }) {
+  const rootRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root || !enabled) return;
+
+    let intersectionObserver: IntersectionObserver | null = null;
+    let collectFrame = 0;
+    let sections: HTMLElement[] = [];
+    const ratios = new Map<HTMLElement, number>();
+
+    const cleanupSections = () => {
+      intersectionObserver?.disconnect();
+      intersectionObserver = null;
+      sections.forEach((section) => {
+        section.classList.remove(pageFocusSectionClass, pageFocusActiveClass);
+      });
+      sections = [];
+      ratios.clear();
+    };
+
+    const updateActiveSection = () => {
+      const activeSection = sections.reduce<HTMLElement | null>((current, section) => {
+        if (!current) return section;
+        return (ratios.get(section) ?? 0) > (ratios.get(current) ?? 0) ? section : current;
+      }, null);
+
+      if (!activeSection || (ratios.get(activeSection) ?? 0) < 0.12) return;
+
+      sections.forEach((section) => {
+        section.classList.toggle(pageFocusActiveClass, section === activeSection);
+      });
+    };
+
+    const collectSections = () => {
+      cleanupSections();
+
+      const nextSections = Array.from(root.querySelectorAll("section")).filter(
+        (section): section is HTMLElement => section instanceof HTMLElement,
+      );
+
+      if (nextSections.length < 2) return;
+
+      sections = nextSections;
+      sections.forEach((section) => section.classList.add(pageFocusSectionClass));
+      sections[0]?.classList.add(pageFocusActiveClass);
+
+      intersectionObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            ratios.set(entry.target as HTMLElement, entry.intersectionRatio);
+          });
+          updateActiveSection();
+        },
+        {
+          root: null,
+          rootMargin: "-16% 0px -30% 0px",
+          threshold: [0.12, 0.24, 0.36, 0.5, 0.66, 0.82],
+        },
+      );
+
+      sections.forEach((section) => intersectionObserver?.observe(section));
+    };
+
+    const scheduleCollect = () => {
+      window.cancelAnimationFrame(collectFrame);
+      collectFrame = window.requestAnimationFrame(collectSections);
+    };
+
+    const mutationObserver = new MutationObserver(scheduleCollect);
+    mutationObserver.observe(root, { childList: true, subtree: true });
+    scheduleCollect();
+
+    return () => {
+      window.cancelAnimationFrame(collectFrame);
+      mutationObserver.disconnect();
+      cleanupSections();
+    };
+  }, [enabled, children]);
+
+  return (
+    <div ref={rootRef} style={{ display: "contents" }}>
+      {children}
+    </div>
+  );
 }
 
 function getRouteImagePaths(pathname: string) {
@@ -258,7 +348,7 @@ function AppRoutes() {
             transition={{ duration: 0.24, ease: "easeOut" }}
             style={{ minHeight: "100vh" }}
           >
-            {pageComponent}
+            <FocusSections enabled={normalizedPath !== "/products"}>{pageComponent}</FocusSections>
           </motion.div>
         </AnimatePresence>
       </ImageReadyBoundary>
