@@ -3,7 +3,7 @@ import { Handshake, Send } from "lucide-react";
 import { useRouter } from "../../contexts/RouterState";
 import { trackEvent } from "../../features/analytics/analytics";
 import { submitForm } from "../../features/forms/submissions";
-import styles from "../SystemPages/SystemPages.module.css";
+import { systemStyles as styles } from "../../styles/systemPageClasses";
 
 export default function PartnersPage() {
   const { navigate } = useRouter();

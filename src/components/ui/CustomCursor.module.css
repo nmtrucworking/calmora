@@ -1,3 +1,5 @@
+/* Intentional custom global interaction stylesheet: custom cursor needs global body and pointer selectors. */
+
 .cursorRing {
   position: fixed;
   top: 0;

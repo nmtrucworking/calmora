@@ -5,6 +5,7 @@ import { SiteLayout } from "../layouts/SiteLayout";
 import { AnimatePresence, motion } from "framer-motion";
 import { preloadImages } from "../utils/imagePreload";
 import { getProductBySlug } from "../features/products/data/products";
+import { collections, policies, services } from "../content/commerceContent";
 import landingBackgroundUrl from "../assets/landing-optimized.jpg";
 import productsBackgroundUrl from "../assets/products-background-optimized.jpg";
 import { canonicalBaseUrl, pageSeo, standardPages, type SeoContent } from "../content/sitePages";
@@ -26,6 +27,7 @@ const loadPartnersPage = () => import("../pages/PartnersPage");
 const loadThankYouPage = () => import("../pages/ThankYouPage");
 const loadQrRedirectPage = () => import("../pages/QrRedirectPage");
 const loadNotFoundPage = () => import("../pages/NotFoundPage");
+const loadCommercePages = () => import("../pages/CommercePages");
 
 const SenovaLandingPage = lazy(loadLandingPage);
 const StoryPage = lazy(loadStoryPage);
@@ -41,6 +43,26 @@ const PartnersPage = lazy(loadPartnersPage);
 const ThankYouPage = lazy(loadThankYouPage);
 const QrRedirectPage = lazy(loadQrRedirectPage);
 const NotFoundPage = lazy(loadNotFoundPage);
+const CollectionsPage = lazy(() =>
+  loadCommercePages().then((module) => ({ default: module.CollectionsPage })),
+);
+const CollectionDetailPage = lazy(() =>
+  loadCommercePages().then((module) => ({ default: module.CollectionDetailPage })),
+);
+const SearchPage = lazy(() => loadCommercePages().then((module) => ({ default: module.SearchPage })));
+const WishlistPage = lazy(() => loadCommercePages().then((module) => ({ default: module.WishlistPage })));
+const BagPage = lazy(() => loadCommercePages().then((module) => ({ default: module.BagPage })));
+const CheckoutPage = lazy(() => loadCommercePages().then((module) => ({ default: module.CheckoutPage })));
+const CheckoutThankYouPage = lazy(() =>
+  loadCommercePages().then((module) => ({ default: module.CheckoutThankYouPage })),
+);
+const ServicePage = lazy(() => loadCommercePages().then((module) => ({ default: module.ServicePage })));
+const PolicyPage = lazy(() => loadCommercePages().then((module) => ({ default: module.PolicyPage })));
+const AccountPage = lazy(() => loadCommercePages().then((module) => ({ default: module.AccountPage })));
+const OrderStatusPage = lazy(() =>
+  loadCommercePages().then((module) => ({ default: module.OrderStatusPage })),
+);
+const JournalPage = lazy(() => loadCommercePages().then((module) => ({ default: module.JournalPage })));
 let didSchedulePreload = false;
 
 const productImagePaths = [
@@ -149,7 +171,15 @@ function getRouteImagePaths(pathname: string) {
     return [landingBackgroundUrl, ...sharedImagePaths];
   }
 
-  if (pathname === "/products") {
+  if (
+    pathname === "/products" ||
+    pathname === "/collections" ||
+    pathname.startsWith("/collections/") ||
+    pathname === "/search" ||
+    pathname === "/wishlist" ||
+    pathname === "/bag" ||
+    pathname === "/checkout"
+  ) {
     return [productsBackgroundUrl, ...sharedImagePaths, ...productImagePaths];
   }
 
@@ -229,6 +259,7 @@ function preloadSecondaryRoutes() {
           loadThankYouPage(),
           loadQrRedirectPage(),
           loadNotFoundPage(),
+          loadCommercePages(),
         ]);
       },
       { timeout: 1800 },
@@ -287,8 +318,12 @@ function AppRoutes() {
   const { pathname, search } = useRouter();
   const normalizedPath = pathname.length > 1 ? pathname.replace(/\/+$/, "") : pathname;
   const productSlug = normalizedPath.split("/")[2] ?? "";
+  const collectionSlug = normalizedPath.split("/")[2] ?? "";
+  const journalSlug = normalizedPath.split("/")[2] ?? "";
   const product = getProductBySlug(productSlug);
   const qrCode = normalizedPath.startsWith("/q/") ? normalizedPath.replace("/q/", "") : "";
+  const serviceContent = services[normalizedPath];
+  const policyContent = policies[normalizedPath];
 
   useEffect(() => {
     preloadSecondaryRoutes();
@@ -310,11 +345,45 @@ function AppRoutes() {
     pageComponent = <ProductsPage />;
   } else if (normalizedPath.startsWith("/products/")) {
     pageComponent = product ? <ProductDetailPage product={product} /> : <NotFoundPage />;
+  } else if (normalizedPath === "/collections") {
+    pageComponent = <CollectionsPage />;
+  } else if (normalizedPath.startsWith("/collections/")) {
+    pageComponent = collections.some((collection) => collection.slug === collectionSlug) ? (
+      <CollectionDetailPage slug={collectionSlug} />
+    ) : (
+      <NotFoundPage />
+    );
+  } else if (normalizedPath === "/search") {
+    pageComponent = <SearchPage />;
+  } else if (normalizedPath === "/wishlist") {
+    pageComponent = <WishlistPage />;
+  } else if (normalizedPath === "/bag") {
+    pageComponent = <BagPage />;
+  } else if (normalizedPath === "/checkout") {
+    pageComponent = <CheckoutPage />;
+  } else if (normalizedPath === "/checkout/thank-you") {
+    pageComponent = <CheckoutThankYouPage />;
+  } else if (serviceContent) {
+    pageComponent = <ServicePage content={serviceContent} />;
+  } else if (policyContent) {
+    pageComponent = <PolicyPage content={policyContent} />;
+  } else if (normalizedPath === "/account") {
+    pageComponent = <AccountPage />;
+  } else if (normalizedPath === "/account/orders") {
+    pageComponent = <AccountPage view="orders" />;
+  } else if (normalizedPath === "/account/wishlist") {
+    pageComponent = <AccountPage view="wishlist" />;
+  } else if (normalizedPath === "/order-status") {
+    pageComponent = <OrderStatusPage />;
+  } else if (normalizedPath === "/journal") {
+    pageComponent = <JournalPage />;
+  } else if (normalizedPath.startsWith("/journal/")) {
+    pageComponent = <JournalPage slug={journalSlug} />;
   } else if (normalizedPath.startsWith("/experience/")) {
     pageComponent = product ? <ExperiencePage product={product} /> : <NotFoundPage />;
   } else if (normalizedPath.startsWith("/feedback/")) {
     pageComponent = product ? <FeedbackPage product={product} /> : <NotFoundPage />;
-  } else if (normalizedPath === "/pre-order") {
+  } else if (normalizedPath === "/dat-truoc" || normalizedPath === "/pre-order") {
     pageComponent = <PreOrderPage />;
   } else if (normalizedPath === "/contact") {
     pageComponent = <ContactPage />;

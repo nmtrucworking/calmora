@@ -1,8 +1,10 @@
 import { motion, useMotionValue, useTransform } from "framer-motion";
 import { type MouseEvent, useRef, useState, useEffect } from "react";
 import { products } from "../data/products";
-import styles from "../../../pages/ProductsPage/ProductsPage.module.css";
+import { productsPageStyles as styles } from "../../../styles/productsPageClasses";
 import { TextReveal } from "../../../components/ui/ZenMotion";
+
+const petalClasses = [styles.petal1, styles.petal2, styles.petal3, styles.petal4];
 
 export function ProductHeroStage() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -148,7 +150,7 @@ export function ProductHeroStage() {
             {[1, 2, 3, 4].map((i) => (
               <motion.div
                 key={i}
-                className={`${styles.petalDecor} ${styles[`petal${i}`]}`}
+                className={`${styles.petalDecor} ${petalClasses[i - 1]}`}
                 animate={{
                   y: [0, -15, 0],
                   rotate: [0, 8, 0],

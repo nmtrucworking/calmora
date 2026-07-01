@@ -5,10 +5,10 @@ import { PetalPackReveal } from "../../features/products/components/PetalPackRev
 import { ClassicRitualScene } from "../../features/products/components/ClassicRitualScene";
 import { GiftSetExplodedView } from "../../features/products/components/GiftSetExplodedView";
 import { ProductJourney } from "../../features/products/components/ProductJourney";
-import styles from "./ProductsPage.module.css";
+import { productsPageStyles as styles } from "../../styles/productsPageClasses";
 
-const focusSectionClass = "productFocusSection";
-const activeSectionClass = "productFocusActive";
+const focusSectionClasses = styles.productFocusSection.split(" ");
+const activeSectionClasses = styles.productFocusActive.split(" ");
 
 export default function ProductsPage() {
   const pageRef = useRef<HTMLDivElement>(null);
@@ -24,9 +24,9 @@ export default function ProductsPage() {
 
     sections.forEach((section, index) => {
       section.dataset.productFocusIndex = String(index);
-      section.classList.add(focusSectionClass);
+      section.classList.add(...focusSectionClasses);
     });
-    sections[0]?.classList.add(activeSectionClass);
+    sections[0]?.classList.add(...activeSectionClasses);
 
     const updateActiveSection = () => {
       const activeSection = sections.reduce<HTMLElement | null>((current, section) => {
@@ -39,7 +39,11 @@ export default function ProductsPage() {
       if (!activeSection || (sectionRatios.get(activeSection) ?? 0) < 0.16) return;
 
       sections.forEach((section) => {
-        section.classList.toggle(activeSectionClass, section === activeSection);
+        if (section === activeSection) {
+          section.classList.add(...activeSectionClasses);
+        } else {
+          section.classList.remove(...activeSectionClasses);
+        }
       });
     };
 
@@ -63,7 +67,7 @@ export default function ProductsPage() {
       observer.disconnect();
       sections.forEach((section) => {
         delete section.dataset.productFocusIndex;
-        section.classList.remove(focusSectionClass, activeSectionClass);
+        section.classList.remove(...focusSectionClasses, ...activeSectionClasses);
       });
     };
   }, []);

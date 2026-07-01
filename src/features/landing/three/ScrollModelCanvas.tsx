@@ -2,7 +2,7 @@ import { Html } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { useScroll } from "framer-motion";
 import { Suspense, useRef } from "react";
-import styles from "../SenovaLandingPage.module.css";
+import { cx } from "../../../utils/classNames";
 import { LotusScene } from "./LotusScene";
 import { ScrollBinder } from "./ScrollBinder";
 
@@ -23,7 +23,7 @@ export function ScrollModelCanvas({
   const progressRef = useRef(0);
 
   return (
-    <div className={`${styles.sceneLayer} ${className ?? ""}`.trim()}>
+    <div className={cx("fixed inset-0 z-0", className)}>
       <Canvas
         shadows
         dpr={[1, 1.8]}
@@ -37,7 +37,7 @@ export function ScrollModelCanvas({
         <Suspense
           fallback={
             <Html center>
-              <span className={styles.loadingText}>Đang tải mô hình...</span>
+              <span className="text-sm text-text-muted">Đang tải mô hình...</span>
             </Html>
           }
         >

@@ -2,7 +2,7 @@ import { ArrowRight } from "lucide-react";
 import { Link } from "../../contexts/RouterContext";
 import type { StandardPageContent } from "../../content/sitePages";
 import { products } from "../../features/products/data/products";
-import styles from "./SystemPages.module.css";
+import { systemStyles as styles } from "../../styles/systemPageClasses";
 
 type StandardPageProps = {
   content: StandardPageContent;

@@ -5,7 +5,7 @@ import { useRouter } from "../../contexts/RouterState";
 import { trackEvent } from "../../features/analytics/analytics";
 import { submitForm } from "../../features/forms/submissions";
 import type { SenovaProduct } from "../../features/products/data/products";
-import styles from "../SystemPages/SystemPages.module.css";
+import { systemStyles as styles } from "../../styles/systemPageClasses";
 
 type FeedbackPageProps = {
   product?: SenovaProduct;

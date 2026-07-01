@@ -35,7 +35,7 @@
       {
         "title": "Kết nối",
         "links": [
-          { "label": "Đăng ký đặt trước", "href": "/pre-order" },
+          { "label": "Đăng ký mẫu thử", "href": "/dat-truoc" },
           { "label": "Liên hệ", "href": "/contact" },
           { "label": "Hợp tác", "href": "/partners" }
         ]

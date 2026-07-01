@@ -1,5 +1,5 @@
 import { Link } from "../../contexts/RouterContext";
-import styles from "../SystemPages/SystemPages.module.css";
+import { systemStyles as styles } from "../../styles/systemPageClasses";
 
 export default function NotFoundPage() {
   return (

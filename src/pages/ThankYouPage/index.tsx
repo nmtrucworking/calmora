@@ -1,7 +1,7 @@
 import { Link } from "../../contexts/RouterContext";
 import { useRouter } from "../../contexts/RouterState";
 import { thankYouMessages } from "../../content/sitePages";
-import styles from "../SystemPages/SystemPages.module.css";
+import { systemStyles as styles } from "../../styles/systemPageClasses";
 
 export default function ThankYouPage() {
   const { search } = useRouter();

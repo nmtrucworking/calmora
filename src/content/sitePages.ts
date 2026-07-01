@@ -61,10 +61,15 @@ export const pageSeo: Record<string, SeoContent> = {
     description:
       "Không gian nội dung theo mùa của Senova, nơi hương sen, ký ức và câu chuyện gặp nhau.",
   },
-  "/pre-order": {
-    title: "Đăng ký đặt trước Senova | Calmora",
+  "/dat-truoc": {
+    title: "Đăng ký mẫu thử Senova | Calmora",
     description:
-      "Gửi nhu cầu đặt trước, yêu cầu mẫu thử hoặc đăng ký nhận thông tin sản phẩm Senova.",
+      "Đăng ký quan tâm mẫu thử và góp phản hồi validation cho Senova Petal Pack, Senova Gift Set.",
+  },
+  "/pre-order": {
+    title: "Đăng ký mẫu thử Senova | Calmora",
+    description:
+      "Đăng ký quan tâm mẫu thử và góp phản hồi validation cho Senova Petal Pack, Senova Gift Set.",
   },
   "/contact": {
     title: "Liên hệ Senova | Calmora",
@@ -88,6 +93,114 @@ export const pageSeo: Record<string, SeoContent> = {
   "/terms": {
     title: "Điều khoản sử dụng | Calmora",
     description: "Điều khoản sử dụng website giới thiệu và thử nghiệm sản phẩm Senova.",
+  },
+  "/collections": {
+    title: "Collections Senova | Calmora",
+    description: "Cac bo suu tap Senova theo ritual, gifting va concierge preorder.",
+  },
+  "/collections/signature": {
+    title: "Signature Collection Senova | Calmora",
+    description: "Classic, Petal Pack va Gift Set trong mot hanh trinh Giu - Mo - Trao.",
+  },
+  "/collections/gifting": {
+    title: "Gifting Collection Senova | Calmora",
+    description: "Qua tang Senova co loi nhan, QR, bao bi va lich giao qua concierge.",
+  },
+  "/collections/daily-ritual": {
+    title: "Daily Ritual Collection Senova | Calmora",
+    description: "Nhung cau hinh Senova cho khoang lang thuong tra hang ngay.",
+  },
+  "/search": {
+    title: "Tim kiem Senova | Calmora",
+    description: "Tim san pham, gift edit va ritual phu hop trong he sinh thai Senova.",
+  },
+  "/wishlist": {
+    title: "Wishlist Senova | Calmora",
+    description: "Luu lai nhung cau hinh san pham Senova dang duoc quan tam.",
+    robots: "noindex,follow",
+  },
+  "/bag": {
+    title: "Inquiry Bag Senova | Calmora",
+    description: "Gio yeu cau san pham Senova truoc khi concierge xac nhan.",
+    robots: "noindex,follow",
+  },
+  "/checkout": {
+    title: "Concierge Checkout Senova | Calmora",
+    description: "Gui yeu cau dat truoc, qua tang hoac tasting cho concierge Senova.",
+    robots: "noindex,follow",
+  },
+  "/checkout/thank-you": {
+    title: "Senova da ghi nhan inquiry | Calmora",
+    description: "Concierge Senova da ghi nhan yeu cau va se phan hoi.",
+    robots: "noindex,follow",
+  },
+  "/gifting": {
+    title: "Gifting Senova | Calmora",
+    description: "Qua tang tra sen cao cap voi loi nhan, bao bi va lich giao duoc concierge xac nhan.",
+  },
+  "/corporate-gifting": {
+    title: "Corporate Gifting Senova | Calmora",
+    description: "Qua tang doi tac Senova voi cau hinh so luong, ca nhan hoa va concierge review.",
+  },
+  "/concierge": {
+    title: "Concierge Senova | Calmora",
+    description: "Tu van san pham, gift set, tasting va preorder Senova qua concierge.",
+  },
+  "/private-tasting": {
+    title: "Private Tasting Senova | Calmora",
+    description: "Dat lich tasting rieng cho Senova Classic, Petal Pack va Gift Set.",
+  },
+  "/shipping": {
+    title: "Giao hang Senova | Calmora",
+    description: "Thong tin giao hang va dieu kien bao quan san pham Senova.",
+  },
+  "/returns": {
+    title: "Doi tra Senova | Calmora",
+    description: "Chinh sach doi tra mock cho giai doan concierge preorder Senova.",
+  },
+  "/faq": {
+    title: "FAQ Senova | Calmora",
+    description: "Cau hoi thuong gap ve preorder, gifting, QR va private tasting Senova.",
+  },
+  "/care": {
+    title: "Cham soc san pham Senova | Calmora",
+    description: "Huong dan bao quan, pha tra va cham soc Gift Set Senova.",
+  },
+  "/account": {
+    title: "Tai khoan Senova | Calmora",
+    description: "Ho so khach hang mock cho wishlist va inquiry Senova.",
+    robots: "noindex,follow",
+  },
+  "/account/orders": {
+    title: "Inquiry history Senova | Calmora",
+    description: "Trang thai cac yeu cau concierge Senova.",
+    robots: "noindex,follow",
+  },
+  "/account/wishlist": {
+    title: "Wishlist tai khoan Senova | Calmora",
+    description: "San pham Senova da luu trong tai khoan mock.",
+    robots: "noindex,follow",
+  },
+  "/order-status": {
+    title: "Theo doi yeu cau Senova | Calmora",
+    description: "Tra cuu trang thai inquiry Senova bang ma mau.",
+    robots: "noindex,follow",
+  },
+  "/journal": {
+    title: "Journal Senova | Calmora",
+    description: "Editorial notes ve tra sen, gifting va seasonal ritual cua Senova.",
+  },
+  "/journal/gift-language": {
+    title: "Gift Language | Senova Journal",
+    description: "Mot ghi chu ve ngon ngu qua tang cao cap cua Senova.",
+  },
+  "/journal/petal-ritual": {
+    title: "Petal Ritual | Senova Journal",
+    description: "Vi sao thao tac mo canh la mot phan cua trai nghiem Petal Pack.",
+  },
+  "/journal/seasonal-lotus": {
+    title: "Seasonal Lotus | Senova Journal",
+    description: "Mua sen nhu mot nguyen tac bien tap cho Senova.",
   },
   "/404": {
     title: "Không tìm thấy trang | Calmora",
@@ -236,6 +349,10 @@ export const thankYouMessages: Record<string, { title: string; text: string }> =
   "pre-order": {
     title: "Yêu cầu của bạn đã được ghi nhận.",
     text: "Nhóm Senova sẽ liên hệ khi có thông tin phù hợp với sản phẩm đã chọn.",
+  },
+  "sample-interest": {
+    title: "Phiếu quan tâm mẫu thử đã được ghi nhận.",
+    text: "Nhóm Senova sẽ tổng hợp phản hồi ẩn danh cho Petal Pack / Gift Set và liên hệ khi có lịch mẫu thử phù hợp.",
   },
   contact: {
     title: "Nội dung liên hệ đã được gửi.",

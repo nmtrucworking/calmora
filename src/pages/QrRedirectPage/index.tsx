@@ -4,7 +4,7 @@ import { Link } from "../../contexts/RouterContext";
 import { useRouter } from "../../contexts/RouterState";
 import { getQrRecord } from "../../content/sitePages";
 import { trackEvent } from "../../features/analytics/analytics";
-import styles from "../SystemPages/SystemPages.module.css";
+import { systemStyles as styles } from "../../styles/systemPageClasses";
 
 type QrRedirectPageProps = {
   code: string;

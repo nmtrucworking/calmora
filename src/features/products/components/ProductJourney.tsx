@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import styles from "../../../pages/ProductsPage/ProductsPage.module.css";
+import { productsPageStyles as styles } from "../../../styles/productsPageClasses";
 import { Link } from "../../../contexts/RouterContext";
 
 export function ProductJourney() {
@@ -109,8 +109,8 @@ export function ProductJourney() {
             <Link href="/products/petal-pack" className={styles.journeyPrimaryBtn}>
               Khám phá Petal Pack
             </Link>
-            <Link href="/pre-order" className={styles.journeySecondaryBtn}>
-              Nhận thông tin Senova
+            <Link href="/dat-truoc" className={styles.journeySecondaryBtn}>
+              Đăng ký mẫu thử
             </Link>
           </div>
 

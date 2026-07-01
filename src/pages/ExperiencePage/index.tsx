@@ -4,7 +4,7 @@ import { useRouter } from "../../contexts/RouterState";
 import { trackEvent } from "../../features/analytics/analytics";
 import type { SenovaProduct } from "../../features/products/data/products";
 import { useEffect } from "react";
-import styles from "../SystemPages/SystemPages.module.css";
+import { systemStyles as styles } from "../../styles/systemPageClasses";
 
 type ExperiencePageProps = {
   product?: SenovaProduct;

@@ -1,4 +1,4 @@
-import styles from "./SectionHeading.module.css";
+import { cx } from "../../utils/classNames";
 
 type SectionHeadingProps = {
   eyebrow: string;
@@ -18,10 +18,20 @@ export function SectionHeading({
   const TitleTag = level;
 
   return (
-    <header className={`${styles.heading} ${styles[align]}`}>
-      <p className={styles.eyebrow}>{eyebrow}</p>
-      <TitleTag className={styles.title}>{title}</TitleTag>
-      {description ? <p className={styles.description}>{description}</p> : null}
+    <header
+      className={cx(
+        "grid gap-[0.85rem]",
+        align === "center" && "justify-items-center text-center",
+        align === "left" && "justify-items-start",
+      )}
+    >
+      <p className="m-0 text-[0.8rem] uppercase tracking-[0.24em] text-accent-gold">{eyebrow}</p>
+      <TitleTag className="m-0 font-display text-[clamp(2.4rem,6vw,4.5rem)] font-semibold leading-[0.95] text-text">
+        {title}
+      </TitleTag>
+      {description ? (
+        <p className="m-0 max-w-[42rem] text-base leading-[1.75] text-text-muted">{description}</p>
+      ) : null}
     </header>
   );
 }

@@ -1,3 +1,5 @@
+/* Intentional custom canvas stylesheet: sizing nested WebGL canvas wrappers is easier and safer in CSS. */
+
 .canvasShell {
   position: relative;
   width: 100%;

@@ -1,7 +1,9 @@
-import { ArrowLeft, ArrowRight, Check, QrCode, Sparkles } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Gift, QrCode, Ruler, ShoppingBag, Sparkles, Truck } from "lucide-react";
+import { useState } from "react";
 import { Link } from "../../contexts/RouterContext";
+import { useInquiryBag } from "../../contexts/InquiryBagContext";
 import { products, type SenovaProduct } from "../../features/products/data/products";
-import styles from "./ProductDetailPage.module.css";
+import { productDetailStyles as styles } from "../../styles/productDetailClasses";
 
 type ProductDetailPageProps = {
   product?: SenovaProduct;
@@ -30,6 +32,9 @@ function ProductNotFound() {
 }
 
 export default function ProductDetailPage({ product }: ProductDetailPageProps) {
+  const { addItem } = useInquiryBag();
+  const [selectedVariant, setSelectedVariant] = useState(product?.variants[0]?.id);
+
   if (!product) {
     return <ProductNotFound />;
   }
@@ -55,7 +60,42 @@ export default function ProductDetailPage({ product }: ProductDetailPageProps) {
           <p className={styles.tagline}>{product.tagline}</p>
           <p className={styles.description}>{product.description}</p>
 
+          <div className="mt-6 grid gap-3 rounded-lg border border-border bg-surface-strong p-4">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <span className="font-display text-[1.55rem] font-[760] text-primary-strong">
+                {product.priceLabel}
+              </span>
+              <span className={styles.statusBadge}>{product.availability}</span>
+            </div>
+            <div className="grid gap-2">
+              <span className={styles.eyebrow}>Cau hinh</span>
+              {product.variants.map((variant) => (
+                <button
+                  key={variant.id}
+                  type="button"
+                  className={`rounded-lg border p-3 text-left transition ${
+                    selectedVariant === variant.id
+                      ? "border-primary bg-[rgba(31,114,74,0.1)]"
+                      : "border-border bg-[#fffdf866]"
+                  }`}
+                  onClick={() => setSelectedVariant(variant.id)}
+                >
+                  <span className="block font-extrabold text-primary-strong">{variant.label}</span>
+                  <span className="text-[0.84rem] text-text-muted">{variant.note}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div className={styles.actions}>
+            <button
+              type="button"
+              className={styles.primaryButton}
+              onClick={() => addItem({ productId: product.id, variantId: selectedVariant })}
+            >
+              Them vao inquiry bag
+              <ShoppingBag aria-hidden="true" />
+            </button>
             <Link href={product.primaryAction.href} className={styles.primaryButton}>
               {product.primaryAction.label}
               <ArrowRight aria-hidden="true" />
@@ -101,6 +141,53 @@ export default function ProductDetailPage({ product }: ProductDetailPageProps) {
             ))}
           </div>
         </div>
+      </section>
+
+      <section className={styles.contentGrid} aria-label="Thong tin commerce">
+        <div className={styles.infoPanel}>
+          <div className={styles.sectionHeading}>
+            <Gift aria-hidden="true" />
+            <h2>Trong cau hinh nay</h2>
+          </div>
+          <ul className={styles.checkList}>
+            {product.includedItems.map((item) => (
+              <li key={item}>
+                <Check aria-hidden="true" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className={styles.infoPanel}>
+          <div className={styles.sectionHeading}>
+            <Ruler aria-hidden="true" />
+            <h2>Kich thuoc va pha tra</h2>
+          </div>
+          <p className={styles.description}>{product.dimensions}</p>
+          <div className={styles.pillList}>
+            {product.brewingNotes.map((note) => (
+              <span key={note}>{note}</span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className={styles.qrPanel}>
+        <Truck aria-hidden="true" />
+        <div>
+          <p className={styles.eyebrow}>Delivery / gifting</p>
+          <h2>Concierge xac nhan truoc khi chot don.</h2>
+          <p>{product.shippingNote}</p>
+          <div className={styles.pillList}>
+            {product.giftOptions.map((option) => (
+              <span key={option}>{option}</span>
+            ))}
+          </div>
+        </div>
+        <Link href="/checkout" className={styles.primaryButton}>
+          Gui inquiry
+          <ArrowRight aria-hidden="true" />
+        </Link>
       </section>
 
       <section className={styles.gallerySection} aria-labelledby="product-gallery-title">

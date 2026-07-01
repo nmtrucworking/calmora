@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { products } from "../data/products";
-import styles from "../../../pages/ProductsPage/ProductsPage.module.css";
+import { productsPageStyles as styles } from "../../../styles/productsPageClasses";
 import { ArrowRight } from "lucide-react";
 import { Link } from "../../../contexts/RouterContext";
 

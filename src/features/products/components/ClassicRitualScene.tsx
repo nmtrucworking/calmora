@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import styles from "../../../pages/ProductsPage/ProductsPage.module.css";
+import { productsPageStyles as styles } from "../../../styles/productsPageClasses";
 import { products } from "../data/products";
 
 import { PackageOpen, Droplets, Timer } from "lucide-react";

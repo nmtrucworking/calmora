@@ -1,6 +1,5 @@
 import { Volume2, VolumeX } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import styles from "../SenovaLandingPage.module.css";
 
 type AudioWindow = Window &
   typeof globalThis & {
@@ -133,7 +132,7 @@ export function AmbientSoundButton() {
   return (
     <button
       type="button"
-      className={styles.soundToggle}
+      className="inline-flex cursor-pointer items-center gap-[0.55rem] rounded-full border border-border bg-surface-strong px-[0.9rem] py-[0.52rem] text-[0.82rem] font-[700] text-text transition-colors duration-150 [backdrop-filter:blur(18px)] hover:border-border-strong hover:bg-[#fffdf8] hover:text-primary aria-pressed:border-primary aria-pressed:text-primary max-[767px]:p-[0.48rem] max-[767px]:[&_span]:hidden"
       onClick={() => {
         if (isPlaying) {
           stop();
@@ -145,7 +144,7 @@ export function AmbientSoundButton() {
       aria-label={isPlaying ? "Tắt nhạc nền" : "Bật nhạc nền"}
       title={isPlaying ? "Tắt nhạc nền" : "Bật nhạc nền"}
     >
-      {isPlaying ? <Volume2 className={styles.soundIcon} /> : <VolumeX className={styles.soundIcon} />}
+      {isPlaying ? <Volume2 className="h-4 w-4 flex-none" /> : <VolumeX className="h-4 w-4 flex-none" />}
       <span>{isPlaying ? "Đang phát" : "Âm thanh"}</span>
     </button>
   );

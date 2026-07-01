@@ -13,6 +13,19 @@ export type SenovaProduct = {
   href: string;
   image: string;
   status: "draft" | "active" | "archived";
+  priceLabel: string;
+  availability: string;
+  variants: {
+    id: string;
+    label: string;
+    note: string;
+  }[];
+  includedItems: string[];
+  dimensions: string;
+  brewingNotes: string[];
+  shippingNote: string;
+  giftOptions: string[];
+  badges: string[];
   primaryAction: {
     label: string;
     href: string;
@@ -52,13 +65,29 @@ export const products: SenovaProduct[] = [
     href: "/products/classic",
     image: "/assets/products/classic-pack.jpg",
     status: "active",
+    priceLabel: "Tu 320.000 VND",
+    availability: "Mo danh sach dat truoc theo lo nho",
+    variants: [
+      { id: "daily-box", label: "Hop 12 goi", note: "Nhip thuong tra hang ngay" },
+      { id: "trial-set", label: "Bo thu 3 goi", note: "Danh cho lan cham dau tien" },
+    ],
+    includedItems: [
+      "Tra huong sen dinh luong tung lan pha",
+      "The huong dan pha ngan gon",
+      "Bao bi giay my thuat co niem phong",
+    ],
+    dimensions: "Hop 12 x 8 x 5 cm, phu hop ke tra hoac ban lam viec",
+    brewingNotes: ["Dung 180 ml nuoc nong", "Cho 4-5 phut", "Thuong thuc khi huong sen vua mo"],
+    shippingNote: "Du kien giao trong 3-5 ngay lam viec sau khi xac nhan concierge.",
+    giftOptions: ["Them thiep loi nhan", "Goi giay lua", "Len lich giao theo ngay"],
+    badges: ["Everyday ritual", "Single serve", "Preorder"],
     primaryAction: {
       label: "Mở trải nghiệm Classic",
       href: "/experience/classic",
     },
     secondaryAction: {
       label: "Đăng ký đặt trước",
-      href: "/pre-order?product=classic",
+      href: "/dat-truoc?product=classic",
     },
     heroAlt: "Hộp trà hương sen Senova Classic",
     suitableFor: [
@@ -108,6 +137,23 @@ export const products: SenovaProduct[] = [
     href: "/products/petal-pack",
     image: "/assets/products/petal-pack.jpg",
     status: "active",
+    priceLabel: "Tu 480.000 VND",
+    availability: "Lo trai nghiem PP-2601-A dang nhan inquiry",
+    variants: [
+      { id: "petal-single", label: "Set 6 Petal Pack", note: "Trai nghiem ca nhan" },
+      { id: "petal-hosting", label: "Set 18 Petal Pack", note: "Cho tasting va booth" },
+    ],
+    includedItems: [
+      "Petal Pack tao hinh bup sen",
+      "Tra tui loc mot ly",
+      "The QR cau chuyen va phan hoi",
+      "Huong dan nghi thuc mo - pha",
+    ],
+    dimensions: "Moi Petal Pack duoc bao quan trong khay rieng, hop 18 x 12 x 7 cm",
+    brewingNotes: ["Mo tung lop canh sen", "Dung 200 ml nuoc nong", "Cho 5 phut va quet QR trong luc doi"],
+    shippingNote: "Hang thu nghiem duoc concierge xac nhan lich giao va dieu kien bao quan.",
+    giftOptions: ["Thiep ca nhan hoa", "QR loi nhan", "Goi rieng tung khach moi"],
+    badges: ["Signature experience", "QR story", "Limited batch"],
     primaryAction: {
       label: "Bắt đầu trải nghiệm",
       href: "/experience/petal-pack",
@@ -174,9 +220,26 @@ export const products: SenovaProduct[] = [
     href: "/products/gift-set",
     image: "/assets/products/gift-set.jpg",
     status: "draft",
+    priceLabel: "Bao gia theo cau hinh qua tang",
+    availability: "Nhan tu van corporate va seasonal gifting",
+    variants: [
+      { id: "gift-personal", label: "Personal Gift Set", note: "Qua tang ca nhan cao cap" },
+      { id: "gift-corporate", label: "Corporate Edition", note: "Cau hinh cho doi tac va su kien" },
+    ],
+    includedItems: [
+      "Senova Classic",
+      "Senova Petal Pack",
+      "The cau chuyen va huong dan pha",
+      "Hop qua cung co loi nhan",
+    ],
+    dimensions: "Hop qua 28 x 20 x 9 cm, co the dieu chinh theo cau hinh doanh nghiep",
+    brewingNotes: ["Bat dau bang loi nhan", "Chon Classic hoac Petal Pack", "Dung QR de tiep tuc cau chuyen"],
+    shippingNote: "Concierge xac nhan so luong, ngay giao, ten nguoi nhan va loi nhan truoc khi chot don.",
+    giftOptions: ["Dong dau logo doi tac", "Thiep song ngu", "Giao nhieu dia chi", "Phien ban theo mua"],
+    badges: ["Gifting", "Corporate", "Custom quote"],
     primaryAction: {
       label: "Đăng ký nhận thông tin",
-      href: "/pre-order?product=gift-set",
+      href: "/dat-truoc?product=gift-set",
     },
     secondaryAction: {
       label: "Liên hệ tư vấn",

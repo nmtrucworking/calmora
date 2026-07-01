@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import styles from "../../../pages/ProductsPage/ProductsPage.module.css";
+import { productsPageStyles as styles } from "../../../styles/productsPageClasses";
 import { products } from "../data/products";
 
 type Hotspot = {

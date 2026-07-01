@@ -1,4 +1,4 @@
-export type SubmissionKind = "feedback" | "pre-order" | "contact" | "partners";
+export type SubmissionKind = "feedback" | "pre-order" | "sample-interest" | "contact" | "partners";
 
 export type ApiResponse<T> = {
   success: boolean;
