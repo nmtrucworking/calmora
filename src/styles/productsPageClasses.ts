@@ -1,8 +1,10 @@
+import { luxuryMotion } from "./luxuryEffects";
+
 export const productsPageStyles = {
   productsPage:
     "relative isolate min-h-screen overflow-x-hidden bg-[linear-gradient(180deg,rgba(236,229,213,0.72)_0%,rgba(226,217,196,0.66)_54%,rgba(216,205,180,0.7)_100%)] px-0 pt-12 pb-20 font-sans text-text before:pointer-events-none before:fixed before:inset-[-1.5rem] before:z-0 before:scale-[1.02] before:bg-[url(/src/assets/products-background-optimized.jpg)] before:bg-cover before:bg-top before:bg-fixed before:opacity-[0.72] before:blur-[1px] before:content-[''] after:pointer-events-none after:fixed after:inset-0 after:z-0 after:bg-[linear-gradient(90deg,rgba(236,229,213,0.58)_0%,rgba(236,229,213,0.34)_44%,rgba(236,229,213,0.5)_100%),linear-gradient(180deg,rgba(255,253,248,0.38)_0%,rgba(255,253,248,0.18)_42%,rgba(216,205,180,0.36)_100%)] after:content-[''] [&>*]:relative [&>*]:z-[1] max-[600px]:pt-[5.4rem] max-[600px]:pb-16 max-[600px]:before:bg-scroll max-[600px]:before:opacity-[0.68] max-[600px]:before:blur-[0.75px]",
   productFocusSection:
-    "scroll-mt-[clamp(4.5rem,8vh,5.75rem)] origin-top translate-y-[0.45rem] scale-[0.992] opacity-[0.84] saturate-[0.94] transition-[opacity,filter,transform] duration-[620ms] ease-[cubic-bezier(0.16,1,0.3,1)] max-[600px]:scroll-mt-[4.25rem] max-[600px]:!translate-y-0 max-[600px]:!scale-100 max-[600px]:!opacity-100 max-[600px]:!saturate-100 motion-reduce:!translate-y-0 motion-reduce:!scale-100 motion-reduce:!opacity-100 motion-reduce:!saturate-100 motion-reduce:!transition-none",
+    "scroll-mt-[clamp(4.5rem,8vh,5.75rem)] origin-top translate-y-3 scale-[0.996] opacity-[0.88] saturate-[0.96] transition-[opacity,filter,transform] duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] max-[600px]:scroll-mt-[4.25rem] max-[600px]:!translate-y-0 max-[600px]:!scale-100 max-[600px]:!opacity-100 max-[600px]:!saturate-100 motion-reduce:!translate-y-0 motion-reduce:!scale-100 motion-reduce:!opacity-100 motion-reduce:!saturate-100 motion-reduce:!transition-none",
   productFocusActive: "!translate-y-0 !scale-100 !opacity-100 !saturate-100",
 
   heroSection:
@@ -21,7 +23,7 @@ export const productsPageStyles = {
   productLayer:
     "absolute flex max-w-[min(34rem,54%)] flex-col items-center [transform-style:preserve-3d] will-change-transform",
   productImage:
-    "h-auto max-h-[clamp(13rem,24vw,22rem)] w-full max-w-[clamp(17rem,26vw,25rem)] object-contain drop-shadow-[0_15px_35px_rgba(0,0,0,0.42)] max-[600px]:max-h-48 max-[600px]:max-w-[clamp(8rem,38vw,10rem)]",
+    "h-auto max-h-[clamp(13rem,24vw,22rem)] w-full max-w-[clamp(17rem,26vw,25rem)] object-contain drop-shadow-[0_24px_38px_rgba(37,31,21,0.24)] max-[600px]:max-h-48 max-[600px]:max-w-[clamp(8rem,38vw,10rem)]",
   layerLabel:
     "mt-4 rounded-full border border-[rgba(255,250,240,0.12)] bg-[rgba(255,250,240,0.05)] px-[0.8rem] py-[0.35rem] text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-accent-gold [backdrop-filter:blur(10px)]",
   layerPetalPack: "z-[5] top-[38%] left-[33%] translate-z-[30px] max-[900px]:top-[37%] max-[900px]:left-[32%]",
@@ -29,7 +31,7 @@ export const productsPageStyles = {
   layerGiftSet: "z-[3] top-[8%] right-0 translate-z-[-20px] scale-90 max-[900px]:right-[4%]",
   floatingPetals: "pointer-events-none absolute inset-0",
   petalDecor:
-    "absolute h-[22px] w-[14px] rounded-[50%_0_50%_50%] border border-[rgba(179,38,93,0.4)] bg-[linear-gradient(135deg,rgba(197,42,101,0.72)_0%,rgba(179,38,93,0.24)_100%)] blur-[0.5px]",
+    "absolute h-[22px] w-[14px] rounded-[50%_0_50%_50%] border border-[rgba(179,38,93,0.26)] bg-[linear-gradient(135deg,rgba(197,42,101,0.48)_0%,rgba(179,38,93,0.18)_100%)] blur-[0.4px]",
   petal1: "top-[15%] left-[15%] rotate-[15deg]",
   petal2: "top-[75%] left-[75%] rotate-[-45deg]",
   petal3: "top-[25%] right-[12%] rotate-[115deg]",
@@ -45,7 +47,7 @@ export const productsPageStyles = {
   mobileTabSelector:
     "relative z-[5] mx-auto mb-[2.2rem] hidden w-fit justify-center gap-2 rounded-full border border-[rgba(255,250,240,0.08)] bg-[rgba(255,250,240,0.03)] p-[0.4rem] max-[768px]:flex",
   mobileTabBtn:
-    "cursor-pointer rounded-full border-0 bg-transparent px-5 py-[0.55rem] text-[0.78rem] font-bold uppercase tracking-[0.05em] text-text-muted transition duration-200",
+    "cursor-pointer rounded-full border-0 bg-transparent px-5 py-[0.55rem] text-[0.78rem] font-bold uppercase tracking-[0.05em] text-text-muted transition-[background,color,box-shadow] duration-[360ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
   mobileTabBtnActive: "bg-text text-page-bg",
   orbitStage:
     "relative mb-12 flex min-h-96 items-center justify-center max-[900px]:h-[30rem] max-[768px]:hidden",
@@ -54,11 +56,11 @@ export const productsPageStyles = {
   coreGlow: "h-10 w-10 rounded-full bg-accent-gold opacity-[0.35] blur-[18px]",
   orbitTrack: "relative h-full w-full max-w-[44rem]",
   orbitItem:
-    "group absolute cursor-pointer border-0 bg-transparent outline-none transition-all duration-[750ms] ease-[cubic-bezier(0.16,1,0.3,1)] will-change-[transform,opacity]",
+    "group absolute cursor-pointer border-0 bg-transparent outline-none transition-[opacity,transform] duration-[980ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-[transform,opacity]",
   orbitItemCard:
-    "flex flex-col items-center rounded-brand-lg border border-[rgba(255,250,240,0.06)] bg-[rgba(255,250,240,0.02)] p-6 transition duration-300 [backdrop-filter:blur(12px)] max-[600px]:p-[0.8rem]",
+    `flex flex-col items-center rounded-brand-lg p-6 max-[600px]:p-[0.8rem] ${luxuryMotion.darkSurface} ${luxuryMotion.darkCardHover}`,
   orbitItemImage:
-    "h-40 w-auto object-contain drop-shadow-[0_10px_20px_rgba(0,0,0,0.35)] max-[600px]:h-24",
+    "h-40 w-auto object-contain drop-shadow-[0_18px_28px_rgba(0,0,0,0.24)] max-[600px]:h-24",
   orbitItemLabel:
     "mt-[0.9rem] text-[0.8rem] font-semibold uppercase tracking-[0.15em] text-text-muted",
   orbitActive:
@@ -68,7 +70,7 @@ export const productsPageStyles = {
   orbitBack: "top-0 left-1/2 z-[3] -translate-x-1/2 -translate-y-[20%] scale-[0.68] opacity-20",
   orbitDetailWrap: "mx-auto min-h-[25rem] max-w-[48rem]",
   orbitDetailGrid:
-    "grid grid-cols-[1.2fr_0.8fr] items-center gap-12 rounded-brand-lg border border-[rgba(255,250,240,0.08)] bg-[rgba(255,250,240,0.03)] p-[2.2rem] [backdrop-filter:blur(20px)] max-[900px]:grid-cols-1 max-[900px]:gap-8 max-[900px]:text-center",
+    `grid grid-cols-[1.2fr_0.8fr] items-center gap-12 rounded-brand-lg p-[2.2rem] max-[900px]:grid-cols-1 max-[900px]:gap-8 max-[900px]:text-center ${luxuryMotion.darkSurface}`,
   orbitDetailCopy: "",
   detailEyebrow: "text-[0.72rem] font-semibold uppercase tracking-[0.22em] text-accent-gold",
   detailName: "mt-[0.6rem] mb-0 font-display text-[2.2rem] font-bold text-text-inverse",
@@ -76,12 +78,12 @@ export const productsPageStyles = {
   detailDescription: "mt-4 mb-0 leading-[1.7] text-text-muted",
   detailActions: "mt-[1.8rem] max-[900px]:flex max-[900px]:justify-center",
   detailCta:
-    "inline-flex items-center gap-[0.6rem] border-b-[1.5px] border-accent-gold pb-1 text-[0.88rem] font-semibold text-text no-underline transition-[gap,border-color] duration-200 hover:gap-[0.8rem] hover:border-text",
+    "inline-flex items-center gap-[0.6rem] border-b-[1.5px] border-accent-gold pb-1 text-[0.88rem] font-semibold text-text no-underline transition-[gap,border-color,color] duration-[360ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:gap-[0.72rem] hover:border-text",
   detailCtaIcon: "h-4 w-4",
   orbitDetailVisual: "relative flex items-center justify-center",
-  visualGlow: "absolute h-32 w-32 rounded-full bg-accent opacity-12 blur-[45px]",
+  visualGlow: "absolute h-32 w-32 rounded-full bg-accent opacity-[0.08] blur-[36px]",
   detailImage:
-    "z-[2] max-h-56 w-auto object-contain drop-shadow-[0_10px_25px_rgba(0,0,0,0.4)] max-[900px]:mx-auto",
+    "z-[2] max-h-56 w-auto object-contain drop-shadow-[0_18px_30px_rgba(0,0,0,0.24)] max-[900px]:mx-auto",
 
   petalPackTrack:
     "relative px-0 py-[clamp(5rem,9vw,8rem)] max-[768px]:min-h-0 max-[768px]:px-6 max-[768px]:py-16",
@@ -94,7 +96,7 @@ export const productsPageStyles = {
     "mb-8 inline-flex items-center gap-[0.45rem] rounded-full border border-[rgba(255,250,240,0.1)] bg-[rgba(255,250,240,0.05)] px-[0.9rem] py-[0.4rem] text-[0.72rem] font-semibold uppercase tracking-[0.24em] text-accent-gold",
   revealBadgeIcon: "h-[0.85rem] w-[0.85rem]",
   revealDisplayStage:
-    "relative flex h-72 w-72 items-center justify-center overflow-hidden rounded-brand-lg border border-[rgba(255,250,240,0.06)] bg-[rgba(255,250,240,0.01)] max-[600px]:h-56 max-[600px]:w-56 max-[768px]:hidden",
+    `relative flex h-72 w-72 items-center justify-center overflow-hidden rounded-brand-lg max-[600px]:h-56 max-[600px]:w-56 max-[768px]:hidden ${luxuryMotion.darkSurface}`,
   revealLayer: "absolute inset-0 flex flex-col items-center justify-center p-6",
   revealSvg: "h-44 w-44 max-[600px]:h-32 max-[600px]:w-32",
   revealStepHint: "mt-4 text-[0.72rem] font-medium uppercase tracking-[0.15em] text-text-soft",
@@ -121,7 +123,7 @@ export const productsPageStyles = {
     "pointer-events-none absolute inset-0 z-[1] bg-[radial-gradient(ellipse_at_50%_70%,rgba(0,0,0,0.6)_0%,rgba(0,0,0,0)_70%)]",
   classicBoxWrapper: "absolute top-[15%] left-[10%] z-[3]",
   classicBoxImage:
-    "h-64 w-auto object-contain drop-shadow-[0_15px_30px_rgba(0,0,0,0.5)] max-[600px]:h-40",
+    "h-64 w-auto object-contain drop-shadow-[0_24px_34px_rgba(0,0,0,0.28)] max-[600px]:h-40",
   classicPacketWrapper: "absolute z-[4]",
   classicPacket:
     "flex h-[6.5rem] w-[5.5rem] items-end rounded-brand-sm border border-[rgba(255,250,240,0.15)] bg-[linear-gradient(135deg,#1b352b_0%,#0d1a15_100%)] p-[0.65rem] shadow-[0_10px_25px_rgba(0,0,0,0.45)]",
@@ -166,18 +168,18 @@ export const productsPageStyles = {
   explodedImage: "block h-auto w-full rounded-brand-lg saturate-[0.92]",
   hotspotAnchor: "absolute z-[5]",
   hotspotBtn:
-    "relative flex h-[1.8rem] w-[1.8rem] cursor-pointer items-center justify-center rounded-full border-0 bg-accent-gold text-base font-bold text-page-bg shadow-[0_0_15px_rgba(248,223,147,0.6)] outline-none transition duration-300",
+    "relative flex h-[1.8rem] w-[1.8rem] cursor-pointer items-center justify-center rounded-full border border-[rgba(255,250,240,0.2)] bg-accent-gold text-base font-bold text-page-bg shadow-[0_10px_22px_rgba(0,0,0,0.22)] outline-none transition-[background,box-shadow,transform] duration-[420ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-px",
   hotspotBtnActive:
-    "rotate-45 bg-accent text-text-inverse shadow-[0_0_15px_rgba(185,86,114,0.7)]",
+    "rotate-45 bg-accent text-text-inverse shadow-[0_14px_28px_rgba(0,0,0,0.26)]",
   hotspotPulse:
-    "pointer-events-none absolute inset-[-6px] rounded-full border-[1.5px] border-accent-gold opacity-60 animate-[ping_2s_infinite_ease-out]",
+    "pointer-events-none absolute inset-[-7px] rounded-full border border-accent-gold opacity-50 animate-[senovaBreath_3.8s_var(--ease-luxury-inout)_infinite]",
   hotspotIcon: "leading-none",
   hotspotPopover:
     "absolute bottom-[calc(100%+12px)] left-1/2 z-10 w-56 -translate-x-1/2 rounded-brand-md border border-[rgba(255,250,240,0.15)] bg-[rgba(7,17,15,0.9)] p-4 shadow-[0_15px_35px_rgba(0,0,0,0.65)] [backdrop-filter:blur(15px)] max-[768px]:hidden",
   popoverTitle: "m-0 text-[0.95rem] font-semibold tracking-[0.05em] text-accent-gold",
   popoverDescription: "mt-[0.45rem] mb-0 text-[0.78rem] leading-[1.6] text-text-muted",
   mobileHotspotDetail:
-    "mt-8 hidden rounded-brand-md border border-border bg-surface-strong p-6 text-left shadow-brand-md max-[768px]:block max-[768px]:animate-[aboutReveal_350ms_ease]",
+    "mt-8 hidden rounded-brand-md border border-border bg-surface-strong p-6 text-left shadow-[var(--shadow-luxury-sm)] max-[768px]:block max-[768px]:animate-[senovaReveal_520ms_var(--ease-luxury)_both]",
   mobileHotspotDetailTitle: "m-0 text-[1.05rem] font-semibold tracking-[0.05em] text-accent-gold",
   mobileHotspotDetailDesc: "mt-2 mb-0 text-[0.85rem] leading-[1.6] text-text-muted",
 
@@ -190,7 +192,7 @@ export const productsPageStyles = {
   convergeItems:
     "relative z-[3] h-full w-full max-w-[32rem] max-[600px]:flex max-[600px]:h-auto max-[600px]:flex-col max-[600px]:items-center",
   convergeBubble:
-    "absolute flex min-w-32 flex-col items-center justify-center rounded-brand-md border border-[rgba(255,250,240,0.08)] bg-[rgba(255,250,240,0.03)] px-[1.4rem] py-[0.8rem] text-center shadow-[0_10px_25px_rgba(0,0,0,0.3)] [backdrop-filter:blur(10px)] max-[600px]:relative max-[600px]:top-auto max-[600px]:right-auto max-[600px]:left-auto max-[600px]:mb-4 max-[600px]:translate-x-0",
+    `absolute flex min-w-32 flex-col items-center justify-center rounded-brand-md px-[1.4rem] py-[0.8rem] text-center max-[600px]:relative max-[600px]:top-auto max-[600px]:right-auto max-[600px]:left-auto max-[600px]:mb-4 max-[600px]:translate-x-0 ${luxuryMotion.darkSurface}`,
   bubbleClassic: "top-[60%] left-0 max-[900px]:top-1/2 max-[900px]:left-[10%]",
   bubblePetalPack: "top-[15%] left-1/2 -translate-x-1/2 border-[rgba(248,223,147,0.22)]",
   bubbleGiftSet: "top-[60%] right-0 max-[900px]:top-1/2 max-[900px]:right-[10%]",
@@ -199,18 +201,18 @@ export const productsPageStyles = {
   centralLogoWrap:
     "absolute top-1/2 left-1/2 z-[2] flex h-[6.5rem] w-[6.5rem] -translate-x-1/2 -translate-y-1/2 items-center justify-center",
   centralLogoGlow:
-    "absolute inset-[-15px] bg-[radial-gradient(circle,rgba(248,223,147,0.28)_0%,rgba(248,223,147,0)_70%)] blur-[10px]",
+    "absolute inset-[-15px] bg-[radial-gradient(circle,rgba(248,223,147,0.18)_0%,rgba(248,223,147,0)_70%)] blur-[12px]",
   calmoraMarkSvg: "h-full w-full",
   journeyCopy: "mx-auto max-w-[44rem] text-center",
   journeyHeadline:
     "font-display text-[clamp(1.8rem,4vw,2.6rem)] font-[650] leading-[1.25] tracking-normal text-text-inverse",
   journeyActions: "mt-12 flex flex-wrap justify-center gap-6",
   journeyPrimaryBtn:
-    "inline-flex items-center rounded-full bg-text px-[1.8rem] py-[0.9rem] text-[0.88rem] font-semibold text-page-bg no-underline shadow-[0_10px_25px_rgba(255,250,240,0.15)] transition duration-200 hover:-translate-y-0.5 hover:bg-accent-gold",
+    `inline-flex items-center rounded-full bg-text px-[1.8rem] py-[0.9rem] text-[0.88rem] font-semibold text-page-bg no-underline hover:bg-accent-gold ${luxuryMotion.button}`,
   journeySecondaryBtn:
-    "inline-flex items-center rounded-full border border-[rgba(255,250,240,0.15)] bg-[rgba(255,250,240,0.05)] px-[1.8rem] py-[0.9rem] text-[0.88rem] font-semibold text-text no-underline transition duration-200 hover:-translate-y-0.5 hover:bg-[rgba(255,250,240,0.1)]",
+    `inline-flex items-center rounded-full border border-[rgba(255,250,240,0.15)] bg-[rgba(255,250,240,0.05)] px-[1.8rem] py-[0.9rem] text-[0.88rem] font-semibold text-text no-underline hover:bg-[rgba(255,250,240,0.1)] ${luxuryMotion.button}`,
   journeyLinkWrap: "mt-10",
   journeyStoryLink:
-    "group text-[0.88rem] font-semibold tracking-[0.05em] text-accent-gold no-underline transition-colors duration-200 hover:text-text",
-  arrowIcon: "inline-block transition-transform duration-200 group-hover:translate-x-1",
+    "group text-[0.88rem] font-semibold tracking-[0.05em] text-accent-gold no-underline transition-colors duration-[360ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:text-text",
+  arrowIcon: "inline-block transition-transform duration-[360ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0.5",
 } as const;

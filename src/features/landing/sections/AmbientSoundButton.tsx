@@ -1,5 +1,8 @@
 import { Volume2, VolumeX } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useLanguage } from "../../../contexts/LanguageContext";
+import { luxuryMotion } from "../../../styles/luxuryEffects";
+import { cx } from "../../../utils/classNames";
 
 type AudioWindow = Window &
   typeof globalThis & {
@@ -59,7 +62,22 @@ function playBell(context: AudioContext, master: GainNode, frequency: number) {
 
 export function AmbientSoundButton() {
   const [isPlaying, setIsPlaying] = useState(false);
+  const { language } = useLanguage();
   const engineRef = useRef<AmbientEngine | null>(null);
+  const copy = {
+    vi: {
+      on: "Đang phát",
+      off: "Âm thanh",
+      turnOn: "Bật nhạc nền",
+      turnOff: "Tắt nhạc nền",
+    },
+    en: {
+      on: "Playing",
+      off: "Sound",
+      turnOn: "Turn ambient sound on",
+      turnOff: "Turn ambient sound off",
+    },
+  }[language];
 
   const stop = () => {
     const engine = engineRef.current;
@@ -132,7 +150,7 @@ export function AmbientSoundButton() {
   return (
     <button
       type="button"
-      className="inline-flex cursor-pointer items-center gap-[0.55rem] rounded-full border border-border bg-surface-strong px-[0.9rem] py-[0.52rem] text-[0.82rem] font-[700] text-text transition-colors duration-150 [backdrop-filter:blur(18px)] hover:border-border-strong hover:bg-[#fffdf8] hover:text-primary aria-pressed:border-primary aria-pressed:text-primary max-[767px]:p-[0.48rem] max-[767px]:[&_span]:hidden"
+      className={cx("inline-flex cursor-pointer items-center gap-[0.55rem] rounded-full border border-border bg-surface-strong px-[0.9rem] py-[0.52rem] text-[0.82rem] font-[700] text-text [backdrop-filter:blur(18px)] hover:border-border-strong hover:bg-[#fffdf8] hover:text-primary aria-pressed:border-primary aria-pressed:text-primary max-[767px]:p-[0.48rem] max-[767px]:[&_span]:hidden", luxuryMotion.button)}
       onClick={() => {
         if (isPlaying) {
           stop();
@@ -141,11 +159,11 @@ export function AmbientSoundButton() {
         }
       }}
       aria-pressed={isPlaying}
-      aria-label={isPlaying ? "Tắt nhạc nền" : "Bật nhạc nền"}
-      title={isPlaying ? "Tắt nhạc nền" : "Bật nhạc nền"}
+      aria-label={isPlaying ? copy.turnOff : copy.turnOn}
+      title={isPlaying ? copy.turnOff : copy.turnOn}
     >
       {isPlaying ? <Volume2 className="h-4 w-4 flex-none" /> : <VolumeX className="h-4 w-4 flex-none" />}
-      <span>{isPlaying ? "Đang phát" : "Âm thanh"}</span>
+      <span>{isPlaying ? copy.on : copy.off}</span>
     </button>
   );
 }

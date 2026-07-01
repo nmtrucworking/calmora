@@ -2,6 +2,8 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import type { LandingContent } from "../types";
 import { Link } from "../../../contexts/RouterContext";
+import { luxuryEase, luxuryMotion } from "../../../styles/luxuryEffects";
+import { cx } from "../../../utils/classNames";
 
 type CTAProps = {
   content: LandingContent["cta"];
@@ -16,10 +18,10 @@ export function CTA({ content }: CTAProps) {
       className="relative z-10 flex min-h-[105vh] items-end px-6 py-28 pb-28 max-[767px]:px-4 max-[767px]:pb-[5.5rem]"
     >
       <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0, y: 16, filter: "blur(3px)" }}
+        whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         viewport={{ once: true, amount: 0.3 }}
-        transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: 1.2, ease: luxuryEase }}
         className="mr-auto ml-[max(1rem,calc((100vw-82rem)/2+1.5rem))] w-[min(25rem,calc(100vw-2rem))] text-left max-[767px]:mr-0 max-[767px]:ml-0"
       >
         <p className={eyebrowClass}>{content.eyebrow}</p>
@@ -32,7 +34,7 @@ export function CTA({ content }: CTAProps) {
         <div className="mt-[1.8rem] flex justify-start">
           <Link
             href={content.href}
-            className="inline-flex items-center justify-center gap-[0.45rem] whitespace-nowrap rounded-full border border-primary bg-primary px-5 py-[0.82rem] text-[0.92rem] font-[700] text-on-primary no-underline transition-colors duration-150 hover:bg-primary-strong"
+            className={cx("inline-flex items-center justify-center gap-[0.45rem] whitespace-nowrap rounded-full border border-primary bg-primary px-5 py-[0.82rem] text-[0.92rem] font-[700] text-on-primary no-underline hover:bg-primary-strong", luxuryMotion.button)}
           >
             {content.label}
             <ArrowRight className="h-4 w-4 flex-none" />

@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { luxuryEase } from "../../../styles/luxuryEffects";
 import { cx } from "../../../utils/classNames";
 import type { LandingChapter } from "../types";
 
@@ -26,10 +27,10 @@ export function Chapters({ chapters }: ChaptersProps) {
             className={cx(chapterClass, isRight && "justify-end max-[767px]:justify-start")}
           >
             <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 14, filter: "blur(3px)" }}
+              whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               viewport={{ once: false, amount: 0.45 }}
-              transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 1.18, ease: luxuryEase }}
               className={cx(chapterTextBaseClass, isRight ? chapterTextRightClass : chapterTextLeftClass)}
             >
               <p className={eyebrowClass}>{chapter.eyebrow}</p>

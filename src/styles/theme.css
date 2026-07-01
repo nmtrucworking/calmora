@@ -36,6 +36,12 @@
   --shadow-sm: 0 8px 22px rgba(37, 31, 21, 0.12);
   --shadow-md: 0 18px 42px rgba(37, 31, 21, 0.16);
   --shadow-lg: 0 30px 72px rgba(37, 31, 21, 0.2);
+  --shadow-luxury-sm: 0 10px 30px rgba(37, 31, 21, 0.09);
+  --shadow-luxury-md: 0 22px 54px rgba(37, 31, 21, 0.13);
+  --shadow-luxury-lg: 0 38px 88px rgba(37, 31, 21, 0.16);
+  --shadow-luxury-dark: 0 28px 70px rgba(0, 0, 0, 0.28);
+  --ease-luxury: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-luxury-inout: cubic-bezier(0.65, 0, 0.35, 1);
 
   --radius-lg: 1.5rem;
   --radius-md: 1rem;

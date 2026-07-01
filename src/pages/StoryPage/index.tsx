@@ -5,6 +5,8 @@ import { SectionHeading } from "../../components/ui/SectionHeading";
 import { StoryLotusCanvas } from "../../components/story/StoryLotusCanvas";
 import content from "../../data/content.json";
 import { StaggerContainer, StaggerItem } from "../../components/ui/ZenMotion";
+import { luxuryMotion } from "../../styles/luxuryEffects";
+import { cx } from "../../utils/classNames";
 
 export default function StoryPage() {
   const [restartSignal, setRestartSignal] = useState(0);
@@ -47,7 +49,7 @@ export default function StoryPage() {
           </div>
           <div className="flex items-center justify-center">
             <button
-              className="inline-flex cursor-pointer items-center gap-[0.6rem] rounded-full border-0 bg-[#fffaf00f] px-[0.85rem] py-2 text-text transition-colors duration-150 hover:bg-[#fffaf024]"
+              className={cx("inline-flex cursor-pointer items-center gap-[0.6rem] rounded-full border border-[rgba(255,250,240,0.12)] bg-[#fffaf00f] px-[0.85rem] py-2 text-text hover:bg-[#fffaf024]", luxuryMotion.button)}
               aria-label="Khoi dong lai hoat canh"
               onClick={() => setRestartSignal((s) => s + 1)}
             >

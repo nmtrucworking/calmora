@@ -2,13 +2,12 @@ import { lazy, Suspense, useEffect, useLayoutEffect, useState, type ReactNode } 
 import { Menu, ShoppingBag, X } from "lucide-react";
 import { BrandMark } from "../components/branding/BrandMark";
 import {
-  brandFooterGroups,
   brandName,
-  brandNavigation,
-  brandSummary,
   type BrandFooterGroup,
   type BrandNavItem,
 } from "../constants/brand";
+import { brandText } from "../content/i18n";
+import { useLanguage } from "../contexts/LanguageContext";
 import { Link } from "../contexts/RouterContext";
 import { useRouter } from "../contexts/RouterState";
 import { AmbientSoundButton } from "../features/landing/sections/AmbientSoundButton";
@@ -38,13 +37,17 @@ const activeNavClass = "!text-accent-gold font-[750]";
 
 export function SiteLayout({
   children,
-  footerGroups = brandFooterGroups,
+  footerGroups,
   isLanding = false,
   isProductsPage = false,
-  navItems = brandNavigation,
+  navItems,
 }: SiteLayoutProps) {
   const { pathname } = useRouter();
   const { itemCount } = useInquiryBag();
+  const { language, toggleLanguage } = useLanguage();
+  const copy = brandText[language];
+  const activeNavItems = navItems ?? copy.navigation;
+  const activeFooterGroups = footerGroups ?? copy.footerGroups;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useLayoutEffect(() => {
@@ -62,7 +65,7 @@ export function SiteLayout({
   }, [isMenuOpen]);
 
   const renderNavLinks = (variant: "desktop" | "mobile") =>
-    navItems.map((item) => {
+    activeNavItems.map((item) => {
       const isActive =
         (item.href === "/" && (pathname === "/" || pathname === "")) ||
         pathname === item.href ||
@@ -111,7 +114,7 @@ export function SiteLayout({
 
           <nav
             className="flex min-w-0 items-center justify-center gap-4 text-[0.78rem] max-[900px]:hidden"
-            aria-label="Dieu huong chinh"
+            aria-label={copy.navAria}
           >
             {renderNavLinks("desktop")}
           </nav>
@@ -124,12 +127,20 @@ export function SiteLayout({
               onClick={() => setIsMenuOpen(false)}
             >
               <ShoppingBag aria-hidden="true" className="h-4 w-4" />
-              Bag {itemCount ? `(${itemCount})` : ""}
+              {copy.bagLabel} {itemCount ? `(${itemCount})` : ""}
             </Link>
+            <button
+              className="inline-flex h-10 min-w-10 items-center justify-center rounded-full border border-border-strong bg-[#fffdf8bd] px-3 text-[0.74rem] font-extrabold text-primary-strong"
+              type="button"
+              aria-label={copy.languageToggle}
+              onClick={toggleLanguage}
+            >
+              {language === "vi" ? "EN" : "VI"}
+            </button>
             <button
               className="hidden h-10 w-10 items-center justify-center rounded-full border border-border-strong bg-[#fffdf8bd] text-primary-strong max-[900px]:inline-flex [&_svg]:h-[1.2rem] [&_svg]:w-[1.2rem]"
               type="button"
-              aria-label={isMenuOpen ? "Dong menu" : "Mo menu"}
+              aria-label={isMenuOpen ? copy.menuClose : copy.menuOpen}
               aria-expanded={isMenuOpen}
               aria-controls="mobile-navigation"
               onClick={() => setIsMenuOpen((open) => !open)}
@@ -145,14 +156,14 @@ export function SiteLayout({
           )}
           id="mobile-navigation"
         >
-          <nav className="grid gap-3" aria-label="Dieu huong di dong">
+          <nav className="grid gap-3" aria-label={copy.mobileNavAria}>
             {renderNavLinks("mobile")}
             <Link
               href="/checkout"
               className="inline-flex min-h-11 items-center justify-center rounded-full border border-primary bg-primary font-[750] !text-on-primary no-underline"
               onClick={() => setIsMenuOpen(false)}
             >
-              Gui inquiry
+              {copy.inquiryCta}
             </Link>
           </nav>
         </div>
@@ -179,16 +190,16 @@ export function SiteLayout({
             <div>
               <p className="m-0 text-[0.95rem] font-[750] tracking-[0.2em] text-primary">{brandName}</p>
               <p className="mt-[0.45rem] mb-0 max-w-[28rem] leading-[1.7] text-text-muted">
-                {brandSummary}
+                {copy.summary}
               </p>
             </div>
           </div>
 
           <nav
             className="grid grid-cols-4 gap-4 max-[900px]:grid-cols-1"
-            aria-label="Dieu huong chan trang"
+            aria-label={copy.footerAria}
           >
-            {footerGroups.map((group) => (
+            {activeFooterGroups.map((group) => (
               <div key={group.title} className="grid content-start gap-[0.55rem]">
                 <h2 className="m-0 text-[0.8rem] font-[750] uppercase tracking-[0.22em] text-accent-gold">
                   {group.title}

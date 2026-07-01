@@ -1,5 +1,6 @@
 import { type ReactNode } from "react";
 import { motion } from "framer-motion";
+import { luxuryEase } from "../../styles/luxuryEffects";
 
 type BaseProps = {
   children: ReactNode;
@@ -8,17 +9,13 @@ type BaseProps = {
   className?: string;
 };
 
-// Zen ease token
-const zenEase = [0.16, 1, 0.3, 1] as const;
-
-
-export function FadeIn({ children, delay = 0, duration = 1.0, className }: BaseProps) {
+export function FadeIn({ children, delay = 0, duration = 1.15, className }: BaseProps) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true, margin: "-10%" }}
-      transition={{ duration, delay, ease: zenEase }}
+      transition={{ duration, delay, ease: luxuryEase }}
       className={className}
     >
       {children}
@@ -26,13 +23,13 @@ export function FadeIn({ children, delay = 0, duration = 1.0, className }: BaseP
   );
 }
 
-export function SlideUp({ children, delay = 0, duration = 1.1, className }: BaseProps) {
+export function SlideUp({ children, delay = 0, duration = 1.2, className }: BaseProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 16, filter: "blur(3px)" }}
+      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
       viewport={{ once: true, margin: "-10%" }}
-      transition={{ duration, delay, ease: zenEase }}
+      transition={{ duration, delay, ease: luxuryEase }}
       className={className}
     >
       {children}
@@ -50,7 +47,7 @@ type StaggerContainerProps = {
 export function StaggerContainer({
   children,
   delay = 0,
-  staggerDelay = 0.18,
+  staggerDelay = 0.12,
   className,
 }: StaggerContainerProps) {
   return (
@@ -78,13 +75,14 @@ export function StaggerItem({ children, className }: { children: ReactNode; clas
   return (
     <motion.div
       variants={{
-        hidden: { opacity: 0, y: 20 },
+        hidden: { opacity: 0, y: 16, filter: "blur(3px)" },
         visible: {
           opacity: 1,
           y: 0,
+          filter: "blur(0px)",
           transition: {
-            duration: 1.0,
-            ease: zenEase,
+            duration: 0.95,
+            ease: luxuryEase,
           },
         },
       }}
@@ -114,7 +112,7 @@ export function TextReveal({ text, delay = 0, className }: TextRevealProps) {
         visible: {
           transition: {
             delayChildren: delay,
-            staggerChildren: 0.08,
+            staggerChildren: 0.045,
           },
         },
       }}
@@ -125,10 +123,11 @@ export function TextReveal({ text, delay = 0, className }: TextRevealProps) {
         <span key={idx} style={{ display: "inline-block", overflow: "hidden", marginRight: "0.25em" }}>
           <motion.span
             variants={{
-              hidden: { y: "100%" },
+              hidden: { y: "88%", opacity: 0.01 },
               visible: {
                 y: 0,
-                transition: { duration: 0.8, ease: zenEase },
+                opacity: 1,
+                transition: { duration: 0.92, ease: luxuryEase },
               },
             }}
             style={{ display: "inline-block" }}

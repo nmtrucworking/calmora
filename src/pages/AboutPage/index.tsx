@@ -2,10 +2,11 @@ import { Award, Eye, ThermometerSnowflake, ShieldCheck, type LucideIcon } from "
 import { SectionHeading } from "../../components/ui/SectionHeading";
 import content from "../../data/content.json";
 import { Link } from "../../contexts/RouterContext";
+import { luxuryMotion } from "../../styles/luxuryEffects";
 import { cx } from "../../utils/classNames";
 
 const revealClass =
-  "translate-y-[18px] opacity-0 animate-[aboutReveal_680ms_cubic-bezier(0.16,1,0.3,1)_both] motion-reduce:translate-y-0 motion-reduce:animate-none motion-reduce:opacity-100";
+  luxuryMotion.reveal;
 
 export default function AboutPage() {
   const aboutData = content.aboutPage;
@@ -14,7 +15,7 @@ export default function AboutPage() {
   return (
     <div className="grid gap-28 pb-12 max-[900px]:gap-[4.5rem]">
       <section className="pt-8" aria-labelledby="about-hero-title">
-        <div className="max-w-[44rem] translate-y-[18px] opacity-0 animate-[aboutReveal_720ms_cubic-bezier(0.16,1,0.3,1)_80ms_both] motion-reduce:translate-y-0 motion-reduce:animate-none motion-reduce:opacity-100">
+        <div className={cx("max-w-[44rem] [animation-delay:80ms]", luxuryMotion.revealSlow)}>
           <SectionHeading
             eyebrow={aboutData.hero.eyebrow}
             title={aboutData.hero.title}
@@ -39,7 +40,8 @@ export default function AboutPage() {
           <div
             className={cx(
               revealClass,
-              "relative overflow-hidden rounded-brand-lg bg-[#fffaf008] p-[2.2rem] backdrop-blur-2xl before:absolute before:inset-y-0 before:left-0 before:w-0.5 before:-translate-y-full before:bg-[linear-gradient(180deg,transparent,var(--accent-gold),transparent)] before:animate-[aboutLineScan_1.2s_cubic-bezier(0.16,1,0.3,1)_420ms_both] motion-reduce:before:animate-none",
+              "relative overflow-hidden rounded-brand-lg p-[2.2rem] before:absolute before:inset-y-0 before:left-0 before:w-px before:-translate-y-full before:bg-[linear-gradient(180deg,transparent,var(--accent-gold),transparent)] before:animate-[senovaLineSheen_1.8s_var(--ease-luxury)_520ms_both] motion-reduce:before:animate-none",
+              luxuryMotion.surface,
             )}
           >
             <p className="m-0 font-display text-[1.35rem] italic leading-[1.6] text-text">
@@ -72,7 +74,9 @@ export default function AboutPage() {
                 key={card.title}
                 className={cx(
                   revealClass,
-                  "grid gap-[1.1rem] rounded-brand-lg bg-[#fffaf008] p-8 transition-colors duration-200 hover:bg-[#fffaf00f]",
+                  "grid gap-[1.1rem] rounded-brand-lg p-8",
+                  luxuryMotion.surface,
+                  luxuryMotion.cardHover,
                   index === 1 && "[animation-delay:80ms]",
                   index === 2 && "[animation-delay:160ms]",
                 )}
@@ -120,7 +124,7 @@ export default function AboutPage() {
       <section
         className={cx(
           revealClass,
-          "mx-auto max-w-[52rem] rounded-brand-lg bg-[radial-gradient(circle_at_top,rgba(185,86,114,0.06),transparent_60%),rgba(7,17,15,0.28)] px-8 py-[4.5rem] text-center backdrop-blur-[18px] [content-visibility:auto] [contain-intrinsic-size:auto_680px]",
+          "mx-auto max-w-[52rem] rounded-brand-lg bg-[radial-gradient(circle_at_top,rgba(185,86,114,0.05),transparent_60%),rgba(7,17,15,0.22)] px-8 py-[4.5rem] text-center backdrop-blur-[18px] shadow-[var(--shadow-luxury-dark)] [content-visibility:auto] [contain-intrinsic-size:auto_680px]",
         )}
       >
         <div className="flex flex-col items-center gap-5">
@@ -134,13 +138,13 @@ export default function AboutPage() {
           <div className="mt-4 flex gap-4 max-[900px]:w-full max-[900px]:flex-col">
             <Link
               href="/contact"
-              className="inline-flex min-h-12 items-center justify-center rounded-full bg-accent-gold px-[1.6rem] py-3 font-bold text-page-bg no-underline transition duration-150 hover:bg-[#fffaf0] max-[900px]:w-full"
+              className={cx("inline-flex min-h-12 items-center justify-center rounded-full bg-accent-gold px-[1.6rem] py-3 font-bold text-page-bg no-underline hover:bg-[#fffaf0] max-[900px]:w-full", luxuryMotion.button)}
             >
               {aboutData.cta.btnText}
             </Link>
             <Link
               href="/products"
-              className="inline-flex min-h-12 items-center justify-center rounded-full bg-[#fffaf014] px-[1.6rem] py-3 font-bold text-text no-underline transition duration-150 hover:bg-[#fffaf024] max-[900px]:w-full"
+              className={cx("inline-flex min-h-12 items-center justify-center rounded-full bg-[#fffaf014] px-[1.6rem] py-3 font-bold text-text no-underline hover:bg-[#fffaf024] max-[900px]:w-full", luxuryMotion.button)}
             >
               {aboutData.cta.secondaryBtnText}
             </Link>

@@ -5,7 +5,9 @@ import { SiteLayout } from "../layouts/SiteLayout";
 import { AnimatePresence, motion } from "framer-motion";
 import { preloadImages } from "../utils/imagePreload";
 import { getProductBySlug } from "../features/products/data/products";
-import { collections, policies, services } from "../content/commerceContent";
+import { collections } from "../content/commerceContent";
+import { commerceText, getLocalizedProduct, getLocalizedSeo } from "../content/i18n";
+import { useLanguage, type Language } from "../contexts/LanguageContext";
 import landingBackgroundUrl from "../assets/landing-optimized.jpg";
 import productsBackgroundUrl from "../assets/products-background-optimized.jpg";
 import { canonicalBaseUrl, pageSeo, standardPages, type SeoContent } from "../content/sitePages";
@@ -280,16 +282,18 @@ function upsertMeta(selector: string, attributes: Record<string, string>) {
   });
 }
 
-function updateMetadata(pathname: string) {
+function updateMetadata(pathname: string, language: Language) {
   const productSlug = pathname.split("/")[2] ?? "";
-  const product =
+  const baseProduct =
     pathname.startsWith("/products/") ||
     pathname.startsWith("/experience/") ||
     pathname.startsWith("/feedback/")
       ? getProductBySlug(productSlug)
       : undefined;
-  const seo: SeoContent = product?.seo ?? pageSeo[pathname] ?? pageSeo["/404"];
-  const canonicalPath = pageSeo[pathname] || product ? pathname : "/404";
+  const product = baseProduct ? getLocalizedProduct(baseProduct, language) : undefined;
+  const fallbackSeo: SeoContent = product?.seo ?? pageSeo[pathname] ?? pageSeo["/404"];
+  const seo = getLocalizedSeo(pathname, fallbackSeo, language);
+  const canonicalPath = pageSeo[pathname] || commerceText[language].seo[pathname] || product ? pathname : "/404";
   const canonical = `${canonicalBaseUrl}${canonicalPath === "/" ? "" : canonicalPath}`;
   const image = seo.image ?? `${canonicalBaseUrl}/assets/brand/calmora-mark.png`;
 
@@ -316,23 +320,24 @@ function updateMetadata(pathname: string) {
 
 function AppRoutes() {
   const { pathname, search } = useRouter();
+  const { language } = useLanguage();
   const normalizedPath = pathname.length > 1 ? pathname.replace(/\/+$/, "") : pathname;
   const productSlug = normalizedPath.split("/")[2] ?? "";
   const collectionSlug = normalizedPath.split("/")[2] ?? "";
   const journalSlug = normalizedPath.split("/")[2] ?? "";
   const product = getProductBySlug(productSlug);
   const qrCode = normalizedPath.startsWith("/q/") ? normalizedPath.replace("/q/", "") : "";
-  const serviceContent = services[normalizedPath];
-  const policyContent = policies[normalizedPath];
+  const serviceContent = commerceText[language].services[normalizedPath];
+  const policyContent = commerceText[language].policies[normalizedPath];
 
   useEffect(() => {
     preloadSecondaryRoutes();
   }, []);
 
   useEffect(() => {
-    updateMetadata(normalizedPath);
+    updateMetadata(normalizedPath, language);
     trackEvent({ eventName: "page_view", path: `${normalizedPath}${search}` });
-  }, [normalizedPath, search]);
+  }, [language, normalizedPath, search]);
 
   let pageComponent;
   if (normalizedPath === landingPath) {

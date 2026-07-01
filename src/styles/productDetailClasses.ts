@@ -1,3 +1,5 @@
+import { luxuryMotion } from "./luxuryEffects";
+
 export const productDetailStyles = {
   page: "grid gap-[clamp(2rem,5vw,4.5rem)]",
   breadcrumb:
@@ -14,16 +16,16 @@ export const productDetailStyles = {
   description: "mt-5 mb-0 max-w-[35rem] text-base leading-[1.75] text-text-muted",
   actions: "mt-8 flex flex-wrap gap-[0.85rem] max-[560px]:flex-col",
   primaryButton:
-    "inline-flex min-h-[2.9rem] items-center justify-center gap-[0.55rem] rounded-full border border-primary bg-primary px-[1.15rem] py-3 text-[0.9rem] font-extrabold text-on-primary no-underline shadow-brand-sm transition duration-150 hover:-translate-y-px max-[560px]:w-full [&_svg]:h-4 [&_svg]:w-4",
+    `inline-flex min-h-[2.9rem] items-center justify-center gap-[0.55rem] rounded-full border border-primary bg-primary px-[1.15rem] py-3 text-[0.9rem] font-extrabold text-on-primary no-underline max-[560px]:w-full [&_svg]:h-4 [&_svg]:w-4 ${luxuryMotion.button}`,
   secondaryButton:
-    "inline-flex min-h-[2.9rem] items-center justify-center gap-[0.55rem] rounded-full border border-border-strong bg-[#fffdf88f] px-[1.15rem] py-3 text-[0.9rem] font-extrabold text-primary-strong no-underline transition duration-150 hover:-translate-y-px max-[560px]:w-full [&_svg]:h-4 [&_svg]:w-4",
+    `inline-flex min-h-[2.9rem] items-center justify-center gap-[0.55rem] rounded-full border border-border-strong bg-[#fffdf88f] px-[1.15rem] py-3 text-[0.9rem] font-extrabold text-primary-strong no-underline max-[560px]:w-full [&_svg]:h-4 [&_svg]:w-4 ${luxuryMotion.button}`,
   batchLabel: "mt-4 mb-0 text-[0.82rem] font-bold text-text-soft",
   heroVisual: "flex justify-center",
   imagePlate:
-    "relative grid min-h-[28rem] w-[min(100%,30rem)] place-items-center overflow-hidden rounded-lg border border-border bg-[radial-gradient(circle_at_50%_44%,rgba(199,111,152,0.18),transparent_38%),linear-gradient(140deg,rgba(255,253,248,0.7),rgba(216,227,212,0.54))] shadow-brand-md before:absolute before:inset-4 before:rounded-lg before:border before:border-[rgba(31,95,68,0.14)] before:content-[''] max-[560px]:min-h-80 [&_img]:relative [&_img]:h-auto [&_img]:w-[min(72%,21rem)] [&_img]:object-contain [&_img]:drop-shadow-[0_22px_34px_rgba(37,31,21,0.22)]",
+    "relative grid min-h-[28rem] w-[min(100%,30rem)] place-items-center overflow-hidden rounded-lg border border-[rgba(31,95,68,0.18)] bg-[radial-gradient(circle_at_50%_44%,rgba(199,111,152,0.1),transparent_42%),linear-gradient(140deg,rgba(255,253,248,0.76),rgba(216,227,212,0.5))] shadow-[var(--shadow-luxury-md)] before:absolute before:inset-4 before:rounded-lg before:border before:border-[rgba(31,95,68,0.12)] before:content-[''] max-[560px]:min-h-80 [&_img]:relative [&_img]:h-auto [&_img]:w-[min(72%,21rem)] [&_img]:object-contain [&_img]:drop-shadow-[0_24px_34px_rgba(37,31,21,0.16)]",
   contentGrid: "grid grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] gap-4 max-[900px]:grid-cols-1",
   infoPanel:
-    "rounded-lg border border-border bg-surface-strong p-[clamp(1.25rem,3vw,2rem)] [&_h2]:m-0 [&_h2]:font-display [&_h2]:text-[clamp(1.6rem,3vw,2.4rem)] [&_h2]:leading-[1.12] [&_h2]:text-primary-strong",
+    `rounded-lg p-[clamp(1.25rem,3vw,2rem)] ${luxuryMotion.surface} [&_h2]:m-0 [&_h2]:font-display [&_h2]:text-[clamp(1.6rem,3vw,2.4rem)] [&_h2]:leading-[1.12] [&_h2]:text-primary-strong`,
   sectionHeading: "flex items-center gap-[0.65rem] [&_svg]:h-[1.15rem] [&_svg]:w-[1.15rem] [&_svg]:text-accent-strong",
   checkList:
     "mt-[1.35rem] mb-0 grid list-none gap-[0.9rem] p-0 [&_li]:grid [&_li]:grid-cols-[1.25rem_minmax(0,1fr)] [&_li]:items-start [&_li]:gap-[0.7rem] [&_li]:leading-[1.55] [&_li]:text-text-muted [&_svg]:mt-[0.18rem] [&_svg]:h-[1.05rem] [&_svg]:w-[1.05rem] [&_svg]:text-primary",
@@ -34,7 +36,7 @@ export const productDetailStyles = {
     "max-w-[46rem] [&_h2]:mt-[0.65rem] [&_h2]:mb-0 [&_h2]:max-w-[16ch] [&_h2]:font-display [&_h2]:text-[clamp(2rem,4vw,3.5rem)] [&_h2]:leading-[1.04] [&_h2]:text-primary-strong [&_p:last-child]:mt-4 [&_p:last-child]:mb-0 [&_p:last-child]:max-w-[40rem] [&_p:last-child]:leading-[1.75] [&_p:last-child]:text-text-muted",
   galleryGrid: "grid grid-cols-3 gap-4 max-[900px]:grid-cols-1",
   galleryCard:
-    "relative grid min-h-[28rem] content-between overflow-hidden rounded-lg border border-border bg-[linear-gradient(180deg,rgba(255,253,248,0.76),rgba(255,253,248,0.54)),var(--surface-strong)] p-4 text-text no-underline shadow-brand-sm transition duration-150 hover:-translate-y-0.5 hover:border-border-strong hover:shadow-brand-md max-[900px]:min-h-0",
+    `relative grid min-h-[28rem] content-between overflow-hidden rounded-lg bg-[linear-gradient(180deg,rgba(255,253,248,0.76),rgba(255,253,248,0.56)),var(--surface-strong)] p-4 text-text no-underline max-[900px]:min-h-0 ${luxuryMotion.surface} ${luxuryMotion.cardHover}`,
   galleryCardActive:
     "border-[rgba(179,38,93,0.42)] bg-[linear-gradient(180deg,rgba(255,253,248,0.84),rgba(255,253,248,0.62)),rgba(179,38,93,0.08)]",
   galleryRole:
@@ -48,9 +50,9 @@ export const productDetailStyles = {
     "max-w-[46rem] [&_h2]:mt-3 [&_h2]:mb-0 [&_h2]:font-display [&_h2]:text-[clamp(1.6rem,3vw,2.4rem)] [&_h2]:leading-[1.12] [&_h2]:text-primary-strong [&_p]:text-base [&_p]:leading-[1.75] [&_p]:text-text-muted",
   stepGrid: "grid grid-cols-4 gap-4 max-[900px]:grid-cols-2 max-[560px]:grid-cols-1",
   stepItem:
-    "min-h-[13.5rem] rounded-lg border border-border bg-surface-strong p-5 [&_h3]:mt-[0.85rem] [&_h3]:mb-0 [&_h3]:text-[1.05rem] [&_h3]:text-primary-strong [&_p]:mt-[0.6rem] [&_p]:mb-0 [&_p]:text-[0.92rem] [&_p]:leading-[1.65] [&_p]:text-text-muted [&_span]:font-display [&_span]:text-[1.7rem] [&_span]:font-[760] [&_span]:text-accent-gold",
+    `min-h-[13.5rem] rounded-lg p-5 ${luxuryMotion.surface} [&_h3]:mt-[0.85rem] [&_h3]:mb-0 [&_h3]:text-[1.05rem] [&_h3]:text-primary-strong [&_p]:mt-[0.6rem] [&_p]:mb-0 [&_p]:text-[0.92rem] [&_p]:leading-[1.65] [&_p]:text-text-muted [&_span]:font-display [&_span]:text-[1.7rem] [&_span]:font-[760] [&_span]:text-accent-gold`,
   qrPanel:
-    "grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-5 rounded-lg border border-border bg-[linear-gradient(120deg,rgba(31,114,74,0.1),rgba(179,38,93,0.08)),var(--surface-strong)] p-[clamp(1.25rem,3vw,2rem)] max-[900px]:grid-cols-1 max-[900px]:items-start [&>svg]:h-10 [&>svg]:w-10 [&>svg]:text-primary [&_h2]:mt-[0.35rem] [&_h2]:mb-0 [&_h2]:font-display [&_h2]:text-[clamp(1.6rem,3vw,2.4rem)] [&_h2]:leading-[1.12] [&_h2]:text-primary-strong [&_p]:text-base [&_p]:leading-[1.75] [&_p]:text-text-muted [&_p:last-child]:mb-0",
+    `grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-5 rounded-lg bg-[linear-gradient(120deg,rgba(31,114,74,0.08),rgba(179,38,93,0.05)),var(--surface-strong)] p-[clamp(1.25rem,3vw,2rem)] max-[900px]:grid-cols-1 max-[900px]:items-start ${luxuryMotion.surface} [&>svg]:h-10 [&>svg]:w-10 [&>svg]:text-primary [&_h2]:mt-[0.35rem] [&_h2]:mb-0 [&_h2]:font-display [&_h2]:text-[clamp(1.6rem,3vw,2.4rem)] [&_h2]:leading-[1.12] [&_h2]:text-primary-strong [&_p]:text-base [&_p]:leading-[1.75] [&_p]:text-text-muted [&_p:last-child]:mb-0`,
   emptyState:
     "mx-auto my-20 max-w-[45rem] rounded-lg border border-border bg-surface-strong p-[clamp(1.5rem,4vw,3rem)] text-center [&_h1]:mt-4 [&_h1]:mb-0 [&_h1]:max-w-full [&_h1]:font-display [&_h1]:text-[clamp(2.4rem,6vw,4.5rem)] [&_h1]:font-[760] [&_h1]:leading-[0.98] [&_h1]:tracking-normal [&_h1]:text-primary-strong [&_p]:text-base [&_p]:leading-[1.75] [&_p]:text-text-muted",
 } as const;

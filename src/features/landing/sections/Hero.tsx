@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import type { LandingContent } from "../types";
+import { luxuryEase } from "../../../styles/luxuryEffects";
 
 type HeroProps = {
   content: LandingContent["hero"];
@@ -12,9 +13,9 @@ export function Hero({ content }: HeroProps) {
     <section id="top" className="relative z-10 min-h-screen px-6 py-28 pt-36 max-[767px]:px-4 max-[767px]:pt-40">
       <div className="mx-auto grid min-h-[calc(100vh-12rem)] max-w-[82rem] items-center gap-8 min-[900px]:grid-cols-[0.68fr_1.32fr] max-[767px]:min-h-[calc(100vh-10rem)] max-[767px]:items-start">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease: "easeOut" }}
+          initial={{ opacity: 0, y: 16, filter: "blur(3px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ duration: 1.18, ease: luxuryEase }}
           className="max-w-[31rem] max-[767px]:max-w-[22rem]"
         >
           <p className={eyebrowClass}>{content.eyebrow}</p>

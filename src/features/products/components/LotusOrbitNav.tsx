@@ -1,10 +1,12 @@
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
+import { useEffect, useState } from "react";
+import { getLocalizedProducts } from "../../../content/i18n";
+import { useLanguage } from "../../../contexts/LanguageContext";
+import { Link } from "../../../contexts/RouterContext";
+import { luxuryEase } from "../../../styles/luxuryEffects";
 import { products } from "../data/products";
 import { productsPageStyles as styles } from "../../../styles/productsPageClasses";
-import { ArrowRight } from "lucide-react";
-import { Link } from "../../../contexts/RouterContext";
-
 
 type ProductId = "classic" | "petal-pack" | "gift-set";
 
@@ -19,11 +21,27 @@ function getInitialProductId(): ProductId {
 export function LotusOrbitNav() {
   const [activeId, setActiveId] = useState<ProductId>(() => getInitialProductId());
   const [isMobile, setIsMobile] = useState(false);
+  const { language } = useLanguage();
+  const localizedProducts = getLocalizedProducts(products, language);
+  const copy = {
+    vi: {
+      aria: "Lựa chọn sản phẩm",
+      label: "Khám phá bộ sản phẩm",
+      title: "Chọn một hình thái thưởng trà",
+      viewProduct: "Xem",
+      viewProductAria: "Xem sản phẩm",
+    },
+    en: {
+      aria: "Product selection",
+      label: "Explore the product edit",
+      title: "Choose a form of tea ritual",
+      viewProduct: "View",
+      viewProductAria: "View product",
+    },
+  }[language];
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -31,13 +49,11 @@ export function LotusOrbitNav() {
 
   const handleSelect = (id: ProductId) => {
     setActiveId(id);
-    // Update hash without triggering a page reload
     window.history.pushState(null, "", `#${id}`);
   };
 
-  const activeProduct = products.find((p) => p.id === activeId) || products[1];
+  const activeProduct = localizedProducts.find((product) => product.id === activeId) ?? localizedProducts[1];
 
-  // Helper to get orbital positioning classes
   const getOrbitPosition = (id: string) => {
     if (id === activeId) return styles.orbitActive;
     if (activeId === "petal-pack") {
@@ -46,63 +62,58 @@ export function LotusOrbitNav() {
     if (activeId === "classic") {
       return id === "petal-pack" ? styles.orbitRight : styles.orbitBack;
     }
-    // activeId is gift-set
     return id === "petal-pack" ? styles.orbitLeft : styles.orbitBack;
   };
 
   return (
-    <section className={styles.orbitSection} aria-label="Lựa chọn sản phẩm">
+    <section className={styles.orbitSection} aria-label={copy.aria}>
       <div className={styles.orbitContainer}>
         <div className={styles.orbitHeader}>
-          <span className={styles.orbitLabel}>Khám phá bộ sản phẩm</span>
-          <h2 className={styles.orbitTitle}>Chọn một hình thái thưởng trà</h2>
+          <span className={styles.orbitLabel}>{copy.label}</span>
+          <h2 className={styles.orbitTitle}>{copy.title}</h2>
         </div>
 
-        {/* Dynamic selector based on viewport */}
         {isMobile ? (
           <div className={styles.mobileTabSelector}>
-            {products.map((p) => (
+            {localizedProducts.map((product) => (
               <button
-                key={p.id}
+                key={product.id}
                 type="button"
-                className={`${styles.mobileTabBtn} ${activeId === p.id ? styles.mobileTabBtnActive : ""}`}
-                onClick={() => handleSelect(p.id as ProductId)}
+                className={`${styles.mobileTabBtn} ${activeId === product.id ? styles.mobileTabBtnActive : ""}`}
+                onClick={() => handleSelect(product.id)}
               >
-                {p.role}
+                {product.role}
               </button>
             ))}
           </div>
         ) : (
           <div className={styles.orbitStage}>
-            {/* Centered lotus core element */}
             <div className={styles.orbitCore}>
               <div className={styles.coreGlow} />
             </div>
 
-            {/* Orbit Items */}
             <div className={styles.orbitTrack}>
-              {products.map((p) => {
-                const posClass = getOrbitPosition(p.id);
-                const isActive = p.id === activeId;
-                
+              {localizedProducts.map((product) => {
+                const isActive = product.id === activeId;
+
                 return (
                   <button
-                    key={p.id}
+                    key={product.id}
                     type="button"
-                    className={`${styles.orbitItem} ${posClass}`}
-                    onClick={() => handleSelect(p.id as ProductId)}
+                    className={`${styles.orbitItem} ${getOrbitPosition(product.id)}`}
+                    onClick={() => handleSelect(product.id)}
                     aria-pressed={isActive}
-                    aria-label={`Xem sản phẩm ${p.name}`}
+                    aria-label={`${copy.viewProductAria} ${product.name}`}
                   >
                     <div className={styles.orbitItemCard}>
                       <img
-                        src={p.image}
-                        alt={p.name}
+                        src={product.image}
+                        alt={product.name}
                         className={styles.orbitItemImage}
                         loading="lazy"
                         decoding="async"
                       />
-                      <span className={styles.orbitItemLabel}>{p.name}</span>
+                      <span className={styles.orbitItemLabel}>{product.name}</span>
                     </div>
                   </button>
                 );
@@ -111,15 +122,14 @@ export function LotusOrbitNav() {
           </div>
         )}
 
-        {/* Detailed Info Area */}
         <div className={styles.orbitDetailWrap}>
           <AnimatePresence mode="wait">
             <motion.div
               key={activeId}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -16 }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              initial={{ opacity: 0, y: 12, filter: "blur(3px)" }}
+              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              exit={{ opacity: 0, y: -8, filter: "blur(2px)" }}
+              transition={{ duration: 0.82, ease: luxuryEase }}
               className={styles.orbitDetailGrid}
             >
               <div className={styles.orbitDetailCopy}>
@@ -127,10 +137,10 @@ export function LotusOrbitNav() {
                 <h3 className={styles.detailName}>{activeProduct.name}</h3>
                 <p className={styles.detailTagline}>&ldquo;{activeProduct.tagline}&rdquo;</p>
                 <p className={styles.detailDescription}>{activeProduct.description}</p>
-                
+
                 <div className={styles.detailActions}>
                   <Link href={activeProduct.href} className={styles.detailCta}>
-                    Xem {activeProduct.name}
+                    {copy.viewProduct} {activeProduct.name}
                     <ArrowRight className={styles.detailCtaIcon} />
                   </Link>
                 </div>

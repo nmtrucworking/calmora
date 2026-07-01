@@ -1,7 +1,9 @@
 import { ArrowLeft, ArrowRight, Check, Gift, QrCode, Ruler, ShoppingBag, Sparkles, Truck } from "lucide-react";
 import { useState } from "react";
-import { Link } from "../../contexts/RouterContext";
+import { getLocalizedProduct } from "../../content/i18n";
 import { useInquiryBag } from "../../contexts/InquiryBagContext";
+import { useLanguage, type Language } from "../../contexts/LanguageContext";
+import { Link } from "../../contexts/RouterContext";
 import { products, type SenovaProduct } from "../../features/products/data/products";
 import { productDetailStyles as styles } from "../../styles/productDetailClasses";
 
@@ -9,30 +11,134 @@ type ProductDetailPageProps = {
   product?: SenovaProduct;
 };
 
-function ProductStatusBadge({ status }: { status: SenovaProduct["status"] }) {
-  const label = status === "active" ? "Đang mở trải nghiệm" : "Đang chuẩn bị";
+const detailText: Record<
+  Language,
+  {
+    products: string;
+    notFoundEyebrow: string;
+    notFoundTitle: string;
+    notFoundText: string;
+    notFoundCta: string;
+    active: string;
+    draft: string;
+    configuration: string;
+    addToBag: string;
+    productInfo: string;
+    highlights: string;
+    suitableFor: string;
+    commerceInfo: string;
+    included: string;
+    dimensionsAndBrewing: string;
+    deliveryEyebrow: string;
+    deliveryTitle: string;
+    sendInquiry: string;
+    galleryEyebrow: string;
+    galleryTitle: string;
+    galleryText: string;
+    journeyEyebrow: string;
+    petalJourney: string;
+    defaultJourney: string;
+    qrEyebrow: string;
+    qrTitle: string;
+    qrText: string;
+    qrCta: string;
+  }
+> = {
+  vi: {
+    products: "Sản phẩm",
+    notFoundEyebrow: "Sản phẩm",
+    notFoundTitle: "Trang sản phẩm đang được chuẩn bị.",
+    notFoundText:
+      "Mã đường dẫn này chưa có nội dung công khai. Bạn có thể quay về bộ sản phẩm Senova để tiếp tục khám phá.",
+    notFoundCta: "Về trang sản phẩm",
+    active: "Đang mở trải nghiệm",
+    draft: "Đang chuẩn bị",
+    configuration: "Cấu hình",
+    addToBag: "Thêm vào inquiry bag",
+    productInfo: "Thông tin sản phẩm",
+    highlights: "Điểm nổi bật",
+    suitableFor: "Phù hợp cho",
+    commerceInfo: "Thông tin commerce",
+    included: "Trong cấu hình này",
+    dimensionsAndBrewing: "Kích thước và pha trà",
+    deliveryEyebrow: "Delivery / gifting",
+    deliveryTitle: "Concierge xác nhận trước khi chốt đơn.",
+    sendInquiry: "Gửi inquiry",
+    galleryEyebrow: "Bộ sản phẩm",
+    galleryTitle: "Ba hình thái trong cùng một câu chuyện trà sen.",
+    galleryText:
+      "Nhìn tổng thể Classic, Petal Pack và Gift Set để thấy vai trò Giữ - Mở - Trao được triển khai qua từng hình thức sản phẩm.",
+    journeyEyebrow: "Hành trình sử dụng",
+    petalJourney: "Mở - pha - thưởng thức",
+    defaultJourney: "Một nhịp trải nghiệm gọn",
+    qrEyebrow: "QR động",
+    qrTitle: "Nối sản phẩm vật lý với câu chuyện số.",
+    qrText:
+      "Sau khi mở Petal Pack, người dùng có thể quét QR để đọc câu chuyện ngắn, xem lại hướng dẫn trải nghiệm và gửi phản hồi.",
+    qrCta: "Mở trải nghiệm QR",
+  },
+  en: {
+    products: "Products",
+    notFoundEyebrow: "Product",
+    notFoundTitle: "This product page is being prepared.",
+    notFoundText:
+      "This route does not have public content yet. You can return to the Senova product edit and keep exploring.",
+    notFoundCta: "Back to products",
+    active: "Experience open",
+    draft: "In preparation",
+    configuration: "Configuration",
+    addToBag: "Add to inquiry bag",
+    productInfo: "Product information",
+    highlights: "Highlights",
+    suitableFor: "Suitable for",
+    commerceInfo: "Commerce information",
+    included: "Included in this configuration",
+    dimensionsAndBrewing: "Dimensions and brewing",
+    deliveryEyebrow: "Delivery / gifting",
+    deliveryTitle: "Concierge confirms before finalizing.",
+    sendInquiry: "Send inquiry",
+    galleryEyebrow: "Product edit",
+    galleryTitle: "Three forms within one lotus tea story.",
+    galleryText:
+      "View Classic, Petal Pack and Gift Set together to see Keep - Open - Give expressed through each product form.",
+    journeyEyebrow: "Usage journey",
+    petalJourney: "Open - brew - taste",
+    defaultJourney: "A compact experience rhythm",
+    qrEyebrow: "Dynamic QR",
+    qrTitle: "Connect the physical product with a digital story.",
+    qrText:
+      "After opening Petal Pack, clients can scan the QR to read a short story, revisit the experience guide and send feedback.",
+    qrCta: "Open QR experience",
+  },
+};
+
+function ProductStatusBadge({ status, language }: { status: SenovaProduct["status"]; language: Language }) {
+  const label = status === "active" ? detailText[language].active : detailText[language].draft;
 
   return <span className={styles.statusBadge}>{label}</span>;
 }
 
 function ProductNotFound() {
+  const { language } = useLanguage();
+  const copy = detailText[language];
+
   return (
     <section className={styles.emptyState}>
-      <p className={styles.eyebrow}>Sản phẩm</p>
-      <h1>Trang sản phẩm đang được chuẩn bị.</h1>
-      <p>
-        Mã đường dẫn này chưa có nội dung công khai. Bạn có thể quay về bộ sản phẩm Senova để
-        tiếp tục khám phá.
-      </p>
+      <p className={styles.eyebrow}>{copy.notFoundEyebrow}</p>
+      <h1>{copy.notFoundTitle}</h1>
+      <p>{copy.notFoundText}</p>
       <Link href="/products" className={styles.primaryButton}>
-        Về trang sản phẩm
+        {copy.notFoundCta}
       </Link>
     </section>
   );
 }
 
-export default function ProductDetailPage({ product }: ProductDetailPageProps) {
+export default function ProductDetailPage({ product: baseProduct }: ProductDetailPageProps) {
   const { addItem } = useInquiryBag();
+  const { language } = useLanguage();
+  const copy = detailText[language];
+  const product = baseProduct ? getLocalizedProduct(baseProduct, language) : undefined;
   const [selectedVariant, setSelectedVariant] = useState(product?.variants[0]?.id);
 
   if (!product) {
@@ -46,7 +152,7 @@ export default function ProductDetailPage({ product }: ProductDetailPageProps) {
       <div className={styles.breadcrumb}>
         <Link href="/products">
           <ArrowLeft aria-hidden="true" />
-          Sản phẩm
+          {copy.products}
         </Link>
       </div>
 
@@ -54,7 +160,7 @@ export default function ProductDetailPage({ product }: ProductDetailPageProps) {
         <div className={styles.heroCopy}>
           <div className={styles.metaRow}>
             <span className={styles.eyebrow}>{product.eyebrow}</span>
-            <ProductStatusBadge status={product.status} />
+            <ProductStatusBadge status={product.status} language={language} />
           </div>
           <h1>{product.name}</h1>
           <p className={styles.tagline}>{product.tagline}</p>
@@ -68,7 +174,7 @@ export default function ProductDetailPage({ product }: ProductDetailPageProps) {
               <span className={styles.statusBadge}>{product.availability}</span>
             </div>
             <div className="grid gap-2">
-              <span className={styles.eyebrow}>Cau hinh</span>
+              <span className={styles.eyebrow}>{copy.configuration}</span>
               {product.variants.map((variant) => (
                 <button
                   key={variant.id}
@@ -93,7 +199,7 @@ export default function ProductDetailPage({ product }: ProductDetailPageProps) {
               className={styles.primaryButton}
               onClick={() => addItem({ productId: product.id, variantId: selectedVariant })}
             >
-              Them vao inquiry bag
+              {copy.addToBag}
               <ShoppingBag aria-hidden="true" />
             </button>
             <Link href={product.primaryAction.href} className={styles.primaryButton}>
@@ -117,11 +223,11 @@ export default function ProductDetailPage({ product }: ProductDetailPageProps) {
         </div>
       </section>
 
-      <section className={styles.contentGrid} aria-label="Thông tin sản phẩm">
+      <section className={styles.contentGrid} aria-label={copy.productInfo}>
         <div className={styles.infoPanel}>
           <div className={styles.sectionHeading}>
             <Sparkles aria-hidden="true" />
-            <h2>Điểm nổi bật</h2>
+            <h2>{copy.highlights}</h2>
           </div>
           <ul className={styles.checkList}>
             {product.highlights.map((highlight) => (
@@ -134,7 +240,7 @@ export default function ProductDetailPage({ product }: ProductDetailPageProps) {
         </div>
 
         <div className={styles.infoPanel}>
-          <h2>Phù hợp cho</h2>
+          <h2>{copy.suitableFor}</h2>
           <div className={styles.pillList}>
             {product.suitableFor.map((item) => (
               <span key={item}>{item}</span>
@@ -143,11 +249,11 @@ export default function ProductDetailPage({ product }: ProductDetailPageProps) {
         </div>
       </section>
 
-      <section className={styles.contentGrid} aria-label="Thong tin commerce">
+      <section className={styles.contentGrid} aria-label={copy.commerceInfo}>
         <div className={styles.infoPanel}>
           <div className={styles.sectionHeading}>
             <Gift aria-hidden="true" />
-            <h2>Trong cau hinh nay</h2>
+            <h2>{copy.included}</h2>
           </div>
           <ul className={styles.checkList}>
             {product.includedItems.map((item) => (
@@ -161,7 +267,7 @@ export default function ProductDetailPage({ product }: ProductDetailPageProps) {
         <div className={styles.infoPanel}>
           <div className={styles.sectionHeading}>
             <Ruler aria-hidden="true" />
-            <h2>Kich thuoc va pha tra</h2>
+            <h2>{copy.dimensionsAndBrewing}</h2>
           </div>
           <p className={styles.description}>{product.dimensions}</p>
           <div className={styles.pillList}>
@@ -175,8 +281,8 @@ export default function ProductDetailPage({ product }: ProductDetailPageProps) {
       <section className={styles.qrPanel}>
         <Truck aria-hidden="true" />
         <div>
-          <p className={styles.eyebrow}>Delivery / gifting</p>
-          <h2>Concierge xac nhan truoc khi chot don.</h2>
+          <p className={styles.eyebrow}>{copy.deliveryEyebrow}</p>
+          <h2>{copy.deliveryTitle}</h2>
           <p>{product.shippingNote}</p>
           <div className={styles.pillList}>
             {product.giftOptions.map((option) => (
@@ -185,39 +291,37 @@ export default function ProductDetailPage({ product }: ProductDetailPageProps) {
           </div>
         </div>
         <Link href="/checkout" className={styles.primaryButton}>
-          Gui inquiry
+          {copy.sendInquiry}
           <ArrowRight aria-hidden="true" />
         </Link>
       </section>
 
       <section className={styles.gallerySection} aria-labelledby="product-gallery-title">
         <div className={styles.galleryHeader}>
-          <p className={styles.eyebrow}>Bộ sản phẩm</p>
-          <h2 id="product-gallery-title">Ba hình thái trong cùng một câu chuyện trà sen.</h2>
-          <p>
-            Nhìn tổng thể Classic, Petal Pack và Gift Set để thấy vai trò Giữ - Mở - Trao
-            được triển khai qua từng hình thức sản phẩm.
-          </p>
+          <p className={styles.eyebrow}>{copy.galleryEyebrow}</p>
+          <h2 id="product-gallery-title">{copy.galleryTitle}</h2>
+          <p>{copy.galleryText}</p>
         </div>
 
         <div className={styles.galleryGrid}>
           {products.map((item) => {
-            const isCurrentProduct = item.id === product.id;
+            const localizedItem = getLocalizedProduct(item, language);
+            const isCurrentProduct = localizedItem.id === product.id;
 
             return (
               <Link
-                key={item.id}
-                href={item.href}
+                key={localizedItem.id}
+                href={localizedItem.href}
                 className={`${styles.galleryCard} ${isCurrentProduct ? styles.galleryCardActive : ""}`}
                 aria-current={isCurrentProduct ? "page" : undefined}
               >
-                <span className={styles.galleryRole}>{item.role}</span>
+                <span className={styles.galleryRole}>{localizedItem.role}</span>
                 <div className={styles.galleryImageFrame}>
-                  <img src={item.image} alt={item.heroAlt} loading="lazy" decoding="async" />
+                  <img src={localizedItem.image} alt={localizedItem.heroAlt} loading="lazy" decoding="async" />
                 </div>
                 <div className={styles.galleryCardCopy}>
-                  <h3>{item.name}</h3>
-                  <p>{item.shortDescription}</p>
+                  <h3>{localizedItem.name}</h3>
+                  <p>{localizedItem.shortDescription}</p>
                 </div>
               </Link>
             );
@@ -227,8 +331,8 @@ export default function ProductDetailPage({ product }: ProductDetailPageProps) {
 
       <section className={styles.experienceSection}>
         <div className={styles.experienceHeader}>
-          <p className={styles.eyebrow}>Hành trình sử dụng</p>
-          <h2>{isPetalPack ? "Mở - pha - thưởng thức" : "Một nhịp trải nghiệm gọn"}</h2>
+          <p className={styles.eyebrow}>{copy.journeyEyebrow}</p>
+          <h2>{isPetalPack ? copy.petalJourney : copy.defaultJourney}</h2>
           <p>{product.shortDescription}</p>
         </div>
 
@@ -247,15 +351,12 @@ export default function ProductDetailPage({ product }: ProductDetailPageProps) {
         <section className={styles.qrPanel}>
           <QrCode aria-hidden="true" />
           <div>
-            <p className={styles.eyebrow}>QR động</p>
-            <h2>Nối sản phẩm vật lý với câu chuyện số.</h2>
-            <p>
-              Sau khi mở Petal Pack, người dùng có thể quét QR để đọc câu chuyện ngắn, xem lại
-              hướng dẫn trải nghiệm và gửi phản hồi.
-            </p>
+            <p className={styles.eyebrow}>{copy.qrEyebrow}</p>
+            <h2>{copy.qrTitle}</h2>
+            <p>{copy.qrText}</p>
           </div>
           <Link href="/experience/petal-pack" className={styles.primaryButton}>
-            Mở trải nghiệm QR
+            {copy.qrCta}
             <ArrowRight aria-hidden="true" />
           </Link>
         </section>

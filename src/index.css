@@ -84,6 +84,20 @@ select {
   }
 }
 
+@keyframes senovaReveal {
+  from {
+    transform: translate3d(0, 18px, 0);
+    opacity: 0;
+    filter: blur(3px);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
 @keyframes aboutLineScan {
   from {
     transform: translateY(-100%);
@@ -91,5 +105,34 @@ select {
 
   to {
     transform: translateY(100%);
+  }
+}
+
+@keyframes senovaLineSheen {
+  from {
+    transform: translateY(-110%);
+    opacity: 0;
+  }
+
+  35% {
+    opacity: 0.72;
+  }
+
+  to {
+    transform: translateY(110%);
+    opacity: 0;
+  }
+}
+
+@keyframes senovaBreath {
+  0%,
+  100% {
+    opacity: 0.46;
+    transform: scale(0.96);
+  }
+
+  50% {
+    opacity: 0.72;
+    transform: scale(1.03);
   }
 }
