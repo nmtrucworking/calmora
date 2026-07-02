@@ -1,366 +1,321 @@
-import { ArrowLeft, ArrowRight, Check, Gift, QrCode, Ruler, ShoppingBag, Sparkles, Truck } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, QrCode, ShoppingBag } from "lucide-react";
 import { useState } from "react";
-import { getLocalizedProduct } from "../../content/i18n";
+import { EditorialSection } from "../../components/luxury/EditorialSection";
+import { ImageReveal } from "../../components/luxury/ImageReveal";
+import { LuxuryButton } from "../../components/luxury/LuxuryButton";
+import { ProductStatement } from "../../components/luxury/ProductStatement";
+import { SectionEyebrow } from "../../components/luxury/SectionEyebrow";
+import { orderedLuxuryProducts, productLuxuryCopy } from "../../content/luxuryCopy";
 import { useInquiryBag } from "../../contexts/InquiryBagContext";
 import { useLanguage, type Language } from "../../contexts/LanguageContext";
 import { Link } from "../../contexts/RouterContext";
-import { products, type SenovaProduct } from "../../features/products/data/products";
-import { productDetailStyles as styles } from "../../styles/productDetailClasses";
+import type { SenovaProduct } from "../../features/products/data/products";
 
 type ProductDetailPageProps = {
   product?: SenovaProduct;
 };
 
-const detailText: Record<
+const detailCopy: Record<
   Language,
   {
     products: string;
-    notFoundEyebrow: string;
     notFoundTitle: string;
     notFoundText: string;
     notFoundCta: string;
-    active: string;
-    draft: string;
     configuration: string;
     addToBag: string;
-    productInfo: string;
-    highlights: string;
-    suitableFor: string;
-    commerceInfo: string;
     included: string;
-    dimensionsAndBrewing: string;
-    deliveryEyebrow: string;
-    deliveryTitle: string;
-    sendInquiry: string;
-    galleryEyebrow: string;
-    galleryTitle: string;
-    galleryText: string;
-    journeyEyebrow: string;
-    petalJourney: string;
-    defaultJourney: string;
-    qrEyebrow: string;
+    materials: string;
+    ritual: string;
+    culturalStory: string;
+    related: string;
+    preorderTitle: string;
+    preorderText: string;
+    preorder: string;
     qrTitle: string;
     qrText: string;
-    qrCta: string;
   }
 > = {
   vi: {
-    products: "Sản phẩm",
-    notFoundEyebrow: "Sản phẩm",
+    products: "Bộ sưu tập",
     notFoundTitle: "Trang sản phẩm đang được chuẩn bị.",
-    notFoundText:
-      "Mã đường dẫn này chưa có nội dung công khai. Bạn có thể quay về bộ sản phẩm Senova để tiếp tục khám phá.",
+    notFoundText: "Mã đường dẫn này chưa có nội dung công khai. Bạn có thể quay về bộ sưu tập Senova.",
     notFoundCta: "Về trang sản phẩm",
-    active: "Đang mở trải nghiệm",
-    draft: "Đang chuẩn bị",
     configuration: "Cấu hình",
     addToBag: "Thêm vào inquiry bag",
-    productInfo: "Thông tin sản phẩm",
-    highlights: "Điểm nổi bật",
-    suitableFor: "Phù hợp cho",
-    commerceInfo: "Thông tin commerce",
     included: "Trong cấu hình này",
-    dimensionsAndBrewing: "Kích thước và pha trà",
-    deliveryEyebrow: "Delivery / gifting",
-    deliveryTitle: "Concierge xác nhận trước khi chốt đơn.",
-    sendInquiry: "Gửi inquiry",
-    galleryEyebrow: "Bộ sản phẩm",
-    galleryTitle: "Ba hình thái trong cùng một câu chuyện trà sen.",
-    galleryText:
-      "Nhìn tổng thể Classic, Petal Pack và Gift Set để thấy vai trò Giữ - Mở - Trao được triển khai qua từng hình thức sản phẩm.",
-    journeyEyebrow: "Hành trình sử dụng",
-    petalJourney: "Mở - pha - thưởng thức",
-    defaultJourney: "Một nhịp trải nghiệm gọn",
-    qrEyebrow: "QR động",
-    qrTitle: "Nối sản phẩm vật lý với câu chuyện số.",
+    materials: "Chất liệu và chi tiết",
+    ritual: "Nghi thức sử dụng",
+    culturalStory: "Câu chuyện văn hóa",
+    related: "Sản phẩm liên quan",
+    preorderTitle: "Concierge xác nhận trước khi chốt đơn.",
+    preorderText:
+      "Senova đang vận hành theo mô hình inquiry và đặt trước. Gửi yêu cầu để được tư vấn cấu hình, lịch giao và ghi chú quà tặng.",
+    preorder: "Gửi yêu cầu đặt trước",
+    qrTitle: "QR tiếp nối trải nghiệm vật lý.",
     qrText:
-      "Sau khi mở Petal Pack, người dùng có thể quét QR để đọc câu chuyện ngắn, xem lại hướng dẫn trải nghiệm và gửi phản hồi.",
-    qrCta: "Mở trải nghiệm QR",
+      "Sau khi mở sản phẩm, QR có thể đưa người dùng tới hướng dẫn, câu chuyện ngắn và form phản hồi.",
   },
   en: {
-    products: "Products",
-    notFoundEyebrow: "Product",
+    products: "Collection",
     notFoundTitle: "This product page is being prepared.",
-    notFoundText:
-      "This route does not have public content yet. You can return to the Senova product edit and keep exploring.",
+    notFoundText: "This route does not have public content yet. You can return to the Senova collection.",
     notFoundCta: "Back to products",
-    active: "Experience open",
-    draft: "In preparation",
     configuration: "Configuration",
     addToBag: "Add to inquiry bag",
-    productInfo: "Product information",
-    highlights: "Highlights",
-    suitableFor: "Suitable for",
-    commerceInfo: "Commerce information",
-    included: "Included in this configuration",
-    dimensionsAndBrewing: "Dimensions and brewing",
-    deliveryEyebrow: "Delivery / gifting",
-    deliveryTitle: "Concierge confirms before finalizing.",
-    sendInquiry: "Send inquiry",
-    galleryEyebrow: "Product edit",
-    galleryTitle: "Three forms within one lotus tea story.",
-    galleryText:
-      "View Classic, Petal Pack and Gift Set together to see Keep - Open - Give expressed through each product form.",
-    journeyEyebrow: "Usage journey",
-    petalJourney: "Open - brew - taste",
-    defaultJourney: "A compact experience rhythm",
-    qrEyebrow: "Dynamic QR",
-    qrTitle: "Connect the physical product with a digital story.",
+    included: "Included",
+    materials: "Materials and details",
+    ritual: "Usage ritual",
+    culturalStory: "Cultural story",
+    related: "Related products",
+    preorderTitle: "Concierge confirms before finalizing.",
+    preorderText:
+      "Senova currently works through inquiry and preorder. Send a request for configuration, delivery timing and gift notes.",
+    preorder: "Send preorder request",
+    qrTitle: "QR continues the physical experience.",
     qrText:
-      "After opening Petal Pack, clients can scan the QR to read a short story, revisit the experience guide and send feedback.",
-    qrCta: "Open QR experience",
+      "After opening the product, QR can lead clients to guidance, a short story and feedback.",
   },
 };
 
-function ProductStatusBadge({ status, language }: { status: SenovaProduct["status"]; language: Language }) {
-  const label = status === "active" ? detailText[language].active : detailText[language].draft;
-
-  return <span className={styles.statusBadge}>{label}</span>;
-}
-
 function ProductNotFound() {
   const { language } = useLanguage();
-  const copy = detailText[language];
+  const copy = detailCopy[language];
 
   return (
-    <section className={styles.emptyState}>
-      <p className={styles.eyebrow}>{copy.notFoundEyebrow}</p>
-      <h1>{copy.notFoundTitle}</h1>
-      <p>{copy.notFoundText}</p>
-      <Link href="/products" className={styles.primaryButton}>
-        {copy.notFoundCta}
-      </Link>
-    </section>
+    <EditorialSection>
+      <div className="mx-auto max-w-[44rem] text-center">
+        <SectionEyebrow>{copy.products}</SectionEyebrow>
+        <h1 className="mt-4 mb-0 font-display text-[clamp(2.4rem,6vw,4.8rem)] font-[430] leading-[1.02] text-primary-strong">
+          {copy.notFoundTitle}
+        </h1>
+        <p className="mt-5 mb-0 leading-[1.75] text-text-muted">{copy.notFoundText}</p>
+        <div className="mt-8">
+          <LuxuryButton href="/products">{copy.notFoundCta}</LuxuryButton>
+        </div>
+      </div>
+    </EditorialSection>
   );
 }
 
 export default function ProductDetailPage({ product: baseProduct }: ProductDetailPageProps) {
   const { addItem } = useInquiryBag();
   const { language } = useLanguage();
-  const copy = detailText[language];
-  const product = baseProduct ? getLocalizedProduct(baseProduct, language) : undefined;
+  const copy = detailCopy[language];
+  const product = baseProduct ? productLuxuryCopy[language][baseProduct.id] : undefined;
   const [selectedVariant, setSelectedVariant] = useState(product?.variants[0]?.id);
 
-  if (!product) {
+  if (!baseProduct || !product) {
     return <ProductNotFound />;
   }
 
-  const isPetalPack = product.slug === "petal-pack";
+  const relatedProducts = orderedLuxuryProducts.filter((productId) => productId !== baseProduct.id);
 
   return (
-    <article className={styles.page}>
-      <div className={styles.breadcrumb}>
-        <Link href="/products">
-          <ArrowLeft aria-hidden="true" />
-          {copy.products}
-        </Link>
-      </div>
+    <article className="bg-[var(--page-bg)]">
+      <section className="relative overflow-hidden bg-[var(--senova-forest-black)] px-6 pt-28 pb-20 text-text-inverse max-[760px]:px-4">
+        <div className="mx-auto max-w-[var(--page-max)]">
+          <Link
+            href="/products"
+            className="inline-flex min-h-11 items-center gap-2 text-[0.88rem] font-[650] text-[rgba(243,239,229,0.72)] no-underline hover:text-text-inverse"
+          >
+            <ArrowLeft aria-hidden="true" className="h-4 w-4" />
+            {copy.products}
+          </Link>
 
-      <section className={styles.hero}>
-        <div className={styles.heroCopy}>
-          <div className={styles.metaRow}>
-            <span className={styles.eyebrow}>{product.eyebrow}</span>
-            <ProductStatusBadge status={product.status} language={language} />
-          </div>
-          <h1>{product.name}</h1>
-          <p className={styles.tagline}>{product.tagline}</p>
-          <p className={styles.description}>{product.description}</p>
+          <div className="mt-10 grid grid-cols-[minmax(0,0.95fr)_minmax(20rem,0.85fr)] items-center gap-[clamp(2rem,6vw,5rem)] max-[900px]:grid-cols-1">
+            <div>
+              <SectionEyebrow>{product.eyebrow}</SectionEyebrow>
+              <h1 className="mt-5 mb-0 max-w-[11ch] font-display text-[clamp(3.2rem,8vw,6.8rem)] font-[420] leading-[0.98]">
+                {product.name}
+              </h1>
+              <p className="mt-5 mb-0 font-display text-[clamp(1.35rem,3vw,2.1rem)] font-[430] leading-[1.18] text-accent-gold">
+                {product.tagline}
+              </p>
+              <p className="mt-5 mb-0 max-w-[38rem] text-[1.04rem] leading-[1.8] text-[rgba(243,239,229,0.76)]">
+                {product.description}
+              </p>
 
-          <div className="mt-6 grid gap-3 rounded-lg border border-border bg-surface-strong p-4">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <span className="font-display text-[1.55rem] font-[760] text-primary-strong">
-                {product.priceLabel}
-              </span>
-              <span className={styles.statusBadge}>{product.availability}</span>
-            </div>
-            <div className="grid gap-2">
-              <span className={styles.eyebrow}>{copy.configuration}</span>
-              {product.variants.map((variant) => (
-                <button
-                  key={variant.id}
-                  type="button"
-                  className={`rounded-lg border p-3 text-left transition ${
-                    selectedVariant === variant.id
-                      ? "border-primary bg-[rgba(31,114,74,0.1)]"
-                      : "border-border bg-[#fffdf866]"
-                  }`}
-                  onClick={() => setSelectedVariant(variant.id)}
+              <div className="mt-8 grid max-w-[34rem] gap-4 border border-[rgba(243,239,229,0.14)] bg-[rgba(243,239,229,0.045)] p-5">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <span className="font-display text-[1.65rem] text-accent-gold">{product.priceLabel}</span>
+                  <span className="text-[0.78rem] uppercase tracking-[0.16em] text-[rgba(243,239,229,0.62)]">
+                    {product.availability}
+                  </span>
+                </div>
+                <div className="grid gap-3">
+                  <SectionEyebrow>{copy.configuration}</SectionEyebrow>
+                  {product.variants.map((variant) => (
+                    <button
+                      key={variant.id}
+                      type="button"
+                      className={`min-h-11 border p-3 text-left transition-colors ${
+                        selectedVariant === variant.id
+                          ? "border-accent-gold bg-[rgba(175,149,88,0.16)]"
+                          : "border-[rgba(243,239,229,0.16)] bg-transparent"
+                      }`}
+                      onClick={() => setSelectedVariant(variant.id)}
+                    >
+                      <span className="block font-[650] text-text-inverse">{variant.label}</span>
+                      <span className="text-[0.86rem] text-[rgba(243,239,229,0.66)]">{variant.note}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-8 flex flex-wrap gap-4">
+                <LuxuryButton
+                  variant="dark"
+                  onClick={() => addItem({ productId: baseProduct.id, variantId: selectedVariant })}
                 >
-                  <span className="block font-extrabold text-primary-strong">{variant.label}</span>
-                  <span className="text-[0.84rem] text-text-muted">{variant.note}</span>
-                </button>
-              ))}
+                  {copy.addToBag}
+                  <ShoppingBag aria-hidden="true" className="h-4 w-4" />
+                </LuxuryButton>
+                <LuxuryButton href={product.secondaryAction.href} variant="light">
+                  {product.secondaryAction.label}
+                </LuxuryButton>
+              </div>
             </div>
-          </div>
 
-          <div className={styles.actions}>
-            <button
-              type="button"
-              className={styles.primaryButton}
-              onClick={() => addItem({ productId: product.id, variantId: selectedVariant })}
-            >
-              {copy.addToBag}
-              <ShoppingBag aria-hidden="true" />
-            </button>
-            <Link href={product.primaryAction.href} className={styles.primaryButton}>
-              {product.primaryAction.label}
-              <ArrowRight aria-hidden="true" />
-            </Link>
-            {product.secondaryAction ? (
-              <Link href={product.secondaryAction.href} className={styles.secondaryButton}>
-                {product.secondaryAction.label}
-              </Link>
-            ) : null}
-          </div>
-
-          {product.batchLabel ? <p className={styles.batchLabel}>{product.batchLabel}</p> : null}
-        </div>
-
-        <div className={styles.heroVisual}>
-          <div className={styles.imagePlate}>
-            <img src={product.image} alt={product.heroAlt} decoding="async" />
+            <ImageReveal
+              src={product.image}
+              alt={product.heroAlt}
+              className="aspect-[4/5] border-[rgba(243,239,229,0.16)] bg-[rgba(243,239,229,0.04)]"
+              imageClassName="object-cover"
+              loading="eager"
+            />
           </div>
         </div>
       </section>
 
-      <section className={styles.contentGrid} aria-label={copy.productInfo}>
-        <div className={styles.infoPanel}>
-          <div className={styles.sectionHeading}>
-            <Sparkles aria-hidden="true" />
-            <h2>{copy.highlights}</h2>
-          </div>
-          <ul className={styles.checkList}>
+      <EditorialSection>
+        <div className="grid grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] gap-[clamp(2rem,6vw,5rem)] max-[900px]:grid-cols-1">
+          <ProductStatement eyebrow={product.role} title={product.tagline} text={product.shortDescription} />
+          <div className="grid gap-5">
             {product.highlights.map((highlight) => (
-              <li key={highlight}>
-                <Check aria-hidden="true" />
-                <span>{highlight}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className={styles.infoPanel}>
-          <h2>{copy.suitableFor}</h2>
-          <div className={styles.pillList}>
-            {product.suitableFor.map((item) => (
-              <span key={item}>{item}</span>
+              <div key={highlight} className="grid grid-cols-[1.25rem_minmax(0,1fr)] gap-3 border-t border-border py-4">
+                <Check aria-hidden="true" className="mt-1 h-4 w-4 text-accent-gold" />
+                <p className="m-0 leading-[1.7] text-text-muted">{highlight}</p>
+              </div>
             ))}
           </div>
         </div>
-      </section>
+      </EditorialSection>
 
-      <section className={styles.contentGrid} aria-label={copy.commerceInfo}>
-        <div className={styles.infoPanel}>
-          <div className={styles.sectionHeading}>
-            <Gift aria-hidden="true" />
-            <h2>{copy.included}</h2>
-          </div>
-          <ul className={styles.checkList}>
-            {product.includedItems.map((item) => (
-              <li key={item}>
-                <Check aria-hidden="true" />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className={styles.infoPanel}>
-          <div className={styles.sectionHeading}>
-            <Ruler aria-hidden="true" />
-            <h2>{copy.dimensionsAndBrewing}</h2>
-          </div>
-          <p className={styles.description}>{product.dimensions}</p>
-          <div className={styles.pillList}>
-            {product.brewingNotes.map((note) => (
-              <span key={note}>{note}</span>
-            ))}
-          </div>
-        </div>
-      </section>
+      <EditorialSection className="bg-[var(--surface)]">
+        <div className="grid grid-cols-2 gap-6 max-[900px]:grid-cols-1">
+          <section className="border border-border bg-[var(--surface-paper)] p-6">
+            <SectionEyebrow>{copy.included}</SectionEyebrow>
+            <ul className="mt-6 mb-0 grid list-none gap-4 p-0">
+              {product.includedItems.map((item) => (
+                <li key={item} className="grid grid-cols-[1.25rem_minmax(0,1fr)] gap-3 text-text-muted">
+                  <Check aria-hidden="true" className="mt-1 h-4 w-4 text-primary" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
 
-      <section className={styles.qrPanel}>
-        <Truck aria-hidden="true" />
-        <div>
-          <p className={styles.eyebrow}>{copy.deliveryEyebrow}</p>
-          <h2>{copy.deliveryTitle}</h2>
-          <p>{product.shippingNote}</p>
-          <div className={styles.pillList}>
-            {product.giftOptions.map((option) => (
-              <span key={option}>{option}</span>
-            ))}
+          <section className="border border-border bg-[var(--surface-paper)] p-6">
+            <SectionEyebrow>{copy.materials}</SectionEyebrow>
+            <div className="mt-6 grid gap-5">
+              {product.materialNotes.map((note) => (
+                <article key={note.title} className="border-t border-border pt-4">
+                  <h2 className="m-0 font-display text-[1.55rem] font-[430] text-primary-strong">
+                    {note.title}
+                  </h2>
+                  <p className="mt-2 mb-0 leading-[1.7] text-text-muted">{note.text}</p>
+                </article>
+              ))}
+              <p className="m-0 border-t border-border pt-4 leading-[1.7] text-text-muted">{product.dimensions}</p>
+            </div>
+          </section>
+        </div>
+      </EditorialSection>
+
+      <EditorialSection>
+        <ProductStatement eyebrow={copy.ritual} title={product.tagline} text={product.culturalNote} />
+        <div className="mt-10 grid grid-cols-4 gap-5 max-[1000px]:grid-cols-2 max-[620px]:grid-cols-1">
+          {product.experienceSteps.map((step, index) => (
+            <article key={step.title} className="grid min-h-[15rem] content-between border-t border-border-strong py-5">
+              <span className="font-display text-[1.7rem] text-accent-gold">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <div>
+                <h2 className="m-0 text-[1.08rem] font-[650] text-primary-strong">{step.title}</h2>
+                <p className="mt-3 mb-0 text-[0.95rem] leading-[1.7] text-text-muted">{step.text}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </EditorialSection>
+
+      <EditorialSection className="bg-[var(--surface)]">
+        <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-6 border border-border bg-[var(--surface-paper)] p-6 max-[900px]:grid-cols-1">
+          <QrCode aria-hidden="true" className="h-10 w-10 text-accent-gold" />
+          <div>
+            <SectionEyebrow>{copy.culturalStory}</SectionEyebrow>
+            <h2 className="mt-3 mb-0 font-display text-[clamp(1.8rem,4vw,3rem)] font-[430] text-primary-strong">
+              {copy.qrTitle}
+            </h2>
+            <p className="mt-3 mb-0 leading-[1.75] text-text-muted">{copy.qrText}</p>
           </div>
+          <LuxuryButton href={`/experience/${baseProduct.id}`} variant="primary">
+            {product.primaryAction.label}
+            <ArrowRight aria-hidden="true" className="h-4 w-4" />
+          </LuxuryButton>
         </div>
-        <Link href="/checkout" className={styles.primaryButton}>
-          {copy.sendInquiry}
-          <ArrowRight aria-hidden="true" />
-        </Link>
-      </section>
+      </EditorialSection>
 
-      <section className={styles.gallerySection} aria-labelledby="product-gallery-title">
-        <div className={styles.galleryHeader}>
-          <p className={styles.eyebrow}>{copy.galleryEyebrow}</p>
-          <h2 id="product-gallery-title">{copy.galleryTitle}</h2>
-          <p>{copy.galleryText}</p>
-        </div>
-
-        <div className={styles.galleryGrid}>
-          {products.map((item) => {
-            const localizedItem = getLocalizedProduct(item, language);
-            const isCurrentProduct = localizedItem.id === product.id;
+      <EditorialSection>
+        <ProductStatement
+          eyebrow={copy.related}
+          title={language === "vi" ? "Những nhịp còn lại trong hệ Senova." : "The remaining rhythms in Senova."}
+          text={
+            language === "vi"
+              ? "Mỗi dòng sản phẩm đảm nhiệm một vai trò khác nhau trong cùng câu chuyện trà sen."
+              : "Each product line holds a different role within the same lotus tea story."
+          }
+        />
+        <div className="mt-10 grid grid-cols-2 gap-5 max-[760px]:grid-cols-1">
+          {relatedProducts.map((productId) => {
+            const related = productLuxuryCopy[language][productId];
 
             return (
               <Link
-                key={localizedItem.id}
-                href={localizedItem.href}
-                className={`${styles.galleryCard} ${isCurrentProduct ? styles.galleryCardActive : ""}`}
-                aria-current={isCurrentProduct ? "page" : undefined}
+                key={productId}
+                href={`/products/${productId}`}
+                className="grid overflow-hidden border border-border bg-[var(--surface-paper)] text-text no-underline shadow-[var(--shadow-luxury-sm)]"
               >
-                <span className={styles.galleryRole}>{localizedItem.role}</span>
-                <div className={styles.galleryImageFrame}>
-                  <img src={localizedItem.image} alt={localizedItem.heroAlt} loading="lazy" decoding="async" />
-                </div>
-                <div className={styles.galleryCardCopy}>
-                  <h3>{localizedItem.name}</h3>
-                  <p>{localizedItem.shortDescription}</p>
+                <img
+                  src={related.image}
+                  alt={related.heroAlt}
+                  className="aspect-[16/10] w-full object-cover saturate-[0.86]"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div className="p-5">
+                  <SectionEyebrow>{related.role}</SectionEyebrow>
+                  <h2 className="mt-3 mb-0 font-display text-[clamp(1.6rem,3vw,2.4rem)] font-[430] text-primary-strong">
+                    {related.name}
+                  </h2>
+                  <p className="mt-3 mb-0 leading-[1.7] text-text-muted">{related.shortDescription}</p>
                 </div>
               </Link>
             );
           })}
         </div>
-      </section>
+      </EditorialSection>
 
-      <section className={styles.experienceSection}>
-        <div className={styles.experienceHeader}>
-          <p className={styles.eyebrow}>{copy.journeyEyebrow}</p>
-          <h2>{isPetalPack ? copy.petalJourney : copy.defaultJourney}</h2>
-          <p>{product.shortDescription}</p>
+      <EditorialSection className="bg-[var(--senova-forest-black)] text-text-inverse">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-8 max-[760px]:grid-cols-1">
+          <ProductStatement eyebrow="Concierge" title={copy.preorderTitle} text={copy.preorderText} dark />
+          <LuxuryButton href="/dat-truoc" variant="dark">
+            {copy.preorder}
+            <ArrowRight aria-hidden="true" className="h-4 w-4" />
+          </LuxuryButton>
         </div>
-
-        <div className={styles.stepGrid}>
-          {product.experienceSteps.map((step, index) => (
-            <div key={step.title} className={styles.stepItem}>
-              <span>{String(index + 1).padStart(2, "0")}</span>
-              <h3>{step.title}</h3>
-              <p>{step.text}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {isPetalPack ? (
-        <section className={styles.qrPanel}>
-          <QrCode aria-hidden="true" />
-          <div>
-            <p className={styles.eyebrow}>{copy.qrEyebrow}</p>
-            <h2>{copy.qrTitle}</h2>
-            <p>{copy.qrText}</p>
-          </div>
-          <Link href="/experience/petal-pack" className={styles.primaryButton}>
-            {copy.qrCta}
-            <ArrowRight aria-hidden="true" />
-          </Link>
-        </section>
-      ) : null}
+      </EditorialSection>
     </article>
   );
 }

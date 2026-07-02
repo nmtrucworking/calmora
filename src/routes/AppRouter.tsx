@@ -8,7 +8,6 @@ import { getProductBySlug } from "../features/products/data/products";
 import { collections } from "../content/commerceContent";
 import { commerceText, getLocalizedProduct, getLocalizedSeo } from "../content/i18n";
 import { useLanguage, type Language } from "../contexts/LanguageContext";
-import landingBackgroundUrl from "../assets/landing-optimized.jpg";
 import productsBackgroundUrl from "../assets/products-background-optimized.jpg";
 import { canonicalBaseUrl, pageSeo, standardPages, type SeoContent } from "../content/sitePages";
 import { trackEvent } from "../features/analytics/analytics";
@@ -68,9 +67,9 @@ const JournalPage = lazy(() => loadCommercePages().then((module) => ({ default: 
 let didSchedulePreload = false;
 
 const productImagePaths = [
-  "/assets/products/classic-pack.jpg",
-  "/assets/products/petal-pack.jpg",
-  "/assets/products/gift-set.jpg",
+  "/assets/products/classic-pack-optimized.jpg",
+  "/assets/products/petal-pack-optimized.jpg",
+  "/assets/products/gift-set-optimized.jpg",
 ];
 const sharedImagePaths = ["/assets/brand/calmora-mark.png"];
 const pageFocusSectionClass = "pageFocusSection";
@@ -170,7 +169,7 @@ function FocusSections({ children, enabled }: { children: ReactNode; enabled: bo
 
 function getRouteImagePaths(pathname: string) {
   if (pathname === landingPath) {
-    return [landingBackgroundUrl, ...sharedImagePaths];
+    return ["/assets/products/petal-pack-optimized.jpg", ...sharedImagePaths];
   }
 
   if (

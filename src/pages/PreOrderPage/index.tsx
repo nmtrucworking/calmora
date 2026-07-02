@@ -1,5 +1,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { ClipboardCheck, ExternalLink, Send } from "lucide-react";
+import { productLuxuryCopy } from "../../content/luxuryCopy";
+import { useLanguage, type Language } from "../../contexts/LanguageContext";
 import { Link } from "../../contexts/RouterContext";
 import { useRouter } from "../../contexts/RouterState";
 import { trackEvent } from "../../features/analytics/analytics";
@@ -12,6 +14,207 @@ const validationProducts = products.filter((product) =>
 );
 
 const reportReferenceDate = "2026-06-27";
+
+const pageCopy: Record<
+  Language,
+  {
+    eyebrow: string;
+    title: string;
+    description: string;
+    formAnchor: string;
+    email: string;
+    asideTitle: string;
+    asideText: string;
+    asideBadge: string;
+    detail: string;
+    formEyebrow: string;
+    formTitle: string;
+    formText: string;
+    errorRequired: string;
+    errorSubmit: string;
+    submitting: string;
+    submit: string;
+    fields: Record<string, string>;
+    options: Record<string, { value: string; label: string }[]>;
+    validationLegend: string;
+    validationTopics: string[];
+    consentLegend: string;
+    consentText: string;
+  }
+> = {
+  vi: {
+    eyebrow: "Đăng ký mẫu thử / khảo sát",
+    title: "Góp dữ liệu kiểm chứng cho Petal Pack và Gift Set.",
+    description:
+      "Trang này ghi nhận người quan tâm dùng thử, góp ý ý tưởng quà tặng và cho phép Senova tổng hợp phản hồi ẩn danh cho hồ sơ validation ngày 27/06/2026. Đây chưa phải giao dịch thanh toán hay cam kết giao hàng.",
+    formAnchor: "Điền khảo sát",
+    email: "Gửi qua email",
+    asideTitle: "Petal Pack + Gift Set",
+    asideText:
+      "Senova đang xác thực mức hấp dẫn của thao tác mở cánh sen, nhu cầu nhận mẫu thử, dịp tặng phù hợp và kỳ vọng về bộ quà.",
+    asideBadge: "Dữ liệu dùng ở dạng tổng hợp ẩn danh",
+    detail: "Xem chi tiết",
+    formEyebrow: "Phiếu ghi nhận validation",
+    formTitle: "Đăng ký quan tâm mẫu thử",
+    formText:
+      "Các trường dưới đây giúp nhóm Senova biết nên mời ai dùng thử, cần hỏi sâu phần nào và có đủ bằng chứng tổng hợp cho Petal Pack / Gift Set.",
+    errorRequired:
+      "Vui lòng điền thông tin liên hệ, vai trò, sản phẩm quan tâm, dạng mẫu thử và phần đồng ý sử dụng phản hồi ẩn danh.",
+    errorSubmit: "Thông tin chưa thể gửi. Vui lòng thử lại.",
+    submitting: "Đang gửi...",
+    submit: "Gửi đăng ký mẫu thử",
+    fields: {
+      name: "Tên của bạn",
+      email: "Email",
+      phone: "Số điện thoại",
+      role: "Bạn đăng ký với vai trò nào?",
+      rolePlaceholder: "Chọn vai trò",
+      primaryProduct: "Sản phẩm muốn xác thực",
+      sampleFormat: "Dạng tham gia mong muốn",
+      samplePlaceholder: "Chọn hình thức",
+      useCase: "Bối cảnh bạn sẽ dùng hoặc tặng",
+      useCasePlaceholder: "Chọn bối cảnh",
+      expectedQuantity: "Số lượng quan tâm",
+      expectedQuantityPlaceholder: "Ví dụ: 5, 20, 100",
+      timeline: "Thời điểm cần thông tin",
+      giftBudget: "Khoảng ngân sách quà tặng",
+      petalQuestion: "Điều gì khiến bạn muốn hoặc chưa muốn thử Petal Pack?",
+      giftQuestion: "Với Gift Set, bạn cần thấy rõ điều gì trước khi cân nhắc đặt?",
+      message: "Ghi chú thêm cho nhóm Senova",
+    },
+    options: {
+      roles: [
+        { value: "consumer", label: "Người dùng cá nhân" },
+        { value: "gift-buyer", label: "Người mua quà tặng" },
+        { value: "event-corporate", label: "Doanh nghiệp / sự kiện" },
+        { value: "retail-partner", label: "Đối tác bán lẻ / phân phối" },
+      ],
+      sampleFormats: [
+        { value: "sample-at-event", label: "Nhận mẫu tại booth / sự kiện" },
+        { value: "home-sample", label: "Nhận mẫu thử tại nhà" },
+        { value: "interview", label: "Phỏng vấn nhanh 15 phút" },
+        { value: "concept-review", label: "Chỉ góp ý concept Gift Set" },
+      ],
+      useCases: [
+        { value: "daily-ritual", label: "Thưởng trà cá nhân" },
+        { value: "small-gift", label: "Quà nhỏ cho bạn bè / gia đình" },
+        { value: "corporate-gift", label: "Quà tri ân đối tác / khách hàng" },
+        { value: "event-souvenir", label: "Quà lưu niệm sự kiện" },
+        { value: "tourism-cultural", label: "Trải nghiệm du lịch / văn hóa" },
+      ],
+      timelines: [
+        { value: "", label: "Chưa xác định" },
+        { value: "july-2026", label: "Trong tháng 07/2026" },
+        { value: "q3-2026", label: "Quý 3/2026" },
+        { value: "q4-2026", label: "Quý 4/2026" },
+        { value: "later", label: "Sau đó" },
+      ],
+      budgets: [
+        { value: "", label: "Chưa xác định" },
+        { value: "under-150k", label: "Dưới 150.000đ / phần" },
+        { value: "150k-300k", label: "150.000đ - 300.000đ / phần" },
+        { value: "300k-500k", label: "300.000đ - 500.000đ / phần" },
+        { value: "over-500k", label: "Trên 500.000đ / phần" },
+      ],
+    },
+    validationLegend: "Senova nên dùng phản hồi của bạn để kiểm chứng điều gì?",
+    validationTopics: [
+      "Thao tác mở cánh sen có đủ khác biệt và dễ hiểu không",
+      "Hương, vị và thời gian pha có phù hợp với kỳ vọng không",
+      "Gift Set có hợp với dịp tặng và người nhận cụ thể không",
+      "Nội dung QR / câu chuyện có làm món quà đáng nhớ hơn không",
+    ],
+    consentLegend: "Đồng ý sử dụng phản hồi",
+    consentText:
+      "Tôi đồng ý để Senova tổng hợp phản hồi ở dạng ẩn danh, không công khai thông tin cá nhân, cho hồ sơ validation và báo cáo ngày 27/06/2026.",
+  },
+  en: {
+    eyebrow: "Sample interest / validation",
+    title: "Contribute validation data for Petal Pack and Gift Set.",
+    description:
+      "This page records sample interest, gifting feedback and consent for Senova to summarize anonymous responses for the validation report dated 27 June 2026. This is not payment or a delivery commitment.",
+    formAnchor: "Fill the survey",
+    email: "Send by email",
+    asideTitle: "Petal Pack + Gift Set",
+    asideText:
+      "Senova is validating the opening gesture, sample interest, suitable gifting occasions and expectations for the gift configuration.",
+    asideBadge: "Feedback is used only in anonymous summary form",
+    detail: "View detail",
+    formEyebrow: "Validation form",
+    formTitle: "Register sample interest",
+    formText:
+      "These fields help Senova choose sample participants, identify topics for deeper questions and collect useful evidence for Petal Pack / Gift Set.",
+    errorRequired:
+      "Please complete contact details, role, product interest, sample format and anonymous feedback consent.",
+    errorSubmit: "Your information could not be sent. Please try again.",
+    submitting: "Sending...",
+    submit: "Send sample interest",
+    fields: {
+      name: "Your name",
+      email: "Email",
+      phone: "Phone",
+      role: "Which role best describes you?",
+      rolePlaceholder: "Choose a role",
+      primaryProduct: "Product to validate",
+      sampleFormat: "Preferred participation format",
+      samplePlaceholder: "Choose a format",
+      useCase: "How would you use or gift it?",
+      useCasePlaceholder: "Choose a use case",
+      expectedQuantity: "Expected quantity",
+      expectedQuantityPlaceholder: "Example: 5, 20, 100",
+      timeline: "Information timing",
+      giftBudget: "Gift budget range",
+      petalQuestion: "What makes you want or hesitate to try Petal Pack?",
+      giftQuestion: "For Gift Set, what must be clear before you consider ordering?",
+      message: "Additional note for Senova",
+    },
+    options: {
+      roles: [
+        { value: "consumer", label: "Personal user" },
+        { value: "gift-buyer", label: "Gift buyer" },
+        { value: "event-corporate", label: "Business / event" },
+        { value: "retail-partner", label: "Retail / distribution partner" },
+      ],
+      sampleFormats: [
+        { value: "sample-at-event", label: "Receive a sample at a booth / event" },
+        { value: "home-sample", label: "Receive a home sample" },
+        { value: "interview", label: "15-minute quick interview" },
+        { value: "concept-review", label: "Gift Set concept review only" },
+      ],
+      useCases: [
+        { value: "daily-ritual", label: "Personal tea ritual" },
+        { value: "small-gift", label: "Small gift for friends / family" },
+        { value: "corporate-gift", label: "Partner / client appreciation gift" },
+        { value: "event-souvenir", label: "Event souvenir" },
+        { value: "tourism-cultural", label: "Tourism / cultural experience" },
+      ],
+      timelines: [
+        { value: "", label: "Not decided" },
+        { value: "july-2026", label: "In July 2026" },
+        { value: "q3-2026", label: "Q3 2026" },
+        { value: "q4-2026", label: "Q4 2026" },
+        { value: "later", label: "Later" },
+      ],
+      budgets: [
+        { value: "", label: "Not decided" },
+        { value: "under-150k", label: "Under VND 150,000 / set" },
+        { value: "150k-300k", label: "VND 150,000 - 300,000 / set" },
+        { value: "300k-500k", label: "VND 300,000 - 500,000 / set" },
+        { value: "over-500k", label: "Above VND 500,000 / set" },
+      ],
+    },
+    validationLegend: "What should Senova validate with your feedback?",
+    validationTopics: [
+      "Whether the lotus opening gesture is distinctive and clear",
+      "Whether aroma, taste and brewing time meet expectations",
+      "Whether Gift Set fits the occasion and recipient",
+      "Whether QR / story content makes the gift more memorable",
+    ],
+    consentLegend: "Feedback consent",
+    consentText:
+      "I agree that Senova may summarize my feedback anonymously, without publishing personal information, for validation materials and the report dated 27 June 2026.",
+  },
+};
 
 function getFieldValue(formData: FormData, field: string) {
   const value = formData.get(field);
@@ -27,6 +230,8 @@ function getCheckedValues(formData: FormData, field: string) {
 
 export default function PreOrderPage() {
   const { navigate, search } = useRouter();
+  const { language } = useLanguage();
+  const copy = pageCopy[language];
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const requestedProduct = new URLSearchParams(search).get("product") ?? "petal-pack";
@@ -77,9 +282,7 @@ export default function PreOrderPage() {
       !payload.validationTopics ||
       !payload.evidenceConsent
     ) {
-      setError(
-        "Vui lòng điền thông tin liên hệ, vai trò, sản phẩm quan tâm, dạng mẫu thử và phần đồng ý sử dụng phản hồi ẩn danh.",
-      );
+      setError(copy.errorRequired);
       setIsSubmitting(false);
       return;
     }
@@ -88,7 +291,7 @@ export default function PreOrderPage() {
     setIsSubmitting(false);
 
     if (!result.success) {
-      setError(result.error?.message ?? "Thông tin chưa thể gửi. Vui lòng thử lại.");
+      setError(result.error?.message ?? copy.errorSubmit);
       return;
     }
 
@@ -100,60 +303,54 @@ export default function PreOrderPage() {
     <article className={styles.page}>
       <section className={`${styles.hero} ${styles.heroCompact}`}>
         <div>
-          <p className={styles.eyebrow}>Đăng ký mẫu thử / khảo sát</p>
-          <h1>Góp dữ liệu kiểm chứng cho Petal Pack và Gift Set.</h1>
-          <p className={styles.heroDescription}>
-            Trang này ghi nhận người quan tâm dùng thử, góp ý ý tưởng quà tặng và cho phép Senova
-            tổng hợp phản hồi ẩn danh để bổ sung vào báo cáo validation ngày 27/06/2026. Đây chưa
-            phải giao dịch thanh toán hay cam kết giao hàng.
-          </p>
+          <p className={styles.eyebrow}>{copy.eyebrow}</p>
+          <h1>{copy.title}</h1>
+          <p className={styles.heroDescription}>{copy.description}</p>
           <div className={styles.actions}>
             <a className={styles.primaryButton} href="#sample-interest-form">
-              Điền khảo sát
+              {copy.formAnchor}
               <ClipboardCheck aria-hidden="true" />
             </a>
             <a className={styles.secondaryButton} href="mailto:hello@senova.vn?subject=Senova sample interest">
-              Gửi qua email
+              {copy.email}
               <ExternalLink aria-hidden="true" />
             </a>
           </div>
         </div>
         <aside className={styles.heroAside}>
-          <strong>Petal Pack + Gift Set</strong>
-          <p className={styles.bodyText}>
-            Senova đang cần xác thực mức hấp dẫn của thao tác mở cánh sen, nhu cầu nhận mẫu thử,
-            dịp tặng phù hợp và kỳ vọng về bộ quà.
-          </p>
-          <span className={styles.statusBadge}>Dữ liệu dùng ở dạng tổng hợp ẩn danh</span>
+          <strong>{copy.asideTitle}</strong>
+          <p className={styles.bodyText}>{copy.asideText}</p>
+          <span className={styles.statusBadge}>{copy.asideBadge}</span>
         </aside>
       </section>
 
       <section className={styles.formLayout}>
         <div className={styles.productStrip}>
-          {validationProducts.map((product) => (
-            <article className={styles.productCard} key={product.slug}>
-              <div className={styles.productImage}>
-                <img src={product.image} alt={product.heroAlt} loading="lazy" />
-              </div>
-              <div className={styles.productBody}>
-                <span className={styles.panelLabel}>{product.role}</span>
-                <h3>{product.name}</h3>
-                <p className={styles.bodyText}>{product.shortDescription}</p>
-                <Link className={styles.inlineLink} href={product.href}>
-                  Xem chi tiết
-                </Link>
-              </div>
-            </article>
-          ))}
+          {validationProducts.map((product) => {
+            const displayProduct = productLuxuryCopy[language][product.id];
+
+            return (
+              <article className={styles.productCard} key={product.slug}>
+                <div className={styles.productImage}>
+                  <img src={displayProduct.image} alt={displayProduct.heroAlt} loading="lazy" />
+                </div>
+                <div className={styles.productBody}>
+                  <span className={styles.panelLabel}>{displayProduct.role}</span>
+                  <h3>{displayProduct.name}</h3>
+                  <p className={styles.bodyText}>{displayProduct.shortDescription}</p>
+                  <Link className={styles.inlineLink} href={product.href}>
+                    {copy.detail}
+                  </Link>
+                </div>
+              </article>
+            );
+          })}
         </div>
 
         <div className={styles.formPanel} id="sample-interest-form">
-          <p className={styles.eyebrow}>Phiếu ghi nhận validation</p>
-          <h2>Đăng ký quan tâm mẫu thử</h2>
-          <p className={styles.fieldHint}>
-            Các trường dưới đây giúp nhóm Senova biết nên mời ai dùng thử, cần hỏi sâu phần nào và
-            có đủ bằng chứng tổng hợp cho Petal Pack / Gift Set trong hồ sơ validation.
-          </p>
+          <p className={styles.eyebrow}>{copy.formEyebrow}</p>
+          <h2>{copy.formTitle}</h2>
+          <p className={styles.fieldHint}>{copy.formText}</p>
           <form className={styles.form} onSubmit={handleSubmit}>
             <div className={styles.hiddenField}>
               <label htmlFor="website">Website</label>
@@ -162,158 +359,154 @@ export default function PreOrderPage() {
 
             <div className={styles.inlineFields}>
               <div className={styles.fieldGroup}>
-                <label htmlFor="name">Tên của bạn</label>
+                <label htmlFor="name">{copy.fields.name}</label>
                 <input id="name" name="name" autoComplete="name" required />
               </div>
               <div className={styles.fieldGroup}>
-                <label htmlFor="email">Email</label>
+                <label htmlFor="email">{copy.fields.email}</label>
                 <input id="email" name="email" type="email" autoComplete="email" required />
               </div>
             </div>
 
             <div className={styles.inlineFields}>
               <div className={styles.fieldGroup}>
-                <label htmlFor="phone">Số điện thoại</label>
+                <label htmlFor="phone">{copy.fields.phone}</label>
                 <input id="phone" name="phone" type="tel" autoComplete="tel" />
               </div>
               <div className={styles.fieldGroup}>
-                <label htmlFor="role">Bạn đăng ký với vai trò nào?</label>
+                <label htmlFor="role">{copy.fields.role}</label>
                 <select id="role" name="role" required defaultValue="">
                   <option value="" disabled>
-                    Chọn vai trò
+                    {copy.fields.rolePlaceholder}
                   </option>
-                  <option value="consumer">Người dùng cá nhân</option>
-                  <option value="gift-buyer">Người mua quà tặng</option>
-                  <option value="event-corporate">Doanh nghiệp / sự kiện</option>
-                  <option value="retail-partner">Đối tác bán lẻ / phân phối</option>
-                </select>
-              </div>
-            </div>
-
-            <div className={styles.inlineFields}>
-              <div className={styles.fieldGroup}>
-                <label htmlFor="primaryProduct">Sản phẩm muốn xác thực</label>
-                <select id="primaryProduct" name="primaryProduct" defaultValue={defaultProduct} required>
-                  {validationProducts.map((product) => (
-                    <option value={product.slug} key={product.slug}>
-                      {product.name}
+                  {copy.options.roles.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
                     </option>
                   ))}
-                  <option value="petal-pack,gift-set">Cả Petal Pack và Gift Set</option>
-                </select>
-              </div>
-              <div className={styles.fieldGroup}>
-                <label htmlFor="sampleFormat">Dạng tham gia mong muốn</label>
-                <select id="sampleFormat" name="sampleFormat" required defaultValue="">
-                  <option value="" disabled>
-                    Chọn hình thức
-                  </option>
-                  <option value="sample-at-event">Nhận mẫu tại booth / sự kiện</option>
-                  <option value="home-sample">Nhận mẫu thử tại nhà</option>
-                  <option value="interview">Phỏng vấn nhanh 15 phút</option>
-                  <option value="concept-review">Chỉ góp ý concept Gift Set</option>
                 </select>
               </div>
             </div>
 
             <div className={styles.inlineFields}>
               <div className={styles.fieldGroup}>
-                <label htmlFor="useCase">Bối cảnh bạn sẽ dùng hoặc tặng</label>
-                <select id="useCase" name="useCase" required defaultValue="">
-                  <option value="" disabled>
-                    Chọn bối cảnh
-                  </option>
-                  <option value="daily-ritual">Thưởng trà cá nhân</option>
-                  <option value="small-gift">Quà nhỏ cho bạn bè / gia đình</option>
-                  <option value="corporate-gift">Quà tri ân đối tác / khách hàng</option>
-                  <option value="event-souvenir">Quà lưu niệm sự kiện</option>
-                  <option value="tourism-cultural">Trải nghiệm du lịch / văn hóa</option>
+                <label htmlFor="primaryProduct">{copy.fields.primaryProduct}</label>
+                <select id="primaryProduct" name="primaryProduct" defaultValue={defaultProduct} required>
+                  {validationProducts.map((product) => {
+                    const displayProduct = productLuxuryCopy[language][product.id];
+                    return (
+                      <option value={product.slug} key={product.slug}>
+                        {displayProduct.name}
+                      </option>
+                    );
+                  })}
+                  <option value="petal-pack,gift-set">Petal Pack + Gift Set</option>
                 </select>
               </div>
               <div className={styles.fieldGroup}>
-                <label htmlFor="expectedQuantity">Số lượng quan tâm</label>
+                <label htmlFor="sampleFormat">{copy.fields.sampleFormat}</label>
+                <select id="sampleFormat" name="sampleFormat" required defaultValue="">
+                  <option value="" disabled>
+                    {copy.fields.samplePlaceholder}
+                  </option>
+                  {copy.options.sampleFormats.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className={styles.inlineFields}>
+              <div className={styles.fieldGroup}>
+                <label htmlFor="useCase">{copy.fields.useCase}</label>
+                <select id="useCase" name="useCase" required defaultValue="">
+                  <option value="" disabled>
+                    {copy.fields.useCasePlaceholder}
+                  </option>
+                  {copy.options.useCases.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className={styles.fieldGroup}>
+                <label htmlFor="expectedQuantity">{copy.fields.expectedQuantity}</label>
                 <input
                   id="expectedQuantity"
                   name="expectedQuantity"
                   type="number"
                   min="1"
-                  placeholder="Ví dụ: 5, 20, 100"
+                  placeholder={copy.fields.expectedQuantityPlaceholder}
                 />
               </div>
             </div>
 
             <div className={styles.inlineFields}>
               <div className={styles.fieldGroup}>
-                <label htmlFor="timeline">Thời điểm cần thông tin</label>
+                <label htmlFor="timeline">{copy.fields.timeline}</label>
                 <select id="timeline" name="timeline" defaultValue="">
-                  <option value="">Chưa xác định</option>
-                  <option value="july-2026">Trong tháng 07/2026</option>
-                  <option value="q3-2026">Quý 3/2026</option>
-                  <option value="q4-2026">Quý 4/2026</option>
-                  <option value="later">Sau đó</option>
+                  {copy.options.timelines.map((option) => (
+                    <option key={option.value || "empty"} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div className={styles.fieldGroup}>
-                <label htmlFor="giftBudget">Khoảng ngân sách quà tặng</label>
+                <label htmlFor="giftBudget">{copy.fields.giftBudget}</label>
                 <select id="giftBudget" name="giftBudget" defaultValue="">
-                  <option value="">Chưa xác định</option>
-                  <option value="under-150k">Dưới 150.000đ / phần</option>
-                  <option value="150k-300k">150.000đ - 300.000đ / phần</option>
-                  <option value="300k-500k">300.000đ - 500.000đ / phần</option>
-                  <option value="over-500k">Trên 500.000đ / phần</option>
+                  {copy.options.budgets.map((option) => (
+                    <option key={option.value || "empty"} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
 
             <fieldset className={styles.choiceGroup}>
-              <legend>Senova nên dùng phản hồi của bạn để kiểm chứng điều gì?</legend>
-              <label>
-                <input name="validationTopics" type="checkbox" value="petal-opening" />
-                <span>Thao tác mở cánh sen có đủ khác biệt và dễ hiểu không</span>
-              </label>
-              <label>
-                <input name="validationTopics" type="checkbox" value="taste-aroma" />
-                <span>Hương, vị và thời gian pha có phù hợp với kỳ vọng không</span>
-              </label>
-              <label>
-                <input name="validationTopics" type="checkbox" value="gift-occasion" />
-                <span>Gift Set có hợp với dịp tặng và người nhận cụ thể không</span>
-              </label>
-              <label>
-                <input name="validationTopics" type="checkbox" value="story-qr" />
-                <span>Nội dung QR / câu chuyện có làm món quà đáng nhớ hơn không</span>
-              </label>
+              <legend>{copy.validationLegend}</legend>
+              {copy.validationTopics.map((topic, index) => (
+                <label key={topic}>
+                  <input
+                    name="validationTopics"
+                    type="checkbox"
+                    value={["petal-opening", "taste-aroma", "gift-occasion", "story-qr"][index]}
+                  />
+                  <span>{topic}</span>
+                </label>
+              ))}
             </fieldset>
 
             <div className={styles.fieldGroup}>
-              <label htmlFor="petalPackQuestion">Điều gì khiến bạn muốn hoặc chưa muốn thử Petal Pack?</label>
+              <label htmlFor="petalPackQuestion">{copy.fields.petalQuestion}</label>
               <textarea id="petalPackQuestion" name="petalPackQuestion" />
             </div>
 
             <div className={styles.fieldGroup}>
-              <label htmlFor="giftSetQuestion">Với Gift Set, bạn cần thấy rõ điều gì trước khi cân nhắc đặt?</label>
+              <label htmlFor="giftSetQuestion">{copy.fields.giftQuestion}</label>
               <textarea id="giftSetQuestion" name="giftSetQuestion" />
             </div>
 
             <div className={styles.fieldGroup}>
-              <label htmlFor="message">Ghi chú thêm cho nhóm Senova</label>
+              <label htmlFor="message">{copy.fields.message}</label>
               <textarea id="message" name="message" />
             </div>
 
             <fieldset className={styles.choiceGroup}>
-              <legend>Đồng ý sử dụng phản hồi</legend>
+              <legend>{copy.consentLegend}</legend>
               <label>
                 <input name="evidenceConsent" type="checkbox" value="anonymous-report-use" required />
-                <span>
-                  Tôi đồng ý để Senova tổng hợp phản hồi ở dạng ẩn danh, không công khai thông tin
-                  cá nhân, cho hồ sơ validation và báo cáo ngày 27/06/2026.
-                </span>
+                <span>{copy.consentText}</span>
               </label>
             </fieldset>
 
             {error ? <p className={styles.errorText}>{error}</p> : null}
             <button className={styles.primaryButton} type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Đang gửi..." : "Gửi đăng ký mẫu thử"}
+              {isSubmitting ? copy.submitting : copy.submit}
               <Send aria-hidden="true" />
             </button>
           </form>

@@ -8,55 +8,67 @@
     "Noto Serif Display", "Playfair Display", "Iowan Old Style", "Palatino Linotype",
     Palatino, "Book Antiqua", Georgia, serif;
 
-  /* Light editorial palette: warm paper, lotus rose, aged gold, deep tea ink. */
-  --page-bg: #ece5d5;
-  --page-bg-soft: #e2d9c4;
-  --surface: rgba(255, 253, 248, 0.64);
-  --surface-strong: rgba(255, 253, 248, 0.86);
-  --surface-tint: rgba(31, 114, 74, 0.14);
-  --border: rgba(31, 95, 68, 0.2);
-  --border-strong: rgba(31, 95, 68, 0.34);
+  --senova-ivory: #f3efe5;
+  --senova-ivory-muted: #e4ddcf;
+  --senova-forest: #384b44;
+  --senova-forest-deep: #172721;
+  --senova-forest-black: #101a16;
+  --senova-gold: #af9558;
+  --senova-gold-light: #c8b178;
+  --senova-tea-brown: #765846;
+  --senova-lotus-dust: #b88a8e;
+  --senova-ink: #18211d;
+  --senova-white: #fffcf6;
 
-  --text: #10231d;
-  --text-muted: rgba(16, 35, 29, 0.72);
-  --text-soft: rgba(16, 35, 29, 0.52);
-  --text-inverse: #fffaf0;
+  --page-bg: var(--senova-ivory);
+  --page-bg-soft: var(--senova-ivory-muted);
+  --surface: #f8f4eb;
+  --surface-strong: #fffcf6;
+  --surface-tint: rgba(56, 75, 68, 0.08);
+  --surface-dark: var(--senova-forest-deep);
+  --surface-dark-soft: #1e3029;
+  --surface-paper: rgba(243, 239, 229, 0.92);
+  --border: rgba(56, 75, 68, 0.16);
+  --border-strong: rgba(56, 75, 68, 0.34);
 
-  --primary: #1f5f44;
-  --primary-strong: #123f2d;
-  --on-primary: #fffdf8;
-  --accent: #b3265d;
-  --accent-strong: #8f1748;
-  --accent-soft: rgba(179, 38, 93, 0.18);
-  --accent-gold: #6f5517;
-  --gold-decorative: #a7832f;
-  --tea-brown: #7d5947;
-  --lotus-mist: #d8e3d4;
+  --text: var(--senova-ink);
+  --text-muted: rgba(24, 33, 29, 0.72);
+  --text-soft: rgba(24, 33, 29, 0.48);
+  --text-inverse: var(--senova-ivory);
 
-  --shadow-sm: 0 8px 22px rgba(37, 31, 21, 0.12);
-  --shadow-md: 0 18px 42px rgba(37, 31, 21, 0.16);
-  --shadow-lg: 0 30px 72px rgba(37, 31, 21, 0.2);
-  --shadow-luxury-sm: 0 10px 30px rgba(37, 31, 21, 0.09);
-  --shadow-luxury-md: 0 22px 54px rgba(37, 31, 21, 0.13);
-  --shadow-luxury-lg: 0 38px 88px rgba(37, 31, 21, 0.16);
-  --shadow-luxury-dark: 0 28px 70px rgba(0, 0, 0, 0.28);
+  --primary: var(--senova-forest);
+  --primary-strong: var(--senova-forest-deep);
+  --on-primary: var(--senova-ivory);
+  --accent: var(--senova-gold);
+  --accent-strong: #8d743f;
+  --accent-soft: rgba(175, 149, 88, 0.16);
+  --accent-gold: var(--senova-gold);
+  --gold-decorative: var(--senova-gold-light);
+  --tea-brown: var(--senova-tea-brown);
+  --lotus-mist: #d5d3c5;
+
+  --shadow-sm: 0 16px 40px rgba(16, 26, 22, 0.1);
+  --shadow-md: 0 30px 90px rgba(16, 26, 22, 0.14);
+  --shadow-lg: 0 42px 110px rgba(16, 26, 22, 0.18);
+  --shadow-luxury-sm: 0 16px 40px rgba(16, 26, 22, 0.1);
+  --shadow-luxury-md: 0 30px 90px rgba(16, 26, 22, 0.16);
+  --shadow-luxury-lg: 0 42px 110px rgba(16, 26, 22, 0.18);
+  --shadow-luxury-dark: 0 28px 80px rgba(0, 0, 0, 0.28);
   --ease-luxury: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-luxury-inout: cubic-bezier(0.65, 0, 0.35, 1);
 
-  --radius-lg: 1.5rem;
-  --radius-md: 1rem;
-  --radius-sm: 0.75rem;
-  --page-max: 82rem;
+  --radius-xs: 2px;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --page-max: 84rem;
 
-  --header-bg: rgba(255, 253, 248, 0.58);
-  --footer-bg: rgba(255, 253, 248, 0.5);
+  --header-bg: rgba(243, 239, 229, 0.9);
+  --footer-bg: var(--senova-forest-deep);
 }
 
 body {
-  background:
-    radial-gradient(circle at 12% 0%, rgba(179, 38, 93, 0.14), transparent 35%),
-    radial-gradient(circle at 88% 8%, rgba(31, 114, 74, 0.12), transparent 35%),
-    linear-gradient(180deg, var(--page-bg) 0%, var(--page-bg-soft) 58%, #d8cdb4 100%);
+  background: linear-gradient(180deg, var(--page-bg) 0%, var(--page-bg-soft) 100%);
   color: var(--text);
   font-family: var(--font-sans);
 }
@@ -66,6 +78,17 @@ a {
 }
 
 ::selection {
-  background: rgba(179, 38, 93, 0.22);
+  background: rgba(175, 149, 88, 0.28);
   color: var(--text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }

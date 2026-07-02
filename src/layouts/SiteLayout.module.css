@@ -1,10 +1,7 @@
-/* Intentional custom layout effects: background image layers and scroll focus globals stay in CSS. */
-
 .page {
   background:
-    linear-gradient(180deg, rgba(236, 229, 213, 0.78) 0%, rgba(226, 217, 196, 0.72) 58%, rgba(216, 205, 180, 0.78) 100%),
-    url("../assets/products-background-optimized.jpg") center top / cover fixed,
-    linear-gradient(180deg, var(--page-bg) 0%, var(--page-bg-soft) 58%, #d8cdb4 100%);
+    linear-gradient(180deg, rgba(243, 239, 229, 0.98) 0%, rgba(228, 221, 207, 0.94) 100%),
+    var(--page-bg);
 }
 
 .page::before {
@@ -14,49 +11,33 @@
   z-index: 0;
   pointer-events: none;
   background:
-    linear-gradient(90deg, rgba(255, 253, 248, 0.48), rgba(255, 253, 248, 0.14) 44%, rgba(255, 253, 248, 0.4)),
-    linear-gradient(180deg, rgba(255, 253, 248, 0.38), rgba(255, 253, 248, 0.12) 42%, rgba(216, 205, 180, 0.36));
-  backdrop-filter: blur(0.75px);
-  -webkit-backdrop-filter: blur(0.75px);
+    linear-gradient(90deg, rgba(56, 75, 68, 0.04), transparent 38%, rgba(118, 88, 70, 0.05)),
+    linear-gradient(180deg, rgba(255, 252, 246, 0.42), transparent 42%);
 }
 
 .landingPage {
-  background:
-    linear-gradient(180deg, rgba(236, 229, 213, 0.52) 0%, rgba(226, 217, 196, 0.58) 58%, rgba(216, 205, 180, 0.72) 100%),
-    url("../assets/landing-optimized.jpg") center top / cover fixed,
-    linear-gradient(180deg, var(--page-bg) 0%, var(--page-bg-soft) 58%, #d8cdb4 100%);
+  background: var(--senova-forest-black);
 }
 
 .landingPage::before {
   display: none;
 }
 
-.landingScrim {
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background:
-    linear-gradient(90deg, rgba(255, 250, 240, 0.76) 0%, rgba(255, 250, 240, 0.4) 30%, rgba(255, 250, 240, 0.08) 58%, rgba(67, 42, 23, 0.22) 100%),
-    linear-gradient(180deg, rgba(255, 253, 248, 0.22) 0%, rgba(255, 253, 248, 0.02) 46%, rgba(112, 79, 46, 0.34) 100%);
-}
-
 .contentEffects :global(.pageFocusSection),
 .landingContentEffects :global(.pageFocusSection) {
   scroll-margin-top: clamp(4.5rem, 8vh, 5.75rem);
-  transform: translateY(0.3rem) scale(0.996);
-  transform-origin: center top;
-  opacity: 0.88;
-  filter: saturate(0.96);
+  transform: translateY(0.18rem);
+  opacity: 0.94;
+  filter: saturate(0.98);
   transition:
-    opacity 480ms ease,
-    filter 480ms ease,
-    transform 560ms cubic-bezier(0.16, 1, 0.3, 1);
+    opacity 700ms var(--ease-luxury),
+    filter 700ms var(--ease-luxury),
+    transform 800ms var(--ease-luxury);
 }
 
 .contentEffects :global(.pageFocusActive),
 .landingContentEffects :global(.pageFocusActive) {
-  transform: translateY(0) scale(1);
+  transform: translateY(0);
   opacity: 1;
   filter: saturate(1);
 }
@@ -67,15 +48,6 @@
     transform: none;
     opacity: 1;
     filter: none;
-  }
-}
-
-@media (max-width: 520px) {
-  .landingPage {
-    background:
-      linear-gradient(180deg, rgba(236, 229, 213, 0.38) 0%, rgba(226, 217, 196, 0.5) 58%, rgba(216, 205, 180, 0.8) 100%),
-      url("../assets/landing-optimized.jpg") center top / cover scroll,
-      linear-gradient(180deg, var(--page-bg) 0%, var(--page-bg-soft) 58%, #d8cdb4 100%);
   }
 }
 

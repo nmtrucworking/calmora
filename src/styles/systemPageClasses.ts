@@ -46,7 +46,7 @@ export const systemStyles = {
   productBody:
     "p-4 [&_h3]:mt-[0.4rem] [&_h3]:mb-0 [&_h3]:text-[1.1rem] [&_h3]:text-primary-strong",
   inlineLink:
-    "mt-[0.85rem] inline-flex w-fit text-[0.86rem] font-extrabold text-primary no-underline hover:text-primary-strong",
+    "mt-[0.85rem] inline-flex min-h-11 w-fit items-center text-[0.86rem] font-extrabold text-primary no-underline hover:text-primary-strong",
   statusBadge:
     "inline-flex w-fit rounded-full border border-[rgba(179,38,93,0.2)] bg-[rgba(179,38,93,0.08)] px-[0.65rem] py-[0.3rem] text-[0.75rem] font-extrabold text-accent-strong",
   formLayout:

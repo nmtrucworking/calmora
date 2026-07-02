@@ -8,19 +8,19 @@ export const luxuryMotion = {
     slow: "duration-[760ms]",
   },
   reveal:
-    "translate-y-4 opacity-0 animate-[senovaReveal_820ms_var(--ease-luxury)_both] motion-reduce:translate-y-0 motion-reduce:animate-none motion-reduce:opacity-100",
+    "translate-y-3 opacity-0 animate-[senovaReveal_900ms_var(--ease-luxury)_both] motion-reduce:translate-y-0 motion-reduce:animate-none motion-reduce:opacity-100",
   revealSlow:
-    "translate-y-5 opacity-0 animate-[senovaReveal_980ms_var(--ease-luxury)_both] motion-reduce:translate-y-0 motion-reduce:animate-none motion-reduce:opacity-100",
+    "translate-y-4 opacity-0 animate-[senovaReveal_1100ms_var(--ease-luxury)_both] motion-reduce:translate-y-0 motion-reduce:animate-none motion-reduce:opacity-100",
   surface:
-    "border border-[rgba(31,95,68,0.18)] bg-[rgba(255,253,248,0.76)] shadow-[var(--shadow-luxury-sm)] backdrop-blur-[18px]",
+    "border border-border bg-[var(--surface-paper)] shadow-[var(--shadow-luxury-sm)]",
   darkSurface:
-    "border border-[rgba(255,250,240,0.08)] bg-[rgba(255,250,240,0.025)] shadow-[var(--shadow-luxury-dark)] backdrop-blur-[14px]",
+    "border border-[rgba(243,239,229,0.12)] bg-[rgba(243,239,229,0.045)] shadow-[var(--shadow-luxury-dark)]",
   cardHover:
-    "transition-[background,border-color,box-shadow,transform,filter] duration-[520ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-[2px] hover:border-border-strong hover:shadow-[var(--shadow-luxury-md)] motion-reduce:transition-none motion-reduce:hover:translate-y-0",
+    "transition-[background,border-color,box-shadow,filter] duration-[700ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-border-strong hover:shadow-[var(--shadow-luxury-md)] motion-reduce:transition-none",
   darkCardHover:
-    "transition-[background,border-color,box-shadow,transform,filter] duration-[620ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-[2px] hover:border-[rgba(248,223,147,0.22)] hover:bg-[rgba(255,250,240,0.045)] hover:shadow-[var(--shadow-luxury-dark)] motion-reduce:transition-none motion-reduce:hover:translate-y-0",
+    "transition-[background,border-color,box-shadow,filter] duration-[760ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-[rgba(200,177,120,0.28)] hover:bg-[rgba(243,239,229,0.065)] hover:shadow-[var(--shadow-luxury-dark)] motion-reduce:transition-none",
   button:
-    "transition-[background,border-color,box-shadow,transform,color] duration-[360ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-px hover:shadow-[0_12px_28px_rgba(37,31,21,0.14)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(111,85,23,0.3)] focus-visible:ring-offset-2 focus-visible:ring-offset-page-bg motion-reduce:transition-none motion-reduce:hover:translate-y-0",
+    "transition-[background,border-color,box-shadow,color] duration-[420ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:shadow-[0_12px_28px_rgba(16,26,22,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(175,149,88,0.42)] focus-visible:ring-offset-2 focus-visible:ring-offset-page-bg motion-reduce:transition-none",
   link:
     "transition-[color,border-color,gap,transform] duration-[360ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
   field:

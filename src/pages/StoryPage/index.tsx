@@ -1,16 +1,30 @@
 import { RotateCw } from "lucide-react";
-import { useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { InfoCard } from "../../components/ui/InfoCard";
 import { SectionHeading } from "../../components/ui/SectionHeading";
-import { StoryLotusCanvas } from "../../components/story/StoryLotusCanvas";
 import content from "../../data/content.json";
 import { StaggerContainer, StaggerItem } from "../../components/ui/ZenMotion";
 import { luxuryMotion } from "../../styles/luxuryEffects";
 import { cx } from "../../utils/classNames";
 
+const StoryLotusCanvas = lazy(() =>
+  import("../../components/story/StoryLotusCanvas").then((module) => ({
+    default: module.StoryLotusCanvas,
+  })),
+);
+
 export default function StoryPage() {
   const [restartSignal, setRestartSignal] = useState(0);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const storyData = content.storyPage;
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const updatePreference = () => setPrefersReducedMotion(mediaQuery.matches);
+    updatePreference();
+    mediaQuery.addEventListener("change", updatePreference);
+    return () => mediaQuery.removeEventListener("change", updatePreference);
+  }, []);
 
   return (
     <div className="grid gap-10">
@@ -42,21 +56,43 @@ export default function StoryPage() {
 
         <div className="relative grid content-start gap-[0.9rem] [&>*]:sticky [&>*]:top-[6.4rem] max-[980px]:[&>*]:relative max-[980px]:[&>*]:top-auto">
           <div className="sticky top-[6.4rem] max-[980px]:relative max-[980px]:top-auto">
-            <StoryLotusCanvas
-              className="min-h-[39rem] max-[980px]:min-h-[30rem]"
-              restartSignal={restartSignal}
-            />
+            {prefersReducedMotion ? (
+              <figure className="m-0 min-h-[30rem] overflow-hidden rounded-[var(--radius-md)] border border-border bg-[var(--surface-paper)]">
+                <img
+                  src="/assets/products/petal-pack-optimized.jpg"
+                  alt="Senova Petal Pack trong vai trò hình ảnh thay thế cho hoạt cảnh hoa sen"
+                  className="h-full min-h-[30rem] w-full object-cover saturate-[0.86]"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </figure>
+            ) : (
+              <Suspense
+                fallback={
+                  <div className="grid min-h-[30rem] place-items-center rounded-[var(--radius-md)] border border-border bg-[var(--surface-paper)] text-text-muted">
+                    Đang dựng bông sen...
+                  </div>
+                }
+              >
+                <StoryLotusCanvas
+                  className="min-h-[39rem] max-[980px]:min-h-[30rem]"
+                  restartSignal={restartSignal}
+                />
+              </Suspense>
+            )}
           </div>
-          <div className="flex items-center justify-center">
-            <button
-              className={cx("inline-flex cursor-pointer items-center gap-[0.6rem] rounded-full border border-[rgba(255,250,240,0.12)] bg-[#fffaf00f] px-[0.85rem] py-2 text-text hover:bg-[#fffaf024]", luxuryMotion.button)}
-              aria-label="Khoi dong lai hoat canh"
-              onClick={() => setRestartSignal((s) => s + 1)}
-            >
-              <RotateCw className="h-4 w-4" />
-              <span className="text-[0.9rem] font-semibold">Khoi dong lai</span>
-            </button>
-          </div>
+          {!prefersReducedMotion ? (
+            <div className="flex items-center justify-center">
+              <button
+                className={cx("inline-flex min-h-11 cursor-pointer items-center gap-[0.6rem] rounded-[var(--radius-sm)] border border-border bg-transparent px-[0.85rem] py-2 text-text hover:bg-[var(--surface-tint)]", luxuryMotion.button)}
+                aria-label="Khởi động lại hoạt cảnh"
+                onClick={() => setRestartSignal((s) => s + 1)}
+              >
+                <RotateCw className="h-4 w-4" />
+                <span className="text-[0.9rem] font-semibold">Khởi động lại</span>
+              </button>
+            </div>
+          ) : null}
         </div>
       </section>
     </div>

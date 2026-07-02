@@ -1,0 +1,34 @@
+import { ArrowRight } from "lucide-react";
+import { DarkSection } from "../../../components/luxury/DarkSection";
+import { LuxuryButton } from "../../../components/luxury/LuxuryButton";
+import { SectionEyebrow } from "../../../components/luxury/SectionEyebrow";
+import type { LuxuryLandingCopy } from "../../../content/luxuryCopy";
+
+type FinalCTAProps = {
+  content: LuxuryLandingCopy["finalCta"];
+};
+
+export function FinalCTA({ content }: FinalCTAProps) {
+  return (
+    <DarkSection className="bg-[var(--senova-forest-black)]" innerClassName="py-6">
+      <div className="max-w-[46rem]">
+        <SectionEyebrow>{content.eyebrow}</SectionEyebrow>
+        <h2 className="mt-5 mb-0 font-display text-[clamp(2.6rem,7vw,5.7rem)] font-[420] leading-[1.02] text-text-inverse">
+          {content.title}
+        </h2>
+        <p className="mt-6 mb-0 max-w-[34rem] text-[1.04rem] leading-[1.8] text-[rgba(243,239,229,0.74)]">
+          {content.text}
+        </p>
+        <div className="mt-8 flex flex-wrap gap-5">
+          <LuxuryButton href={content.primary.href} variant="dark">
+            {content.primary.label}
+            <ArrowRight aria-hidden="true" className="h-4 w-4" />
+          </LuxuryButton>
+          <LuxuryButton href={content.secondary.href} variant="light">
+            {content.secondary.label}
+          </LuxuryButton>
+        </div>
+      </div>
+    </DarkSection>
+  );
+}
