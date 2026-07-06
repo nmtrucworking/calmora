@@ -45,8 +45,8 @@ export default function FeedbackPage({ product }: FeedbackPageProps) {
     const form = new FormData(event.currentTarget);
     const payload = Object.fromEntries(form.entries()) as Record<string, string>;
 
-    if (!payload.name || !payload.email || !payload.rating || !payload.comment) {
-      setError("Vui lòng điền tên, email, mức đánh giá và nội dung phản hồi.");
+    if (!payload.rating || !payload.comment) {
+      setError("Vui lòng chọn mức đánh giá và nhập nội dung phản hồi.");
       setIsSubmitting(false);
       return;
     }
@@ -104,12 +104,12 @@ export default function FeedbackPage({ product }: FeedbackPageProps) {
             </div>
             <div className={styles.inlineFields}>
               <div className={styles.fieldGroup}>
-                <label htmlFor="name">Tên của bạn</label>
-                <input id="name" name="name" autoComplete="name" required />
+                <label htmlFor="name">Tên của bạn <span className="text-text-soft font-normal text-[0.8em]">(Không bắt buộc)</span></label>
+                <input id="name" name="name" autoComplete="name" />
               </div>
               <div className={styles.fieldGroup}>
-                <label htmlFor="email">Email</label>
-                <input id="email" name="email" type="email" autoComplete="email" required />
+                <label htmlFor="email">Email <span className="text-text-soft font-normal text-[0.8em]">(Không bắt buộc)</span></label>
+                <input id="email" name="email" type="email" autoComplete="email" />
               </div>
             </div>
             <div className={styles.inlineFields}>

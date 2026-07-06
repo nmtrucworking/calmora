@@ -8,6 +8,7 @@ import { Link } from "../contexts/RouterContext";
 import { useRouter } from "../contexts/RouterState";
 import { cx } from "../utils/classNames";
 import styles from "./SiteLayout.module.css";
+import { AmbientSoundButton } from "../features/landing/sections/AmbientSoundButton";
 
 type SiteLayoutProps = {
   children: ReactNode;
@@ -127,6 +128,7 @@ export function SiteLayout({
             >
               {copy.preorder}
             </Link>
+            <AmbientSoundButton />
             <button
               className={cx(
                 "inline-flex h-11 min-w-16 items-center justify-center rounded-[var(--radius-sm)] border px-3 text-[0.74rem] font-[700] uppercase tracking-[0.12em]",
