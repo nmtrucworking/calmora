@@ -351,13 +351,15 @@ export function CheckoutPage() {
   const { language } = useLanguage();
   const { text } = useCommerceCopy();
   const intent = new URLSearchParams(search).get("intent") ?? "preorder";
+  const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setError("");
     setIsSubmitting(true);
     const form = new FormData(event.currentTarget);
-    await submitForm("pre-order", {
+    const result = await submitForm("pre-order", {
       name: String(form.get("name") ?? ""),
       email: String(form.get("email") ?? ""),
       phone: String(form.get("phone") ?? ""),
@@ -365,6 +367,13 @@ export function CheckoutPage() {
       notes: String(form.get("notes") ?? ""),
       itemCount: items.length,
     });
+    setIsSubmitting(false);
+
+    if (!result.success) {
+      setError(result.error?.message ?? text.ui.checkoutSubmitError);
+      return;
+    }
+
     clearBag();
     navigate("/checkout/thank-you");
   };
@@ -402,6 +411,11 @@ export function CheckoutPage() {
             <span className={eyebrowClass}>{text.ui.notesLabel}</span>
             <textarea className={cx(fieldClass, "min-h-36 resize-y")} name="notes" placeholder={text.ui.notesPlaceholder} />
           </label>
+          {error ? (
+            <p className="m-0 rounded-lg border border-[rgba(185,86,114,0.26)] bg-[rgba(185,86,114,0.08)] px-4 py-3 text-[0.9rem] font-bold text-accent-strong" role="alert">
+              {error}
+            </p>
+          ) : null}
           <button className={primaryButtonClass} type="submit" disabled={isSubmitting}>
             {isSubmitting ? text.ui.submitting : text.ui.submitInquiry}
           </button>

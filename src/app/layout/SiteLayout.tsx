@@ -76,6 +76,7 @@ export function SiteLayout({
             isActive && activeNavClass,
           )}
           onClick={() => setIsMenuOpen(false)}
+          tabIndex={variant === "mobile" && !isMenuOpen ? -1 : undefined}
         >
           {item.label}
         </Link>
@@ -162,9 +163,10 @@ export function SiteLayout({
 
         <div
           className={cx(
-            "pointer-events-none fixed inset-x-0 top-[4.75rem] hidden max-h-[calc(100svh-4.75rem)] -translate-y-[0.6rem] overflow-y-auto border-t border-border bg-[var(--surface)] p-4 opacity-0 shadow-brand-md transition duration-200 max-[900px]:block",
-            isMenuOpen && "pointer-events-auto translate-y-0 opacity-100",
+            "fixed inset-x-0 top-[4.75rem] hidden max-h-[calc(100svh-4.75rem)] -translate-y-[0.6rem] overflow-y-auto border-t border-border bg-[var(--surface)] p-4 opacity-0 shadow-brand-md transition duration-200 max-[900px]:block",
+            isMenuOpen ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none",
           )}
+          aria-hidden={!isMenuOpen}
           id="mobile-navigation"
         >
           <nav className="grid gap-3" aria-label={copy.mobileNavAria}>
@@ -173,6 +175,7 @@ export function SiteLayout({
               href="/dat-truoc"
               className="inline-flex min-h-11 items-center justify-center rounded-[var(--radius-sm)] border border-primary bg-primary font-[650] !text-on-primary no-underline"
               onClick={() => setIsMenuOpen(false)}
+              tabIndex={isMenuOpen ? undefined : -1}
             >
               {copy.preorder}
             </Link>
