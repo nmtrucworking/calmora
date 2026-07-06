@@ -131,12 +131,12 @@ export default function ProductsPage() {
                       <span className="text-[0.72rem] font-[650] uppercase tracking-[0.22em] text-accent-gold">
                         {product.role}
                       </span>
-                      <h2 className="mt-3 mb-0 font-display text-[clamp(1.7rem,3vw,2.8rem)] font-[430] leading-[1.04] text-primary-strong">
+                      <h2 className="mt-3 mb-0 font-display text-[clamp(1.7rem,3vw,2.8rem)] font-[430] leading-[1.04] text-text">
                         {product.name}
                       </h2>
                       <p className="mt-4 mb-0 leading-[1.7] text-text-muted">{product.shortDescription}</p>
                     </div>
-                    <span className="inline-flex items-center gap-2 text-[0.86rem] font-[650] text-primary-strong">
+                    <span className="inline-flex items-center gap-2 text-[0.86rem] font-[650] text-[var(--accent)]">
                       {copy.explore}
                       <ArrowRight aria-hidden="true" className="h-4 w-4" />
                     </span>

@@ -86,7 +86,7 @@ function ProductNotFound() {
     <EditorialSection>
       <div className="mx-auto max-w-[44rem] text-center">
         <SectionEyebrow>{copy.products}</SectionEyebrow>
-        <h1 className="mt-4 mb-0 font-display text-[clamp(2.4rem,6vw,4.8rem)] font-[430] leading-[1.02] text-primary-strong">
+        <h1 className="mt-4 mb-0 font-display text-[clamp(2.4rem,6vw,4.8rem)] font-[430] leading-[1.02] text-text">
           {copy.notFoundTitle}
         </h1>
         <p className="mt-5 mb-0 leading-[1.75] text-text-muted">{copy.notFoundText}</p>
@@ -209,7 +209,7 @@ export default function ProductDetailPage({ product: baseProduct }: ProductDetai
             <ul className="mt-6 mb-0 grid list-none gap-4 p-0">
               {product.includedItems.map((item) => (
                 <li key={item} className="grid grid-cols-[1.25rem_minmax(0,1fr)] gap-3 text-text-muted">
-                  <Check aria-hidden="true" className="mt-1 h-4 w-4 text-primary" />
+                  <Check aria-hidden="true" className="mt-1 h-4 w-4 text-[var(--accent)]" />
                   <span>{item}</span>
                 </li>
               ))}
@@ -221,7 +221,7 @@ export default function ProductDetailPage({ product: baseProduct }: ProductDetai
             <div className="mt-6 grid gap-5">
               {product.materialNotes.map((note) => (
                 <article key={note.title} className="border-t border-border pt-4">
-                  <h2 className="m-0 font-display text-[1.55rem] font-[430] text-primary-strong">
+                  <h2 className="m-0 font-display text-[1.55rem] font-[430] text-[var(--accent)]">
                     {note.title}
                   </h2>
                   <p className="mt-2 mb-0 leading-[1.7] text-text-muted">{note.text}</p>
@@ -242,7 +242,7 @@ export default function ProductDetailPage({ product: baseProduct }: ProductDetai
                 {String(index + 1).padStart(2, "0")}
               </span>
               <div>
-                <h2 className="m-0 text-[1.08rem] font-[650] text-primary-strong">{step.title}</h2>
+                <h2 className="m-0 text-[1.08rem] font-[650] text-[var(--accent)]">{step.title}</h2>
                 <p className="mt-3 mb-0 text-[0.95rem] leading-[1.7] text-text-muted">{step.text}</p>
               </div>
             </article>
@@ -255,7 +255,7 @@ export default function ProductDetailPage({ product: baseProduct }: ProductDetai
           <QrCode aria-hidden="true" className="h-10 w-10 text-accent-gold" />
           <div>
             <SectionEyebrow>{copy.culturalStory}</SectionEyebrow>
-            <h2 className="mt-3 mb-0 font-display text-[clamp(1.8rem,4vw,3rem)] font-[430] text-primary-strong">
+            <h2 className="mt-3 mb-0 font-display text-[clamp(1.8rem,4vw,3rem)] font-[430] text-text">
               {copy.qrTitle}
             </h2>
             <p className="mt-3 mb-0 leading-[1.75] text-text-muted">{copy.qrText}</p>
@@ -296,7 +296,7 @@ export default function ProductDetailPage({ product: baseProduct }: ProductDetai
                 />
                 <div className="p-5">
                   <SectionEyebrow>{related.role}</SectionEyebrow>
-                  <h2 className="mt-3 mb-0 font-display text-[clamp(1.6rem,3vw,2.4rem)] font-[430] text-primary-strong">
+                  <h2 className="mt-3 mb-0 font-display text-[clamp(1.6rem,3vw,2.4rem)] font-[430] text-text">
                     {related.name}
                   </h2>
                   <p className="mt-3 mb-0 leading-[1.7] text-text-muted">{related.shortDescription}</p>
