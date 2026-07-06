@@ -1,6 +1,6 @@
-import { DarkSection } from "../../../components/luxury/DarkSection";
-import { ProductStatement } from "../../../components/luxury/ProductStatement";
-import type { LuxuryLandingCopy } from "../../../content/luxuryCopy";
+import { DarkSection } from "@shared/components/luxury/DarkSection";
+import { ProductStatement } from "@shared/components/luxury/ProductStatement";
+import type { LuxuryLandingCopy } from "@features/content/luxuryCopy";
 
 type CulturalMaterialProps = {
   content: LuxuryLandingCopy["culture"];

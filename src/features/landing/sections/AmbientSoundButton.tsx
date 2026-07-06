@@ -1,8 +1,8 @@
 import { Volume2, VolumeX } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { useLanguage } from "../../../contexts/LanguageContext";
-import { luxuryMotion } from "../../../styles/luxuryEffects";
-import { cx } from "../../../utils/classNames";
+import { useLanguage } from "@app/providers/LanguageContext";
+import { luxuryMotion } from "@shared/styles/luxuryEffects";
+import { cx } from "@shared/utils/classNames";
 
 type AudioWindow = Window &
   typeof globalThis & {

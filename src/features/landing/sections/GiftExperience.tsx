@@ -1,9 +1,9 @@
 import { ArrowRight } from "lucide-react";
-import { DarkSection } from "../../../components/luxury/DarkSection";
-import { ImageReveal } from "../../../components/luxury/ImageReveal";
-import { LuxuryButton } from "../../../components/luxury/LuxuryButton";
-import { ProductStatement } from "../../../components/luxury/ProductStatement";
-import type { LuxuryLandingCopy } from "../../../content/luxuryCopy";
+import { DarkSection } from "@shared/components/luxury/DarkSection";
+import { ImageReveal } from "@shared/components/luxury/ImageReveal";
+import { LuxuryButton } from "@shared/components/luxury/LuxuryButton";
+import { ProductStatement } from "@shared/components/luxury/ProductStatement";
+import type { LuxuryLandingCopy } from "@features/content/luxuryCopy";
 
 type GiftExperienceProps = {
   content: LuxuryLandingCopy["gift"];

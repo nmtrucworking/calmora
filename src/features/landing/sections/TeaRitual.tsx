@@ -1,10 +1,10 @@
-import { EditorialSection } from "../../../components/luxury/EditorialSection";
-import { ImageReveal } from "../../../components/luxury/ImageReveal";
-import { ProductStatement } from "../../../components/luxury/ProductStatement";
-import { RitualStep } from "../../../components/luxury/RitualStep";
-import type { LuxuryLandingCopy } from "../../../content/luxuryCopy";
-import { productLuxuryCopy } from "../../../content/luxuryCopy";
-import type { Language } from "../../../contexts/LanguageContext";
+import { EditorialSection } from "@shared/components/luxury/EditorialSection";
+import { ImageReveal } from "@shared/components/luxury/ImageReveal";
+import { ProductStatement } from "@shared/components/luxury/ProductStatement";
+import { RitualStep } from "@shared/components/luxury/RitualStep";
+import type { LuxuryLandingCopy } from "@features/content/luxuryCopy";
+import { productLuxuryCopy } from "@features/content/luxuryCopy";
+import type { Language } from "@app/providers/LanguageContext";
 
 type TeaRitualProps = {
   content: LuxuryLandingCopy["ritual"];

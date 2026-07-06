@@ -51,16 +51,10 @@ apps/frontend
 +-- public/                 Static assets served by Vite
 |   +-- assets/products/    Product imagery
 +-- src/
-|   +-- components/         Shared UI, branding, and story components
-|   +-- constants/          Brand constants derived from content data
-|   +-- contexts/           Lightweight router context
-|   +-- data/               Site content JSON
-|   +-- features/           Feature-specific landing and product modules
-|   +-- layouts/            Landing and site layouts
-|   +-- pages/              Route-level page components
-|   +-- routes/             App routing and route metadata
-|   +-- styles/             Theme tokens
-|   +-- utils/              Shared helpers
+|   +-- app/                App entry, providers, layout, and lightweight router
+|   +-- assets/             Imported Vite assets
+|   +-- features/           Feature-scoped pages, sections, content, and domain data
+|   +-- shared/             Shared UI, utilities, styles, analytics, and API helpers
 +-- docs/                   Frontend documentation
 +-- vite.config.ts          Vite configuration
 +-- vercel.json             Vercel deployment configuration
@@ -68,7 +62,7 @@ apps/frontend
 
 ## Routes
 
-The app uses a lightweight client-side router instead of React Router. Main routes are defined through `src/routes/AppRouter.tsx` and route metadata is generated from `src/data/content.json`.
+The app uses a lightweight client-side router instead of React Router. Main routes are defined through `src/app/router/AppRouter.tsx`, and shared route/content metadata lives in `src/features/content`.
 
 - `/` - landing experience
 - `/about` - about page
@@ -78,9 +72,9 @@ The app uses a lightweight client-side router instead of React Router. Main rout
 
 ## Content And Branding
 
-Most brand copy and navigation data lives in `src/data/content.json`. Shared brand exports are centralized in `src/constants/brand.ts`, so update content data first when changing brand name, tagline, navigation, or footer links.
+Most brand copy, navigation data, SEO metadata, commerce copy, and localized content lives in `src/features/content`. Shared brand exports are centralized in `src/features/content/brand.ts`, so update content data first when changing brand name, tagline, navigation, or footer links.
 
-Static brand assets and product images live under `public/`. Product data for the products page lives in `src/features/products/data/products.ts`.
+Static brand assets and product images live under `public/`. Imported Vite assets live in `src/assets`. Product data for product-facing features lives in `src/features/products/data/products.ts`.
 
 ## Deployment
 

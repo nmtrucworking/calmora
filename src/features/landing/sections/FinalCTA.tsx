@@ -1,8 +1,8 @@
 import { ArrowRight } from "lucide-react";
-import { DarkSection } from "../../../components/luxury/DarkSection";
-import { LuxuryButton } from "../../../components/luxury/LuxuryButton";
-import { SectionEyebrow } from "../../../components/luxury/SectionEyebrow";
-import type { LuxuryLandingCopy } from "../../../content/luxuryCopy";
+import { DarkSection } from "@shared/components/luxury/DarkSection";
+import { LuxuryButton } from "@shared/components/luxury/LuxuryButton";
+import { SectionEyebrow } from "@shared/components/luxury/SectionEyebrow";
+import type { LuxuryLandingCopy } from "@features/content/luxuryCopy";
 
 type FinalCTAProps = {
   content: LuxuryLandingCopy["finalCta"];

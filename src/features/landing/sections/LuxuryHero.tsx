@@ -1,7 +1,7 @@
 import { ArrowRight } from "lucide-react";
-import { LuxuryButton } from "../../../components/luxury/LuxuryButton";
-import { SectionEyebrow } from "../../../components/luxury/SectionEyebrow";
-import type { LuxuryLandingCopy } from "../../../content/luxuryCopy";
+import { LuxuryButton } from "@shared/components/luxury/LuxuryButton";
+import { SectionEyebrow } from "@shared/components/luxury/SectionEyebrow";
+import type { LuxuryLandingCopy } from "@features/content/luxuryCopy";
 
 type LuxuryHeroProps = {
   content: LuxuryLandingCopy["hero"];

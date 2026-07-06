@@ -2,7 +2,7 @@ import { Html } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { useScroll } from "framer-motion";
 import { Suspense, useRef } from "react";
-import { cx } from "../../../utils/classNames";
+import { cx } from "@shared/utils/classNames";
 import { LotusScene } from "./LotusScene";
 import { ScrollBinder } from "./ScrollBinder";
 

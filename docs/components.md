@@ -1,12 +1,15 @@
-# Components — Frontend
+# Components - Frontend
 
 Shared components
-- `src/components/branding/BrandMark` — small brand mark used in headers and footers.
-- `src/components/layout/SiteFrame` — site-level frame: header, content column, footer.
-- `src/components/ui/SectionHeading` — eyebrow / title / description block used as section hero.
-- `src/components/ui/InfoCard` — compact informative card used across site pages.
-- `src/components/story/StoryLotusCanvas` — wrapper to reuse the 3D lotus scene for the `StoryPage` with an autoplay cycle. It accepts `restartSignal?: number` to trigger a replay when the prop increments.
+- `src/shared/components/branding/BrandMark` - small brand mark used in headers and footers.
+- `src/app/layout/SiteLayout` - site-level frame with header, content area, footer, and ambient sound control.
+- `src/shared/components/ui/SectionHeading` - eyebrow, title, and description block used as a section heading.
+- `src/shared/components/ui/InfoCard` - compact informative card used across route pages.
+- `src/shared/components/luxury` - reusable editorial, button, image reveal, divider, and statement primitives for the luxury visual system.
+- `src/shared/components/story/StoryLotusCanvas` - wrapper that reuses the landing 3D lotus scene for the story page.
 
 Guidelines
-- Avoid modifying `src/features/landing/three` unless you must change the model itself; prefer wrapping or controlling it via supplied refs.
-- Keep styles in `src/styles/theme.css` for global tokens; component modules should only add layout and compositional styles.
+- Put reusable UI in `src/shared/components`; put route-specific UI next to its feature under `src/features/<feature>`.
+- Avoid modifying `src/features/landing/three` unless the model itself must change.
+- Keep global tokens and reusable motion/style helpers in `src/shared/styles`.
+- Component CSS modules should stay beside their component and only handle local layout or composition.

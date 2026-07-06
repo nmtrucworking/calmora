@@ -1,7 +1,7 @@
-import { EditorialSection } from "../../../components/luxury/EditorialSection";
-import { ImageReveal } from "../../../components/luxury/ImageReveal";
-import { ProductStatement } from "../../../components/luxury/ProductStatement";
-import type { LuxuryLandingCopy } from "../../../content/luxuryCopy";
+import { EditorialSection } from "@shared/components/luxury/EditorialSection";
+import { ImageReveal } from "@shared/components/luxury/ImageReveal";
+import { ProductStatement } from "@shared/components/luxury/ProductStatement";
+import type { LuxuryLandingCopy } from "@features/content/luxuryCopy";
 
 type SignatureProductProps = {
   content: LuxuryLandingCopy["signature"];

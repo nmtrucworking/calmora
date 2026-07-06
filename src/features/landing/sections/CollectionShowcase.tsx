@@ -1,10 +1,10 @@
 import { ArrowRight } from "lucide-react";
-import { EditorialSection } from "../../../components/luxury/EditorialSection";
-import { LuxuryButton } from "../../../components/luxury/LuxuryButton";
-import { ProductStatement } from "../../../components/luxury/ProductStatement";
-import { productLuxuryCopy, orderedLuxuryProducts, type LuxuryLandingCopy } from "../../../content/luxuryCopy";
-import type { Language } from "../../../contexts/LanguageContext";
-import { Link } from "../../../contexts/RouterContext";
+import { EditorialSection } from "@shared/components/luxury/EditorialSection";
+import { LuxuryButton } from "@shared/components/luxury/LuxuryButton";
+import { ProductStatement } from "@shared/components/luxury/ProductStatement";
+import { productLuxuryCopy, orderedLuxuryProducts, type LuxuryLandingCopy } from "@features/content/luxuryCopy";
+import type { Language } from "@app/providers/LanguageContext";
+import { Link } from "@app/router/RouterContext";
 
 type CollectionShowcaseProps = {
   content: LuxuryLandingCopy["collection"];

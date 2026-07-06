@@ -15,6 +15,12 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "resolveJsonModule": true,
+    "paths": {
+      "@app/*": ["./src/app/*"],
+      "@assets/*": ["./src/assets/*"],
+      "@features/*": ["./src/features/*"],
+      "@shared/*": ["./src/shared/*"]
+    },
 
     /* Linting */
     "noUnusedLocals": true,
