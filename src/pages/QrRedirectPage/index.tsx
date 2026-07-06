@@ -18,14 +18,24 @@ export default function QrRedirectPage({ code }: QrRedirectPageProps) {
   useEffect(() => {
     if (!record?.active) return;
 
+    const batch = record.batchCode ?? normalizedCode;
+    const contentViewed = `${record.productSlug}-scan`;
+    const searchParams = new URLSearchParams({
+      batch,
+      source: "qr",
+      content: contentViewed,
+    });
+
     trackEvent({
       eventName: "qr_scan",
       productSlug: record.productSlug,
-      batchCode: record.batchCode ?? normalizedCode,
+      batchCode: batch,
+      source: "qr",
+      contentViewed,
     });
 
     const timer = window.setTimeout(() => {
-      navigate(`${record.destination}?batch=${record.batchCode ?? normalizedCode}`);
+      navigate(`${record.destination}?${searchParams.toString()}`);
     }, 520);
 
     return () => window.clearTimeout(timer);

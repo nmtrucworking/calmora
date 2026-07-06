@@ -6,6 +6,7 @@ export type AnalyticsEvent = {
   productSlug?: ProductId;
   batchCode?: string;
   source?: string;
+  contentViewed?: string;
   timestamp: string;
 };
 

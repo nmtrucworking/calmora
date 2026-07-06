@@ -290,7 +290,7 @@ function updateMetadata(pathname: string, language: Language) {
       ? getProductBySlug(productSlug)
       : undefined;
   const product = baseProduct ? getLocalizedProduct(baseProduct, language) : undefined;
-  const fallbackSeo: SeoContent = product?.seo ?? pageSeo[pathname] ?? pageSeo["/404"];
+  const fallbackSeo: SeoContent = pageSeo[pathname] ?? product?.seo ?? pageSeo["/404"];
   const seo = getLocalizedSeo(pathname, fallbackSeo, language);
   const canonicalPath = pageSeo[pathname] || commerceText[language].seo[pathname] || product ? pathname : "/404";
   const canonical = `${canonicalBaseUrl}${canonicalPath === "/" ? "" : canonicalPath}`;

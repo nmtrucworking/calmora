@@ -51,6 +51,21 @@ export const pageSeo: Record<string, SeoContent> = {
     description:
       "Khám phá Senova Classic, Senova Petal Pack và Senova Gift Set trong cùng một hệ trải nghiệm trà sen.",
   },
+  "/experience/classic": {
+    title: "Senova Classic QR | Giữ một khoảng lặng mỗi ngày",
+    description:
+      "Trang QR Senova Classic với câu chuyện văn hóa, hướng dẫn pha trà hằng ngày và phản hồi follow-up theo SKU hoặc mã lô.",
+  },
+  "/experience/petal-pack": {
+    title: "Senova Petal Pack QR | Mở một cánh sen",
+    description:
+      "Trang QR Senova Petal Pack với câu chuyện mở cánh sen, hướng dẫn trải nghiệm giác quan và phản hồi follow-up theo SKU hoặc mã lô.",
+  },
+  "/experience/gift-set": {
+    title: "Senova Gift Set QR | Một món quà có câu chuyện",
+    description:
+      "Trang QR Senova Gift Set dành cho người nhận quà, kết nối câu chuyện Giữ - Mở - Trao, hướng dẫn bắt đầu và phản hồi follow-up.",
+  },
   "/ritual": {
     title: "Nghi thức thưởng trà Senova | Calmora",
     description:
