@@ -1,6 +1,7 @@
 import { EditorialSection } from "@shared/components/luxury/EditorialSection";
 import { ImageReveal } from "@shared/components/luxury/ImageReveal";
 import { ProductStatement } from "@shared/components/luxury/ProductStatement";
+import { StaggerContainer, StaggerItem } from "@shared/components/ui/ZenMotion";
 import type { LuxuryLandingCopy } from "@features/content/luxuryCopy";
 
 type SignatureProductProps = {
@@ -9,7 +10,7 @@ type SignatureProductProps = {
 
 export function SignatureProduct({ content }: SignatureProductProps) {
   return (
-    <EditorialSection>
+    <EditorialSection className="bg-[var(--page-bg)]">
       <div className="grid grid-cols-[minmax(0,1.15fr)_minmax(20rem,0.85fr)] items-center gap-[clamp(2rem,6vw,5rem)] max-[900px]:grid-cols-1">
         <ImageReveal
           src="/assets/products/petal-pack-optimized.jpg"
@@ -20,9 +21,9 @@ export function SignatureProduct({ content }: SignatureProductProps) {
         />
         <div>
           <ProductStatement eyebrow={content.eyebrow} title={content.title} text={content.text} />
-          <div className="mt-8 grid gap-3">
+          <StaggerContainer className="mt-8 grid gap-3" staggerDelay={0.08}>
             {content.steps.map((step, index) => (
-              <div
+              <StaggerItem
                 key={step}
                 className="grid grid-cols-[2.5rem_minmax(0,1fr)] items-center border-t border-border py-3"
               >
@@ -30,9 +31,9 @@ export function SignatureProduct({ content }: SignatureProductProps) {
                   {String(index + 1).padStart(2, "0")}
                 </span>
                 <span className="text-[1rem] text-text-muted">{step}</span>
-              </div>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
         </div>
       </div>
     </EditorialSection>

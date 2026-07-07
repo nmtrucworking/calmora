@@ -2,7 +2,8 @@ import { lazy, Suspense, useEffect, useMemo, useRef, useState, type ReactNode } 
 import { RouterProvider } from "@app/router/RouterContext";
 import { useRouter } from "@app/router/RouterState";
 import { SiteLayout } from "@app/layout/SiteLayout";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, MotionConfig, motion } from "framer-motion";
+import { pageTransitionVariants } from "@shared/motion/animationSystem";
 import { preloadImages } from "@shared/utils/imagePreload";
 import { getProductBySlug } from "@features/products/data/products";
 import { collections } from "@features/content/commerceContent";
@@ -415,10 +416,10 @@ function AppRoutes() {
         <AnimatePresence initial={false}>
           <motion.div
             key={pathname}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.24, ease: "easeOut" }}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            variants={pageTransitionVariants}
             style={{ minHeight: "100vh" }}
           >
             <FocusSections enabled={normalizedPath !== "/products"}>{pageComponent}</FocusSections>
@@ -437,9 +438,11 @@ function AppRoutes() {
 
 export default function AppRouter() {
   return (
-    <RouterProvider>
-      <AppRoutes />
-    </RouterProvider>
+    <MotionConfig reducedMotion="user">
+      <RouterProvider>
+        <AppRoutes />
+      </RouterProvider>
+    </MotionConfig>
   );
 }
 

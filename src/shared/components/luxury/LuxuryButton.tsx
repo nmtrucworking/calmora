@@ -12,7 +12,7 @@ type LuxuryButtonProps = {
 };
 
 const baseClass =
-  "inline-flex min-h-11 items-center justify-center gap-2 text-[0.88rem] font-[650] no-underline transition-[background,border-color,color,box-shadow] duration-[420ms] ease-[var(--ease-luxury)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(175,149,88,0.42)] focus-visible:ring-offset-2 focus-visible:ring-offset-page-bg";
+  "inline-flex min-h-11 items-center justify-center gap-2 text-[0.88rem] font-[650] no-underline transition-[background,border-color,color,box-shadow,transform,gap] duration-[420ms] ease-[var(--ease-luxury)] hover:-translate-y-0.5 hover:gap-3 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(175,149,88,0.42)] focus-visible:ring-offset-2 focus-visible:ring-offset-page-bg motion-reduce:transition-none motion-reduce:hover:translate-y-0";
 
 const variantClass = {
   primary:

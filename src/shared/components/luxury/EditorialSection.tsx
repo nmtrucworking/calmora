@@ -1,4 +1,6 @@
 import type { ReactNode } from "react";
+import { motion } from "framer-motion";
+import { motionViewport, sectionRevealVariants } from "@shared/motion/animationSystem";
 import { cx } from "@shared/utils/classNames";
 
 type EditorialSectionProps = {
@@ -17,8 +19,12 @@ export function EditorialSection({
   innerClassName,
 }: EditorialSectionProps) {
   return (
-    <section
+    <motion.section
       id={id}
+      initial="hidden"
+      whileInView="visible"
+      viewport={motionViewport}
+      variants={sectionRevealVariants}
       className={cx(
         "relative px-6 py-[clamp(5rem,10vw,9rem)] max-[760px]:px-4 max-[760px]:py-20",
         dark && "bg-[var(--surface-dark)] text-text-inverse",
@@ -26,6 +32,6 @@ export function EditorialSection({
       )}
     >
       <div className={cx("mx-auto w-full max-w-[var(--page-max)]", innerClassName)}>{children}</div>
-    </section>
+    </motion.section>
   );
 }

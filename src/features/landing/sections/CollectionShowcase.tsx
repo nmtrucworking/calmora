@@ -2,6 +2,7 @@ import { ArrowRight } from "lucide-react";
 import { EditorialSection } from "@shared/components/luxury/EditorialSection";
 import { LuxuryButton } from "@shared/components/luxury/LuxuryButton";
 import { ProductStatement } from "@shared/components/luxury/ProductStatement";
+import { StaggerContainer, StaggerItem } from "@shared/components/ui/ZenMotion";
 import { productLuxuryCopy, orderedLuxuryProducts, type LuxuryLandingCopy } from "@features/content/luxuryCopy";
 import type { Language } from "@app/providers/LanguageContext";
 import { Link } from "@app/router/RouterContext";
@@ -13,7 +14,7 @@ type CollectionShowcaseProps = {
 
 export function CollectionShowcase({ content, language }: CollectionShowcaseProps) {
   return (
-    <EditorialSection>
+    <EditorialSection className="bg-[var(--page-bg)]">
       <div className="grid gap-12">
         <div className="grid grid-cols-[minmax(0,0.95fr)_minmax(0,1fr)] gap-10 max-[900px]:grid-cols-1">
           <ProductStatement eyebrow={content.eyebrow} title={content.title} text={content.text} />
@@ -25,45 +26,49 @@ export function CollectionShowcase({ content, language }: CollectionShowcaseProp
           </div>
         </div>
 
-        <div className="grid grid-cols-[1.35fr_0.82fr_0.82fr] gap-5 max-[960px]:grid-cols-1">
+        <StaggerContainer
+          className="grid grid-cols-[1.35fr_0.82fr_0.82fr] gap-5 max-[960px]:grid-cols-1"
+          staggerDelay={0.12}
+        >
           {orderedLuxuryProducts.map((productId) => {
             const product = productLuxuryCopy[language][productId];
             const isSignature = productId === "petal-pack";
 
             return (
-              <Link
-                key={productId}
-                href={`/products/${productId}`}
-                className="group grid min-h-[30rem] overflow-hidden border border-border bg-[var(--surface-paper)] text-text no-underline shadow-[var(--shadow-luxury-sm)]"
-              >
-                <div className={isSignature ? "aspect-[16/11]" : "aspect-[4/3]"}>
-                  <img
-                    src={product.image}
-                    alt={product.heroAlt}
-                    className="h-full w-full object-cover saturate-[0.86] transition duration-[900ms] ease-[var(--ease-luxury)] group-hover:scale-[1.015]"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-                <div className="grid content-between gap-8 p-6">
-                  <div>
-                    <span className="text-[0.72rem] font-[650] uppercase tracking-[0.22em] text-accent-strong">
-                      {product.role}
-                    </span>
-                    <h3 className="mt-3 mb-0 font-display text-[clamp(1.7rem,3vw,2.8rem)] font-[430] leading-[1.04] text-primary-strong">
-                      {product.name}
-                    </h3>
-                    <p className="mt-4 mb-0 leading-[1.7] text-text-muted">{product.shortDescription}</p>
+              <StaggerItem key={productId}>
+                <Link
+                  href={`/products/${productId}`}
+                  className="group grid min-h-[30rem] overflow-hidden border border-border bg-[var(--surface-paper)] text-text no-underline shadow-[var(--shadow-luxury-sm)] transition-[border-color,box-shadow,transform] duration-[700ms] ease-[var(--ease-luxury)] hover:-translate-y-1 hover:border-border-strong hover:shadow-[var(--shadow-luxury-md)] motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+                >
+                  <div className={isSignature ? "aspect-[16/11]" : "aspect-[4/3]"}>
+                    <img
+                      src={product.image}
+                      alt={product.heroAlt}
+                      className="h-full w-full object-cover saturate-[0.86] transition duration-[900ms] ease-[var(--ease-luxury)] group-hover:scale-[1.015] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                      loading="lazy"
+                      decoding="async"
+                    />
                   </div>
-                  <span className="inline-flex items-center gap-2 text-[0.86rem] font-[650] text-primary-strong">
-                    {product.secondaryAction.label}
-                    <ArrowRight aria-hidden="true" className="h-4 w-4" />
-                  </span>
-                </div>
-              </Link>
+                  <div className="grid content-between gap-8 p-6">
+                    <div>
+                      <span className="text-[0.72rem] font-[650] uppercase tracking-[0.22em] text-accent-strong">
+                        {product.role}
+                      </span>
+                      <h3 className="mt-3 mb-0 font-display text-[clamp(1.7rem,3vw,2.8rem)] font-[430] leading-[1.04] text-primary-strong">
+                        {product.name}
+                      </h3>
+                      <p className="mt-4 mb-0 leading-[1.7] text-text-muted">{product.shortDescription}</p>
+                    </div>
+                    <span className="inline-flex items-center gap-2 text-[0.86rem] font-[650] text-primary-strong transition-[gap] duration-300 ease-[var(--ease-luxury)] group-hover:gap-3 motion-reduce:transition-none">
+                      {product.secondaryAction.label}
+                      <ArrowRight aria-hidden="true" className="h-4 w-4" />
+                    </span>
+                  </div>
+                </Link>
+              </StaggerItem>
             );
           })}
-        </div>
+        </StaggerContainer>
       </div>
     </EditorialSection>
   );

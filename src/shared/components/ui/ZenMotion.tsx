@@ -1,6 +1,13 @@
 import { type ReactNode } from "react";
 import { motion } from "framer-motion";
-import { luxuryEase } from "@shared/styles/luxuryEffects";
+import {
+  fadeVariants,
+  motionViewport,
+  revealVariants,
+  staggerVariants,
+  transition,
+  wordRevealVariants,
+} from "@shared/motion/animationSystem";
 
 type BaseProps = {
   children: ReactNode;
@@ -12,10 +19,16 @@ type BaseProps = {
 export function FadeIn({ children, delay = 0, duration = 1.15, className }: BaseProps) {
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true, margin: "-10%" }}
-      transition={{ duration, delay, ease: luxuryEase }}
+      initial="hidden"
+      whileInView="visible"
+      viewport={motionViewport}
+      variants={{
+        ...fadeVariants,
+        visible: {
+          ...fadeVariants.visible,
+          transition: { ...transition.reveal, duration, delay },
+        },
+      }}
       className={className}
     >
       {children}
@@ -26,10 +39,16 @@ export function FadeIn({ children, delay = 0, duration = 1.15, className }: Base
 export function SlideUp({ children, delay = 0, duration = 1.2, className }: BaseProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 16, filter: "blur(3px)" }}
-      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-      viewport={{ once: true, margin: "-10%" }}
-      transition={{ duration, delay, ease: luxuryEase }}
+      initial="hidden"
+      whileInView="visible"
+      viewport={motionViewport}
+      variants={{
+        ...revealVariants,
+        visible: {
+          ...revealVariants.visible,
+          transition: { ...transition.reveal, duration, delay },
+        },
+      }}
       className={className}
     >
       {children}
@@ -54,16 +73,8 @@ export function StaggerContainer({
     <motion.div
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: "-10%" }}
-      variants={{
-        hidden: {},
-        visible: {
-          transition: {
-            delayChildren: delay,
-            staggerChildren: staggerDelay,
-          },
-        },
-      }}
+      viewport={motionViewport}
+      variants={staggerVariants(delay, staggerDelay)}
       className={className}
     >
       {children}
@@ -74,18 +85,7 @@ export function StaggerContainer({
 export function StaggerItem({ children, className }: { children: ReactNode; className?: string }) {
   return (
     <motion.div
-      variants={{
-        hidden: { opacity: 0, y: 16, filter: "blur(3px)" },
-        visible: {
-          opacity: 1,
-          y: 0,
-          filter: "blur(0px)",
-          transition: {
-            duration: 0.95,
-            ease: luxuryEase,
-          },
-        },
-      }}
+      variants={revealVariants}
       className={className}
     >
       {children}
@@ -106,30 +106,15 @@ export function TextReveal({ text, delay = 0, className }: TextRevealProps) {
     <motion.span
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: "-10%" }}
-      variants={{
-        hidden: {},
-        visible: {
-          transition: {
-            delayChildren: delay,
-            staggerChildren: 0.045,
-          },
-        },
-      }}
+      viewport={motionViewport}
+      variants={staggerVariants(delay, 0.045)}
       className={className}
       style={{ display: "inline-block" }}
     >
       {words.map((word, idx) => (
         <span key={idx} style={{ display: "inline-block", overflow: "hidden", marginRight: "0.25em" }}>
           <motion.span
-            variants={{
-              hidden: { y: "88%", opacity: 0.01 },
-              visible: {
-                y: 0,
-                opacity: 1,
-                transition: { duration: 0.92, ease: luxuryEase },
-              },
-            }}
+            variants={wordRevealVariants}
             style={{ display: "inline-block" }}
           >
             {word}
