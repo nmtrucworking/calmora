@@ -26,7 +26,7 @@ export function SignatureProduct({ content }: SignatureProductProps) {
                 key={step}
                 className="grid grid-cols-[2.5rem_minmax(0,1fr)] items-center border-t border-border py-3"
               >
-                <span className="font-display text-[1.35rem] text-accent-gold">
+                <span className="font-display text-[1.35rem] text-accent-strong">
                   {String(index + 1).padStart(2, "0")}
                 </span>
                 <span className="text-[1rem] text-text-muted">{step}</span>

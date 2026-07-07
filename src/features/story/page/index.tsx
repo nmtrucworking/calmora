@@ -30,7 +30,7 @@ export default function StoryPage() {
     <div className="grid gap-10">
       <section className="grid min-h-[calc(100svh-11rem)] grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)] items-start gap-7 py-11 max-[980px]:min-h-0 max-[980px]:grid-cols-1">
         <div className="max-w-[42rem]">
-          <p className="mt-0 mb-4 text-[0.75rem] uppercase tracking-[0.26em] text-accent-gold">
+          <p className="mt-0 mb-4 text-[0.75rem] uppercase tracking-[0.26em] text-accent-strong">
             {storyData.kicker}
           </p>
           <SectionHeading

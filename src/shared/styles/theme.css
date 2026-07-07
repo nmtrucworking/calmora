@@ -1,5 +1,5 @@
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 
   --font-sans:
     "Be Vietnam Pro", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
@@ -8,51 +8,57 @@
     "Noto Serif Display", "Playfair Display", "Iowan Old Style", "Palatino Linotype",
     Palatino, "Book Antiqua", Georgia, serif;
 
-  --senova-ivory: #FFFAF0;
+  --senova-ivory: #fffaf0;
   --senova-ivory-muted: rgba(255, 250, 240, 0.72);
+  --senova-paper: #f3efe5;
+  --senova-paper-muted: #e6decc;
   --senova-forest: #1d3329;
   --senova-forest-deep: #0b1a15;
-  --senova-forest-black: #07110F;
-  --senova-gold: #F8DF93;
+  --senova-forest-black: #07110f;
+  --senova-gold: #f8df93;
   --senova-gold-light: #ffeaab;
+  --senova-bronze: #8a6825;
+  --senova-bronze-deep: #5f4818;
   --senova-tea-brown: #765846;
-  --senova-lotus-dust: #B95672;
-  --senova-ink: #07110F;
+  --senova-lotus-dust: #b95672;
+  --senova-ink: #101a16;
   --senova-white: #fffcf6;
 
-  --page-bg: var(--senova-forest-black);
-  --page-bg-soft: #0c1d1a;
-  --surface: rgba(255, 250, 240, 0.06);
-  --surface-strong: rgba(255, 250, 240, 0.12);
-  --surface-tint: rgba(248, 223, 147, 0.06);
+  --page-bg: var(--senova-paper);
+  --page-bg-soft: var(--senova-paper-muted);
+  --surface: rgba(255, 253, 248, 0.7);
+  --surface-strong: rgba(255, 253, 248, 0.9);
+  --surface-tint: rgba(31, 114, 74, 0.07);
   --surface-dark: var(--senova-forest-deep);
   --surface-dark-soft: #122821;
-  --surface-paper: rgba(11, 26, 21, 0.92);
-  --border: rgba(255, 250, 240, 0.12);
-  --border-strong: rgba(248, 223, 147, 0.28);
+  --surface-paper: rgba(255, 253, 248, 0.78);
+  --border: rgba(31, 95, 68, 0.16);
+  --border-strong: rgba(111, 85, 23, 0.26);
 
-  --text: var(--senova-ivory);
-  --text-muted: rgba(255, 250, 240, 0.72);
-  --text-soft: rgba(255, 250, 240, 0.48);
-  --text-inverse: var(--senova-ink);
+  --text: var(--senova-ink);
+  --text-muted: rgba(16, 26, 22, 0.72);
+  --text-soft: rgba(16, 26, 22, 0.52);
+  --text-inverse: var(--senova-ivory);
+  --text-inverse-muted: rgba(243, 239, 229, 0.72);
+  --text-inverse-soft: rgba(243, 239, 229, 0.54);
 
   --primary: var(--senova-forest);
   --primary-strong: #274236;
   --on-primary: var(--senova-ivory);
-  --accent: var(--senova-gold);
-  --accent-strong: #e4c979;
-  --accent-soft: rgba(248, 223, 147, 0.16);
+  --accent: var(--senova-bronze);
+  --accent-strong: var(--senova-bronze-deep);
+  --accent-soft: rgba(138, 104, 37, 0.14);
   --accent-gold: var(--senova-gold);
   --gold-decorative: var(--senova-gold-light);
   --tea-brown: var(--senova-tea-brown);
   --lotus-mist: var(--senova-lotus-dust);
 
-  --shadow-sm: 0 16px 40px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 30px 90px rgba(0, 0, 0, 0.45);
-  --shadow-lg: 0 42px 110px rgba(0, 0, 0, 0.55);
-  --shadow-luxury-sm: 0 16px 40px rgba(0, 0, 0, 0.3);
-  --shadow-luxury-md: 0 30px 90px rgba(0, 0, 0, 0.4);
-  --shadow-luxury-lg: 0 42px 110px rgba(0, 0, 0, 0.5);
+  --shadow-sm: 0 16px 40px rgba(37, 31, 21, 0.08);
+  --shadow-md: 0 30px 90px rgba(37, 31, 21, 0.12);
+  --shadow-lg: 0 42px 110px rgba(37, 31, 21, 0.16);
+  --shadow-luxury-sm: 0 16px 40px rgba(37, 31, 21, 0.08);
+  --shadow-luxury-md: 0 30px 90px rgba(37, 31, 21, 0.12);
+  --shadow-luxury-lg: 0 42px 110px rgba(37, 31, 21, 0.16);
   --shadow-luxury-dark: 0 28px 80px rgba(0, 0, 0, 0.6);
   --ease-luxury: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-luxury-inout: cubic-bezier(0.65, 0, 0.35, 1);
@@ -63,7 +69,7 @@
   --radius-lg: 18px;
   --page-max: 84rem;
 
-  --header-bg: rgba(7, 17, 15, 0.82);
+  --header-bg: rgba(255, 253, 248, 0.82);
   --footer-bg: #050c0a;
 }
 

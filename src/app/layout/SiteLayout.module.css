@@ -1,6 +1,6 @@
 .page {
   background:
-    linear-gradient(180deg, rgba(243, 239, 229, 0.98) 0%, rgba(228, 221, 207, 0.94) 100%),
+    linear-gradient(180deg, rgba(255, 252, 246, 0.74) 0%, rgba(255, 252, 246, 0.18) 100%),
     var(--page-bg);
 }
 
@@ -17,6 +17,7 @@
 
 .landingPage {
   background: var(--senova-forest-black);
+  color: var(--text-inverse);
 }
 
 .landingPage::before {

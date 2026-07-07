@@ -54,11 +54,11 @@ export default function ProductsPage() {
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(16,26,22,0.94)_0%,rgba(16,26,22,0.7)_48%,rgba(16,26,22,0.18)_100%)]" />
         <div className="relative z-10 mx-auto grid min-h-[34rem] max-w-[var(--page-max)] items-end">
           <div className="max-w-[46rem]">
-            <SectionEyebrow>{copy.eyebrow}</SectionEyebrow>
+            <SectionEyebrow className="text-accent-gold">{copy.eyebrow}</SectionEyebrow>
             <h1 className="mt-5 mb-0 font-display text-[clamp(3.2rem,7vw,6.6rem)] font-[420] leading-[0.98]">
               {copy.title}
             </h1>
-            <p className="mt-6 mb-0 max-w-[38rem] text-[1.05rem] leading-[1.8] text-[rgba(243,239,229,0.76)]">
+            <p className="mt-6 mb-0 max-w-[38rem] text-[1.05rem] leading-[1.8] text-text-inverse-muted">
               {copy.text}
             </p>
             <div className="mt-8 flex flex-wrap gap-5">
@@ -128,7 +128,7 @@ export default function ProductsPage() {
                   </div>
                   <div className="grid gap-8 p-6">
                     <div>
-                      <span className="text-[0.72rem] font-[650] uppercase tracking-[0.22em] text-accent-gold">
+                      <span className="text-[0.72rem] font-[650] uppercase tracking-[0.22em] text-accent-strong">
                         {product.role}
                       </span>
                       <h2 className="mt-3 mb-0 font-display text-[clamp(1.7rem,3vw,2.8rem)] font-[430] leading-[1.04] text-text">

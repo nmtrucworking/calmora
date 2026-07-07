@@ -25,7 +25,7 @@ export function SectionHeading({
         align === "left" && "justify-items-start",
       )}
     >
-      <p className="m-0 text-[0.8rem] uppercase tracking-[0.24em] text-accent-gold">{eyebrow}</p>
+      <p className="m-0 text-[0.8rem] uppercase tracking-[0.24em] text-accent-strong">{eyebrow}</p>
       <TitleTag className="m-0 font-display text-[clamp(2.4rem,6vw,4.5rem)] font-semibold leading-[0.95] text-text">
         {title}
       </TitleTag>

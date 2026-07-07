@@ -17,7 +17,7 @@ export function CulturalMaterial({ content }: CulturalMaterialProps) {
               <h3 className="m-0 font-display text-[clamp(1.35rem,2.8vw,2rem)] font-[430] text-text-inverse">
                 {point.title}
               </h3>
-              <p className="mt-3 mb-0 leading-[1.75] text-[rgba(243,239,229,0.72)]">{point.text}</p>
+              <p className="mt-3 mb-0 leading-[1.75] text-text-inverse-muted">{point.text}</p>
             </article>
           ))}
         </div>

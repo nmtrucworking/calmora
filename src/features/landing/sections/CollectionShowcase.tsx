@@ -47,7 +47,7 @@ export function CollectionShowcase({ content, language }: CollectionShowcaseProp
                 </div>
                 <div className="grid content-between gap-8 p-6">
                   <div>
-                    <span className="text-[0.72rem] font-[650] uppercase tracking-[0.22em] text-accent-gold">
+                    <span className="text-[0.72rem] font-[650] uppercase tracking-[0.22em] text-accent-strong">
                       {product.role}
                     </span>
                     <h3 className="mt-3 mb-0 font-display text-[clamp(1.7rem,3vw,2.8rem)] font-[430] leading-[1.04] text-primary-strong">

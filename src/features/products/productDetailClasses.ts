@@ -8,7 +8,7 @@ export const productDetailStyles = {
     "grid min-h-[min(42rem,calc(100svh-8rem))] grid-cols-[minmax(0,1fr)_minmax(18rem,0.82fr)] items-center gap-[clamp(2rem,6vw,5rem)] max-[900px]:min-h-0 max-[900px]:grid-cols-1 [&_h1]:mt-4 [&_h1]:mb-0 [&_h1]:max-w-[12ch] [&_h1]:font-display [&_h1]:text-[clamp(3rem,8vw,6rem)] [&_h1]:font-[760] [&_h1]:leading-[0.98] [&_h1]:tracking-normal [&_h1]:text-primary-strong max-[560px]:[&_h1]:max-w-[10ch]",
   heroCopy: "max-w-[40rem] max-[900px]:max-w-full",
   metaRow: "flex flex-wrap items-center gap-3",
-  eyebrow: "m-0 text-[0.78rem] font-extrabold uppercase tracking-[0.16em] text-accent-gold",
+  eyebrow: "m-0 text-[0.78rem] font-extrabold uppercase tracking-[0.16em] text-accent-strong",
   statusBadge:
     "inline-flex min-h-8 items-center rounded-full border border-[rgba(179,38,93,0.22)] bg-[rgba(179,38,93,0.08)] px-[0.7rem] py-[0.35rem] text-[0.75rem] font-extrabold text-accent-strong",
   tagline:
@@ -18,7 +18,7 @@ export const productDetailStyles = {
   primaryButton:
     `inline-flex min-h-[2.9rem] items-center justify-center gap-[0.55rem] rounded-full border border-primary bg-primary px-[1.15rem] py-3 text-[0.9rem] font-extrabold text-on-primary no-underline max-[560px]:w-full [&_svg]:h-4 [&_svg]:w-4 ${luxuryMotion.button}`,
   secondaryButton:
-    `inline-flex min-h-[2.9rem] items-center justify-center gap-[0.55rem] rounded-full border border-border-strong bg-[#fffdf88f] px-[1.15rem] py-3 text-[0.9rem] font-extrabold text-primary-strong no-underline max-[560px]:w-full [&_svg]:h-4 [&_svg]:w-4 ${luxuryMotion.button}`,
+    `inline-flex min-h-[2.9rem] items-center justify-center gap-[0.55rem] rounded-full border border-border-strong bg-surface-strong px-[1.15rem] py-3 text-[0.9rem] font-extrabold text-primary-strong no-underline max-[560px]:w-full [&_svg]:h-4 [&_svg]:w-4 ${luxuryMotion.button}`,
   batchLabel: "mt-4 mb-0 text-[0.82rem] font-bold text-text-soft",
   heroVisual: "flex justify-center",
   imagePlate:
@@ -40,7 +40,7 @@ export const productDetailStyles = {
   galleryCardActive:
     "border-[rgba(179,38,93,0.42)] bg-[linear-gradient(180deg,rgba(255,253,248,0.84),rgba(255,253,248,0.62)),rgba(179,38,93,0.08)]",
   galleryRole:
-    "relative z-[2] justify-self-start rounded-full border border-[rgba(111,85,23,0.22)] bg-[#fffdf8b8] px-[0.7rem] py-[0.35rem] text-[0.76rem] font-extrabold text-accent-gold",
+    "relative z-[2] justify-self-start rounded-full border border-border-strong bg-surface-strong px-[0.7rem] py-[0.35rem] text-[0.76rem] font-extrabold text-accent-strong",
   galleryImageFrame:
     "my-2 grid min-h-56 place-items-center [&_img]:max-h-60 [&_img]:w-[min(82%,16rem)] [&_img]:object-contain [&_img]:drop-shadow-[0_20px_28px_rgba(37,31,21,0.18)]",
   galleryCardCopy:
@@ -50,7 +50,7 @@ export const productDetailStyles = {
     "max-w-[46rem] [&_h2]:mt-3 [&_h2]:mb-0 [&_h2]:font-display [&_h2]:text-[clamp(1.6rem,3vw,2.4rem)] [&_h2]:leading-[1.12] [&_h2]:text-primary-strong [&_p]:text-base [&_p]:leading-[1.75] [&_p]:text-text-muted",
   stepGrid: "grid grid-cols-4 gap-4 max-[900px]:grid-cols-2 max-[560px]:grid-cols-1",
   stepItem:
-    `min-h-[13.5rem] rounded-lg p-5 ${luxuryMotion.surface} [&_h3]:mt-[0.85rem] [&_h3]:mb-0 [&_h3]:text-[1.05rem] [&_h3]:text-primary-strong [&_p]:mt-[0.6rem] [&_p]:mb-0 [&_p]:text-[0.92rem] [&_p]:leading-[1.65] [&_p]:text-text-muted [&_span]:font-display [&_span]:text-[1.7rem] [&_span]:font-[760] [&_span]:text-accent-gold`,
+    `min-h-[13.5rem] rounded-lg p-5 ${luxuryMotion.surface} [&_h3]:mt-[0.85rem] [&_h3]:mb-0 [&_h3]:text-[1.05rem] [&_h3]:text-primary-strong [&_p]:mt-[0.6rem] [&_p]:mb-0 [&_p]:text-[0.92rem] [&_p]:leading-[1.65] [&_p]:text-text-muted [&_span]:font-display [&_span]:text-[1.7rem] [&_span]:font-[760] [&_span]:text-accent-strong`,
   qrPanel:
     `grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-5 rounded-lg bg-[linear-gradient(120deg,rgba(31,114,74,0.08),rgba(179,38,93,0.05)),var(--surface-strong)] p-[clamp(1.25rem,3vw,2rem)] max-[900px]:grid-cols-1 max-[900px]:items-start ${luxuryMotion.surface} [&>svg]:h-10 [&>svg]:w-10 [&>svg]:text-primary [&_h2]:mt-[0.35rem] [&_h2]:mb-0 [&_h2]:font-display [&_h2]:text-[clamp(1.6rem,3vw,2.4rem)] [&_h2]:leading-[1.12] [&_h2]:text-primary-strong [&_p]:text-base [&_p]:leading-[1.75] [&_p]:text-text-muted [&_p:last-child]:mb-0`,
   emptyState:

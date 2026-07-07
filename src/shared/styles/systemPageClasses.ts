@@ -5,7 +5,7 @@ export const systemStyles = {
   hero:
     "grid min-h-[min(34rem,calc(100svh-8rem))] grid-cols-[minmax(0,1fr)_minmax(16rem,0.55fr)] items-end gap-[clamp(1.5rem,5vw,4rem)] pt-16 max-[900px]:min-h-0 max-[900px]:grid-cols-1 max-[900px]:pt-8 [&_h1]:mt-[0.9rem] [&_h1]:mb-0 [&_h1]:max-w-[15ch] [&_h1]:font-display [&_h1]:text-[clamp(2.7rem,7vw,5.4rem)] [&_h1]:font-[420] [&_h1]:leading-none [&_h1]:tracking-normal [&_h1]:text-text",
   heroCompact: "min-h-80 items-center",
-  eyebrow: "m-0 text-[0.78rem] font-extrabold uppercase tracking-[0.16em] text-accent-gold",
+  eyebrow: "m-0 text-[0.78rem] font-extrabold uppercase tracking-[0.16em] text-accent-strong",
   title:
     "mt-[0.9rem] mb-0 max-w-[15ch] font-display text-[clamp(2.7rem,7vw,5.4rem)] font-[420] leading-none tracking-normal text-text",
   heroDescription:
@@ -37,7 +37,7 @@ export const systemStyles = {
   cardGrid: "grid grid-cols-3 gap-4 max-[900px]:grid-cols-1",
   stepGrid: "grid grid-cols-2 gap-4 max-[900px]:grid-cols-1",
   panelLabel:
-    "text-[0.82rem] font-extrabold uppercase tracking-[0.12em] text-accent-gold",
+    "text-[0.82rem] font-extrabold uppercase tracking-[0.12em] text-accent-strong",
   productStrip: "grid grid-cols-3 gap-4 max-[900px]:grid-cols-1",
   productCard:
     `overflow-hidden rounded-lg text-inherit no-underline ${luxuryMotion.surface} ${luxuryMotion.cardHover}`,
@@ -53,7 +53,7 @@ export const systemStyles = {
     "grid grid-cols-[minmax(0,0.68fr)_minmax(20rem,0.72fr)] items-start gap-[clamp(1.25rem,4vw,3rem)] max-[900px]:grid-cols-1",
   form: "mt-[1.4rem] grid gap-4",
   fieldGroup:
-    "grid gap-[0.45rem] [&_input]:w-full [&_input]:rounded-lg [&_input]:border [&_input]:border-border [&_input]:bg-[rgba(255,250,240,0.03)] [&_input]:px-[0.9rem] [&_input]:py-[0.78rem] [&_input]:text-text [&_input]:outline-none [&_input]:transition-[border-color,box-shadow,background] [&_input]:duration-[320ms] [&_input]:ease-[cubic-bezier(0.22,1,0.36,1)] [&_input:focus]:border-[var(--accent)] [&_input:focus]:shadow-[0_0_0_3px_rgba(248,223,147,0.12)] [&_label]:text-[0.88rem] [&_label]:font-extrabold [&_label]:text-[var(--accent)] [&_select]:w-full [&_select]:rounded-lg [&_select]:border [&_select]:border-border [&_select]:bg-[rgba(255,250,240,0.03)] [&_select]:px-[0.9rem] [&_select]:py-[0.78rem] [&_select]:text-text [&_select]:outline-none [&_select]:transition-[border-color,box-shadow,background] [&_select]:duration-[320ms] [&_select]:ease-[cubic-bezier(0.22,1,0.36,1)] [&_select:focus]:border-[var(--accent)] [&_select:focus]:shadow-[0_0_0_3px_rgba(248,223,147,0.12)] [&_textarea]:min-h-32 [&_textarea]:w-full [&_textarea]:resize-y [&_textarea]:rounded-lg [&_textarea]:border [&_textarea]:border-border [&_textarea]:bg-[rgba(255,250,240,0.03)] [&_textarea]:px-[0.9rem] [&_textarea]:py-[0.78rem] [&_textarea]:text-text [&_textarea]:outline-none [&_textarea]:transition-[border-color,box-shadow,background] [&_textarea]:duration-[320ms] [&_textarea]:ease-[cubic-bezier(0.22,1,0.36,1)] [&_textarea:focus]:border-[var(--accent)] [&_textarea:focus]:shadow-[0_0_0_3px_rgba(248,223,147,0.12)]",
+    "grid gap-[0.45rem] [&_input]:w-full [&_input]:rounded-lg [&_input]:border [&_input]:border-border [&_input]:bg-surface-strong [&_input]:px-[0.9rem] [&_input]:py-[0.78rem] [&_input]:text-text [&_input]:outline-none [&_input]:transition-[border-color,box-shadow,background] [&_input]:duration-[320ms] [&_input]:ease-[cubic-bezier(0.22,1,0.36,1)] [&_input:focus]:border-[var(--accent)] [&_input:focus]:shadow-[0_0_0_3px_rgba(138,104,37,0.14)] [&_label]:text-[0.88rem] [&_label]:font-extrabold [&_label]:text-[var(--accent-strong)] [&_select]:w-full [&_select]:rounded-lg [&_select]:border [&_select]:border-border [&_select]:bg-surface-strong [&_select]:px-[0.9rem] [&_select]:py-[0.78rem] [&_select]:text-text [&_select]:outline-none [&_select]:transition-[border-color,box-shadow,background] [&_select]:duration-[320ms] [&_select]:ease-[cubic-bezier(0.22,1,0.36,1)] [&_select:focus]:border-[var(--accent)] [&_select:focus]:shadow-[0_0_0_3px_rgba(138,104,37,0.14)] [&_textarea]:min-h-32 [&_textarea]:w-full [&_textarea]:resize-y [&_textarea]:rounded-lg [&_textarea]:border [&_textarea]:border-border [&_textarea]:bg-surface-strong [&_textarea]:px-[0.9rem] [&_textarea]:py-[0.78rem] [&_textarea]:text-text [&_textarea]:outline-none [&_textarea]:transition-[border-color,box-shadow,background] [&_textarea]:duration-[320ms] [&_textarea]:ease-[cubic-bezier(0.22,1,0.36,1)] [&_textarea:focus]:border-[var(--accent)] [&_textarea:focus]:shadow-[0_0_0_3px_rgba(138,104,37,0.14)]",
   choiceGroup:
     "m-0 grid gap-3 rounded-lg border border-border bg-[rgba(255,250,240,0.02)] p-4 [&_input]:mt-[0.2rem] [&_input]:h-4 [&_input]:w-4 [&_input]:accent-primary [&_label]:grid [&_label]:grid-cols-[auto_minmax(0,1fr)] [&_label]:items-start [&_label]:gap-[0.7rem] [&_label]:leading-[1.55] [&_label]:text-text-muted [&_legend]:px-[0.35rem] [&_legend]:text-[0.88rem] [&_legend]:font-extrabold [&_legend]:text-[var(--accent)]",
   hiddenField: "absolute -left-[100vw] h-px w-px overflow-hidden",

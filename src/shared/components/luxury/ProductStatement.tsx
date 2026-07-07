@@ -16,11 +16,12 @@ export function ProductStatement({ eyebrow, title, text, dark = false, className
       <h2
         className={cx(
           "mt-4 mb-0 font-display text-[clamp(2.2rem,5vw,4.5rem)] font-[430] leading-[1.02] text-text",
+          dark && "text-text-inverse",
         )}
       >
         {title}
       </h2>
-      <p className={cx("mt-6 mb-0 max-w-[42rem] text-[1.04rem] leading-[1.8] text-text-muted")}>
+      <p className={cx("mt-6 mb-0 max-w-[42rem] text-[1.04rem] leading-[1.8] text-text-muted", dark && "text-text-inverse-muted")}>
         {text}
       </p>
     </div>

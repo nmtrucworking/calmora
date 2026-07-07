@@ -33,7 +33,7 @@ import { luxuryMotion } from "@shared/styles/luxuryEffects";
 import { cx } from "@shared/utils/classNames";
 
 const pageClass = "grid gap-[clamp(2rem,5vw,4.5rem)]";
-const eyebrowClass = "m-0 text-[0.78rem] font-extrabold uppercase tracking-[0.16em] text-accent-gold";
+const eyebrowClass = "m-0 text-[0.78rem] font-extrabold uppercase tracking-[0.16em] text-accent-strong";
 const heroClass =
   "grid min-h-[min(36rem,calc(100svh-8rem))] grid-cols-[minmax(0,1fr)_minmax(16rem,0.55fr)] items-end gap-[clamp(1.5rem,5vw,4rem)] pt-16 max-[900px]:min-h-0 max-[900px]:grid-cols-1 max-[900px]:pt-8";
 const titleClass =
@@ -43,9 +43,9 @@ const panelClass = `rounded-lg p-[clamp(1.25rem,3vw,2rem)] ${luxuryMotion.surfac
 const primaryButtonClass =
   `inline-flex min-h-[2.85rem] items-center justify-center gap-[0.55rem] rounded-full border border-primary bg-primary px-[1.1rem] py-3 text-[0.9rem] font-extrabold text-on-primary no-underline disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 ${luxuryMotion.button}`;
 const secondaryButtonClass =
-  `inline-flex min-h-[2.85rem] items-center justify-center gap-[0.55rem] rounded-full border border-border-strong bg-[#fffdf899] px-[1.1rem] py-3 text-[0.9rem] font-extrabold text-primary-strong no-underline ${luxuryMotion.button}`;
+  `inline-flex min-h-[2.85rem] items-center justify-center gap-[0.55rem] rounded-full border border-border-strong bg-surface-strong px-[1.1rem] py-3 text-[0.9rem] font-extrabold text-primary-strong no-underline ${luxuryMotion.button}`;
 const fieldClass =
-  `w-full rounded-lg border border-border-strong bg-[#fffdf8b8] px-[0.9rem] py-[0.78rem] text-text outline-none ${luxuryMotion.field}`;
+  `w-full rounded-lg border border-border-strong bg-surface-strong px-[0.9rem] py-[0.78rem] text-text outline-none ${luxuryMotion.field}`;
 
 function useCommerceCopy() {
   const { language } = useLanguage();
@@ -65,7 +65,7 @@ function ProductCard({ product, compact = false }: { product: LocalizedProduct; 
     <article className={cx("group grid overflow-hidden rounded-lg", luxuryMotion.surface, luxuryMotion.cardHover)}>
       <div className="relative grid aspect-[4/3] place-items-center bg-[radial-gradient(circle_at_50%_40%,rgba(179,38,93,0.1),transparent_42%),rgba(255,253,248,0.58)]">
         <button
-          className="absolute right-4 top-4 grid h-10 w-10 place-items-center rounded-full border border-border bg-[#fffdf8cc] text-accent-strong"
+          className="absolute right-4 top-4 grid h-10 w-10 place-items-center rounded-full border border-border bg-surface-strong text-accent-strong"
           type="button"
           aria-label={text.ui.saveProduct}
           onClick={() => setSaved((value) => !value)}
@@ -567,8 +567,8 @@ export function OrderStatusPage() {
         </label>
         <div className="grid grid-cols-3 gap-3 max-[680px]:grid-cols-1">
           {["Received", "Concierge review", "Configuration proposal"].map((step, index) => (
-            <div key={step} className="rounded-lg border border-border bg-[#fffdf86b] p-4">
-              <CalendarDays className="h-5 w-5 text-accent-gold" />
+            <div key={step} className="rounded-lg border border-border bg-surface p-4">
+              <CalendarDays className="h-5 w-5 text-accent-strong" />
               <p className="mb-0 font-bold text-primary-strong">{index + 1}. {step}</p>
             </div>
           ))}
@@ -612,7 +612,7 @@ export function JournalPage({ slug }: { slug?: string }) {
             <p className={eyebrowClass}>{item.eyebrow}</p>
             <h2 className="font-display text-[1.7rem] leading-[1.1] text-primary-strong">{item.title}</h2>
             <p className={bodyClass}>{item.excerpt}</p>
-            <span className="text-[0.78rem] font-extrabold text-accent-gold">{item.readTime}</span>
+            <span className="text-[0.78rem] font-extrabold text-accent-strong">{item.readTime}</span>
           </Link>
         ))}
       </section>

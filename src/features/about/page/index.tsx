@@ -27,13 +27,13 @@ export default function AboutPage() {
       <section className="[content-visibility:auto] [contain-intrinsic-size:auto_680px]">
         <div className="grid grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] items-center gap-16 max-[900px]:grid-cols-1 max-[900px]:gap-8">
           <div className={revealClass}>
-            <p className="m-0 text-[0.8rem] uppercase tracking-[0.24em] text-accent-gold">
+            <p className="m-0 text-[0.8rem] uppercase tracking-[0.24em] text-accent-strong">
               {aboutData.mission.label}
             </p>
             <h2 className="mt-[0.9rem] mb-0 font-display text-[clamp(2rem,4vw,3.2rem)] leading-[1.08] text-text">
               {aboutData.mission.title}
             </h2>
-            <p className="mt-5 mb-0 text-[1.05rem] leading-[1.8] text-text-muted [&_strong]:text-accent-gold">
+            <p className="mt-5 mb-0 text-[1.05rem] leading-[1.8] text-text-muted [&_strong]:text-accent-strong">
               {aboutData.mission.text}
             </p>
           </div>
@@ -47,7 +47,7 @@ export default function AboutPage() {
             <p className="m-0 font-display text-[1.35rem] italic leading-[1.6] text-text">
               &ldquo;{aboutData.mission.quote}&rdquo;
             </p>
-            <p className="mt-5 mb-0 text-[0.82rem] uppercase tracking-[0.16em] text-accent-gold">
+            <p className="mt-5 mb-0 text-[0.82rem] uppercase tracking-[0.16em] text-accent-strong">
               {aboutData.mission.quoteAuthor}
             </p>
           </div>
@@ -82,7 +82,7 @@ export default function AboutPage() {
                 )}
               >
                 <div className="grid h-[3.2rem] w-[3.2rem] place-items-center rounded-brand-sm bg-[rgba(248,223,147,0.05)]">
-                  <TechIcon className="h-6 w-6 text-accent-gold" />
+                  <TechIcon className="h-6 w-6 text-accent-strong" />
                 </div>
                 <h3 className="m-0 font-display text-[1.38rem] leading-[1.1] text-text">
                   {card.title}
@@ -111,7 +111,7 @@ export default function AboutPage() {
                 index === 2 && "[animation-delay:160ms]",
               )}
             >
-              <span className="text-[0.76rem] uppercase tracking-[0.24em] text-accent-gold">
+              <span className="text-[0.76rem] uppercase tracking-[0.24em] text-accent-strong">
                 {item.number}
               </span>
               <h4 className="m-0 text-[1.25rem] font-bold text-text">{item.title}</h4>
@@ -128,7 +128,7 @@ export default function AboutPage() {
         )}
       >
         <div className="flex flex-col items-center gap-5">
-          <ShieldCheck className="h-[2.8rem] w-[2.8rem] text-accent-gold" />
+          <ShieldCheck className="h-[2.8rem] w-[2.8rem] text-accent-strong" />
           <h2 className="m-0 font-display text-[2.4rem] leading-[1.1] text-text">
             {aboutData.cta.title}
           </h2>
@@ -138,13 +138,13 @@ export default function AboutPage() {
           <div className="mt-4 flex gap-4 max-[900px]:w-full max-[900px]:flex-col">
             <Link
               href="/contact"
-              className={cx("inline-flex min-h-12 items-center justify-center rounded-full bg-accent-gold px-[1.6rem] py-3 font-bold text-page-bg no-underline hover:bg-[#fffaf0] max-[900px]:w-full", luxuryMotion.button)}
+              className={cx("inline-flex min-h-12 items-center justify-center rounded-full bg-primary px-[1.6rem] py-3 font-bold text-on-primary no-underline hover:bg-primary-strong max-[900px]:w-full", luxuryMotion.button)}
             >
               {aboutData.cta.btnText}
             </Link>
             <Link
               href="/products"
-              className={cx("inline-flex min-h-12 items-center justify-center rounded-full bg-[#fffaf014] px-[1.6rem] py-3 font-bold text-text no-underline hover:bg-[#fffaf024] max-[900px]:w-full", luxuryMotion.button)}
+              className={cx("inline-flex min-h-12 items-center justify-center rounded-full bg-surface px-[1.6rem] py-3 font-bold text-text no-underline hover:bg-surface-strong max-[900px]:w-full", luxuryMotion.button)}
             >
               {aboutData.cta.secondaryBtnText}
             </Link>

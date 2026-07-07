@@ -12,11 +12,11 @@ export function FinalCTA({ content }: FinalCTAProps) {
   return (
     <DarkSection className="bg-[var(--senova-forest-black)]" innerClassName="py-6">
       <div className="max-w-[46rem]">
-        <SectionEyebrow>{content.eyebrow}</SectionEyebrow>
+        <SectionEyebrow className="text-accent-gold">{content.eyebrow}</SectionEyebrow>
         <h2 className="mt-5 mb-0 font-display text-[clamp(2.6rem,7vw,5.7rem)] font-[420] leading-[1.02] text-text-inverse">
           {content.title}
         </h2>
-        <p className="mt-6 mb-0 max-w-[34rem] text-[1.04rem] leading-[1.8] text-[rgba(243,239,229,0.74)]">
+        <p className="mt-6 mb-0 max-w-[34rem] text-[1.04rem] leading-[1.8] text-text-inverse-muted">
           {content.text}
         </p>
         <div className="mt-8 flex flex-wrap gap-5">

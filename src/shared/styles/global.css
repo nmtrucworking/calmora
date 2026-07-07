@@ -20,6 +20,8 @@
   --color-text-muted: var(--text-muted);
   --color-text-soft: var(--text-soft);
   --color-text-inverse: var(--text-inverse);
+  --color-text-inverse-muted: var(--text-inverse-muted);
+  --color-text-inverse-soft: var(--text-inverse-soft);
   --color-primary: var(--primary);
   --color-primary-strong: var(--primary-strong);
   --color-on-primary: var(--on-primary);

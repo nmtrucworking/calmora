@@ -25,7 +25,7 @@ export function LuxuryHero({ content }: LuxuryHeroProps) {
 
       <div className="relative z-10 mx-auto grid min-h-[calc(100svh-9.5rem)] max-w-[var(--page-max)] items-end pb-10">
         <div className="max-w-[44rem]">
-          <SectionEyebrow>{content.eyebrow}</SectionEyebrow>
+          <SectionEyebrow className="text-accent-gold">{content.eyebrow}</SectionEyebrow>
           <h1 className="mt-5 mb-0 font-display text-[clamp(3.5rem,8vw,7rem)] font-[420] leading-[0.98] text-text-inverse">
             {content.lines.map((line) => (
               <span key={line} className="block">
@@ -33,7 +33,7 @@ export function LuxuryHero({ content }: LuxuryHeroProps) {
               </span>
             ))}
           </h1>
-          <p className="mt-6 mb-0 max-w-[34rem] text-[1.05rem] leading-[1.8] text-[rgba(243,239,229,0.78)]">
+          <p className="mt-6 mb-0 max-w-[34rem] text-[1.05rem] leading-[1.8] text-text-inverse-muted">
             {content.description}
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-5">
@@ -47,7 +47,7 @@ export function LuxuryHero({ content }: LuxuryHeroProps) {
           </div>
         </div>
 
-        <p className="absolute right-0 bottom-0 m-0 text-[0.68rem] uppercase tracking-[0.24em] text-[rgba(243,239,229,0.5)] max-[760px]:hidden">
+        <p className="absolute right-0 bottom-0 m-0 text-[0.68rem] uppercase tracking-[0.24em] text-text-inverse-soft max-[760px]:hidden">
           {content.scrollHint}
         </p>
       </div>

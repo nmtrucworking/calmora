@@ -22,7 +22,6 @@ const desktopNavLinkClass =
   "inline-flex min-h-11 flex-none items-center text-text-muted no-underline transition-colors duration-200 hover:text-primary-strong";
 const mobileNavLinkClass =
   "min-h-11 border-b border-border py-3 text-[1.05rem] font-[650] text-text-muted no-underline transition-colors duration-200";
-const activeNavClass = "!text-primary-strong";
 
 export function SiteLayout({
   children,
@@ -60,6 +59,9 @@ export function SiteLayout({
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const isTransparentHeader = isLanding && !isScrolled && !isMenuOpen;
+  const activeNavClass = isTransparentHeader ? "!text-accent-gold" : "!text-primary-strong";
+
   const renderNavLinks = (variant: "desktop" | "mobile") =>
     activeNavItems.map((item) => {
       const isActive =
@@ -82,8 +84,6 @@ export function SiteLayout({
         </Link>
       );
     });
-
-  const isTransparentHeader = isLanding && !isScrolled && !isMenuOpen;
 
   return (
     <main
@@ -205,7 +205,7 @@ export function SiteLayout({
               <p className="m-0 text-[0.82rem] font-[650] uppercase tracking-[0.24em] text-accent-gold">
                 {copy.brand}
               </p>
-              <p className="mt-4 mb-0 max-w-[31rem] leading-[1.75] text-[rgba(243,239,229,0.72)]">
+              <p className="mt-4 mb-0 max-w-[31rem] leading-[1.75] text-text-inverse-muted">
                 {copy.summary}
               </p>
             </div>
@@ -221,7 +221,7 @@ export function SiteLayout({
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="inline-flex min-h-11 items-center text-[rgba(243,239,229,0.72)] no-underline hover:text-text-inverse"
+                    className="inline-flex min-h-11 items-center text-text-inverse-muted no-underline hover:text-text-inverse"
                   >
                     {link.label}
                   </Link>
@@ -230,7 +230,7 @@ export function SiteLayout({
             ))}
           </nav>
 
-          <div className="col-span-full flex flex-wrap justify-between gap-x-5 gap-y-3 border-t border-[rgba(243,239,229,0.14)] pt-6 text-[0.82rem] text-[rgba(243,239,229,0.54)]">
+          <div className="col-span-full flex flex-wrap justify-between gap-x-5 gap-y-3 border-t border-[rgba(243,239,229,0.14)] pt-6 text-[0.82rem] text-text-inverse-soft">
             <span>hello@senova.vn</span>
             <span>© {new Date().getFullYear()} Calmora | Senova</span>
           </div>
