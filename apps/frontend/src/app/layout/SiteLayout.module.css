@@ -43,6 +43,52 @@
   filter: saturate(1);
 }
 
+.contentEffects :global(.pageMotionTarget),
+.landingContentEffects :global(.pageMotionTarget) {
+  --page-motion-delay: 0ms;
+  opacity: 0;
+  transform: translate3d(0, 1.1rem, 0) scale(0.992);
+  filter: blur(5px) saturate(0.96);
+  transition:
+    opacity 960ms var(--ease-luxury) var(--page-motion-delay),
+    transform 1120ms var(--ease-luxury) var(--page-motion-delay),
+    filter 1120ms var(--ease-luxury) var(--page-motion-delay),
+    border-color 700ms var(--ease-luxury),
+    box-shadow 700ms var(--ease-luxury),
+    background 700ms var(--ease-luxury);
+  will-change: opacity, transform, filter;
+}
+
+.contentEffects :global(.pageMotionVisible),
+.landingContentEffects :global(.pageMotionVisible) {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+  filter: blur(0) saturate(1);
+  will-change: auto;
+}
+
+.contentEffects :global(article.pageMotionVisible:hover),
+.contentEffects :global(aside.pageMotionVisible:hover),
+.contentEffects :global(figure.pageMotionVisible:hover),
+.landingContentEffects :global(article.pageMotionVisible:hover),
+.landingContentEffects :global(aside.pageMotionVisible:hover),
+.landingContentEffects :global(figure.pageMotionVisible:hover) {
+  transform: translate3d(0, -0.18rem, 0) scale(1);
+}
+
+.contentEffects :global(.pageMotionVisible:is(article, aside, figure):hover img),
+.landingContentEffects :global(.pageMotionVisible:is(article, aside, figure):hover img) {
+  transform: scale(1.018);
+  filter: saturate(0.92) contrast(1.02);
+}
+
+.contentEffects :global(.pageMotionVisible img),
+.landingContentEffects :global(.pageMotionVisible img) {
+  transition:
+    transform 1000ms var(--ease-luxury),
+    filter 1000ms var(--ease-luxury);
+}
+
 @media (max-width: 900px) {
   .contentEffects :global(.pageFocusSection),
   .landingContentEffects :global(.pageFocusSection) {
@@ -50,14 +96,30 @@
     opacity: 1;
     filter: none;
   }
+
+  .contentEffects :global(.pageMotionTarget),
+  .landingContentEffects :global(.pageMotionTarget) {
+    transform: translate3d(0, 0.65rem, 0);
+    filter: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .contentEffects :global(.pageFocusSection),
-  .landingContentEffects :global(.pageFocusSection) {
+  .landingContentEffects :global(.pageFocusSection),
+  .contentEffects :global(.pageMotionTarget),
+  .landingContentEffects :global(.pageMotionTarget),
+  .contentEffects :global(.pageMotionVisible),
+  .landingContentEffects :global(.pageMotionVisible) {
     transform: none;
     opacity: 1;
     filter: none;
     transition: none;
+  }
+
+  .contentEffects :global(.pageMotionVisible:is(article, aside, figure):hover img),
+  .landingContentEffects :global(.pageMotionVisible:is(article, aside, figure):hover img) {
+    transform: none;
+    filter: none;
   }
 }

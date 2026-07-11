@@ -75,6 +75,9 @@ const productImagePaths = [
 const sharedImagePaths = ["/assets/brand/calmora-mark.png"];
 const pageFocusSectionClass = "pageFocusSection";
 const pageFocusActiveClass = "pageFocusActive";
+const pageMotionTargetClass = "pageMotionTarget";
+const pageMotionVisibleClass = "pageMotionVisible";
+const pageMotionSelector = "section, article, aside, form, figure, [data-luxury-motion]";
 
 function RouteFallback() {
   return <div style={{ minHeight: "60vh" }} />;
@@ -88,8 +91,10 @@ function FocusSections({ children, enabled }: { children: ReactNode; enabled: bo
     if (!root || !enabled) return;
 
     let intersectionObserver: IntersectionObserver | null = null;
+    let motionObserver: IntersectionObserver | null = null;
     let collectFrame = 0;
     let sections: HTMLElement[] = [];
+    let motionTargets: HTMLElement[] = [];
     const ratios = new Map<HTMLElement, number>();
 
     const cleanupSections = () => {
@@ -100,6 +105,16 @@ function FocusSections({ children, enabled }: { children: ReactNode; enabled: bo
       });
       sections = [];
       ratios.clear();
+    };
+
+    const cleanupMotionTargets = () => {
+      motionObserver?.disconnect();
+      motionObserver = null;
+      motionTargets.forEach((target) => {
+        target.classList.remove(pageMotionTargetClass, pageMotionVisibleClass);
+        target.style.removeProperty("--page-motion-delay");
+      });
+      motionTargets = [];
     };
 
     const updateActiveSection = () => {
@@ -145,9 +160,64 @@ function FocusSections({ children, enabled }: { children: ReactNode; enabled: bo
       sections.forEach((section) => intersectionObserver?.observe(section));
     };
 
+    const collectMotionTargets = () => {
+      const nextTargets = Array.from(root.querySelectorAll(pageMotionSelector)).filter(
+        (target): target is HTMLElement =>
+          target instanceof HTMLElement && !target.closest("[data-motion-static='true']"),
+      );
+      const nextTargetSet = new Set(nextTargets);
+
+      motionTargets.forEach((target) => {
+        if (nextTargetSet.has(target)) return;
+
+        target.classList.remove(pageMotionTargetClass, pageMotionVisibleClass);
+        target.style.removeProperty("--page-motion-delay");
+      });
+
+      motionTargets = nextTargets;
+      motionObserver?.disconnect();
+      motionObserver = null;
+
+      if (!motionTargets.length) return;
+
+      motionObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting && entry.intersectionRatio < 0.08) return;
+
+            entry.target.classList.add(pageMotionVisibleClass);
+            motionObserver?.unobserve(entry.target);
+          });
+        },
+        {
+          root: null,
+          rootMargin: "0px 0px -12% 0px",
+          threshold: [0.08, 0.16, 0.28],
+        },
+      );
+
+      motionTargets.forEach((target) => {
+        const siblingTargets = Array.from(target.parentElement?.children ?? []).filter(
+          (sibling): sibling is HTMLElement =>
+            sibling instanceof HTMLElement && sibling.matches(pageMotionSelector),
+        );
+        const delay = Math.min(Math.max(siblingTargets.indexOf(target), 0), 6) * 70;
+
+        target.classList.add(pageMotionTargetClass);
+        target.style.setProperty("--page-motion-delay", `${delay}ms`);
+
+        if (!target.classList.contains(pageMotionVisibleClass)) {
+          motionObserver?.observe(target);
+        }
+      });
+    };
+
     const scheduleCollect = () => {
       window.cancelAnimationFrame(collectFrame);
-      collectFrame = window.requestAnimationFrame(collectSections);
+      collectFrame = window.requestAnimationFrame(() => {
+        collectSections();
+        collectMotionTargets();
+      });
     };
 
     const mutationObserver = new MutationObserver(scheduleCollect);
@@ -158,6 +228,7 @@ function FocusSections({ children, enabled }: { children: ReactNode; enabled: bo
       window.cancelAnimationFrame(collectFrame);
       mutationObserver.disconnect();
       cleanupSections();
+      cleanupMotionTargets();
     };
   }, [enabled, children]);
 
