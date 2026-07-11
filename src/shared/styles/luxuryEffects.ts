@@ -20,7 +20,7 @@ export const luxuryMotion = {
   darkCardHover:
     "transition-[background,border-color,box-shadow,filter] duration-[760ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-[rgba(200,177,120,0.28)] hover:bg-[rgba(243,239,229,0.065)] hover:shadow-[var(--shadow-luxury-dark)] motion-reduce:transition-none",
   button:
-    "transition-[background,border-color,box-shadow,color] duration-[420ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:shadow-[0_12px_28px_rgba(16,26,22,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(175,149,88,0.42)] focus-visible:ring-offset-2 focus-visible:ring-offset-page-bg motion-reduce:transition-none",
+    "transition-[background,border-color,box-shadow,color,transform] duration-[520ms] ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:shadow-[0_18px_40px_rgba(16,26,22,0.16)] active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(175,149,88,0.42)] focus-visible:ring-offset-2 focus-visible:ring-offset-page-bg motion-reduce:transition-none motion-reduce:hover:translate-y-0",
   link:
     "transition-[color,border-color,gap,transform] duration-[360ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
   field:

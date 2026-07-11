@@ -66,7 +66,7 @@ export default function ProductsPage() {
                 {copy.explore} Petal Pack
                 <ArrowRight aria-hidden="true" className="h-4 w-4" />
               </LuxuryButton>
-              <LuxuryButton href="/dat-truoc" variant="light">
+              <LuxuryButton href="/reorder" variant="light">
                 {copy.preorder}
               </LuxuryButton>
             </div>
@@ -151,7 +151,7 @@ export default function ProductsPage() {
       <EditorialSection>
         <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-8 max-[760px]:grid-cols-1">
           <ProductStatement eyebrow="Concierge" title={copy.closingTitle} text={copy.closingText} />
-          <LuxuryButton href="/dat-truoc" variant="primary">
+          <LuxuryButton href="/reorder" variant="primary">
             {copy.preorder}
             <ArrowRight aria-hidden="true" className="h-4 w-4" />
           </LuxuryButton>

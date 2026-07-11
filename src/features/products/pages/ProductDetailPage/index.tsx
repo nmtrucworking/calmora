@@ -310,7 +310,7 @@ export default function ProductDetailPage({ product: baseProduct }: ProductDetai
       <EditorialSection className="bg-[var(--senova-forest-black)] text-text-inverse">
         <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-8 max-[760px]:grid-cols-1">
           <ProductStatement eyebrow="Concierge" title={copy.preorderTitle} text={copy.preorderText} dark />
-          <LuxuryButton href="/dat-truoc" variant="dark">
+          <LuxuryButton href="/reorder" variant="dark">
             {copy.preorder}
             <ArrowRight aria-hidden="true" className="h-4 w-4" />
           </LuxuryButton>

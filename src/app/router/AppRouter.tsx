@@ -388,7 +388,7 @@ function AppRoutes() {
     pageComponent = product ? <ExperiencePage product={product} /> : <NotFoundPage />;
   } else if (normalizedPath.startsWith("/feedback/")) {
     pageComponent = product ? <FeedbackPage product={product} /> : <NotFoundPage />;
-  } else if (normalizedPath === "/dat-truoc" || normalizedPath === "/pre-order") {
+  } else if (normalizedPath === "/reorder" || normalizedPath === "/pre-order") {
     pageComponent = <PreOrderPage />;
   } else if (normalizedPath === "/contact") {
     pageComponent = <ContactPage />;

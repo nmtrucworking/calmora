@@ -118,7 +118,7 @@ export function SiteLayout({
 
           <div className="flex items-center justify-end gap-3 max-[520px]:gap-2">
             <Link
-              href="/dat-truoc"
+              href="/reorder"
               className={cx(
                 "inline-flex min-h-11 items-center justify-center whitespace-nowrap rounded-[var(--radius-sm)] px-4 py-2 text-[0.78rem] font-[650] uppercase tracking-[0.12em] no-underline transition-colors duration-200 max-[520px]:hidden",
                 isTransparentHeader
@@ -172,7 +172,7 @@ export function SiteLayout({
           <nav className="grid gap-3" aria-label={copy.mobileNavAria}>
             {renderNavLinks("mobile")}
             <Link
-              href="/dat-truoc"
+              href="/reorder"
               className="inline-flex min-h-11 items-center justify-center rounded-[var(--radius-sm)] border border-primary bg-primary font-[650] !text-on-primary no-underline"
               onClick={() => setIsMenuOpen(false)}
               tabIndex={isMenuOpen ? undefined : -1}

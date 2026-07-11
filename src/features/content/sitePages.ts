@@ -76,7 +76,7 @@ export const pageSeo: Record<string, SeoContent> = {
     description:
       "Không gian nội dung theo mùa của Senova, nơi hương sen, ký ức và câu chuyện gặp nhau.",
   },
-  "/dat-truoc": {
+  "/reorder": {
     title: "Đăng ký mẫu thử Senova | Calmora",
     description:
       "Đăng ký quan tâm mẫu thử và góp phản hồi validation cho Senova Petal Pack, Senova Gift Set.",

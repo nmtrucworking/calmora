@@ -87,7 +87,7 @@ export const products: SenovaProduct[] = [
     },
     secondaryAction: {
       label: "Đăng ký đặt trước",
-      href: "/dat-truoc?product=classic",
+      href: "/reorder?product=classic",
     },
     heroAlt: "Hộp trà hương sen Senova Classic",
     suitableFor: [
@@ -239,7 +239,7 @@ export const products: SenovaProduct[] = [
     badges: ["Gifting", "Corporate", "Custom quote"],
     primaryAction: {
       label: "Đăng ký nhận thông tin",
-      href: "/dat-truoc?product=gift-set",
+      href: "/reorder?product=gift-set",
     },
     secondaryAction: {
       label: "Liên hệ tư vấn",

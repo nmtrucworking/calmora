@@ -30,7 +30,7 @@ export function ProductStatement({ eyebrow, title, text, dark = false, className
         <p
           className={cx(
             "mt-6 mb-0 max-w-[42rem] text-[1.04rem] leading-[1.8] text-text-muted",
-            dark && "text-text-inverse-muted",
+            dark && "!text-[rgba(255,250,240,0.86)] [text-shadow:0_1px_18px_rgba(0,0,0,0.32)]",
           )}
         >
           {text}

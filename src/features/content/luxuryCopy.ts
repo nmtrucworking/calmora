@@ -126,7 +126,7 @@ export const luxuryLayoutCopy: Record<Language, LuxuryLayoutCopy> = {
       {
         title: "Dịch vụ",
         links: [
-          { label: "Đặt trước", href: "/dat-truoc" },
+          { label: "Đặt trước", href: "/reorder" },
           { label: "Quà tặng", href: "/gifting" },
           { label: "Concierge", href: "/concierge" },
           { label: "Hợp tác", href: "/partners" },
@@ -164,7 +164,7 @@ export const luxuryLayoutCopy: Record<Language, LuxuryLayoutCopy> = {
       {
         title: "Service",
         links: [
-          { label: "Pre-order", href: "/dat-truoc" },
+          { label: "Pre-order", href: "/reorder" },
           { label: "Gifting", href: "/gifting" },
           { label: "Concierge", href: "/concierge" },
           { label: "Partners", href: "/partners" },
@@ -266,7 +266,7 @@ export const luxuryLandingCopy: Record<Language, LuxuryLandingCopy> = {
       title: "Sen trà giao hòa, chuyện Việt ngân nga.",
       text: "Khám phá bộ sưu tập hoặc gửi yêu cầu đặt trước để Senova tư vấn cấu hình phù hợp.",
       primary: { label: "Khám phá bộ sưu tập", href: "/products" },
-      secondary: { label: "Đặt trước", href: "/dat-truoc" },
+      secondary: { label: "Đặt trước", href: "/reorder" },
     },
   },
   en: {
@@ -360,7 +360,7 @@ export const luxuryLandingCopy: Record<Language, LuxuryLandingCopy> = {
       title: "Lotus and tea in dialogue, a Vietnamese story carried forward.",
       text: "Explore the collection or send a preorder request so Senova can advise the right configuration.",
       primary: { label: "Explore collection", href: "/products" },
-      secondary: { label: "Pre-order", href: "/dat-truoc" },
+      secondary: { label: "Pre-order", href: "/reorder" },
     },
   },
 };
@@ -381,7 +381,7 @@ export const productLuxuryCopy: Record<Language, Record<ProductId, ProductLuxury
       image: "/assets/products/petal-pack-optimized.jpg",
       heroAlt: "Senova Petal Pack tạo hình búp sen với phần trà bên trong",
       primaryAction: { label: "Bắt đầu trải nghiệm", href: "/experience/petal-pack" },
-      secondaryAction: { label: "Đặt trước Petal Pack", href: "/dat-truoc?product=petal-pack" },
+      secondaryAction: { label: "Đặt trước Petal Pack", href: "/reorder?product=petal-pack" },
       variants: [
         { id: "petal-single", label: "Set 6 Petal Pack", note: "Trải nghiệm cá nhân" },
         { id: "petal-hosting", label: "Set 18 Petal Pack", note: "Cho tasting và booth" },
@@ -434,7 +434,7 @@ export const productLuxuryCopy: Record<Language, Record<ProductId, ProductLuxury
       image: "/assets/products/classic-pack-optimized.jpg",
       heroAlt: "Hộp trà hương sen Senova Classic",
       primaryAction: { label: "Mở trải nghiệm Classic", href: "/experience/classic" },
-      secondaryAction: { label: "Đặt trước Classic", href: "/dat-truoc?product=classic" },
+      secondaryAction: { label: "Đặt trước Classic", href: "/reorder?product=classic" },
       variants: [
         { id: "daily-box", label: "Hộp 12 gói", note: "Nhịp thưởng trà hằng ngày" },
         { id: "trial-set", label: "Bộ thử 3 gói", note: "Dành cho lần chạm đầu tiên" },
@@ -474,7 +474,7 @@ export const productLuxuryCopy: Record<Language, Record<ProductId, ProductLuxury
       availability: "Nhận tư vấn corporate và seasonal gifting",
       image: "/assets/products/gift-set-optimized.jpg",
       heroAlt: "Bộ quà trà sen Senova Gift Set",
-      primaryAction: { label: "Đăng ký nhận thông tin", href: "/dat-truoc?product=gift-set" },
+      primaryAction: { label: "Đăng ký nhận thông tin", href: "/reorder?product=gift-set" },
       secondaryAction: { label: "Liên hệ tư vấn", href: "/contact?topic=gift-set" },
       variants: [
         { id: "gift-personal", label: "Personal Gift Set", note: "Quà tặng cá nhân" },
@@ -520,7 +520,7 @@ export const productLuxuryCopy: Record<Language, Record<ProductId, ProductLuxury
       image: "/assets/products/petal-pack-optimized.jpg",
       heroAlt: "Senova Petal Pack shaped as a lotus bud with tea inside",
       primaryAction: { label: "Begin the experience", href: "/experience/petal-pack" },
-      secondaryAction: { label: "Pre-order Petal Pack", href: "/dat-truoc?product=petal-pack" },
+      secondaryAction: { label: "Pre-order Petal Pack", href: "/reorder?product=petal-pack" },
       variants: [
         { id: "petal-single", label: "Set of 6 Petal Packs", note: "Personal tasting" },
         { id: "petal-hosting", label: "Set of 18 Petal Packs", note: "For tasting sessions and booths" },
@@ -562,7 +562,7 @@ export const productLuxuryCopy: Record<Language, Record<ProductId, ProductLuxury
       image: "/assets/products/classic-pack-optimized.jpg",
       heroAlt: "Senova Classic lotus tea box",
       primaryAction: { label: "Open the Classic experience", href: "/experience/classic" },
-      secondaryAction: { label: "Pre-order Classic", href: "/dat-truoc?product=classic" },
+      secondaryAction: { label: "Pre-order Classic", href: "/reorder?product=classic" },
       variants: [
         { id: "daily-box", label: "Box of 12 sachets", note: "Everyday tea rhythm" },
         { id: "trial-set", label: "3-sachet trial set", note: "For the first touchpoint" },
@@ -602,7 +602,7 @@ export const productLuxuryCopy: Record<Language, Record<ProductId, ProductLuxury
       availability: "Corporate and seasonal gifting consultation open",
       image: "/assets/products/gift-set-optimized.jpg",
       heroAlt: "Senova Gift Set lotus tea gift box",
-      primaryAction: { label: "Register interest", href: "/dat-truoc?product=gift-set" },
+      primaryAction: { label: "Register interest", href: "/reorder?product=gift-set" },
       secondaryAction: { label: "Contact concierge", href: "/contact?topic=gift-set" },
       variants: [
         { id: "gift-personal", label: "Personal Gift Set", note: "Personal gifting" },

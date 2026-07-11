@@ -16,9 +16,9 @@ export const productDetailStyles = {
   description: "mt-5 mb-0 max-w-[35rem] text-base leading-[1.75] text-text-muted",
   actions: "mt-8 flex flex-wrap gap-[0.85rem] max-[560px]:flex-col",
   primaryButton:
-    `inline-flex min-h-[2.9rem] items-center justify-center gap-[0.55rem] rounded-full border border-primary bg-primary px-[1.15rem] py-3 text-[0.9rem] font-extrabold text-on-primary no-underline max-[560px]:w-full [&_svg]:h-4 [&_svg]:w-4 ${luxuryMotion.button}`,
+    `inline-flex min-h-[2.9rem] items-center justify-center gap-[0.55rem] rounded-[var(--radius-sm)] border border-[rgba(11,26,21,0.9)] bg-[linear-gradient(135deg,var(--primary),var(--primary-strong)_58%,#13281f)] px-[1.2rem] py-3 text-[0.9rem] font-extrabold tracking-normal text-on-primary no-underline shadow-[0_14px_34px_rgba(7,17,15,0.16)] max-[560px]:w-full hover:border-[rgba(248,223,147,0.42)] [&_svg]:h-4 [&_svg]:w-4 ${luxuryMotion.button}`,
   secondaryButton:
-    `inline-flex min-h-[2.9rem] items-center justify-center gap-[0.55rem] rounded-full border border-border-strong bg-surface-strong px-[1.15rem] py-3 text-[0.9rem] font-extrabold text-primary-strong no-underline max-[560px]:w-full [&_svg]:h-4 [&_svg]:w-4 ${luxuryMotion.button}`,
+    `inline-flex min-h-[2.9rem] items-center justify-center gap-[0.55rem] rounded-[var(--radius-sm)] border border-[rgba(138,104,37,0.28)] bg-[rgba(255,253,248,0.58)] px-[1.2rem] py-3 text-[0.9rem] font-extrabold tracking-normal text-primary-strong no-underline shadow-[0_12px_28px_rgba(37,31,21,0.08)] max-[560px]:w-full hover:border-[rgba(138,104,37,0.5)] hover:bg-surface-strong [&_svg]:h-4 [&_svg]:w-4 ${luxuryMotion.button}`,
   batchLabel: "mt-4 mb-0 text-[0.82rem] font-bold text-text-soft",
   heroVisual: "flex justify-center",
   imagePlate:
