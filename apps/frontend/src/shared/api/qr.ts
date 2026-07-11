@@ -1,0 +1,47 @@
+import { resolveQrCode } from "@features/qr/services/qrRegistry";
+import type { QrResolveResult } from "@features/qr/types/qr";
+import type { ApiResponse } from "@shared/api/submissions";
+import { getApiBaseUrl, hasApiBaseUrl } from "@shared/api/config";
+
+export async function resolveQr(code: string): Promise<QrResolveResult> {
+  if (!hasApiBaseUrl()) {
+    return resolveQrCode(code);
+  }
+
+  try {
+    const response = await fetch(`${getApiBaseUrl()}/api/qr/${encodeURIComponent(code)}`);
+    const result = (await response.json()) as ApiResponse<QrResolveResult>;
+
+    if (!response.ok || !result.success || !result.data) {
+      return resolveQrCode(code);
+    }
+
+    return result.data;
+  } catch {
+    return resolveQrCode(code);
+  }
+}
+
+export function trackQrScan(code: string, payload: Record<string, string | undefined>) {
+  if (!hasApiBaseUrl()) return;
+
+  const body = JSON.stringify(payload);
+  const url = `${getApiBaseUrl()}/api/qr/${encodeURIComponent(code)}/scan`;
+
+  try {
+    if ("sendBeacon" in navigator) {
+      const blob = new Blob([body], { type: "application/json" });
+      navigator.sendBeacon(url, blob);
+      return;
+    }
+
+    void fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body,
+      keepalive: true,
+    });
+  } catch {
+    // QR scan tracking must never block redirect.
+  }
+}

@@ -291,9 +291,16 @@ function updateMetadata(pathname: string, language: Language) {
       ? getProductBySlug(productSlug)
       : undefined;
   const product = baseProduct ? getLocalizedProduct(baseProduct, language) : undefined;
-  const fallbackSeo: SeoContent = pageSeo[pathname] ?? product?.seo ?? pageSeo["/404"];
+  const qrSeo: SeoContent | undefined = pathname.startsWith("/q/")
+    ? {
+        title: "QR Senova | Calmora",
+        description: "Trang xu ly ma QR Senova va dieu huong den trai nghiem san pham phu hop.",
+        robots: "noindex,follow",
+      }
+    : undefined;
+  const fallbackSeo: SeoContent = qrSeo ?? pageSeo[pathname] ?? product?.seo ?? pageSeo["/404"];
   const seo = getLocalizedSeo(pathname, fallbackSeo, language);
-  const canonicalPath = pageSeo[pathname] || commerceText[language].seo[pathname] || product ? pathname : "/404";
+  const canonicalPath = qrSeo || pageSeo[pathname] || commerceText[language].seo[pathname] || product ? pathname : "/404";
   const canonical = `${canonicalBaseUrl}${canonicalPath === "/" ? "" : canonicalPath}`;
   const image = seo.image ?? `${canonicalBaseUrl}/assets/brand/calmora-mark.png`;
 

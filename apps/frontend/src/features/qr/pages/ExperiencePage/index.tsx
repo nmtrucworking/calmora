@@ -3,6 +3,7 @@ import { ArrowRight, Check, MessageSquare, Quote } from "lucide-react";
 import { Link } from "@app/router/RouterContext";
 import { useRouter } from "@app/router/RouterState";
 import { getQrExperienceContent } from "@features/content/qrExperience";
+import { getQrBatchContentOverride } from "@features/qr/data/qrBatchOverrides";
 import { trackEvent } from "@shared/analytics/analytics";
 import { QrFeedbackForm } from "@features/qr/components/QrFeedbackForm";
 import type { SenovaProduct } from "@features/products/data/products";
@@ -19,6 +20,8 @@ export default function ExperiencePage({ product }: ExperiencePageProps) {
   const source = params.get("source") ?? "qr";
   const qrContent = product ? getQrExperienceContent(product.slug) : undefined;
   const contentViewed = params.get("content") ?? qrContent?.contentViewed ?? "unknown-scan";
+  const contentVersion = params.get("version") ?? qrContent?.version ?? "v1";
+  const batchOverride = batchCode ? getQrBatchContentOverride(batchCode, contentVersion) : undefined;
 
   useEffect(() => {
     if (!product) return;
@@ -29,8 +32,9 @@ export default function ExperiencePage({ product }: ExperiencePageProps) {
       batchCode,
       source,
       contentViewed,
+      contentVersion,
     });
-  }, [batchCode, contentViewed, product, source]);
+  }, [batchCode, contentVersion, contentViewed, product, source]);
 
   if (!product) {
     return (
@@ -46,6 +50,11 @@ export default function ExperiencePage({ product }: ExperiencePageProps) {
   }
 
   const activeQrContent = qrContent ?? getQrExperienceContent(product.slug);
+  const guidance = batchOverride?.guidanceOverride ?? {
+    title: activeQrContent.guidanceTitle,
+    intro: activeQrContent.guidanceIntro,
+    steps: activeQrContent.guidanceSteps,
+  };
 
   return (
     <article className={styles.page}>
@@ -57,6 +66,7 @@ export default function ExperiencePage({ product }: ExperiencePageProps) {
           <div className="mt-5 flex flex-wrap gap-2">
             {batchCode ? <span className={styles.statusBadge}>SKU / Lô {batchCode}</span> : null}
             <span className={styles.statusBadge}>Nguồn {source}</span>
+            <span className={styles.statusBadge}>Nội dung {contentVersion}</span>
           </div>
           <div className={styles.actions}>
             <a href="#qr-feedback-form" className={styles.primaryButton}>
@@ -94,11 +104,12 @@ export default function ExperiencePage({ product }: ExperiencePageProps) {
       <section id="brew-guidance" className="scroll-mt-28 grid gap-6">
         <div className={styles.sectionHeader}>
           <p className={styles.eyebrow}>Hướng dẫn trải nghiệm</p>
-          <h2 className={styles.title}>{activeQrContent.guidanceTitle}</h2>
-          <p className={styles.lead}>{activeQrContent.guidanceIntro}</p>
+          <h2 className={styles.title}>{guidance.title}</h2>
+          <p className={styles.lead}>{guidance.intro}</p>
+          {batchOverride?.notice ? <p className={styles.lead}>{batchOverride.notice}</p> : null}
         </div>
         <div className={styles.stepGrid}>
-          {activeQrContent.guidanceSteps.map((step) => (
+          {guidance.steps.map((step) => (
             <article className={styles.panel} key={step.label}>
               <span className={styles.panelLabel}>{step.label}</span>
               <h3>{step.title}</h3>
@@ -122,6 +133,7 @@ export default function ExperiencePage({ product }: ExperiencePageProps) {
           skuOrLot={batchCode}
           source={source}
           contentViewed={contentViewed}
+          contentVersion={contentVersion}
           title="Phản hồi QR"
         />
       </section>

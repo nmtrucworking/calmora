@@ -18,6 +18,7 @@ export default function FeedbackPage({ product }: FeedbackPageProps) {
   const source = params.get("source") ?? "qr";
   const qrContent = product ? getQrExperienceContent(product.slug) : undefined;
   const contentViewed = params.get("content") ?? qrContent?.contentViewed ?? "unknown-feedback";
+  const contentVersion = params.get("version") ?? qrContent?.version ?? "v1";
 
   useEffect(() => {
     if (!product) return;
@@ -28,8 +29,9 @@ export default function FeedbackPage({ product }: FeedbackPageProps) {
       batchCode,
       source,
       contentViewed,
+      contentVersion,
     });
-  }, [batchCode, contentViewed, product, source]);
+  }, [batchCode, contentVersion, contentViewed, product, source]);
 
   if (!product) {
     return (
@@ -74,6 +76,7 @@ export default function FeedbackPage({ product }: FeedbackPageProps) {
           skuOrLot={batchCode}
           source={source}
           contentViewed={contentViewed}
+          contentVersion={contentVersion}
           title="Gửi phản hồi"
         />
       </section>

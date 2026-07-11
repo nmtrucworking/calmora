@@ -1,0 +1,69 @@
+[
+  {
+    "code": "PP-2601-A",
+    "productSlug": "petal-pack",
+    "batchCode": "PP-2601-A",
+    "contentVersion": "v1",
+    "destination": "/experience/petal-pack",
+    "status": "active",
+    "campaign": "pilot-2026",
+    "locale": "vi",
+    "createdAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "code": "CL-2601-A",
+    "productSlug": "classic",
+    "batchCode": "CL-2601-A",
+    "contentVersion": "v1",
+    "destination": "/experience/classic",
+    "status": "active",
+    "campaign": "pilot-2026",
+    "locale": "vi",
+    "createdAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "code": "GS-2601-A",
+    "productSlug": "gift-set",
+    "batchCode": "GS-2601-A",
+    "contentVersion": "v1",
+    "destination": "/experience/gift-set",
+    "status": "active",
+    "campaign": "pilot-2026",
+    "locale": "vi",
+    "createdAt": "2026-01-01T00:00:00.000Z"
+  },
+  {
+    "code": "PP-2509-X",
+    "productSlug": "petal-pack",
+    "batchCode": "PP-2509-X",
+    "contentVersion": "prototype-2025-09",
+    "destination": "/experience/petal-pack",
+    "status": "paused",
+    "campaign": "prototype-2025",
+    "locale": "vi",
+    "createdAt": "2025-09-01T00:00:00.000Z"
+  },
+  {
+    "code": "CL-2501-Z",
+    "productSlug": "classic",
+    "batchCode": "CL-2501-Z",
+    "contentVersion": "v1",
+    "destination": "/experience/classic",
+    "status": "active",
+    "expiresAt": "2026-01-01T00:00:00.000Z",
+    "campaign": "expired-sample",
+    "locale": "vi",
+    "createdAt": "2025-01-01T00:00:00.000Z"
+  },
+  {
+    "code": "GS-2508-R",
+    "productSlug": "gift-set",
+    "batchCode": "GS-2508-R",
+    "contentVersion": "prototype-2025-08",
+    "destination": "/experience/gift-set",
+    "status": "revoked",
+    "campaign": "revoked-sample",
+    "locale": "vi",
+    "createdAt": "2025-08-01T00:00:00.000Z"
+  }
+]

@@ -1,5 +1,3 @@
-import type { ProductId } from "@features/products/data/products";
-
 export type SeoContent = {
   title: string;
   description: string;
@@ -378,53 +376,3 @@ export const thankYouMessages: Record<string, { title: string; text: string }> =
     text: "Calmora sẽ xem xét nội dung và phản hồi khi có hướng trao đổi phù hợp.",
   },
 };
-
-export type QrRecord = {
-  code: string;
-  productSlug: ProductId;
-  batchCode?: string;
-  destination: string;
-  active: boolean;
-  createdAt: string;
-  expiresAt?: string;
-};
-
-export const qrRecords: QrRecord[] = [
-  {
-    code: "PP-2601-A",
-    productSlug: "petal-pack",
-    batchCode: "PP-2601-A",
-    destination: "/experience/petal-pack",
-    active: true,
-    createdAt: "2026-01-01",
-  },
-  {
-    code: "CL-2601-A",
-    productSlug: "classic",
-    batchCode: "CL-2601-A",
-    destination: "/experience/classic",
-    active: true,
-    createdAt: "2026-01-01",
-  },
-  {
-    code: "GS-2601-A",
-    productSlug: "gift-set",
-    batchCode: "GS-2601-A",
-    destination: "/experience/gift-set",
-    active: true,
-    createdAt: "2026-01-01",
-  },
-  {
-    code: "PP-2509-X",
-    productSlug: "petal-pack",
-    batchCode: "PP-2509-X",
-    destination: "/experience/petal-pack",
-    active: false,
-    createdAt: "2025-09-01",
-  },
-];
-
-export function getQrRecord(code: string) {
-  const normalizedCode = code.trim().toUpperCase();
-  return qrRecords.find((record) => record.code === normalizedCode);
-}

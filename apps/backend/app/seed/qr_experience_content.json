@@ -1,0 +1,116 @@
+[
+  {
+    "productSlug": "classic",
+    "version": "v1",
+    "locale": "vi",
+    "contentViewed": "classic-scan",
+    "eyebrow": "QR Senova Classic / Giu",
+    "title": "Giu mot khoang lang moi ngay.",
+    "lede": "Classic la diem bat dau cua Senova: mot phan tra huong sen gon, de pha va du cham de huong sen hien dien trong doi song thuong ngay.",
+    "story": {
+      "title": "Cau chuyen phia sau",
+      "paragraphs": [
+        "Classic tao mot diem tiep can don gian de nguoi dung bat dau nhan biet huong sen, vi tra va khoang lang cua viec thuong thuc.",
+        "Mot phan tra, mot chiec coc va vai phut danh rieng da du de bien viec pha tra thanh mot nhip nghi co chu dich."
+      ]
+    },
+    "culture": {
+      "title": "Cau chuyen van hoa",
+      "paragraphs": [
+        "Senova tiep can hinh anh sen nhu chat lieu cam hung cho trai nghiem hien dai, khong gan thanh tuyen bo lich su khi chua co nguon kiem chung."
+      ],
+      "sourceNotes": []
+    },
+    "guidance": {
+      "title": "Cach bat dau",
+      "intro": "Danh cho mot tach tra hang ngay, khong can chuan bi cau ky.",
+      "steps": [
+        { "label": "01", "title": "Mo mot phan tra", "text": "Lay mot phan tra da dinh luong, giu thao tac gon va sach truoc khi pha." },
+        { "label": "02", "title": "Pha bang nuoc nong", "text": "Dung khoang 180 ml nuoc nong va lam theo huong dan in tren bao bi." },
+        { "label": "03", "title": "Cho huong sen mo", "text": "Cho 4-5 phut de huong va vi dan on dinh truoc khi thuong thuc." }
+      ],
+      "safetyNote": null
+    },
+    "reflectionPrompt": "Hom nay, ban muon danh tach tra nay cho chinh minh hay moi mot nguoi khac ngoi lai?",
+    "cta": {
+      "primary": { "label": "Xem Classic", "href": "/products/classic" },
+      "secondary": { "label": "Gui phan hoi", "href": "/feedback/classic" }
+    }
+  },
+  {
+    "productSlug": "petal-pack",
+    "version": "v1",
+    "locale": "vi",
+    "contentViewed": "petal-pack-scan",
+    "eyebrow": "QR Senova Petal Pack / Mo",
+    "title": "Mo mot canh sen, bat dau mot khoang lang.",
+    "lede": "Petal Pack la phan tra cho mot lan pha, dat trong tui loc va duoc bao quanh boi canh sen say tao hinh bup sen.",
+    "story": {
+      "title": "Y nghia cua trai nghiem",
+      "paragraphs": [
+        "Petal Pack khong mo phong mot nghi le lich su cu the. Day la nghi thuc trai nghiem do Senova thiet ke.",
+        "Van hoa con duoc ghi nho qua hinh dang, mui huong, thao tac va cam giac."
+      ]
+    },
+    "culture": {
+      "title": "Cau chuyen van hoa",
+      "paragraphs": [
+        "Senova dung hinh anh canh sen nhu diem cham truc quan, tranh dua ra tuyen bo vuot qua bang chung ve di san hoac nghi le."
+      ],
+      "sourceNotes": []
+    },
+    "guidance": {
+      "title": "Mo - cam nhan - pha",
+      "intro": "Hay de thao tac mo canh tro thanh buoc dau tien cua tach tra.",
+      "steps": [
+        { "label": "01", "title": "Mo nhe tung lop canh", "text": "Quan sat cau truc bup sen va cam nhan chat lieu truoc." },
+        { "label": "02", "title": "Cam nhan bang nhieu giac quan", "text": "Nhan biet hinh dang, chat lieu va huong trong khoanh khac dau tien." },
+        { "label": "03", "title": "Pha phan tra ben trong", "text": "Lay tui tra, dat vao coc, dung khoang 200 ml nuoc nong va lam theo huong dan tren bao bi." }
+      ],
+      "safetyNote": "Neu thong so bao bi khac voi noi dung QR, uu tien thong so tren bao bi."
+    },
+    "reflectionPrompt": "Dieu khien ban nho nhat la hinh dang bup sen, thao tac mo canh, huong tra hay thoi gian cho?",
+    "cta": {
+      "primary": { "label": "Gui phan hoi", "href": "/feedback/petal-pack" },
+      "secondary": { "label": "Xem Petal Pack", "href": "/products/petal-pack" }
+    }
+  },
+  {
+    "productSlug": "gift-set",
+    "version": "v1",
+    "locale": "vi",
+    "contentViewed": "gift-set-scan",
+    "eyebrow": "QR Senova Gift Set / Trao",
+    "title": "Mot mon qua co cau chuyen.",
+    "lede": "Gift Set ket hop tra huong sen, Petal Pack, huong dan pha va the cau chuyen trong mot hanh trinh trao tang thong nhat.",
+    "story": {
+      "title": "Giu - Mo - Trao",
+      "paragraphs": [
+        "Ban nhan duoc Senova Gift Set nhu mot loi moi danh thoi gian cho huong sen, cho chinh minh va cho nguoi da chuan bi mon qua.",
+        "Dieu duoc trao di khong chi la san pham, ma con la thoi gian chuan bi va mot loi tran trong."
+      ]
+    },
+    "culture": {
+      "title": "Cau chuyen van hoa",
+      "paragraphs": [
+        "Gift Set cho phep cau chuyen san pham di cung nguoi nhan ma khong bien chat lieu van hoa thanh cam ket lich su chua duoc kiem chung."
+      ],
+      "sourceNotes": []
+    },
+    "guidance": {
+      "title": "Bat dau tu dau?",
+      "intro": "Moi thanh phan trong Gift Set dam nhiem mot vai tro trong hanh trinh nhan qua.",
+      "steps": [
+        { "label": "01", "title": "Doc loi nhan", "text": "Bat dau bang thong diep di cung bo qua de nhan biet dung y cua nguoi trao." },
+        { "label": "02", "title": "Chon trai nghiem", "text": "Chon Classic cho tach tra gon, chon Petal Pack khi muon bat dau bang thao tac mo canh." },
+        { "label": "03", "title": "Pha theo huong dan", "text": "Dung huong dan in tren bao bi hoac the di kem de pha dung phan tra ban chon." }
+      ],
+      "safetyNote": null
+    },
+    "reflectionPrompt": "Mon qua nay phu hop nhat voi dip trao tang nao?",
+    "cta": {
+      "primary": { "label": "Lien he tu van", "href": "/contact?topic=gift-set" },
+      "secondary": { "label": "Xem Gift Set", "href": "/products/gift-set" }
+    }
+  }
+]

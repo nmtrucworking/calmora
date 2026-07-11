@@ -1,4 +1,5 @@
 import type { ProductId } from "@features/products/data/products";
+import { getApiBaseUrl, hasApiBaseUrl } from "@shared/api/config";
 
 export type AnalyticsEvent = {
   eventName: string;
@@ -7,6 +8,9 @@ export type AnalyticsEvent = {
   batchCode?: string;
   source?: string;
   contentViewed?: string;
+  contentVersion?: string;
+  destination?: string;
+  status?: string;
   timestamp: string;
 };
 
@@ -30,5 +34,18 @@ export function trackEvent(event: Omit<AnalyticsEvent, "timestamp" | "path"> & {
     localStorage.setItem(analyticsKey, JSON.stringify([...previous.slice(-99), payload]));
   } catch {
     // Analytics must never block the experience.
+  }
+
+  if (hasApiBaseUrl()) {
+    try {
+      void fetch(`${getApiBaseUrl()}/api/analytics/events`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+        keepalive: true,
+      });
+    } catch {
+      // Remote analytics must never block the experience.
+    }
   }
 }

@@ -8,6 +8,7 @@ export type QrExperienceStep = {
 
 export type QrExperienceContent = {
   productSlug: ProductId;
+  version: string;
   contentViewed: string;
   eyebrow: string;
   title: string;
@@ -23,6 +24,7 @@ export type QrExperienceContent = {
 export const qrExperienceContent: Record<ProductId, QrExperienceContent> = {
   classic: {
     productSlug: "classic",
+    version: "v1",
     contentViewed: "classic-scan",
     eyebrow: "QR Senova Classic / Giữ",
     title: "Giữ một khoảng lặng mỗi ngày.",
@@ -61,6 +63,7 @@ export const qrExperienceContent: Record<ProductId, QrExperienceContent> = {
   },
   "petal-pack": {
     productSlug: "petal-pack",
+    version: "v1",
     contentViewed: "petal-pack-scan",
     eyebrow: "QR Senova Petal Pack / Mở",
     title: "Mở một cánh sen, bắt đầu một khoảng lặng.",
@@ -100,6 +103,7 @@ export const qrExperienceContent: Record<ProductId, QrExperienceContent> = {
   },
   "gift-set": {
     productSlug: "gift-set",
+    version: "v1",
     contentViewed: "gift-set-scan",
     eyebrow: "QR Senova Gift Set / Trao",
     title: "Một món quà có câu chuyện.",

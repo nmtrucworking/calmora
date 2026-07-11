@@ -11,6 +11,7 @@ type QrFeedbackFormProps = {
   skuOrLot?: string;
   source?: string;
   contentViewed: string;
+  contentVersion?: string;
   title?: string;
   description?: string;
 };
@@ -42,6 +43,7 @@ export function QrFeedbackForm({
   skuOrLot = "",
   source = "qr",
   contentViewed,
+  contentVersion = "v1",
   title = "Gửi phản hồi nhanh",
   description = "Phản hồi được lưu theo sản phẩm, mã lô và nội dung đã xem để Senova cải tiến trải nghiệm QR.",
 }: QrFeedbackFormProps) {
@@ -62,6 +64,7 @@ export function QrFeedbackForm({
       skuOrLot: getFieldValue(formData, "skuOrLot"),
       source: getFieldValue(formData, "source"),
       contentViewed: getFieldValue(formData, "contentViewed"),
+      contentVersion: getFieldValue(formData, "contentVersion"),
       sensoryFeedback: getFieldValue(formData, "sensoryFeedback"),
       acceptablePriceRange: getFieldValue(formData, "acceptablePriceRange"),
       purchaseIntentPurpose: getFieldValue(formData, "purchaseIntentPurpose"),
@@ -98,6 +101,7 @@ export function QrFeedbackForm({
       batchCode: payload.skuOrLot,
       source: payload.source,
       contentViewed: payload.contentViewed,
+      contentVersion: payload.contentVersion,
     });
     navigate(`/thank-you?type=feedback&product=${product.slug}`);
   }
@@ -142,6 +146,11 @@ export function QrFeedbackForm({
         <div className={styles.fieldGroup}>
           <label htmlFor="contentViewed">Nội dung đã xem</label>
           <input id="contentViewed" name="contentViewed" defaultValue={contentViewed} readOnly required />
+        </div>
+
+        <div className={styles.hiddenField}>
+          <label htmlFor="contentVersion">Content version</label>
+          <input id="contentVersion" name="contentVersion" defaultValue={contentVersion} readOnly />
         </div>
 
         <div className={styles.fieldGroup}>
