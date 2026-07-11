@@ -436,8 +436,11 @@ function AppRoutes() {
     </Suspense>
   );
 
+  const isFullBleedContent =
+    normalizedPath === "/products" || (normalizedPath.startsWith("/products/") && Boolean(product));
+
   return (
-    <SiteLayout isLanding={pathname === landingPath} isProductsPage={normalizedPath === "/products"}>
+    <SiteLayout isLanding={pathname === landingPath} isFullBleedContent={isFullBleedContent}>
       {routedPage}
     </SiteLayout>
   );

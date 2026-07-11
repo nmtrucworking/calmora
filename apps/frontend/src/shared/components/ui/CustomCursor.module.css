@@ -29,7 +29,7 @@
 }
 
 /* Hide default cursor on desktop when custom cursor is active */
-@media (hover: hover) and (pointer: fine) {
+@media (hover: hover) and (pointer: fine) and (min-width: 1025px) {
   :global(body),
   :global(body) * {
     cursor: none !important;

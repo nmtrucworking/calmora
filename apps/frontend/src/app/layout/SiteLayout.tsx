@@ -13,8 +13,8 @@ import { AmbientSoundButton } from "@features/landing/sections/AmbientSoundButto
 type SiteLayoutProps = {
   children: ReactNode;
   footerGroups?: BrandFooterGroup[];
+  isFullBleedContent?: boolean;
   isLanding?: boolean;
-  isProductsPage?: boolean;
   navItems?: BrandNavItem[];
 };
 
@@ -26,8 +26,8 @@ const mobileNavLinkClass =
 export function SiteLayout({
   children,
   footerGroups,
+  isFullBleedContent = false,
   isLanding = false,
-  isProductsPage = false,
   navItems,
 }: SiteLayoutProps) {
   const { pathname } = useRouter();
@@ -187,10 +187,11 @@ export function SiteLayout({
         className={
           isLanding
             ? cx("relative z-10", styles.landingContentEffects)
+            : isFullBleedContent
+              ? cx("relative z-10", styles.contentEffects)
             : cx(
                 "relative z-10 mx-auto max-w-[var(--page-max)] px-6 pt-[6.75rem] pb-20 max-[900px]:px-4 max-[900px]:pt-[5.8rem] max-[900px]:pb-16",
                 styles.contentEffects,
-                isProductsPage && "max-w-none p-0 max-[900px]:p-0",
               )
         }
       >

@@ -12,10 +12,14 @@ interface Sparkle {
   decay: number;
 }
 
+const desktopCursorMediaQuery = "(hover: hover) and (pointer: fine) and (min-width: 1025px)";
+
 export function CustomCursor() {
   const [hovered, setHovered] = useState(false);
   const [isMoving, setIsMoving] = useState(false);
-  const [isDesktop] = useState(() => !window.matchMedia("(hover: none)").matches);
+  const [isDesktop, setIsDesktop] = useState(() =>
+    typeof window !== "undefined" ? window.matchMedia(desktopCursorMediaQuery).matches : false,
+  );
 
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
@@ -29,6 +33,16 @@ export function CustomCursor() {
   const particlesRef = useRef<Sparkle[]>([]);
   const isLoopingRef = useRef(false);
   const moveTimeoutRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(desktopCursorMediaQuery);
+    const updateCursorMode = () => setIsDesktop(mediaQuery.matches);
+
+    updateCursorMode();
+    mediaQuery.addEventListener("change", updateCursorMode);
+
+    return () => mediaQuery.removeEventListener("change", updateCursorMode);
+  }, []);
 
   // Register event listeners and canvas setup only when isDesktop is true
   useEffect(() => {
