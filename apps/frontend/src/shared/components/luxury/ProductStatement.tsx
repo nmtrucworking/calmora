@@ -19,7 +19,7 @@ export function ProductStatement({ eyebrow, title, text, dark = false, className
       <StaggerItem>
         <h2
           className={cx(
-            "mt-4 mb-0 font-display text-[clamp(2.2rem,5vw,4.5rem)] font-[430] leading-[1.02] text-text",
+            "mt-4 mb-0 font-display text-[clamp(1.9rem,4vw,3.45rem)] font-[430] leading-[1.06] text-text",
             dark && "text-text-inverse",
           )}
         >
@@ -29,7 +29,7 @@ export function ProductStatement({ eyebrow, title, text, dark = false, className
       <StaggerItem>
         <p
           className={cx(
-            "mt-6 mb-0 max-w-[42rem] text-[1.04rem] leading-[1.8] text-text-muted",
+            "mt-5 mb-0 max-w-[42rem] text-[1rem] leading-[1.76] text-text-muted",
             dark && "!text-[rgba(255,250,240,0.86)] [text-shadow:0_1px_18px_rgba(0,0,0,0.32)]",
           )}
         >

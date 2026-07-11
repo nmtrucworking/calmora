@@ -86,7 +86,7 @@ function ProductNotFound() {
     <EditorialSection>
       <div className="mx-auto max-w-[44rem] text-center">
         <SectionEyebrow>{copy.products}</SectionEyebrow>
-        <h1 className="mt-4 mb-0 font-display text-[clamp(2.4rem,6vw,4.8rem)] font-[430] leading-[1.02] text-text">
+        <h1 className="mt-4 mb-0 font-display text-[clamp(2.15rem,5.4vw,4.25rem)] font-[430] leading-[1.04] text-text">
           {copy.notFoundTitle}
         </h1>
         <p className="mt-5 mb-0 leading-[1.75] text-text-muted">{copy.notFoundText}</p>
@@ -113,7 +113,7 @@ export default function ProductDetailPage({ product: baseProduct }: ProductDetai
 
   return (
     <article className="bg-[var(--page-bg)]">
-      <section className="relative overflow-hidden bg-[var(--senova-forest-black)] px-6 pt-28 pb-20 text-text-inverse max-[760px]:px-4">
+      <section className="relative overflow-hidden bg-[var(--senova-forest-black)] px-6 pt-24 pb-18 text-text-inverse max-[760px]:px-4">
         <div className="mx-auto max-w-[var(--page-max)]">
           <Link
             href="/products"
@@ -126,7 +126,7 @@ export default function ProductDetailPage({ product: baseProduct }: ProductDetai
           <div className="mt-10 grid grid-cols-[minmax(0,0.95fr)_minmax(20rem,0.85fr)] items-center gap-[clamp(2rem,6vw,5rem)] max-[900px]:grid-cols-1">
             <div>
               <SectionEyebrow className="text-accent-gold">{product.eyebrow}</SectionEyebrow>
-              <h1 className="mt-5 mb-0 max-w-[11ch] font-display text-[clamp(3.2rem,8vw,6.8rem)] font-[420] leading-[0.98]">
+              <h1 className="mt-5 mb-0 max-w-[11ch] font-display text-[clamp(2.55rem,6.2vw,5.1rem)] font-[420] leading-[1.04]">
                 {product.name}
               </h1>
               <p className="mt-5 mb-0 font-display text-[clamp(1.35rem,3vw,2.1rem)] font-[430] leading-[1.18] text-accent-gold">

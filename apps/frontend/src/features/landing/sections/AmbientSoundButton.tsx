@@ -16,6 +16,11 @@ type AmbientEngine = {
   oscillators: OscillatorNode[];
 };
 
+type AmbientSoundButtonProps = {
+  className?: string;
+  compact?: boolean;
+};
+
 function createOscillator(context: AudioContext, master: GainNode, frequency: number, type: OscillatorType) {
   const oscillator = context.createOscillator();
   const gain = context.createGain();
@@ -60,7 +65,7 @@ function playBell(context: AudioContext, master: GainNode, frequency: number) {
   oscillator.stop(now + 1.7);
 }
 
-export function AmbientSoundButton() {
+export function AmbientSoundButton({ className, compact = false }: AmbientSoundButtonProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const { language } = useLanguage();
   const engineRef = useRef<AmbientEngine | null>(null);
@@ -150,7 +155,13 @@ export function AmbientSoundButton() {
   return (
     <button
       type="button"
-      className={cx("inline-flex cursor-pointer items-center gap-[0.55rem] rounded-full border border-border bg-surface-strong px-[0.9rem] py-[0.52rem] text-[0.82rem] font-[700] text-text [backdrop-filter:blur(18px)] hover:border-border-strong hover:bg-surface hover:text-primary aria-pressed:border-primary aria-pressed:text-primary max-[767px]:p-[0.48rem] max-[767px]:[&_span]:hidden", luxuryMotion.button)}
+      className={cx(
+        compact
+          ? "inline-flex h-9 w-9 cursor-pointer items-center justify-center border text-inherit [backdrop-filter:blur(18px)] [&_svg]:h-4 [&_svg]:w-4"
+          : "inline-flex cursor-pointer items-center gap-[0.55rem] rounded-full border border-border bg-surface-strong px-[0.9rem] py-[0.52rem] text-[0.82rem] font-[700] text-text [backdrop-filter:blur(18px)] hover:border-border-strong hover:bg-surface hover:text-primary aria-pressed:border-primary aria-pressed:text-primary max-[767px]:p-[0.48rem] max-[767px]:[&_span]:hidden",
+        luxuryMotion.button,
+        className,
+      )}
       onClick={() => {
         if (isPlaying) {
           stop();
@@ -163,7 +174,7 @@ export function AmbientSoundButton() {
       title={isPlaying ? copy.turnOff : copy.turnOn}
     >
       {isPlaying ? <Volume2 className="h-4 w-4 flex-none" /> : <VolumeX className="h-4 w-4 flex-none" />}
-      <span>{isPlaying ? copy.on : copy.off}</span>
+      <span className={compact ? "sr-only" : undefined}>{isPlaying ? copy.on : copy.off}</span>
     </button>
   );
 }

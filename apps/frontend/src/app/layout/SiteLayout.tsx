@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useState, type ReactNode } from "react";
-import { Menu, X } from "lucide-react";
+import { ArrowRight, Globe2, Mail, MapPin, Menu, Sparkles, X } from "lucide-react";
 import { BrandMark } from "@shared/components/branding/BrandMark";
 import type { BrandFooterGroup, BrandNavItem } from "@features/content/brand";
 import { luxuryLayoutCopy } from "@features/content/luxuryCopy";
@@ -19,9 +19,9 @@ type SiteLayoutProps = {
 };
 
 const desktopNavLinkClass =
-  "inline-flex min-h-11 flex-none items-center text-text-muted no-underline transition-colors duration-200 hover:text-primary-strong";
+  "relative inline-flex h-9 flex-none items-center px-2 text-text-muted no-underline transition-colors duration-200 after:absolute after:inset-x-2 after:bottom-0 after:h-px after:origin-center after:scale-x-0 after:bg-current after:transition-transform after:duration-300 hover:text-primary-strong hover:after:scale-x-100";
 const mobileNavLinkClass =
-  "min-h-11 border-b border-border py-3 text-[1.05rem] font-[650] text-text-muted no-underline transition-colors duration-200";
+  "min-h-11 border-l-2 border-l-transparent border-b border-border py-3 pl-3 text-[1.02rem] font-[650] text-text-muted no-underline transition-colors duration-200";
 
 export function SiteLayout({
   children,
@@ -60,7 +60,22 @@ export function SiteLayout({
   }, []);
 
   const isTransparentHeader = isLanding && !isScrolled && !isMenuOpen;
-  const activeNavClass = isTransparentHeader ? "!text-accent-gold" : "!text-primary-strong";
+  const desktopActiveNavClass = isTransparentHeader
+    ? "!text-accent-gold after:!scale-x-100"
+    : "!text-primary-strong after:!scale-x-100";
+  const mobileActiveNavClass = "!border-l-accent-strong !text-primary-strong";
+  const footerMoments =
+    language === "vi"
+      ? [
+          { label: "Signature", value: "Petal Pack mở đầu nghi thức trà sen" },
+          { label: "Story QR", value: "Hướng dẫn, câu chuyện và phản hồi sau khi chạm sản phẩm" },
+          { label: "Gifting", value: "Cấu hình quà tặng cho đối tác, tasting và mùa lễ" },
+        ]
+      : [
+          { label: "Signature", value: "Petal Pack opens the lotus tea ritual" },
+          { label: "Story QR", value: "Guidance, short story and feedback after the product touchpoint" },
+          { label: "Gifting", value: "Prepared configurations for partners, tasting and seasonal moments" },
+        ];
 
   const renderNavLinks = (variant: "desktop" | "mobile") =>
     activeNavItems.map((item) => {
@@ -75,7 +90,7 @@ export function SiteLayout({
           href={item.href}
           className={cx(
             variant === "desktop" ? desktopNavLinkClass : mobileNavLinkClass,
-            isActive && activeNavClass,
+            isActive && (variant === "desktop" ? desktopActiveNavClass : mobileActiveNavClass),
           )}
           onClick={() => setIsMenuOpen(false)}
           tabIndex={variant === "mobile" && !isMenuOpen ? -1 : undefined}
@@ -101,51 +116,65 @@ export function SiteLayout({
             : "border-border bg-[var(--header-bg)] text-text shadow-[0_10px_30px_rgba(16,26,22,0.06)]",
         )}
       >
-        <div className="mx-auto grid max-w-[var(--page-max)] grid-cols-[minmax(12rem,0.72fr)_minmax(0,1fr)_auto] items-center gap-6 px-6 py-4 max-[900px]:grid-cols-[minmax(0,1fr)_auto] max-[900px]:px-4">
-          <Link href="/" className="inline-flex min-h-11 min-w-0 items-center gap-[0.75rem] no-underline">
+        <div className="mx-auto grid max-w-[var(--page-max)] grid-cols-[minmax(10rem,0.62fr)_minmax(0,1.32fr)_auto] items-center gap-4 px-6 py-2.5 max-[900px]:grid-cols-[minmax(0,1fr)_auto] max-[900px]:px-4">
+          <Link href="/" className="inline-flex min-h-10 min-w-0 items-center gap-[0.65rem] no-underline">
             <BrandMark size="md" />
-            <span className="text-[0.72rem] font-[650] uppercase tracking-[0.24em] max-[520px]:text-[0.68rem]">
+            <span className="text-[0.68rem] font-[650] uppercase tracking-[0.22em] max-[520px]:text-[0.64rem]">
               {copy.brand}
             </span>
           </Link>
 
           <nav
-            className="flex min-w-0 items-center justify-center gap-5 text-[0.78rem] font-[600] uppercase tracking-[0.14em] max-[900px]:hidden"
+            className={cx(
+              "flex min-w-0 items-center justify-center gap-4 border-y px-2 py-1 text-[0.73rem] font-[620] uppercase tracking-[0.13em] max-[900px]:hidden",
+              isTransparentHeader
+                ? "border-[rgba(243,239,229,0.18)]"
+                : "border-[rgba(31,95,68,0.16)] bg-[rgba(255,253,248,0.38)]",
+            )}
             aria-label={copy.navAria}
           >
             {renderNavLinks("desktop")}
           </nav>
 
-          <div className="flex items-center justify-end gap-3 max-[520px]:gap-2">
+          <div className="flex items-center justify-end gap-2 max-[520px]:gap-2">
             <Link
               href="/reorder"
               className={cx(
-                "inline-flex min-h-11 items-center justify-center whitespace-nowrap rounded-[var(--radius-sm)] px-4 py-2 text-[0.78rem] font-[650] uppercase tracking-[0.12em] no-underline transition-colors duration-200 max-[520px]:hidden",
+                "inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap border px-3 text-[0.72rem] font-[650] uppercase tracking-[0.12em] no-underline transition-colors duration-200 max-[1120px]:hidden",
                 isTransparentHeader
-                  ? "border border-[rgba(243,239,229,0.42)] text-text-inverse hover:border-accent-gold hover:text-accent-gold"
-                  : "border border-primary bg-primary text-on-primary hover:bg-primary-strong",
+                  ? "border-[rgba(243,239,229,0.38)] text-text-inverse hover:border-accent-gold hover:text-accent-gold"
+                  : "border-primary bg-primary text-on-primary hover:bg-primary-strong",
               )}
               onClick={() => setIsMenuOpen(false)}
             >
               {copy.preorder}
+              <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
             </Link>
-            <AmbientSoundButton />
+            <AmbientSoundButton
+              compact
+              className={cx(
+                isTransparentHeader
+                  ? "border-[rgba(243,239,229,0.3)] bg-[rgba(255,250,240,0.06)] text-text-inverse hover:border-accent-gold hover:text-accent-gold"
+                  : "border-border bg-[rgba(255,253,248,0.48)] text-primary-strong hover:border-border-strong hover:bg-surface-strong",
+              )}
+            />
             <button
               className={cx(
-                "inline-flex h-11 min-w-16 items-center justify-center rounded-[var(--radius-sm)] border px-3 text-[0.74rem] font-[700] uppercase tracking-[0.12em]",
+                "inline-flex h-9 items-center justify-center gap-1.5 border px-2.5 text-[0.7rem] font-[700] uppercase tracking-[0.1em]",
                 isTransparentHeader
-                  ? "border-[rgba(243,239,229,0.34)] bg-transparent text-text-inverse"
-                  : "border-border-strong bg-transparent text-primary-strong",
+                  ? "border-[rgba(243,239,229,0.3)] bg-[rgba(255,250,240,0.04)] text-text-inverse hover:border-accent-gold hover:text-accent-gold"
+                  : "border-border bg-transparent text-primary-strong hover:border-border-strong",
               )}
               type="button"
               aria-label={copy.languageToggle}
               onClick={toggleLanguage}
             >
-              {language === "vi" ? "VI / EN" : "EN / VI"}
+              <Globe2 aria-hidden="true" className="h-3.5 w-3.5" />
+              {language === "vi" ? "VI" : "EN"}
             </button>
             <button
               className={cx(
-                "hidden h-11 w-11 items-center justify-center rounded-[var(--radius-sm)] border max-[900px]:inline-flex [&_svg]:h-[1.2rem] [&_svg]:w-[1.2rem]",
+                "hidden h-9 w-9 items-center justify-center border max-[900px]:inline-flex [&_svg]:h-[1.1rem] [&_svg]:w-[1.1rem]",
                 isTransparentHeader
                   ? "border-[rgba(243,239,229,0.34)] text-text-inverse"
                   : "border-border-strong text-primary-strong",
@@ -163,7 +192,7 @@ export function SiteLayout({
 
         <div
           className={cx(
-            "fixed inset-x-0 top-[4.75rem] hidden max-h-[calc(100svh-4.75rem)] -translate-y-[0.6rem] overflow-y-auto border-t border-border bg-[var(--surface)] p-4 opacity-0 shadow-brand-md transition duration-200 max-[900px]:block",
+            "fixed inset-x-0 top-[4rem] hidden max-h-[calc(100svh-4rem)] -translate-y-[0.6rem] overflow-y-auto border-t border-border bg-[var(--surface)] p-4 opacity-0 shadow-brand-md transition duration-200 max-[900px]:block",
             isMenuOpen ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none",
           )}
           aria-hidden={!isMenuOpen}
@@ -190,7 +219,7 @@ export function SiteLayout({
             : isFullBleedContent
               ? cx("relative z-10", styles.contentEffects)
             : cx(
-                "relative z-10 mx-auto max-w-[var(--page-max)] px-6 pt-[6.75rem] pb-20 max-[900px]:px-4 max-[900px]:pt-[5.8rem] max-[900px]:pb-16",
+                "relative z-10 mx-auto max-w-[var(--page-max)] px-6 pt-[5.8rem] pb-[4.5rem] max-[900px]:px-4 max-[900px]:pt-[5rem] max-[900px]:pb-14",
                 styles.contentEffects,
               )
         }
@@ -198,17 +227,36 @@ export function SiteLayout({
         {children}
       </div>
 
-      <footer className="relative z-10 bg-[var(--footer-bg)] text-text-inverse">
-        <div className="mx-auto grid max-w-[var(--page-max)] grid-cols-[minmax(0,1.2fr)_minmax(0,0.9fr)] gap-10 px-6 pt-12 pb-10 max-[900px]:grid-cols-1 max-[900px]:px-4">
-          <div className="flex items-start gap-[0.9rem]">
-            <BrandMark size="sm" />
-            <div>
-              <p className="m-0 text-[0.82rem] font-[650] uppercase tracking-[0.24em] text-accent-gold">
-                {copy.brand}
-              </p>
-              <p className="mt-4 mb-0 max-w-[31rem] leading-[1.75] text-text-inverse-muted">
-                {copy.summary}
-              </p>
+      <footer className="relative z-10 overflow-hidden bg-[var(--footer-bg)] text-text-inverse">
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(248,223,147,0.7),transparent)]" />
+        <div className="mx-auto grid max-w-[var(--page-max)] grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] gap-x-12 gap-y-10 px-6 pt-14 pb-10 max-[900px]:grid-cols-1 max-[900px]:px-4">
+          <div className="grid gap-8">
+            <div className="flex items-start gap-[0.9rem]">
+              <BrandMark size="sm" />
+              <div>
+                <p className="m-0 text-[0.78rem] font-[650] uppercase tracking-[0.24em] text-accent-gold">
+                  {copy.brand}
+                </p>
+                <p className="mt-4 mb-0 max-w-[34rem] leading-[1.78] text-text-inverse-muted">
+                  {copy.summary}
+                </p>
+              </div>
+            </div>
+
+            <div className="grid max-w-[45rem] grid-cols-3 gap-4 max-[760px]:grid-cols-1">
+              {footerMoments.map((moment) => (
+                <article key={moment.label} className="border-t border-[rgba(248,223,147,0.2)] pt-4">
+                  <div className="flex items-center gap-2 text-accent-gold">
+                    <Sparkles aria-hidden="true" className="h-3.5 w-3.5" />
+                    <h2 className="m-0 text-[0.68rem] font-[700] uppercase tracking-[0.2em]">
+                      {moment.label}
+                    </h2>
+                  </div>
+                  <p className="mt-3 mb-0 text-[0.9rem] leading-[1.65] text-text-inverse-muted">
+                    {moment.value}
+                  </p>
+                </article>
+              ))}
             </div>
           </div>
 
@@ -231,8 +279,17 @@ export function SiteLayout({
             ))}
           </nav>
 
-          <div className="col-span-full flex flex-wrap justify-between gap-x-5 gap-y-3 border-t border-[rgba(243,239,229,0.14)] pt-6 text-[0.82rem] text-text-inverse-soft">
-            <span>hello@senova.vn</span>
+          <div className="col-span-full grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-5 gap-y-3 border-t border-[rgba(243,239,229,0.14)] pt-6 text-[0.82rem] text-text-inverse-soft max-[760px]:grid-cols-1">
+            <div className="flex flex-wrap gap-x-5 gap-y-2">
+              <span className="inline-flex items-center gap-2">
+                <Mail aria-hidden="true" className="h-3.5 w-3.5" />
+                hello@senova.vn
+              </span>
+              <span className="inline-flex items-center gap-2">
+                <MapPin aria-hidden="true" className="h-3.5 w-3.5" />
+                Hanoi, Vietnam
+              </span>
+            </div>
             <span>© {new Date().getFullYear()} Calmora | Senova</span>
           </div>
         </div>

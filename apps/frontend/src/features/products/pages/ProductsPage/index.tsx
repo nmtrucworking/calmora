@@ -43,7 +43,7 @@ export default function ProductsPage() {
 
   return (
     <div className="bg-[var(--page-bg)]">
-      <section className="relative min-h-[min(48rem,100svh)] overflow-hidden bg-[var(--senova-forest-black)] px-6 pt-32 pb-16 text-text-inverse max-[760px]:px-4">
+      <section className="relative min-h-[min(43rem,100svh)] overflow-hidden bg-[var(--senova-forest-black)] px-6 pt-28 pb-14 text-text-inverse max-[760px]:px-4">
         <img
           src={petalPack.image}
           alt={petalPack.heroAlt}
@@ -52,10 +52,10 @@ export default function ProductsPage() {
           fetchPriority="high"
         />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(16,26,22,0.94)_0%,rgba(16,26,22,0.7)_48%,rgba(16,26,22,0.18)_100%)]" />
-        <div className="relative z-10 mx-auto grid min-h-[34rem] max-w-[var(--page-max)] items-end">
+        <div className="relative z-10 mx-auto grid min-h-[30.5rem] max-w-[var(--page-max)] items-end">
           <div className="max-w-[46rem]">
             <SectionEyebrow className="text-accent-gold">{copy.eyebrow}</SectionEyebrow>
-            <h1 className="mt-5 mb-0 font-display text-[clamp(3.2rem,7vw,6.6rem)] font-[420] leading-[0.98]">
+            <h1 className="mt-5 mb-0 font-display text-[clamp(2.55rem,5.7vw,4.8rem)] font-[420] leading-[1.04]">
               {copy.title}
             </h1>
             <p className="mt-6 mb-0 max-w-[38rem] text-[1.05rem] leading-[1.8] text-text-inverse-muted">

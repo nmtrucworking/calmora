@@ -16,7 +16,7 @@ export function LuxuryHero({ content }: LuxuryHeroProps) {
       initial="hidden"
       animate="visible"
       variants={staggerVariants(0.14, 0.12)}
-      className="relative min-h-[100svh] overflow-hidden bg-[var(--senova-forest-black)] px-6 pt-28 pb-10 text-text-inverse max-[760px]:px-4 max-[760px]:pt-24"
+      className="relative min-h-[100svh] overflow-hidden bg-[var(--senova-forest-black)] px-6 pt-24 pb-9 text-text-inverse max-[760px]:px-4 max-[760px]:pt-20"
     >
       <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(16,26,22,0.92)_0%,rgba(16,26,22,0.72)_42%,rgba(16,26,22,0.18)_100%)]" />
       <motion.img
@@ -29,14 +29,14 @@ export function LuxuryHero({ content }: LuxuryHeroProps) {
       />
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(16,26,22,0.26)_0%,rgba(16,26,22,0.04)_42%,rgba(16,26,22,0.72)_100%)]" />
 
-      <div className="relative z-10 mx-auto grid min-h-[calc(100svh-9.5rem)] max-w-[var(--page-max)] items-end pb-10">
+      <div className="relative z-10 mx-auto grid min-h-[calc(100svh-8.6rem)] max-w-[var(--page-max)] items-end pb-9">
         <div className="max-w-[44rem]">
           <motion.div variants={revealVariants}>
             <SectionEyebrow className="text-accent-gold">{content.eyebrow}</SectionEyebrow>
           </motion.div>
           <motion.h1
             variants={revealVariants}
-            className="mt-5 mb-0 font-display text-[clamp(3.5rem,8vw,7rem)] font-[420] leading-[0.98] text-text-inverse"
+            className="mt-5 mb-0 font-display text-[clamp(2.7rem,6vw,4.9rem)] font-[420] leading-[1.02] text-text-inverse"
           >
             {content.lines.map((line) => (
               <span key={line} className="block">

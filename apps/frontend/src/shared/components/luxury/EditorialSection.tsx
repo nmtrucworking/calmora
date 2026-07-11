@@ -26,7 +26,7 @@ export function EditorialSection({
       viewport={motionViewport}
       variants={sectionRevealVariants}
       className={cx(
-        "relative px-6 py-[clamp(5rem,10vw,9rem)] max-[760px]:px-4 max-[760px]:py-20",
+        "relative px-6 py-[clamp(4.5rem,9vw,8.1rem)] max-[760px]:px-4 max-[760px]:py-[4.5rem]",
         dark && "bg-[var(--surface-dark)] text-text-inverse",
         className,
       )}
