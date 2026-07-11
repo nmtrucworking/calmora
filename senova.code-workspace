@@ -1,0 +1,20 @@
+{
+  "folders": [
+    {
+      "path": ".",
+      "name": "Senova Root"
+    },
+    {
+      "path": "apps/backend",
+      "name": "Senova Backend"
+    },
+    {
+      "path": "apps/frontend",
+      "name": "Senova Frontend"
+    },
+  ],
+  "settings": {
+    "powershell.cwd": "Senova Root",
+    "liveServer.settings.multiRootWorkspaceName": "Senova Root"
+  }
+}
