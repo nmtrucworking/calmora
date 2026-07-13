@@ -29,11 +29,12 @@ Tài liệu không giả định rằng toàn bộ chức năng đã được tr
 Backend hiện tại là FastAPI và đang tập trung vào:
 
 - Health check.
+- Catalog sản phẩm public.
 - Resolve QR và nội dung trải nghiệm QR.
 - Ghi nhận QR scan.
 - Nhận các loại submission.
 - Ghi nhận analytics event.
-- Seed JSON và lưu dữ liệu runtime trong bộ nhớ tiến trình.
+- Seed JSON cho catalog/QR; PostgreSQL cho submission và analytics.
 
 Frontend hiện có các nhóm chức năng lớn:
 
@@ -51,6 +52,7 @@ Vì vậy, backend mục tiêu được thiết kế theo hướng **modular mon
 | Tài liệu | Nội dung |
 | --- | --- |
 | [`01-system-scope-and-architecture.md`](./01-system-scope-and-architecture.md) | Phạm vi hệ thống, nguyên tắc kiến trúc, module, luồng chính, lựa chọn công nghệ. |
+| [`02-current-implementation.md`](./02-current-implementation.md) | API, persistence, cấu hình, kiểm thử và giới hạn đang ở trạng thái `CURRENT`. |
 | [`02-domain-model-and-business-rules.md`](./02-domain-model-and-business-rules.md) | Domain model, vòng đời thực thể, quy tắc nghiệp vụ, trạng thái và bất biến dữ liệu. |
 | [`03-database-design.md`](./03-database-design.md) | Thiết kế PostgreSQL, bảng, khóa, index, soft delete, audit, retention và migration. |
 | [`04-api-contracts.md`](./04-api-contracts.md) | Quy ước REST API, endpoint public/account/admin/webhook, request/response, phân trang và lỗi. |

@@ -4,15 +4,20 @@ import json
 import os
 import re
 import time
+from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Literal
 from urllib.parse import urlencode
 from uuid import uuid4
 
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, Header, HTTPException, Request
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+
+from app.database import get_submission as find_stored_submission
+from app.database import initialize_database, insert_analytics_event, insert_submission
 
 
 API_PREFIX = os.getenv("API_PREFIX", "/api")
@@ -57,7 +62,13 @@ class AnalyticsEventRequest(BaseModel):
     timestamp: str | None = None
 
 
-app = FastAPI(title="Senova Backend")
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    initialize_database()
+    yield
+
+
+app = FastAPI(title="Calmora / Senova Backend", version="1.0.0", lifespan=lifespan)
 
 
 def parse_origins() -> list[str]:
@@ -88,8 +99,7 @@ def load_seed(filename: str) -> list[dict[str, Any]]:
 qr_records = load_seed("qr_records.json")
 qr_experience_contents = load_seed("qr_experience_content.json")
 qr_batch_overrides = load_seed("qr_batch_overrides.json")
-submissions: list[dict[str, Any]] = []
-analytics_events: list[dict[str, Any]] = []
+products = load_seed("products.json")
 rate_limits: dict[str, list[float]] = {}
 
 
@@ -114,11 +124,18 @@ def sanitize_text(value: Any) -> Any:
     if not isinstance(value, str):
         return value
 
-    return re.sub(r"[<>]", "", value).strip()
+    return re.sub(r"[<>]", "", value).strip()[:5000]
 
 
 def sanitize_payload(payload: dict[str, Any]) -> dict[str, Any]:
-    return {key: sanitize_text(value) for key, value in payload.items()}
+    def sanitize(value: Any) -> Any:
+        if isinstance(value, dict):
+            return {str(key)[:100]: sanitize(item) for key, item in value.items()}
+        if isinstance(value, list):
+            return [sanitize(item) for item in value[:100]]
+        return sanitize_text(value)
+
+    return {str(key)[:100]: sanitize(value) for key, value in payload.items()}
 
 
 def api_success(data: Any = None) -> dict[str, Any]:
@@ -146,6 +163,23 @@ async def http_exception_handler(_: Request, exc: HTTPException):
             "error": {
                 "code": "HTTP_ERROR",
                 "message": str(exc.detail),
+            },
+        },
+    )
+
+
+@app.exception_handler(RequestValidationError)
+async def request_validation_exception_handler(_: Request, exc: RequestValidationError):
+    from fastapi.responses import JSONResponse
+
+    fields = [".".join(str(part) for part in error["loc"][1:]) for error in exc.errors()]
+    return JSONResponse(
+        status_code=422,
+        content={
+            "success": False,
+            "error": {
+                "code": "VALIDATION_ERROR",
+                "message": f"Invalid request fields: {', '.join(fields)}",
             },
         },
     )
@@ -288,20 +322,35 @@ def validate_submission(kind: str, payload: dict[str, Any]) -> None:
     if missing:
         raise api_error(422, "VALIDATION_ERROR", f"Missing required fields: {', '.join(missing)}")
 
+    email = payload.get("email")
+    if email and not re.fullmatch(r"[^\s@]+@[^\s@]+\.[^\s@]+", str(email)):
+        raise api_error(422, "VALIDATION_ERROR", "Email is invalid.")
 
-def append_limited(target: list[dict[str, Any]], entry: dict[str, Any], limit: int = 500) -> None:
-    target.append(entry)
-    del target[:-limit]
+    if len(json.dumps(payload, ensure_ascii=False).encode("utf-8")) > 64 * 1024:
+        raise api_error(413, "PAYLOAD_TOO_LARGE", "Submission payload exceeds 64 KiB.")
 
 
 @app.get("/")
 async def root():
-    return {"message": "Senova Backend is running"}
+    return api_success({"service": "calmora-senova-api", "version": app.version})
 
 
 @app.get(f"{API_PREFIX}/health")
 async def health():
     return api_success({"status": "ok"})
+
+
+@app.get(f"{API_PREFIX}/products")
+async def list_products():
+    return api_success(products)
+
+
+@app.get(f"{API_PREFIX}/products/{{slug}}")
+async def get_product(slug: str):
+    product = next((item for item in products if item.get("slug") == slug.strip().lower()), None)
+    if not product:
+        raise api_error(404, "PRODUCT_NOT_FOUND", "Product was not found.")
+    return api_success(product)
 
 
 @app.get(f"{API_PREFIX}/qr/experience/{{product_slug}}")
@@ -354,17 +403,26 @@ async def track_qr_scan(code: str, payload: ScanRequest, request: Request):
         "campaign": sanitize_text(payload.campaign or record.get("campaign")),
         "path": sanitize_text(payload.path),
         "referrer": sanitize_text(payload.referrer),
+        "userAgent": sanitize_text(request.headers.get("user-agent")),
         "status": status,
         "createdAt": now_utc().isoformat(),
     }
-    append_limited(analytics_events, entry)
+    insert_analytics_event(entry)
 
     return api_success({"accepted": True})
 
 
 @app.post(f"{API_PREFIX}/submissions")
-async def create_submission(submission: SubmissionRequest, request: Request):
-    check_rate_limit(get_client_key(request, "submissions"), limit=10)
+async def create_submission(
+    submission: SubmissionRequest,
+    request: Request,
+    idempotency_key: str | None = Header(default=None, alias="Idempotency-Key"),
+):
+    limit = int(os.getenv("SUBMISSION_RATE_LIMIT_PER_MINUTE", "10"))
+    check_rate_limit(get_client_key(request, "submissions"), limit=limit)
+
+    if idempotency_key and not re.fullmatch(r"[A-Za-z0-9._:-]{8,128}", idempotency_key):
+        raise api_error(400, "INVALID_IDEMPOTENCY_KEY", "Idempotency-Key must contain 8-128 safe characters.")
 
     payload = sanitize_payload(submission.payload)
     if payload.get("website"):
@@ -380,23 +438,27 @@ async def create_submission(submission: SubmissionRequest, request: Request):
         "createdAt": now_utc().isoformat(),
         "updatedAt": now_utc().isoformat(),
     }
-    append_limited(submissions, entry)
+    stored, _ = insert_submission(entry, f"{submission.kind}:{idempotency_key}" if idempotency_key else None)
 
-    return api_success({"id": entry["id"]})
+    return api_success({"id": stored["id"]})
 
 
 @app.get(f"{API_PREFIX}/submissions/{{submission_id}}")
 async def get_submission(submission_id: str):
-    entry = next((submission for submission in submissions if submission["id"] == submission_id), None)
+    entry = find_stored_submission(submission_id)
     if not entry:
         raise api_error(404, "SUBMISSION_NOT_FOUND", "Submission was not found.")
 
-    return api_success(entry)
+    # Public status lookup deliberately excludes the PII-bearing payload.
+    return api_success({key: entry[key] for key in ("id", "kind", "status", "createdAt", "updatedAt")})
 
 
 @app.post(f"{API_PREFIX}/analytics/events")
 async def create_analytics_event(event: AnalyticsEventRequest, request: Request):
     check_rate_limit(get_client_key(request, "analytics"), limit=120)
+
+    if not event.eventName.strip() or len(event.eventName) > 100:
+        raise api_error(422, "VALIDATION_ERROR", "eventName must contain 1-100 characters.")
 
     entry = {
         "id": str(uuid4()),
@@ -411,6 +473,6 @@ async def create_analytics_event(event: AnalyticsEventRequest, request: Request)
         "status": sanitize_text(event.status),
         "createdAt": event.timestamp or now_utc().isoformat(),
     }
-    append_limited(analytics_events, entry)
+    insert_analytics_event(entry)
 
     return api_success({"id": entry["id"]})
