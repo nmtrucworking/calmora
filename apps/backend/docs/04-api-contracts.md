@@ -210,11 +210,10 @@ Response:
 }
 ```
 
-### 9.2. Readiness — `NEXT`
+### 9.2. Liveness/Readiness (v1) — `NEXT`
 
-```http
-GET /api/v1/health/ready
-```
+    GET /api/v1/health/live
+    GET /api/v1/health/ready
 
 Response `200`:
 
