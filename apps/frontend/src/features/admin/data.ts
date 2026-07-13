@@ -1,0 +1,86 @@
+import type { AdminState } from "./types";
+
+export const demoCredentials = {
+  email: "admin@senova.vn",
+  password: "Senova123",
+};
+
+export const initialAdminState: AdminState = {
+  products: [
+    {
+      id: "classic",
+      slug: "classic",
+      name: "Senova Classic",
+      line: "Classic",
+      role: "Giữ",
+      tagline: "Giữ hương sen trong nhịp sống mỗi ngày.",
+      shortDescription: "Dòng trà hương sen nền tảng cho nghi thức thưởng trà hằng ngày.",
+      image: "/assets/products/classic-pack-optimized.jpg",
+      priceLabel: "Từ 320.000 VND",
+      availability: "Đang nhận đặt trước theo lô nhỏ",
+      status: "active",
+      variants: [
+        { id: "daily-box", label: "Hộp 12 gói", note: "Nhịp thưởng trà hằng ngày" },
+        { id: "trial-set", label: "Bộ thử 3 gói", note: "Dành cho lần chạm đầu tiên" },
+      ],
+      updatedAt: "2026-07-12T08:30:00.000Z",
+    },
+    {
+      id: "petal-pack",
+      slug: "petal-pack",
+      name: "Senova Petal Pack",
+      line: "Petal Pack",
+      role: "Mở",
+      tagline: "Mở một cánh sen, bắt đầu một khoảng lặng.",
+      shortDescription: "Phần trà một ly trong hình dáng búp sen, kết nối cùng trải nghiệm QR.",
+      image: "/assets/products/petal-pack-optimized.jpg",
+      priceLabel: "Từ 480.000 VND",
+      availability: "Lô PP-2601-A đang nhận inquiry",
+      status: "active",
+      variants: [
+        { id: "petal-single", label: "Set 6 Petal Pack", note: "Trải nghiệm cá nhân" },
+        { id: "petal-hosting", label: "Set 18 Petal Pack", note: "Cho tasting và booth" },
+      ],
+      updatedAt: "2026-07-13T04:15:00.000Z",
+    },
+    {
+      id: "gift-set",
+      slug: "gift-set",
+      name: "Senova Gift Set",
+      line: "Gift Set",
+      role: "Trao",
+      tagline: "Trao hương sen, gửi một lời trân trọng.",
+      shortDescription: "Bộ quà kết hợp sản phẩm, trải nghiệm và câu chuyện văn hóa.",
+      image: "/assets/products/gift-set-optimized.jpg",
+      priceLabel: "Báo giá theo cấu hình",
+      availability: "Nhận tư vấn corporate và seasonal gifting",
+      status: "draft",
+      variants: [{ id: "gift-personal", label: "Personal Gift Set", note: "Quà tặng cá nhân" }],
+      updatedAt: "2026-07-10T10:00:00.000Z",
+    },
+  ],
+  qrRecords: [
+    { id: "qr-1", code: "PP-2601-A", productSlug: "petal-pack", batchCode: "PP-2601-A", contentVersion: "v1", destination: "/experience/petal-pack", campaign: "pilot-2026", locale: "vi", status: "active", scans: 1284, createdAt: "2026-01-01T00:00:00.000Z" },
+    { id: "qr-2", code: "CL-2601-A", productSlug: "classic", batchCode: "CL-2601-A", contentVersion: "v1", destination: "/experience/classic", campaign: "pilot-2026", locale: "vi", status: "active", scans: 764, createdAt: "2026-01-01T00:00:00.000Z" },
+    { id: "qr-3", code: "GS-2601-A", productSlug: "gift-set", batchCode: "GS-2601-A", contentVersion: "v1", destination: "/experience/gift-set", campaign: "pilot-2026", locale: "vi", status: "active", scans: 392, createdAt: "2026-01-01T00:00:00.000Z" },
+    { id: "qr-4", code: "PP-2509-X", productSlug: "petal-pack", batchCode: "PP-2509-X", contentVersion: "prototype-2025-09", destination: "/experience/petal-pack", campaign: "prototype-2025", locale: "vi", status: "paused", scans: 219, createdAt: "2025-09-01T00:00:00.000Z" },
+    { id: "qr-5", code: "CL-2501-Z", productSlug: "classic", batchCode: "CL-2501-Z", contentVersion: "v1", destination: "/experience/classic", campaign: "expired-sample", locale: "vi", status: "expired", expiresAt: "2026-01-01", scans: 485, createdAt: "2025-01-01T00:00:00.000Z" },
+    { id: "qr-6", code: "GS-2508-R", productSlug: "gift-set", batchCode: "GS-2508-R", contentVersion: "prototype-2025-08", destination: "/experience/gift-set", campaign: "revoked-sample", locale: "vi", status: "revoked", scans: 86, createdAt: "2025-08-01T00:00:00.000Z" },
+  ],
+  submissions: [
+    { id: "sub-1", reference: "SNV-260713-014", kind: "pre-order", status: "new", assignee: "Chưa phân công", customer: { name: "Nguyễn Minh Anh", email: "minhanh@example.com", phone: "090 123 4567" }, productSlug: "petal-pack", message: "Tôi muốn đặt 5 set làm quà tặng khách hàng.", source: "Website", createdAt: "2026-07-13T08:45:00.000Z", activities: [] },
+    { id: "sub-2", reference: "SNV-260713-013", kind: "feedback", status: "contacted", assignee: "Thu Hà", customer: { name: "Trần Hoàng Nam", email: "hoangnam@example.com" }, productSlug: "petal-pack", message: "Trải nghiệm mở cánh sen rất thú vị, hương trà dịu.", source: "QR", createdAt: "2026-07-13T07:20:00.000Z", activities: [{ id: "act-1", author: "Thu Hà", content: "Đã gửi email cảm ơn và xin phép sử dụng phản hồi.", createdAt: "2026-07-13T09:10:00.000Z" }] },
+    { id: "sub-3", reference: "SNV-260712-012", kind: "partners", status: "qualified", assignee: "Minh Khôi", customer: { name: "Lê Thanh Tâm", email: "tam@lotuscafe.vn", phone: "091 992 8181" }, productSlug: "classic", message: "Lotus Café quan tâm chương trình phân phối thử nghiệm.", source: "Đối tác", createdAt: "2026-07-12T14:05:00.000Z", activities: [{ id: "act-2", author: "Minh Khôi", content: "Đã lên lịch trao đổi vào thứ Tư.", createdAt: "2026-07-12T16:00:00.000Z" }] },
+    { id: "sub-4", reference: "SNV-260712-011", kind: "sample-interest", status: "new", assignee: "Chưa phân công", customer: { name: "Phạm Ngọc Linh", email: "linh@studio.vn" }, productSlug: "gift-set", message: "Cần bộ mẫu cho workshop văn hóa Việt vào tháng 8.", source: "Landing page", createdAt: "2026-07-12T10:30:00.000Z", activities: [] },
+    { id: "sub-5", reference: "SNV-260711-009", kind: "contact", status: "closed", assignee: "Thu Hà", customer: { name: "Vũ Thảo My", email: "thaomy@example.com" }, message: "Xin thông tin địa điểm trải nghiệm sản phẩm.", source: "Website", createdAt: "2026-07-11T05:15:00.000Z", activities: [{ id: "act-3", author: "Thu Hà", content: "Đã cung cấp thông tin và hoàn tất yêu cầu.", createdAt: "2026-07-11T08:00:00.000Z" }] },
+  ],
+  analytics: [
+    { label: "07/07", scans: 238, submissions: 12 },
+    { label: "08/07", scans: 284, submissions: 16 },
+    { label: "09/07", scans: 251, submissions: 14 },
+    { label: "10/07", scans: 326, submissions: 19 },
+    { label: "11/07", scans: 379, submissions: 23 },
+    { label: "12/07", scans: 352, submissions: 21 },
+    { label: "13/07", scans: 428, submissions: 28 },
+  ],
+};

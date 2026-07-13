@@ -12,6 +12,7 @@ import { useLanguage, type Language } from "@app/providers/LanguageContext";
 import productsBackgroundUrl from "@assets/products-background-optimized.jpg";
 import { canonicalBaseUrl, pageSeo, standardPages, type SeoContent } from "@features/content/sitePages";
 import { trackEvent } from "@shared/analytics/analytics";
+import { CustomCursor } from "@shared/components/ui/CustomCursor";
 
 const landingPath = "/";
 
@@ -30,6 +31,7 @@ const loadThankYouPage = () => import("@features/inquiry/pages/ThankYouPage");
 const loadQrRedirectPage = () => import("@features/qr/pages/QrRedirectPage");
 const loadNotFoundPage = () => import("@features/system/pages/NotFoundPage");
 const loadCommercePages = () => import("@features/commerce/pages");
+const loadAdminApp = () => import("@features/admin/AdminApp");
 
 const SenovaLandingPage = lazy(loadLandingPage);
 const StoryPage = lazy(loadStoryPage);
@@ -65,6 +67,7 @@ const OrderStatusPage = lazy(() =>
   loadCommercePages().then((module) => ({ default: module.OrderStatusPage })),
 );
 const JournalPage = lazy(() => loadCommercePages().then((module) => ({ default: module.JournalPage })));
+const AdminApp = lazy(loadAdminApp);
 let didSchedulePreload = false;
 
 const productImagePaths = [
@@ -396,7 +399,7 @@ function updateMetadata(pathname: string, language: Language) {
   canonicalLink.href = canonical;
 }
 
-function AppRoutes() {
+function PublicRoutes() {
   const { pathname, search } = useRouter();
   const { language } = useLanguage();
   const normalizedPath = pathname.length > 1 ? pathname.replace(/\/+$/, "") : pathname;
@@ -514,6 +517,25 @@ function AppRoutes() {
     <SiteLayout isLanding={pathname === landingPath} isFullBleedContent={isFullBleedContent}>
       {routedPage}
     </SiteLayout>
+  );
+}
+
+function AppRoutes() {
+  const { pathname } = useRouter();
+
+  if (pathname === "/admin" || pathname.startsWith("/admin/")) {
+    return (
+      <Suspense fallback={<RouteFallback />}>
+        <AdminApp />
+      </Suspense>
+    );
+  }
+
+  return (
+    <>
+      <CustomCursor />
+      <PublicRoutes />
+    </>
   );
 }
 
