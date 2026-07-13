@@ -780,8 +780,8 @@ Scale dựa trên metric, không dựa chỉ vào dự đoán.
 
 Không dùng dữ liệu PII thật nếu không cần.
 
-- `GET /health/live`.
-- `GET /health/ready`.
+- `GET /api/v1/health/live`.
+- `GET /api/v1/health/ready`.
 - Product list/detail public.
 - QR test code dành riêng.
 - QR content test.
