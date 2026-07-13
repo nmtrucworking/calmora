@@ -30,8 +30,8 @@
 
 /* Hide default cursor on desktop when custom cursor is active */
 @media (hover: hover) and (pointer: fine) and (min-width: 1025px) {
-  :global(body),
-  :global(body) * {
+  :global(body.senova-custom-cursor-active),
+  :global(body.senova-custom-cursor-active) * {
     cursor: none !important;
   }
 }

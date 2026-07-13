@@ -44,6 +44,18 @@ export function CustomCursor() {
     return () => mediaQuery.removeEventListener("change", updateCursorMode);
   }, []);
 
+  useEffect(() => {
+    const activeClass = "senova-custom-cursor-active";
+
+    if (!isDesktop) {
+      document.body.classList.remove(activeClass);
+      return;
+    }
+
+    document.body.classList.add(activeClass);
+    return () => document.body.classList.remove(activeClass);
+  }, [isDesktop]);
+
   // Register event listeners and canvas setup only when isDesktop is true
   useEffect(() => {
     if (!isDesktop) return;
