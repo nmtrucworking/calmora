@@ -96,10 +96,10 @@ Backend hiện đang:
 - Dùng một `FastAPI` app trong `app/main.py`.
 - Đọc seed JSON cho catalog, QR và QR experience.
 - Cung cấp API health, catalog, QR, submission và analytics.
-- Lưu submission và analytics event bền vững trong SQLite; rate-limit bucket vẫn ở memory.
+- Lưu submission và analytics event bền vững trong PostgreSQL; rate-limit bucket vẫn ở memory.
 - Hỗ trợ idempotency cho submission và không trả payload chứa PII qua status lookup công khai.
 - Có contract test cho các luồng public chính.
-- Chưa có database ORM/migration.
+- Chưa có ORM/migration có version; schema hiện được bootstrap idempotently khi khởi động.
 - Chưa có authentication/RBAC.
 - Chưa có catalog quản trị bằng database/CMS, giá và tồn kho động.
 - Chưa có commerce thật.
@@ -107,7 +107,7 @@ Backend hiện đang:
 ### 4.2. Rủi ro của trạng thái hiện tại
 
 - Rate limit in-memory không nhất quán giữa instance/worker.
-- SQLite chỉ phù hợp một instance và chưa có migration versioning.
+- Schema chưa có migration versioning cho các thay đổi production về sau.
 - Không có transaction.
 - Không có audit trail.
 - Không có migration versioning.

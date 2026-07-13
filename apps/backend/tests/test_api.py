@@ -1,18 +1,38 @@
 from __future__ import annotations
 
-import sqlite3
+from copy import deepcopy
 
 import pytest
 from fastapi.testclient import TestClient
 
-from app.main import app, rate_limits
+import app.main as main
 
 
 @pytest.fixture()
-def client(tmp_path, monkeypatch):
-    monkeypatch.setenv("DATABASE_URL", f"sqlite:///{tmp_path / 'test.db'}")
-    rate_limits.clear()
-    with TestClient(app) as test_client:
+def storage(monkeypatch):
+    submissions: dict[str, dict] = {}
+    idempotency_keys: dict[str, str] = {}
+    analytics_events: list[dict] = []
+
+    def insert_submission(entry, idempotency_key):
+        if idempotency_key and idempotency_key in idempotency_keys:
+            return deepcopy(submissions[idempotency_keys[idempotency_key]]), False
+        submissions[entry["id"]] = deepcopy(entry)
+        if idempotency_key:
+            idempotency_keys[idempotency_key] = entry["id"]
+        return deepcopy(entry), True
+
+    monkeypatch.setattr(main, "initialize_database", lambda: None)
+    monkeypatch.setattr(main, "insert_submission", insert_submission)
+    monkeypatch.setattr(main, "find_stored_submission", lambda submission_id: deepcopy(submissions.get(submission_id)))
+    monkeypatch.setattr(main, "insert_analytics_event", lambda entry: analytics_events.append(deepcopy(entry)))
+    return submissions, analytics_events
+
+
+@pytest.fixture()
+def client(storage):
+    main.rate_limits.clear()
+    with TestClient(main.app) as test_client:
         yield test_client
 
 
@@ -47,7 +67,7 @@ def test_qr_resolve_and_experience(client: TestClient):
     assert experience.json()["data"]["productSlug"] == "petal-pack"
 
 
-def test_submission_validation_persistence_and_public_status(client: TestClient, tmp_path, monkeypatch):
+def test_submission_validation_persistence_and_public_status(client: TestClient, storage):
     invalid = client.post("/api/submissions", json={"kind": "contact", "payload": {"name": "An"}})
     assert invalid.status_code == 422
     assert invalid.json()["error"]["code"] == "VALIDATION_ERROR"
@@ -72,21 +92,13 @@ def test_submission_validation_persistence_and_public_status(client: TestClient,
     assert status.status_code == 200
     assert status.json()["data"]["status"] == "new"
     assert "payload" not in status.json()["data"]
-
-    db_path = tmp_path / "test.db"
-    with sqlite3.connect(db_path) as db:
-        row = db.execute("SELECT payload_json FROM submissions WHERE id = ?", (submission_id,)).fetchone()
-    assert row is not None
-    assert '"name": "An"' in row[0]
+    assert storage[0][submission_id]["payload"]["name"] == "An"
 
 
-def test_analytics_event_is_persisted(client: TestClient, tmp_path):
+def test_analytics_event_is_persisted(client: TestClient, storage):
     response = client.post(
         "/api/analytics/events",
         json={"eventName": "product_view", "productSlug": "classic", "path": "/products/classic"},
     )
     assert response.status_code == 200
-
-    with sqlite3.connect(tmp_path / "test.db") as db:
-        count = db.execute("SELECT COUNT(*) FROM analytics_events").fetchone()[0]
-    assert count == 1
+    assert len(storage[1]) == 1

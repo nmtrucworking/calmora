@@ -45,5 +45,3 @@ build/
 *.njsproj
 *.sln
 *.sw?
-# Local backend runtime data
-apps/backend/data/

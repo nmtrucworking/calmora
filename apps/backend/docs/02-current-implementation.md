@@ -4,7 +4,7 @@
 
 - Mốc triển khai: `CURRENT`.
 - Runtime: FastAPI + Uvicorn.
-- Persistence: SQLite dùng thư viện chuẩn `sqlite3`, bật WAL và foreign keys.
+- Persistence: PostgreSQL qua Psycopg 3, dùng transaction và kiểu `JSONB`/`TIMESTAMPTZ`.
 - API prefix mặc định: `/api`.
 - Chế độ commerce: inquiry/pre-order, chưa thu tiền trực tuyến.
 
@@ -16,7 +16,7 @@ Phạm vi hiện thực gồm catalog sản phẩm công khai, resolve/nội dun
 cd apps/backend
 python -m pip install -r requirements.txt
 Copy-Item .env.example .env
-python -m uvicorn app.main:app --reload --port 8000
+python -m uvicorn app.main:app --reload --port 8000 --env-file .env
 ```
 
 Các biến môi trường:
@@ -25,11 +25,36 @@ Các biến môi trường:
 | --- | --- | --- |
 | `APP_ENV` | `local` | Tên môi trường triển khai. |
 | `API_PREFIX` | `/api` | Prefix route, được đọc lúc process khởi động. |
-| `DATABASE_URL` | `sqlite:///./data/senova.db` | File SQLite; đường dẫn tương đối tính từ `apps/backend`. |
+| `DATABASE_URL` | Bắt buộc | PostgreSQL URL dạng `postgresql://user:password@host:5432/database`. |
 | `FRONTEND_ORIGINS` | Các port Vite local | Danh sách origin CORS, phân tách bằng dấu phẩy. |
 | `SUBMISSION_RATE_LIMIT_PER_MINUTE` | `10` | Số form tối đa mỗi IP trong 60 giây. |
 
-Không commit file trong `apps/backend/data/`; thư mục này chứa dữ liệu runtime.
+Backend từ chối khởi động nếu thiếu `DATABASE_URL` hoặc URL không dùng PostgreSQL.
+
+### Render
+
+1. Tạo Render Postgres cùng region với backend.
+2. Gán **Internal Database URL** của database vào biến `DATABASE_URL` của Web Service.
+3. Không gắn persistent disk cho database; PostgreSQL là datastore độc lập.
+4. Deploy backend với start command:
+
+```text
+python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT
+```
+
+Backend tự bootstrap bảng/index khi process khởi động. Sau deploy, kiểm tra `/api/health`, tạo thử một submission và xác nhận record trong PostgreSQL.
+
+### Supabase Postgres
+
+Supabase dùng PostgreSQL chuẩn nên backend kết nối trực tiếp bằng Psycopg; không cần `supabase-py`, anon key hay service-role key.
+
+1. Tạo project trong Supabase.
+2. Mở **Connect** và chọn **Session pooler** (port `5432`) cho backend Render chạy lâu dài, đặc biệt khi môi trường chỉ hỗ trợ IPv4.
+3. Copy connection string, thay `[YOUR-PASSWORD]`, rồi lưu toàn bộ URL vào secret `DATABASE_URL` trên Render.
+4. Bật SSL và ưu tiên connection string có `sslmode=require`.
+5. Redeploy backend; process khởi động sẽ tạo `submissions`, `analytics_events` và các index nếu chưa có.
+
+Không đưa database password, connection string, anon key hoặc service-role key vào frontend hay source control. Nếu sau này expose các bảng qua Supabase Data API, phải bật RLS và thiết kế policy riêng; backend hiện tại truy cập database từ trusted server bằng credential bí mật.
 
 ## 3. API contract
 
@@ -95,7 +120,7 @@ Các kind được hỗ trợ: `feedback`, `pre-order`, `sample-interest`, `cont
 - giới hạn toàn payload ở 64 KiB;
 - rate limit theo IP;
 - hỗ trợ `Idempotency-Key` 8-128 ký tự an toàn, được scope theo kind;
-- lưu payload vào SQLite nhưng không trả payload/PII qua status lookup công khai.
+- lưu payload dạng `JSONB` trong PostgreSQL nhưng không trả payload/PII qua status lookup công khai.
 
 `GET /api/submissions/{id}` chỉ trả `id`, `kind`, `status`, `createdAt`, `updatedAt`. Endpoint quản trị đọc payload chưa được triển khai vì chưa có authentication/RBAC.
 
@@ -109,14 +134,14 @@ Các kind được hỗ trợ: `feedback`, `pre-order`, `sample-interest`, `cont
 
 ## 4. Persistence schema
 
-Database tự tạo khi ứng dụng khởi động:
+Các bảng/index được bootstrap idempotently khi ứng dụng khởi động:
 
 | Table | Dữ liệu chính | Index/constraint |
 | --- | --- | --- |
-| `submissions` | kind, JSON payload, status, timestamps | PK `id`, unique `idempotency_key`, index `(kind, created_at)` |
-| `analytics_events` | event name, JSON event, created time | PK `id`, index `(event_name, created_at)` |
+| `submissions` | kind, `JSONB` payload, status, `TIMESTAMPTZ` | PK `id`, unique `idempotency_key`, status check, index `(kind, created_at)` |
+| `analytics_events` | event name, `JSONB` event, `TIMESTAMPTZ` | PK `id`, index `(event_name, created_at)` |
 
-QR, QR experience và catalog vẫn là seed JSON có version trong source control. Submissions và analytics tồn tại qua restart. SQLite phù hợp một instance/MVP; khi chạy nhiều instance cần chuyển repository sang PostgreSQL và migration có version.
+QR, QR experience và catalog vẫn là seed JSON có version trong source control. Submissions và analytics nằm trong PostgreSQL, tồn tại qua restart và dùng chung được giữa nhiều backend instance. Bước tiếp theo cho thay đổi schema là bổ sung Alembic migration có version.
 
 ## 5. Security và privacy
 
@@ -125,7 +150,7 @@ QR, QR experience và catalog vẫn là seed JSON có version trong source contr
 - Không dùng destination do client cung cấp để redirect QR.
 - Không log raw payload trong code ứng dụng.
 - Rate limiter hiện nằm trong memory nên chỉ chính xác trong từng process.
-- SQLite không thay thế cơ chế encryption/secret management; quyền truy cập file database phải được giới hạn ở hạ tầng.
+- Credential PostgreSQL chỉ đặt trong secret/environment của hạ tầng, không commit vào repository.
 
 ## 6. Kiểm thử
 
@@ -147,7 +172,7 @@ Test hiện bao phủ:
 
 Các phần sau chưa phải `CURRENT`:
 
-1. PostgreSQL + Alembic migration cho production/multi-instance.
+1. Alembic migration cho các thay đổi schema production.
 2. Redis/distributed rate limiting.
 3. Authentication, RBAC và admin API xử lý lead.
 4. Notification worker/email sau khi nhận submission.
