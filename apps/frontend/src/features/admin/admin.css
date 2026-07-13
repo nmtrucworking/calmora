@@ -159,6 +159,13 @@
 .adminFormActions { display: flex; justify-content: flex-end; gap: 9px; padding-top: 18px; margin-top: 18px; border-top: 1px solid var(--admin-border); }
 .adminFormAside { position: sticky; top: 96px; }
 .adminPreviewImage { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 10px; background: #edf1ee; }
+.adminQrPreview { display: grid; justify-items: center; gap: 12px; }
+.adminQrPreview__canvas { width: min(100%, 280px); overflow: hidden; border: 1px solid #e5ebe7; border-radius: 14px; background: #fff; box-shadow: 0 10px 28px rgba(23,78,54,.08); }
+.adminQrPreview__canvas svg, .adminQrPreview__canvas canvas { display: block; width: 100%; height: auto; }
+.adminQrPreview__url { width: 100%; padding: 9px 10px; overflow-wrap: anywhere; border-radius: 8px; background: #f4f7f5; color: #52635b; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 9px; line-height: 1.5; text-align: center; }
+.adminQrPreview__actions { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.adminQrPreview--compact { display: block; width: 58px; }
+.adminQrPreview--compact .adminQrPreview__canvas { width: 58px; border-radius: 8px; box-shadow: none; }
 .adminMetaList { margin: 0; padding: 0; list-style: none; }
 .adminMetaList li { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid #edf1ee; font-size: 10px; }
 .adminMetaList li:last-child { border: 0; }
@@ -274,6 +281,7 @@
   .adminVariant button { grid-column: 2; grid-row: 1; }
   .adminFormActions { flex-direction: column-reverse; }
   .adminFormActions .adminButton { width: 100%; }
+  .adminQrPreview__actions { grid-template-columns: 1fr; }
   .adminChart svg { height: 190px; }
   .adminBreakdown__row { grid-template-columns: 82px 1fr 34px; }
 }

@@ -16,6 +16,7 @@
     "@tailwindcss/vite": "^4.3.2",
     "framer-motion": "^12.39.0",
     "lucide-react": "^1.16.0",
+    "qr-code-styling": "^1.9.2",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "tailwindcss": "^4.3.2",
