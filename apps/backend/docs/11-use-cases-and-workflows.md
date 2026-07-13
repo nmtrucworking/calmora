@@ -165,7 +165,7 @@ Preconditions:
 
 Main flow liveness:
 
-1. Client gọi `GET /api/v1/health/live`.
+1. Client gọi `GET /api/health` (`CURRENT`) hoặc `GET /api/v1/health/live` (`NEXT`).
 2. API trả `200` nếu process sống.
 3. Không gọi provider chậm.
 
