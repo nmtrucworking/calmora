@@ -197,7 +197,7 @@ Preconditions:
 
 Main flow list:
 
-1. Client gọi `GET /products` với locale/filter.
+1. Client gọi `GET /api/v1/products` với locale/filter.
 2. Backend validate filter/sort.
 3. Đọc product active/public.
 4. Map response DTO.
