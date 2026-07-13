@@ -54,19 +54,60 @@ Vì vậy, backend mục tiêu được thiết kế theo hướng **modular mon
 | [`01-system-scope-and-architecture.md`](./01-system-scope-and-architecture.md) | Phạm vi hệ thống, nguyên tắc kiến trúc, module, luồng chính, lựa chọn công nghệ. |
 | [`02-current-implementation.md`](./02-current-implementation.md) | API, persistence, cấu hình, kiểm thử và giới hạn đang ở trạng thái `CURRENT`. |
 | [`02-domain-model-and-business-rules.md`](./02-domain-model-and-business-rules.md) | Domain model, vòng đời thực thể, quy tắc nghiệp vụ, trạng thái và bất biến dữ liệu. |
-| [`03-database-design.md`](./03-database-design.md) | Thiết kế PostgreSQL, bảng, khóa, index, soft delete, audit và retention. |
-| [`04-api-contracts.md`](./04-api-contracts.md) | Quy ước REST API, endpoint public/account/admin, request/response, phân trang và lỗi. |
-| [`05-authentication-authorization.md`](./05-authentication-authorization.md) | Authentication, session/token, RBAC, permission matrix và bảo vệ route. |
-| [`06-cross-cutting-concerns.md`](./06-cross-cutting-concerns.md) | Validation, idempotency, concurrency, rate limit, file upload, email, jobs và caching. |
-| [`07-security-privacy-and-compliance.md`](./07-security-privacy-and-compliance.md) | Security baseline, PII, consent, retention, secrets, threat model và incident handling. |
-| [`08-testing-and-quality.md`](./08-testing-and-quality.md) | Test pyramid, contract test, integration test, security test, performance test và DoD. |
-| [`09-deployment-observability-and-operations.md`](./09-deployment-observability-and-operations.md) | Môi trường, CI/CD, migration, logging, metrics, alert, backup và runbook. |
-| [`10-implementation-roadmap.md`](./10-implementation-roadmap.md) | Lộ trình chuyển từ backend hiện tại sang kiến trúc đầy đủ, theo milestone và tiêu chí hoàn thành. |
+| [`03-database-design.md`](./03-database-design.md) | Thiết kế PostgreSQL, bảng, khóa, index, soft delete, audit, retention và migration. |
+| [`04-api-contracts.md`](./04-api-contracts.md) | Quy ước REST API, endpoint public/account/admin/webhook, request/response, phân trang và lỗi. |
+| [`05-authentication-authorization.md`](./05-authentication-authorization.md) | Authentication, session/token, RBAC, permission matrix, ownership và bảo vệ route. |
+| [`06-cross-cutting-concerns.md`](./06-cross-cutting-concerns.md) | Validation, error, idempotency, concurrency, rate limit, cache, upload, email, jobs và provider adapter. |
+| [`07-security-privacy-and-compliance.md`](./07-security-privacy-and-compliance.md) | Security baseline, threat model, PII, consent, retention, secrets, incident handling và release gate. |
+| [`08-testing-and-quality.md`](./08-testing-and-quality.md) | Test pyramid, unit/integration/contract/migration/security/performance test và Definition of Done. |
+| [`09-deployment-observability-and-operations.md`](./09-deployment-observability-and-operations.md) | Môi trường, Docker, CI/CD, migration, logging, metrics, alert, backup, restore và runbook. |
+| [`10-implementation-roadmap.md`](./10-implementation-roadmap.md) | Lộ trình chuyển từ backend hiện tại sang kiến trúc đầy đủ theo milestone và stage gate. |
+| [`11-use-cases-and-workflows.md`](./11-use-cases-and-workflows.md) | Danh mục use case đầy đủ, actor, luồng chính, luồng lỗi/biên, permission, audit, analytics và traceability. |
 | [`features/qr-product-cultural-story.md`](./features/qr-product-cultural-story.md) | Đặc tả chuyên sâu QR và câu chuyện văn hóa sản phẩm hiện có. |
 
-## 4. Phạm vi chức năng đầy đủ
+## 4. Thứ tự đọc đề xuất
 
-### 4.1. Public experience
+### Backend developer mới
+
+1. `README.md`.
+2. `01-system-scope-and-architecture.md`.
+3. `11-use-cases-and-workflows.md`.
+4. `02-domain-model-and-business-rules.md`.
+5. `04-api-contracts.md`.
+6. `03-database-design.md`.
+7. Các tài liệu bảo mật, test và vận hành.
+
+### Frontend developer
+
+1. `04-api-contracts.md`.
+2. `11-use-cases-and-workflows.md`.
+3. `features/qr-product-cultural-story.md`.
+4. Các phần error, auth và cache liên quan.
+
+### QA/tester
+
+1. `11-use-cases-and-workflows.md`.
+2. `02-domain-model-and-business-rules.md`.
+3. `04-api-contracts.md`.
+4. `08-testing-and-quality.md`.
+
+### DevOps
+
+1. `01-system-scope-and-architecture.md`.
+2. `03-database-design.md`.
+3. `06-cross-cutting-concerns.md`.
+4. `07-security-privacy-and-compliance.md`.
+5. `09-deployment-observability-and-operations.md`.
+
+### Product owner/BA
+
+1. `11-use-cases-and-workflows.md`.
+2. `02-domain-model-and-business-rules.md`.
+3. `10-implementation-roadmap.md`.
+
+## 5. Phạm vi chức năng đầy đủ
+
+### 5.1. Public experience
 
 - Product catalog.
 - Product detail và variant.
@@ -78,7 +119,7 @@ Vì vậy, backend mục tiêu được thiết kế theo hướng **modular mon
 - Form contact, partner, sample-interest, feedback và reorder/pre-order.
 - Analytics event không chứa PII.
 
-### 4.2. Customer account
+### 5.2. Customer account
 
 - Đăng ký, đăng nhập, đăng xuất.
 - Xác minh email.
@@ -89,7 +130,7 @@ Vì vậy, backend mục tiêu được thiết kế theo hướng **modular mon
 - Đơn hàng và theo dõi trạng thái.
 - Consent và quyền riêng tư.
 
-### 4.3. Commerce
+### 5.3. Commerce
 
 Hệ thống hỗ trợ hai chế độ:
 
@@ -98,7 +139,7 @@ Hệ thống hỗ trợ hai chế độ:
 
 Không được mô tả checkout hiện tại là thanh toán thật khi chưa tích hợp payment gateway và đối soát.
 
-### 4.4. Admin/back-office
+### 5.4. Admin/back-office
 
 - Quản trị product, variant, price, inventory và collection.
 - Quản trị content, journal, SEO và phiên bản nội dung QR.
@@ -111,7 +152,7 @@ Không được mô tả checkout hiện tại là thanh toán thật khi chưa 
 - User, role, permission.
 - Audit log.
 
-## 5. Nguyên tắc bắt buộc
+## 6. Nguyên tắc bắt buộc
 
 1. **API contract ổn định**: frontend không phụ thuộc trực tiếp vào cấu trúc database.
 2. **Không lưu production data trong memory**: dữ liệu nghiệp vụ phải được lưu bền vững.
@@ -122,9 +163,11 @@ Không được mô tả checkout hiện tại là thanh toán thật khi chưa 
 7. **Mọi create endpoint có rủi ro gửi lặp phải hỗ trợ idempotency**.
 8. **Mọi cập nhật tồn kho/đơn hàng phải xử lý concurrency**.
 9. **Không đưa payment card data vào hệ thống**: chỉ lưu token/reference từ cổng thanh toán.
-10. **Migration phải chạy trước application rollout và có phương án rollback dữ liệu**.
+10. **Migration phải chạy trước application rollout và có phương án rollback/forward-fix dữ liệu**.
+11. **Mọi feature phải ghi rõ trạng thái `CURRENT`, `NEXT`, `TARGET` hoặc `OPTIONAL`**.
+12. **Use case, business rule, API, database và test phải truy vết được với nhau**.
 
-## 6. Cấu trúc code mục tiêu
+## 7. Cấu trúc code mục tiêu
 
 ```text
 apps/backend/
@@ -137,12 +180,14 @@ apps/backend/
         public/
         account/
         admin/
+        webhooks/
     core/
       config.py
       errors.py
       logging.py
       security.py
       telemetry.py
+      request_context.py
     db/
       base.py
       session.py
@@ -169,7 +214,7 @@ apps/backend/
   requirements.txt
 ```
 
-Mỗi module nên có tối thiểu:
+Mỗi module nên có tối thiểu khi thực sự cần:
 
 ```text
 module/
@@ -184,30 +229,62 @@ module/
 
 Không bắt buộc tạo đủ file khi module còn nhỏ. Mục tiêu là giữ ranh giới trách nhiệm, không tạo cấu trúc rỗng chỉ để đúng mẫu.
 
-## 7. Quy trình cập nhật tài liệu
+## 8. Quy trình cập nhật tài liệu
 
 Khi thêm hoặc đổi chức năng backend:
 
-1. Cập nhật business rule nếu hành vi nghiệp vụ thay đổi.
-2. Cập nhật API contract trước hoặc cùng pull request code.
-3. Cập nhật database design nếu thêm bảng/index/constraint.
-4. Thêm test case tương ứng.
-5. Cập nhật migration/rollout note nếu thay đổi không tương thích.
-6. Ghi rõ endpoint hoặc module đang ở trạng thái `CURRENT`, `NEXT`, `TARGET` hay `OPTIONAL`.
+1. Cập nhật use case nếu actor, luồng chính, luồng lỗi hoặc phạm vi thay đổi.
+2. Cập nhật business rule nếu hành vi nghiệp vụ thay đổi.
+3. Cập nhật API contract trước hoặc cùng pull request code.
+4. Cập nhật database design nếu thêm bảng/index/constraint.
+5. Thêm test case tương ứng.
+6. Cập nhật security/privacy review nếu có dữ liệu/quyền/provider mới.
+7. Cập nhật deployment/migration/runbook nếu thay đổi vận hành.
+8. Ghi rõ endpoint hoặc module đang ở trạng thái `CURRENT`, `NEXT`, `TARGET` hay `OPTIONAL`.
 
-## 8. Definition of Done cho tài liệu backend
+## 9. Traceability chuẩn
+
+Mỗi feature nên có chuỗi truy vết:
+
+```text
+Use case
+-> Actor/permission
+-> Business rule
+-> API contract
+-> Database model/constraint
+-> Test case
+-> Metric/audit
+-> Rollout/migration
+```
+
+Ví dụ:
+
+```text
+UC-QR-01 Resolve active QR
+-> public
+-> destination chỉ từ registry nội bộ
+-> GET /api/v1/qr/{code}
+-> qr_records
+-> test active/inactive/not-found/open-redirect
+-> qr_resolve_total{status}
+-> migrate seed JSON sang PostgreSQL
+```
+
+## 10. Definition of Done cho tài liệu backend
 
 Một feature chỉ được coi là có đặc tả đủ khi có:
 
 - Phạm vi và trường hợp ngoài phạm vi.
 - Actor và quyền truy cập.
+- Preconditions/postconditions.
 - Luồng chính.
-- Luồng lỗi/biên.
+- Luồng thay thế, lỗi và trường hợp biên.
 - Dữ liệu vào/ra.
-- Business rule.
-- API contract.
-- Dữ liệu lưu trữ.
+- Business rule và state transition.
+- API contract/error code.
+- Dữ liệu lưu trữ, constraint và transaction.
 - Security/privacy consideration.
-- Audit/analytics requirement.
+- Audit/analytics/observability requirement.
 - Test cases.
-- Rollout và migration note nếu ảnh hưởng production.
+- Rollout, migration và rollback/forward-fix note nếu ảnh hưởng production.
+- Trạng thái `CURRENT/NEXT/TARGET/OPTIONAL` phản ánh đúng code thật.
