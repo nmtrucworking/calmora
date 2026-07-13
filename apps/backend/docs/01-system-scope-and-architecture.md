@@ -94,19 +94,20 @@ Các mục sau chỉ triển khai khi có yêu cầu và dữ liệu kiểm ch�
 Backend hiện đang:
 
 - Dùng một `FastAPI` app trong `app/main.py`.
-- Đọc seed JSON cho QR.
-- Lưu submission, analytics event và rate-limit bucket trong memory.
-- Cung cấp API QR, submission và analytics.
+- Đọc seed JSON cho catalog, QR và QR experience.
+- Cung cấp API health, catalog, QR, submission và analytics.
+- Lưu submission và analytics event bền vững trong SQLite; rate-limit bucket vẫn ở memory.
+- Hỗ trợ idempotency cho submission và không trả payload chứa PII qua status lookup công khai.
+- Có contract test cho các luồng public chính.
 - Chưa có database ORM/migration.
 - Chưa có authentication/RBAC.
-- Chưa có catalog API đầy đủ.
+- Chưa có catalog quản trị bằng database/CMS, giá và tồn kho động.
 - Chưa có commerce thật.
 
 ### 4.2. Rủi ro của trạng thái hiện tại
 
-- Restart process làm mất submission và analytics.
-- Chạy nhiều worker tạo dữ liệu phân mảnh theo process.
-- Rate limit in-memory không nhất quán giữa instance.
+- Rate limit in-memory không nhất quán giữa instance/worker.
+- SQLite chỉ phù hợp một instance và chưa có migration versioning.
 - Không có transaction.
 - Không có audit trail.
 - Không có migration versioning.
@@ -527,7 +528,7 @@ Không lưu binary lớn trong PostgreSQL.
 | ORM | SQLAlchemy 2.x | Tương thích FastAPI, explicit transaction. |
 | Migration | Alembic | Version schema. |
 | Cache/job | Redis | Chỉ thêm khi cần shared state/background jobs. |
-| Media | Object storage | Không làm phình database/container. |
+| Media | Object storage | Không làm phình database hoặc ổ đĩa chạy ứng dụng. |
 | Auth | Cookie session hoặc access+refresh token an toàn | Tùy mô hình deploy; phải tránh token lưu không an toàn. |
 | Payment | Provider token/reference | Giảm phạm vi dữ liệu nhạy cảm. |
 | Async side effect | Outbox + worker | Tránh mất email/event sau commit. |

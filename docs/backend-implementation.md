@@ -1,5 +1,7 @@
 # Backend Implementation Plan
 
+> Cập nhật 2026-07-13: MVP catalog, QR, submissions và analytics đã được triển khai. Contract đang chạy, schema SQLite, hướng dẫn vận hành và giới hạn được ghi tại [`apps/backend/docs/02-current-implementation.md`](../apps/backend/docs/02-current-implementation.md). Các mục PostgreSQL, auth/admin và commerce đầy đủ trong tài liệu này vẫn là lộ trình tiếp theo.
+
 Tài liệu này mô tả backend cần triển khai dựa trên cấu trúc frontend hiện tại trong `apps/frontend`. Mục tiêu là thay phần mock/localStorage của frontend bằng API thật, nhưng vẫn giữ nguyên các route và domain đang có.
 
 ## 1. Bối cảnh frontend
