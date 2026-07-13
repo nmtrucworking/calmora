@@ -34,7 +34,7 @@ Backend hiện tại là FastAPI và đang tập trung vào:
 - Ghi nhận QR scan.
 - Nhận các loại submission.
 - Ghi nhận analytics event.
-- Seed JSON cho catalog/QR; SQLite cho submission và analytics.
+- Seed JSON cho catalog/QR; PostgreSQL cho submission và analytics.
 
 Frontend hiện có các nhóm chức năng lớn:
 

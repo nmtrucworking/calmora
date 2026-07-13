@@ -1,6 +1,6 @@
 # Backend Implementation Plan
 
-> Cập nhật 2026-07-13: MVP catalog, QR, submissions và analytics đã được triển khai. Contract đang chạy, schema SQLite, hướng dẫn vận hành và giới hạn được ghi tại [`apps/backend/docs/02-current-implementation.md`](../apps/backend/docs/02-current-implementation.md). Các mục PostgreSQL, auth/admin và commerce đầy đủ trong tài liệu này vẫn là lộ trình tiếp theo.
+> Cập nhật 2026-07-13: MVP catalog, QR, submissions và analytics đã được triển khai trên PostgreSQL. Contract đang chạy, schema, hướng dẫn vận hành và giới hạn được ghi tại [`apps/backend/docs/02-current-implementation.md`](../apps/backend/docs/02-current-implementation.md). Các mục auth/admin và commerce đầy đủ trong tài liệu này vẫn là lộ trình tiếp theo.
 
 Tài liệu này mô tả backend cần triển khai dựa trên cấu trúc frontend hiện tại trong `apps/frontend`. Mục tiêu là thay phần mock/localStorage của frontend bằng API thật, nhưng vẫn giữ nguyên các route và domain đang có.
 
@@ -322,7 +322,7 @@ Biến môi trường đề xuất:
 ```text
 APP_ENV=local
 API_PREFIX=/api
-DATABASE_URL=sqlite:///./senova.db
+DATABASE_URL=postgresql://senova:change-me@localhost:5432/senova
 FRONTEND_ORIGINS=http://localhost:5173,http://localhost:5175
 SUBMISSION_RATE_LIMIT_PER_MINUTE=10
 ```
