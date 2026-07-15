@@ -131,6 +131,7 @@ Các kind được hỗ trợ: `feedback`, `pre-order`, `sample-interest`, `cont
 - Auth: `POST /api/v1/auth/login`, `GET /auth/me`, `POST /auth/logout`, password reset và revoke-all session.
 - Product: list/detail/upsert và chuyển `draft/active/archived` với optimistic version.
 - QR: list/upsert, trạng thái `active/paused/revoked`, destination bắt buộc thuộc `/experience/`.
+- QR content: draft/publish theo product-version-locale; QR active bắt buộc trỏ published content, batch override chỉ thay guidance/notice.
 - Lead: filter/page/detail/status/assign/note và CSV export có permission riêng, allowlist field, cap 1.000 dòng trong 365 ngày.
 - Dashboard: aggregate server-side theo khoảng thời gian và IANA timezone; audit log lưu actor/action/target/request ID.
 - Content: item/revision draft, submit/return review, publish và unpublish; public API chỉ đọc current published revision.

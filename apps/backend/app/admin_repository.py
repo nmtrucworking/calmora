@@ -327,6 +327,78 @@ class AdminRepository:
                 )
             return bool(result.rowcount)
 
+    def published_qr_content_exists(self, product: str, version: str, locale: str) -> bool:
+        with self.engine.connect() as db:
+            return bool(
+                db.execute(
+                    text(
+                        "SELECT 1 FROM qr_experience_contents WHERE product_id=:product AND version=:version AND locale=:locale AND status='published'"
+                    ),
+                    {"product": product, "version": version, "locale": locale},
+                ).scalar_one_or_none()
+            )
+
+    def product_exists(self, product: str) -> bool:
+        with self.engine.connect() as db:
+            return bool(
+                db.execute(
+                    text("SELECT 1 FROM products WHERE id=:product OR slug=:product"), {"product": product}
+                ).scalar_one_or_none()
+            )
+
+    def list_qr_contents(self) -> list[dict[str, Any]]:
+        with self.engine.connect() as db:
+            return [
+                dict(row)
+                for row in db.execute(
+                    text(
+                        "SELECT product_id,version,locale,status,data,updated_at FROM qr_experience_contents ORDER BY product_id,version,locale"
+                    )
+                ).mappings()
+            ]
+
+    def save_qr_content(self, product: str, version: str, locale: str, data: dict[str, Any]) -> bool:
+        import json
+
+        with self.engine.begin() as db:
+            existing = db.execute(
+                text(
+                    "SELECT status FROM qr_experience_contents WHERE product_id=:product AND version=:version AND locale=:locale"
+                ),
+                {"product": product, "version": version, "locale": locale},
+            ).scalar_one_or_none()
+            if existing == "published":
+                return False
+            result = db.execute(
+                text(
+                    "INSERT INTO qr_experience_contents(product_id,version,locale,status,data,created_at,updated_at) VALUES (:product,:version,:locale,'draft',CAST(:data AS jsonb),now(),now()) ON CONFLICT(product_id,version,locale) DO UPDATE SET data=excluded.data,updated_at=now() WHERE qr_experience_contents.status='draft'"
+                ),
+                {"product": product, "version": version, "locale": locale, "data": json.dumps(data)},
+            )
+            return bool(result.rowcount)
+
+    def publish_qr_content(self, product: str, version: str, locale: str) -> bool:
+        with self.engine.begin() as db:
+            return bool(
+                db.execute(
+                    text(
+                        "UPDATE qr_experience_contents SET status='published',updated_at=now() WHERE product_id=:product AND version=:version AND locale=:locale AND status='draft'"
+                    ),
+                    {"product": product, "version": version, "locale": locale},
+                ).rowcount
+            )
+
+    def save_qr_override(self, batch: str, product: str, version: str, data: dict[str, Any]) -> None:
+        import json
+
+        with self.engine.begin() as db:
+            db.execute(
+                text(
+                    "INSERT INTO qr_batch_overrides(batch_code,product_id,content_version,status,data,created_at,updated_at) VALUES (:batch,:product,:version,'active',CAST(:data AS jsonb),now(),now()) ON CONFLICT(batch_code,product_id,content_version) DO UPDATE SET status='active',data=excluded.data,updated_at=now()"
+                ),
+                {"batch": batch, "product": product, "version": version, "data": json.dumps(data)},
+            )
+
     def list_leads(
         self, status: str | None, kind: str | None, page: int, size: int
     ) -> tuple[list[dict[str, Any]], int]:

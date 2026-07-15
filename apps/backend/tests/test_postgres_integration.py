@@ -179,6 +179,58 @@ def test_admin_auth_csrf_rbac_audit_and_session_revoke():
             headers={"X-CSRF-Token": csrf},
         )
         assert qr_saved.status_code == 200
+        qr_item = next(item for item in client.get("/api/v1/admin/qr").json()["data"] if item["code"] == "PP-2601-A")
+        v2_record = {**qr_item["data"], "contentVersion": "v2", "status": "active"}
+        blocked_activation = client.put(
+            "/api/v1/admin/qr/PP-2601-A",
+            json={"data": v2_record, "expectedVersion": qr_item["version"]},
+            headers={"X-CSRF-Token": csrf},
+        )
+        assert blocked_activation.status_code == 409
+        assert (
+            client.put(
+                "/api/v1/admin/qr-contents/petal-pack/v2/vi",
+                json={"data": {"title": "Petal Pack version 2", "guidance": {"title": "Pha trà"}}},
+                headers={"X-CSRF-Token": csrf},
+            ).status_code
+            == 200
+        )
+        assert client.get("/api/v1/qr/experience/petal-pack?version=v2").status_code == 404
+        assert (
+            client.post(
+                "/api/v1/admin/qr-contents/petal-pack/v2/vi/publish", headers={"X-CSRF-Token": csrf}
+            ).status_code
+            == 200
+        )
+        assert client.get("/api/v1/qr/experience/petal-pack?version=v2").status_code == 200
+        assert (
+            client.put(
+                "/api/v1/admin/qr-contents/petal-pack/v2/vi",
+                json={"data": {"title": "Mutated"}},
+                headers={"X-CSRF-Token": csrf},
+            ).status_code
+            == 409
+        )
+        assert (
+            client.put(
+                "/api/v1/admin/qr/PP-2601-A",
+                json={"data": v2_record, "expectedVersion": qr_item["version"]},
+                headers={"X-CSRF-Token": csrf},
+            ).status_code
+            == 200
+        )
+        assert (
+            client.put(
+                "/api/v1/admin/qr-overrides/PP-V2-BATCH/petal-pack/v2",
+                json={"notice": "Phiên bản theo lô", "guidanceOverride": {"title": "Pha nhẹ"}},
+                headers={"X-CSRF-Token": csrf},
+            ).status_code
+            == 200
+        )
+        assert (
+            client.get("/api/v1/qr/experience/petal-pack?version=v2&batch=PP-V2-BATCH").json()["data"]["batchNotice"]
+            == "Phiên bản theo lô"
+        )
 
         lead_page = client.get("/api/v1/admin/submissions?page=1&pageSize=2").json()
         assert lead_page["meta"]["total"] >= 1

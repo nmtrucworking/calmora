@@ -100,6 +100,7 @@ class SqlAlchemyRepository:
                     qr_experience_contents.c.product_id == slug,
                     qr_experience_contents.c.version == version,
                     qr_experience_contents.c.locale == locale,
+                    qr_experience_contents.c.status == "published",
                 )
             ).scalar_one_or_none()
         return deepcopy(value) if value else None
@@ -113,6 +114,7 @@ class SqlAlchemyRepository:
                     qr_batch_overrides.c.batch_code == batch.strip().upper(),
                     qr_batch_overrides.c.product_id == slug,
                     qr_batch_overrides.c.content_version == version,
+                    qr_batch_overrides.c.status == "active",
                 )
             ).scalar_one_or_none()
         return deepcopy(value) if value else None

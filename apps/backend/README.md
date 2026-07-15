@@ -34,6 +34,8 @@ Admin API dùng session cookie HttpOnly 8 giờ. Frontend phải gửi `credenti
 
 Content workflow nằm dưới `/api/v1/admin/content-*`; public read dùng `GET /api/v1/content/{contentKey}` và chỉ trả revision đang publish. Revision đã publish không thể sửa trực tiếp; cần tạo revision draft mới.
 
+QR content admin nằm dưới `/api/v1/admin/qr-contents` và `/admin/qr-overrides`. Public experience chỉ đọc content `published` cùng override `active`; thao tác activate QR bị từ chối nếu product/version/locale chưa publish.
+
 Ứng dụng chỉ kiểm tra kết nối lúc startup; không tự tạo hoặc thay đổi schema. Migration production phải chạy như một bước deploy riêng.
 
 API mặc định ở `http://localhost:8000`, Swagger UI ở `http://localhost:8000/docs`.

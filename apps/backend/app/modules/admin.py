@@ -63,6 +63,15 @@ class LeadNoteWrite(BaseModel):
     note: str = Field(min_length=1, max_length=5000)
 
 
+class QrContentWrite(BaseModel):
+    data: dict[str, Any]
+
+
+class QrOverrideWrite(BaseModel):
+    guidanceOverride: dict[str, Any] | None = None
+    notice: str | None = Field(default=None, max_length=2000)
+
+
 class AdminService:
     def __init__(self, repository: AdminRepository, app_env: str):
         self.repository = repository
@@ -315,6 +324,14 @@ async def save_qr(
     if not destination.startswith("/experience/") or payload.data.get("status") not in {"active", "paused", "revoked"}:
         raise DomainError(422, "VALIDATION_ERROR", "QR destination or status is invalid.")
     normalized = code.strip().upper()
+    if payload.data.get(
+        "status"
+    ) == "active" and not request.app.state.services.admin.repository.published_qr_content_exists(
+        str(payload.data.get("productSlug", "")),
+        str(payload.data.get("contentVersion", "v1")),
+        str(payload.data.get("locale", "vi")),
+    ):
+        raise DomainError(409, "QR_CONTENT_NOT_PUBLISHED", "QR activation requires published content.")
     if not request.app.state.services.admin.repository.save_qr(
         normalized, {**payload.data, "code": normalized}, payload.expectedVersion
     ):
@@ -323,6 +340,89 @@ async def save_qr(
         identity["id"], "qr.write", "qr_record", normalized, {}, getattr(request.state, "request_id", None)
     )
     return success({"code": normalized})
+
+
+@router.get("/admin/qr-contents")
+async def qr_contents(request: Request, _: dict[str, Any] = Depends(require("qr.read"))):
+    return success(request.app.state.services.admin.repository.list_qr_contents())
+
+
+@router.put("/admin/qr-contents/{product}/{version}/{locale}")
+async def save_qr_content(
+    product: str,
+    version: str,
+    locale: str,
+    payload: QrContentWrite,
+    request: Request,
+    identity: dict[str, Any] = Depends(require("qr.manage", True)),
+):
+    if not payload.data:
+        raise DomainError(422, "VALIDATION_ERROR", "QR content cannot be empty.")
+    if not request.app.state.services.admin.repository.product_exists(product):
+        raise DomainError(404, "PRODUCT_NOT_FOUND", "Product was not found.")
+    data = {**payload.data, "productSlug": product, "version": version, "locale": locale}
+    if not request.app.state.services.admin.repository.save_qr_content(product, version, locale, data):
+        raise DomainError(409, "QR_CONTENT_IMMUTABLE", "Published QR content is immutable; use a new version.")
+    request.app.state.services.admin.repository.audit(
+        identity["id"],
+        "qr.content_write",
+        "qr_content",
+        f"{product}:{version}:{locale}",
+        {},
+        getattr(request.state, "request_id", None),
+    )
+    return success({"status": "draft"})
+
+
+@router.post("/admin/qr-contents/{product}/{version}/{locale}/publish")
+async def publish_qr_content(
+    product: str,
+    version: str,
+    locale: str,
+    request: Request,
+    identity: dict[str, Any] = Depends(require("qr.manage", True)),
+):
+    if not request.app.state.services.admin.repository.publish_qr_content(product, version, locale):
+        raise DomainError(409, "QR_CONTENT_TRANSITION_INVALID", "Only draft QR content can publish.")
+    request.app.state.services.admin.repository.audit(
+        identity["id"],
+        "qr.content_publish",
+        "qr_content",
+        f"{product}:{version}:{locale}",
+        {},
+        getattr(request.state, "request_id", None),
+    )
+    return success({"status": "published"})
+
+
+@router.put("/admin/qr-overrides/{batch}/{product}/{version}")
+async def save_qr_override(
+    batch: str,
+    product: str,
+    version: str,
+    payload: QrOverrideWrite,
+    request: Request,
+    identity: dict[str, Any] = Depends(require("qr.manage", True)),
+):
+    if not request.app.state.services.admin.repository.published_qr_content_exists(product, version, "vi"):
+        raise DomainError(409, "QR_CONTENT_NOT_PUBLISHED", "Batch override requires published base content.")
+    data = {
+        "batchCode": batch.strip().upper(),
+        "productSlug": product,
+        "contentVersion": version,
+        "guidanceOverride": payload.guidanceOverride,
+        "notice": payload.notice,
+    }
+    request.app.state.services.admin.repository.save_qr_override(data["batchCode"], product, version, data)
+    request.app.state.services.admin.repository.audit(
+        identity["id"],
+        "qr.override_write",
+        "qr_override",
+        f"{data['batchCode']}:{product}:{version}",
+        {},
+        getattr(request.state, "request_id", None),
+    )
+    return success({"active": True})
 
 
 @router.get("/admin/submissions")
