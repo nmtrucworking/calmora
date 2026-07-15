@@ -3,17 +3,21 @@ from __future__ import annotations
 import os
 from concurrent.futures import ThreadPoolExecutor
 from datetime import UTC, datetime
+from uuid import uuid4
 
 import psycopg
 import pytest
 from alembic import command
 from alembic.config import Config
 from fastapi.testclient import TestClient
+from sqlalchemy import text
 
+from app.admin_repository import AdminRepository
 from app.core.config import Settings
 from app.database import initialize_database
 from app.db.session import clear_engine_cache
 from app.main import create_app
+from app.modules.admin import CSRF_COOKIE, hasher
 from app.repository import SqlAlchemyRepository
 from app.seed_import import import_seeds
 
@@ -112,3 +116,174 @@ def test_submission_idempotency_is_safe_under_concurrency():
     with ThreadPoolExecutor(max_workers=8) as executor:
         stored_ids = list(executor.map(insert_once, range(8)))
     assert len(set(stored_ids)) == 1
+
+
+def test_admin_auth_csrf_rbac_audit_and_session_revoke():
+    repository = SqlAlchemyRepository()
+    admin_repository = AdminRepository(repository)
+    admin_repository.bootstrap_admin("admin@senova.test", "Admin", hasher.hash("Very-Secure-Password-2026"))
+    settings = Settings(app_env="test", database_url=_psycopg_url(), receipt_secret="integration-secret")
+    app = create_app(settings, repository)
+
+    with TestClient(app) as client:
+        assert client.get("/api/v1/admin/products").status_code == 401
+        assert (
+            client.post(
+                "/api/v1/auth/login", json={"email": "admin@senova.test", "password": "wrong-password"}
+            ).status_code
+            == 401
+        )
+        login = client.post(
+            "/api/v1/auth/login", json={"email": "admin@senova.test", "password": "Very-Secure-Password-2026"}
+        )
+        assert login.status_code == 200
+        admin_id = login.json()["data"]["id"]
+        assert "catalog.publish" in login.json()["data"]["permissions"]
+        assert client.get("/api/v1/auth/me").status_code == 200
+
+        products = client.get("/api/v1/admin/products").json()["data"]
+        classic = next(item for item in products if item["id"] == "classic")
+        assert client.get("/api/v1/admin/products/classic").json()["data"]["slug"] == "classic"
+        no_csrf = client.post(
+            "/api/v1/admin/products/classic/status",
+            json={"status": "active", "expectedVersion": classic["version"]},
+        )
+        assert no_csrf.status_code == 403
+        csrf = client.cookies.get(CSRF_COOKIE)
+        changed = client.post(
+            "/api/v1/admin/products/classic/status",
+            json={"status": "active", "expectedVersion": classic["version"]},
+            headers={"X-CSRF-Token": csrf},
+        )
+        assert changed.status_code == 200
+        conflict = client.post(
+            "/api/v1/admin/products/classic/status",
+            json={"status": "active", "expectedVersion": classic["version"]},
+            headers={"X-CSRF-Token": csrf},
+        )
+        assert conflict.status_code == 409
+        dashboard = client.get("/api/v1/admin/dashboard?fromDate=2026-01-01T00:00:00&timezone=Asia%2FSaigon")
+        assert dashboard.status_code == 200
+        assert dashboard.json()["data"]["range"]["timezone"] == "Asia/Saigon"
+        assert client.get("/api/v1/admin/dashboard?timezone=Invalid%2FZone").status_code == 422
+        qr_items = client.get("/api/v1/admin/qr").json()["data"]
+        qr_item = next(item for item in qr_items if item["code"] == "PP-2601-A")
+        qr_saved = client.put(
+            "/api/v1/admin/qr/PP-2601-A",
+            json={"data": qr_item["data"], "expectedVersion": qr_item["version"]},
+            headers={"X-CSRF-Token": csrf},
+        )
+        assert qr_saved.status_code == 200
+
+        lead_page = client.get("/api/v1/admin/submissions?page=1&pageSize=2").json()
+        assert lead_page["meta"]["total"] >= 1
+        lead_id = lead_page["data"][0]["id"]
+        assert (
+            client.patch(
+                f"/api/v1/admin/submissions/{lead_id}/status",
+                json={"status": "contacted"},
+                headers={"X-CSRF-Token": csrf},
+            ).status_code
+            == 200
+        )
+        assert (
+            client.post(
+                f"/api/v1/admin/submissions/{lead_id}/activities",
+                json={"note": "Called customer"},
+                headers={"X-CSRF-Token": csrf},
+            ).status_code
+            == 200
+        )
+        assert (
+            client.post(
+                f"/api/v1/admin/submissions/{lead_id}/assign",
+                json={"assigneeId": admin_id},
+                headers={"X-CSRF-Token": csrf},
+            ).status_code
+            == 200
+        )
+        exported = client.post("/api/v1/admin/submissions/export", headers={"X-CSRF-Token": csrf})
+        assert exported.status_code == 200
+        assert "an@example.com" in exported.text
+        assert any(item["action"] == "catalog.active" for item in client.get("/api/v1/admin/audit-logs").json()["data"])
+        assert any(
+            item["action"] == "submission.export" for item in client.get("/api/v1/admin/audit-logs").json()["data"]
+        )
+        assert any(
+            item["action"] == "submission.assign" for item in client.get("/api/v1/admin/audit-logs").json()["data"]
+        )
+
+        logout = client.post("/api/v1/auth/logout", headers={"X-CSRF-Token": csrf})
+        assert logout.status_code == 200
+        assert client.get("/api/v1/auth/me").status_code == 401
+
+
+def test_rbac_is_deny_by_default_for_read_only_role():
+    repository = SqlAlchemyRepository()
+    viewer_id, role_id = str(uuid4()), str(uuid4())
+    with repository.engine.begin() as db:
+        db.execute(
+            text("INSERT INTO roles(id,code,name,is_system) VALUES (:id,'viewer','Viewer',false)"), {"id": role_id}
+        )
+        db.execute(
+            text(
+                "INSERT INTO admin_users(id,email,name,password_hash,status,created_at,updated_at) "
+                "VALUES (:id,'viewer@senova.test','Viewer',:password,'active',now(),now())"
+            ),
+            {"id": viewer_id, "password": hasher.hash("Viewer-Secure-Password-2026")},
+        )
+        db.execute(
+            text("INSERT INTO admin_user_roles(user_id,role_id,granted_at) VALUES (:user,:role,now())"),
+            {"user": viewer_id, "role": role_id},
+        )
+        db.execute(
+            text(
+                "INSERT INTO role_permissions(role_id,permission_id) "
+                "SELECT :role,id FROM permissions WHERE code='catalog.read'"
+            ),
+            {"role": role_id},
+        )
+    app = create_app(
+        Settings(app_env="test", database_url=_psycopg_url(), receipt_secret="integration-secret"), repository
+    )
+    with TestClient(app) as client:
+        assert (
+            client.post(
+                "/api/v1/auth/login", json={"email": "viewer@senova.test", "password": "Viewer-Secure-Password-2026"}
+            ).status_code
+            == 200
+        )
+        assert client.get("/api/v1/admin/products").status_code == 200
+        csrf = client.cookies.get(CSRF_COOKIE)
+        denied = client.post(
+            "/api/v1/admin/products/classic/status",
+            json={"status": "active", "expectedVersion": 2},
+            headers={"X-CSRF-Token": csrf},
+        )
+        assert denied.status_code == 403
+        assert denied.json()["error"]["code"] == "PERMISSION_DENIED"
+
+
+def test_admin_password_reset_revokes_existing_session():
+    repository = SqlAlchemyRepository()
+    settings = Settings(app_env="test", database_url=_psycopg_url(), receipt_secret="integration-secret")
+    app = create_app(settings, repository)
+    with TestClient(app) as client:
+        login = client.post(
+            "/api/v1/auth/login", json={"email": "admin@senova.test", "password": "Very-Secure-Password-2026"}
+        )
+        assert login.status_code == 200
+        reset = client.post("/api/v1/auth/password-reset/request", json={"email": "admin@senova.test"})
+        token = reset.json()["data"]["resetToken"]
+        confirmed = client.post(
+            "/api/v1/auth/password-reset/confirm",
+            json={"token": token, "password": "New-Very-Secure-Password-2026"},
+        )
+        assert confirmed.status_code == 200
+        assert client.get("/api/v1/auth/me").status_code == 401
+        assert (
+            client.post(
+                "/api/v1/auth/login", json={"email": "admin@senova.test", "password": "New-Very-Secure-Password-2026"}
+            ).status_code
+            == 200
+        )

@@ -279,16 +279,16 @@ Tất cả endpoint dưới `/api/v1/admin` yêu cầu authentication, permissio
 
 | Màn hình | Endpoint tối thiểu | Permission |
 | --- | --- | --- |
-| Login/logout/me | `POST /auth/login`, `POST /auth/logout`, `GET /auth/me` | public/session |
-| Dashboard | `GET /dashboard?from&to` | `dashboard.read` |
-| Products | `GET/POST /products`, `GET/PATCH /products/{id}`, action `publish`, `archive` | `catalog.read/write/publish` |
-| QR | `GET/POST /qr-records`, `GET/PATCH /qr-records/{id}`, action `activate`, `pause`, `revoke` | `qr.read/write/publish` |
-| Leads | `GET /submissions`, `GET /submissions/{id}`, `PATCH .../status`, `POST .../assign`, `POST .../activities` | `leads.read/write` |
-| Analytics | `GET /analytics/overview`, `/analytics/qr`, `/analytics/submissions` | `analytics.read` |
+| Login/logout/me | `POST /api/v1/auth/login`, `POST /auth/logout`, `GET /auth/me` | public/session |
+| Dashboard | `GET /api/v1/admin/dashboard?fromDate&toDate&timezone` | `analytics.read` |
+| Products | `GET /admin/products[/{id}]`, `PUT /admin/products/{id}`, `POST .../status` | `catalog.read/write/publish` |
+| QR | `GET /admin/qr`, `PUT /admin/qr/{code}` | `qr.read/manage` |
+| Leads | `GET /admin/submissions[/{id}]`, `PATCH .../status`, `POST .../assign`, `POST .../activities` | `submissions.read/write/assign` |
+| Export/audit | `POST /admin/submissions/export`, `GET /admin/audit-logs` | `submissions.export`, `audit.read` |
 
 Contract list admin phải trả `meta.total` vì UI có phân trang. Dashboard/analytics phải aggregate ở BE theo timezone được khai báo; FE không cộng toàn bộ raw events.
 
-Login demo trong `AdminApp.tsx` và sessionStorage chỉ là prototype. Production không được:
+Admin frontend hiện dùng session backend và không còn credential demo/sessionStorage. Các ràng buộc bắt buộc là:
 
 - ship credential mẫu trong bundle;
 - coi object trong sessionStorage là bằng chứng xác thực;

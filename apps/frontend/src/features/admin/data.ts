@@ -1,10 +1,5 @@
 import type { AdminState } from "./types";
 
-export const demoCredentials = {
-  email: "admin@senova.vn",
-  password: "Senova123",
-};
-
 export const initialAdminState: AdminState = {
   products: [
     {

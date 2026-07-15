@@ -4,7 +4,7 @@
 
 ## Theo dõi triển khai
 
-> Quy ước: chỉ chuyển sang `DONE` sau khi code, test và tài liệu/contract liên quan đã đạt quality gate. Cập nhật gần nhất: 2026-07-15.
+> Quy ước: chỉ chuyển sang `DONE` sau khi code, test và tài liệu/contract liên quan đã đạt quality gate. Cập nhật gần nhất: 2026-07-16.
 
 | Trạng thái | Task | Bằng chứng |
 | --- | --- | --- |
@@ -36,9 +36,18 @@
 | DONE | BE-204 | Backend/FE contract tests cho camelCase, envelope, draft visibility và pre-order items |
 | DONE | BE-205 | FE catalog provider gọi API thật; loading/error telemetry; không dùng local fallback khi API đã cấu hình; QR không che business error |
 | DONE | BE-206 | Checkout gửi `items[]` + idempotency key ổn định; server validate và snapshot product/variant name |
-| NEXT | BE-300 → BE-308 | Admin identity/session, RBAC, audit, product/QR/lead admin và security tests |
+| DONE | BE-300 | Argon2id login/reset; opaque 8h HttpOnly session cookie, double-submit CSRF, logout/revoke-all và login/reset rate limit |
+| DONE | BE-301 | Role/permission schema và dependency deny-by-default kiểm tra quyền trên server cho mọi admin route |
+| DONE | BE-302 | Audit login/permission denied/product publish/QR mutation/lead status-assign/export kèm actor và request ID |
+| DONE | BE-303 | Product admin list/detail/upsert/publish/archive; trường `version` bảo vệ optimistic concurrency |
+| DONE | BE-304 | QR admin list/upsert/activate/pause/revoke; chuẩn hóa code và chặn destination ngoài `/experience/` |
+| DONE | BE-305 | Lead list/filter/page/detail/status/assign/note; `meta.total` lấy bằng count query độc lập |
+| DONE | BE-306 | Permission export riêng; CSV chỉ gồm allowlist field, audit, giới hạn 1.000 dòng/365 ngày |
+| DONE | BE-307 | Dashboard aggregate ở backend, hỗ trợ date range và IANA timezone chuẩn hóa về UTC |
+| DONE | BE-308 | PostgreSQL integration test cho auth, CSRF, deny-by-default RBAC, session revoke, reset, export và audit |
+| NEXT | BE-400 → BE-405 | Content revision/publish, media, outbox worker, distributed rate limit và observability |
 
-M0, M1 và M2 đã hoàn tất theo automated quality gate, PostgreSQL 16 integration/restore drill và frontend production build. PostgreSQL + SQLAlchemy + Alembic là persistence path; FE dùng API cho catalog/QR/submission khi API được cấu hình. M3 là phase kế tiếp.
+M0-M3 đã hoàn tất theo automated quality gate, PostgreSQL 16 integration/restore drill và frontend production build. PostgreSQL + SQLAlchemy + Alembic là persistence path; FE dùng API thật cho catalog/QR/submission và admin authentication. M4 là phase kế tiếp.
 
 ## 1. Mục tiêu triển khai
 

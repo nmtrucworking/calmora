@@ -20,6 +20,18 @@ python -m alembic upgrade head
 python -m app.seed_import
 ```
 
+Tạo admin đầu tiên bằng CLI sau khi migration (không commit mật khẩu):
+
+```powershell
+$env:ADMIN_EMAIL="admin@example.com"
+$env:ADMIN_NAME="Administrator"
+$env:ADMIN_PASSWORD="use-a-secret-with-at-least-12-characters"
+python -m app.bootstrap_admin
+Remove-Item Env:ADMIN_PASSWORD
+```
+
+Admin API dùng session cookie HttpOnly 8 giờ. Frontend phải gửi `credentials: include`; các mutation đồng thời gửi giá trị cookie `senova_admin_csrf` trong header `X-CSRF-Token`. Chạy bootstrap lại với cùng email không ghi đè tài khoản hiện hữu.
+
 Ứng dụng chỉ kiểm tra kết nối lúc startup; không tự tạo hoặc thay đổi schema. Migration production phải chạy như một bước deploy riêng.
 
 API mặc định ở `http://localhost:8000`, Swagger UI ở `http://localhost:8000/docs`.

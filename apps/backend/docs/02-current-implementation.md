@@ -8,7 +8,7 @@
 - API prefix mặc định: `/api`.
 - Chế độ commerce: inquiry/pre-order, chưa thu tiền trực tuyến.
 
-Phạm vi hiện thực gồm catalog sản phẩm công khai, resolve/nội dung QR, ghi nhận QR scan, tiếp nhận form và analytics event. Authentication, admin, payment, inventory và fulfillment chưa thuộc mốc này.
+Phạm vi hiện thực gồm catalog sản phẩm công khai, resolve/nội dung QR, ghi nhận QR scan, tiếp nhận form, analytics event và admin có authentication/RBAC/audit. Payment, inventory và fulfillment chưa thuộc mốc này.
 
 ## 2. Chạy ứng dụng
 
@@ -124,7 +124,17 @@ Các kind được hỗ trợ: `feedback`, `pre-order`, `sample-interest`, `cont
 - hỗ trợ `Idempotency-Key` 8-128 ký tự an toàn, được scope theo kind;
 - lưu payload dạng `JSONB` trong PostgreSQL nhưng không trả payload/PII qua status lookup công khai.
 
-`GET /api/submissions/{id}` chỉ trả `id`, `kind`, `status`, `createdAt`, `updatedAt`. Endpoint quản trị đọc payload chưa được triển khai vì chưa có authentication/RBAC.
+`GET /api/submissions/{id}` chỉ trả `id`, `kind`, `status`, `createdAt`, `updatedAt`; raw payload chỉ được đọc qua admin API có permission.
+
+### Admin
+
+- Auth: `POST /api/v1/auth/login`, `GET /auth/me`, `POST /auth/logout`, password reset và revoke-all session.
+- Product: list/detail/upsert và chuyển `draft/active/archived` với optimistic version.
+- QR: list/upsert, trạng thái `active/paused/revoked`, destination bắt buộc thuộc `/experience/`.
+- Lead: filter/page/detail/status/assign/note và CSV export có permission riêng, allowlist field, cap 1.000 dòng trong 365 ngày.
+- Dashboard: aggregate server-side theo khoảng thời gian và IANA timezone; audit log lưu actor/action/target/request ID.
+
+Session admin là opaque token lưu hash trong PostgreSQL, truyền bằng cookie HttpOnly 8 giờ. Mutation bắt buộc double-submit CSRF và permission server-side; password dùng Argon2id.
 
 ### Analytics
 
@@ -144,12 +154,16 @@ Alembic quản lý schema; migration hiện tại tạo/adopt các bảng:
 | `analytics_events` | event name, `JSONB` event, `TIMESTAMPTZ` | PK `id`, index `(event_name, created_at)` |
 | `products`, `product_variants` | public catalog snapshot | unique slug/ID, product FK, status/index |
 | `qr_records`, `qr_experience_contents`, `qr_batch_overrides` | QR registry/content/override | PK/composite PK, product FK, seed hash |
+| `admin_users`, `roles`, `permissions`, `admin_sessions` | Identity, RBAC và session admin | email/token hash unique, role/permission joins, expiry/revoke |
+| `audit_logs`, `password_reset_tokens`, `lead_activities` | Audit, reset password và lịch sử xử lý lead | actor/target/request ID, token expiry, submission FK |
 
 Seed JSON vẫn được version trong source control nhưng chỉ là nguồn import; API runtime đọc PostgreSQL. Import dùng `ON CONFLICT DO NOTHING` để không overwrite dữ liệu hiện hữu. Submissions, analytics, catalog và QR dùng chung được giữa nhiều backend instance.
 
 ## 5. Security và privacy
 
 - CORS chỉ cho phép origin khai báo trong `FRONTEND_ORIGINS`.
+- Admin mutation yêu cầu permission và CSRF; cookie session là HttpOnly/SameSite Strict và bật Secure ở staging/production.
+- Login/reset bị rate limit; sai mật khẩu liên tiếp khóa tài khoản tạm thời; password hash dùng Argon2id.
 - Không có endpoint public liệt kê submissions hoặc đọc raw payload.
 - Không dùng destination do client cung cấp để redirect QR.
 - Không log raw payload trong code ứng dụng.
@@ -171,15 +185,16 @@ Test hiện bao phủ:
 - QR resolve và experience content;
 - submission validation, sanitization, persistence, status privacy và idempotency;
 - analytics persistence.
+- admin auth/CSRF/RBAC deny-by-default, reset/revoke session, optimistic concurrency, QR/lead/export/dashboard và audit trên PostgreSQL.
 
 ## 7. Giới hạn và bước tiếp theo
 
 Các phần sau chưa phải `CURRENT`:
 
 1. Redis/distributed rate limiting.
-3. Authentication, RBAC và admin API xử lý lead.
-4. Notification worker/email sau khi nhận submission.
-5. Catalog CMS, inventory, order, payment và fulfillment.
+2. Content revision/publish và media storage.
+3. Notification outbox/worker và email sau khi nhận submission hoặc yêu cầu reset password.
+4. Catalog CMS nâng cao, inventory, order, payment và fulfillment.
 5. Metrics, tracing và alert production.
 
-Khi triển khai production, ưu tiên PostgreSQL/migration, admin authentication và backup/restore trước khi mở quyền xử lý dữ liệu khách hàng.
+Khi triển khai production, chạy migration/bootstrap admin qua secret manager, kiểm tra backup/restore và cấu hình HTTPS trước khi mở quyền xử lý dữ liệu khách hàng.

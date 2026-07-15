@@ -11,7 +11,7 @@ from app.core.config import Settings, get_settings
 from app.core.errors import install_error_handlers, success
 from app.core.logging import configure_logging
 from app.core.middleware import PayloadLimitMiddleware, install_request_middleware
-from app.modules import analytics, catalog, qr, submissions, system
+from app.modules import admin, analytics, catalog, qr, submissions, system
 from app.repository import SqlAlchemyRepository
 from app.services import build_services
 
@@ -36,8 +36,8 @@ def create_app(settings: Settings | None = None, repository: Any | None = None) 
         CORSMiddleware,
         allow_origins=settings.cors_origins,
         allow_credentials=True,
-        allow_methods=["GET", "POST", "OPTIONS"],
-        allow_headers=["Content-Type", "Idempotency-Key", "X-Request-ID"],
+        allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+        allow_headers=["Content-Type", "Idempotency-Key", "X-Request-ID", "X-CSRF-Token"],
     )
     application.middleware("http")(install_request_middleware(application, settings))
     install_error_handlers(application)
@@ -46,7 +46,14 @@ def create_app(settings: Settings | None = None, repository: Any | None = None) 
     async def root():
         return success({"service": "calmora-senova-api", "version": application.version})
 
-    for feature_router in (system.router, catalog.router, qr.router, submissions.router, analytics.router):
+    for feature_router in (
+        system.router,
+        catalog.router,
+        qr.router,
+        submissions.router,
+        analytics.router,
+        admin.router,
+    ):
         application.include_router(feature_router, prefix=settings.api_prefix)
         application.include_router(feature_router, prefix=f"{settings.api_prefix}/v1", include_in_schema=True)
     return application

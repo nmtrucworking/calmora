@@ -30,7 +30,7 @@ import { Link } from "@app/router/RouterContext";
 import { useRouter } from "@app/router/RouterState";
 import { AdminStoreProvider, useAdminStore } from "./AdminStore";
 import { AdminQrCode } from "./AdminQrCode";
-import { demoCredentials } from "./data";
+import { getAdminSession, loginAdmin, logoutAdmin } from "./adminApi";
 import { filterProducts, getAdminRedirect, validateProduct, type ProductValidationErrors } from "./adminLogic";
 import {
   ConfirmDialog,
@@ -55,7 +55,6 @@ import type {
 } from "./types";
 import "./admin.css";
 
-const SESSION_KEY = "senova-admin-demo-session";
 const PAGE_SIZE = 5;
 
 const kindLabels: Record<SubmissionKind, string> = {
@@ -68,37 +67,26 @@ const kindLabels: Record<SubmissionKind, string> = {
 
 const assignees = ["Chưa phân công", "Thu Hà", "Minh Khôi", "Ngọc Lan"];
 
-function readSession(): AdminSession | null {
-  try {
-    const value = window.sessionStorage.getItem(SESSION_KEY);
-    return value ? (JSON.parse(value) as AdminSession) : null;
-  } catch {
-    return null;
-  }
-}
-
 function AdminLogin({ onLogin }: { onLogin: (session: AdminSession) => void }) {
   const { navigate } = useRouter();
-  const [email, setEmail] = useState(demoCredentials.email);
-  const [password, setPassword] = useState(demoCredentials.password);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  const submit = (event: FormEvent) => {
+  const submit = async (event: FormEvent) => {
     event.preventDefault();
     setError("");
     setSubmitting(true);
-    window.setTimeout(() => {
-      if (email.trim().toLowerCase() !== demoCredentials.email || password !== demoCredentials.password) {
-        setError("Email hoặc mật khẩu demo chưa đúng.");
-        setSubmitting(false);
-        return;
-      }
-      const session = { name: "Quản trị Senova", email: demoCredentials.email, role: "Administrator" };
-      window.sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
+    try {
+      const session = await loginAdmin(email.trim().toLowerCase(), password);
       onLogin(session);
       navigate("/admin");
-    }, 420);
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : "Không thể đăng nhập quản trị.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -124,17 +112,13 @@ function AdminLogin({ onLogin }: { onLogin: (session: AdminSession) => void }) {
           <button className="adminButton adminButton--primary adminLogin__submit" type="submit" disabled={submitting}>
             {submitting ? "Đang xác thực..." : "Đăng nhập"}
           </button>
-          <div className="adminLogin__demo">
-            <strong>Tài khoản demo</strong>
-            Email: {demoCredentials.email}<br />Mật khẩu: {demoCredentials.password}
-          </div>
         </form>
       </section>
       <aside className="adminLogin__visual" aria-hidden="true">
         <div className="adminLogin__quote">
           <span>Senova Operations</span>
           <blockquote>Nuôi dưỡng từng kết nối, từ một cánh sen đến một trải nghiệm.</blockquote>
-          <p>Frontend prototype · Dữ liệu trong phiên không được lưu trữ lâu dài</p>
+          <p>Phiên quản trị được bảo vệ bởi backend Senova.</p>
         </div>
       </aside>
     </main>
@@ -444,23 +428,38 @@ function AdminRoutes() {
 
 export default function AdminApp() {
   const { pathname, navigate } = useRouter();
-  const [session, setSession] = useState<AdminSession | null>(() => readSession());
+  const [session, setSession] = useState<AdminSession | null | undefined>(undefined);
+
+  useEffect(() => {
+    let current = true;
+    void getAdminSession()
+      .then((value) => current && setSession(value))
+      .catch(() => current && setSession(null));
+    return () => {
+      current = false;
+    };
+  }, []);
 
   useEffect(() => {
     document.title = `${pageLabel(pathname)} | Senova Admin`;
   }, [pathname]);
 
   useEffect(() => {
+    if (session === undefined) return;
     const redirect = getAdminRedirect(session, pathname);
     if (redirect) navigate(redirect);
   }, [navigate, pathname, session]);
 
+  if (session === undefined) return <main className="adminRoot adminLogin" />;
   if (!session) return <AdminLogin onLogin={setSession} />;
 
-  const logout = () => {
-    window.sessionStorage.removeItem(SESSION_KEY);
+  const logout = async () => {
+    try {
+      await logoutAdmin();
+    } finally {
     setSession(null);
     navigate("/admin/login");
+    }
   };
 
   return (
