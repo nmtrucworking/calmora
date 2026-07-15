@@ -2,8 +2,8 @@
 
 ## 1. Trạng thái tài liệu
 
-- `CURRENT`: QR/catalog content đọc từ JSON; submission và analytics lưu trong PostgreSQL qua Psycopg 3; rate limit còn ở memory theo process.
-- `NEXT`: Alembic migration có version; chuyển QR/catalog sang PostgreSQL khi nối admin; distributed rate limit khi chạy nhiều instance.
+- `CURRENT`: catalog, QR/content, submission và analytics dùng PostgreSQL qua SQLAlchemy 2.x/Psycopg 3; schema có Alembic migration; rate limit còn ở memory theo process.
+- `NEXT`: mở rộng catalog visibility/collection/media và admin; distributed rate limit khi chạy nhiều instance.
 - `TARGET`: mở rộng catalog, content, account, commerce, inventory, payment, fulfillment, media và audit.
 
 Không được xem cấu trúc bảng mục tiêu là đã tồn tại trong code hiện tại.

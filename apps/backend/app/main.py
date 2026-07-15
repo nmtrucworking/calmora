@@ -12,7 +12,7 @@ from app.core.errors import install_error_handlers, success
 from app.core.logging import configure_logging
 from app.core.middleware import PayloadLimitMiddleware, install_request_middleware
 from app.modules import analytics, catalog, qr, submissions, system
-from app.repository import PsycopgRepository
+from app.repository import SqlAlchemyRepository
 from app.services import build_services
 
 SEED_DIR = Path(__file__).resolve().parent / "seed"
@@ -20,7 +20,7 @@ SEED_DIR = Path(__file__).resolve().parent / "seed"
 
 def create_app(settings: Settings | None = None, repository: Any | None = None) -> FastAPI:
     settings = settings or get_settings()
-    repository = repository or PsycopgRepository()
+    repository = repository or SqlAlchemyRepository()
 
     @asynccontextmanager
     async def lifespan(_: FastAPI):

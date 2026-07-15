@@ -13,6 +13,15 @@ python -m uvicorn app.main:app --reload --port 8000 --env-file .env
 
 Trước khi khởi động, tạo database PostgreSQL và cập nhật `DATABASE_URL` trong `.env`. Có thể dùng PostgreSQL local, Render Postgres hoặc Supabase Postgres; backend kết nối trực tiếp bằng Psycopg và không cần SDK Supabase.
 
+Khởi tạo hoặc nâng cấp schema và import seed idempotent trước khi chạy app:
+
+```powershell
+python -m alembic upgrade head
+python -m app.seed_import
+```
+
+Ứng dụng chỉ kiểm tra kết nối lúc startup; không tự tạo hoặc thay đổi schema. Migration production phải chạy như một bước deploy riêng.
+
 API mặc định ở `http://localhost:8000`, Swagger UI ở `http://localhost:8000/docs`.
 
 ## Kiểm thử
@@ -25,8 +34,8 @@ python -m pytest -q
 Quality gate đầy đủ:
 
 ```powershell
-python -m ruff format --check app tests
-python -m ruff check app tests
+python -m ruff format --check app migrations tests
+python -m ruff check app migrations tests
 python -m mypy app
 python -m pytest -q
 ```

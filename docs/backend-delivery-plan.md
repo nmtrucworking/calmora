@@ -19,10 +19,19 @@
 | DONE | BE-014 | `X-Request-ID`, JSON access log, trusted proxy handling và PII/secret redaction |
 | DONE | BE-015 | Payload limit, field bounds, analytics allowlist, CORS allowlist và rate limit single-instance |
 | DONE | BE-016 | Ruff, mypy, pytest và GitHub Actions quality gate; 21 API/unit tests pass |
-| TODO | BE-000 | Cần PostgreSQL integration baseline; test hiện tại dùng in-memory repository |
-| NEXT | BE-100 → BE-108 | SQLAlchemy/Alembic, durable repositories, seed import và migration/integration tests |
+| DONE | BE-000 | Baseline và M1 suite chạy trên PostgreSQL 16 cô lập; quality gate đạt 27 tests |
+| DONE | BE-100 | SQLAlchemy 2.x engine/session/transaction factory, pool pre-ping và repository lifecycle |
+| DONE | BE-101 | Alembic revision `20260716_0001`; app startup không còn bootstrap DDL |
+| DONE | BE-102 | Adopt schema legacy không mất submission/analytics; idempotency/index/constraint được giữ |
+| DONE | BE-103 | PostgreSQL schema cho product/variant, QR record, experience content và batch override |
+| DONE | BE-104 | Seed validator/importer idempotent; lần hai ghi 0 record và không overwrite dữ liệu hiện hữu |
+| DONE | BE-105 | Public catalog/QR đọc PostgreSQL qua repository; không còn seed fallback ở runtime production |
+| DONE | BE-106 | Migration map status legacy sang canonical; dữ liệu `in_progress` được kiểm chứng thành `contacted` |
+| DONE | BE-107 | PostgreSQL migration/repository/API tests gồm legacy adoption, seed hai lần và concurrent idempotency |
+| DONE | BE-108 | Backup/restore runbook và drill PostgreSQL 16; record counts source/restore khớp |
+| NEXT | BE-200 → BE-206 | Catalog API v1 contract, visibility/caching hoàn chỉnh và hỗ trợ frontend cutover |
 
-Các task M0 (BE-010–BE-016) đã hoàn tất về code và automated quality gate. Stage gate tổng thể vẫn chờ BE-000 chạy trên PostgreSQL test. Production vẫn dùng bootstrap DDL/Psycopg cho đến khi BE-100–BE-107 hoàn tất.
+M0 và M1 đã hoàn tất theo automated quality gate và PostgreSQL 16 integration/restore drill. PostgreSQL + SQLAlchemy + Alembic hiện là persistence path; app startup không còn thay đổi schema. M2 là phase kế tiếp.
 
 ## 1. Mục tiêu triển khai
 

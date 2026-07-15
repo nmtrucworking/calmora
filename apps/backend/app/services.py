@@ -22,11 +22,19 @@ class Services:
 
 
 def build_services(settings: Settings, repository: Any, seed_dir: Path) -> Services:
-    catalog = CatalogService(CatalogRepository(seed_dir))
+    catalog_repository = (
+        repository if all(hasattr(repository, name) for name in ("list", "get")) else CatalogRepository(seed_dir)
+    )
+    qr_repository = (
+        repository
+        if all(hasattr(repository, name) for name in ("get_record", "get_content", "get_override"))
+        else QrRepository(seed_dir)
+    )
+    catalog = CatalogService(catalog_repository)
     analytics = AnalyticsService(repository)
     return Services(
         catalog=catalog,
-        qr=QrService(QrRepository(seed_dir), analytics),
+        qr=QrService(qr_repository, analytics),
         submissions=SubmissionService(repository, catalog, settings.receipt_secret),
         analytics=analytics,
         rate_limiter=InMemoryRateLimiter(),
