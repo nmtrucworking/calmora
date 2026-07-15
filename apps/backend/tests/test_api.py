@@ -63,9 +63,20 @@ def test_product_catalog_detail_and_http_cache(client: TestClient):
     assert catalog.headers["cache-control"] == "public, max-age=60"
     assert client.get("/api/products", headers={"If-None-Match": catalog.headers["etag"]}).status_code == 304
     assert client.get("/api/v1/products/petal-pack").json()["data"]["name"] == "Senova Petal Pack"
+    assert [item["slug"] for item in client.get("/api/v1/products").json()["data"]] == ["classic", "petal-pack"]
+    assert client.get("/api/products/gift-set").status_code == 200
+    assert client.get("/api/v1/products/gift-set").status_code == 404
     missing = client.get("/api/products/unknown")
     assert missing.status_code == 404
     assert missing.json()["error"]["code"] == "PRODUCT_NOT_FOUND"
+
+
+def test_catalog_etag_changes_when_published_data_changes(client: TestClient):
+    first = client.get("/api/v1/products")
+    repository = client.app.state.services.catalog.repository
+    repository._products[0]["name"] = "Senova Classic Updated"
+    second = client.get("/api/v1/products")
+    assert first.headers["etag"] != second.headers["etag"]
 
 
 def test_qr_resolve_inactive_states_and_experience(client: TestClient):

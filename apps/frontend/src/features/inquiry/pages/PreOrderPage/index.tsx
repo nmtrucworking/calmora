@@ -6,12 +6,8 @@ import { Link } from "@app/router/RouterContext";
 import { useRouter } from "@app/router/RouterState";
 import { trackEvent } from "@shared/analytics/analytics";
 import { submitForm } from "@shared/api/submissions";
-import { getProductBySlug, products } from "@features/products/data/products";
+import { useProductCatalog } from "@app/providers/ProductCatalogContext";
 import { systemStyles as styles } from "@shared/styles/systemPageClasses";
-
-const validationProducts = products.filter((product) =>
-  ["petal-pack", "gift-set"].includes(product.slug),
-);
 
 const reportReferenceDate = "2026-06-27";
 
@@ -234,6 +230,8 @@ export default function PreOrderPage() {
   const copy = pageCopy[language];
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { getProductBySlug, products } = useProductCatalog();
+  const validationProducts = products.filter((product) => ["petal-pack", "gift-set"].includes(product.slug));
   const requestedProduct = new URLSearchParams(search).get("product") ?? "petal-pack";
   const selectedProduct = getProductBySlug(requestedProduct);
   const defaultProduct =

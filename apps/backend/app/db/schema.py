@@ -6,6 +6,7 @@ from sqlalchemy import (
     Column,
     ForeignKey,
     Index,
+    Integer,
     MetaData,
     String,
     Table,
@@ -42,6 +43,41 @@ product_variants = Table(
     Column("updated_at", TIMESTAMP(timezone=True), nullable=False),
 )
 Index("idx_product_variants_product", product_variants.c.product_id)
+
+collections = Table(
+    "collections",
+    metadata,
+    Column("id", String(120), primary_key=True),
+    Column("slug", String(120), nullable=False, unique=True),
+    Column("name", String(255), nullable=False),
+    Column("status", String(32), nullable=False),
+    Column("data", JSONB, nullable=False),
+    Column("created_at", TIMESTAMP(timezone=True), nullable=False),
+    Column("updated_at", TIMESTAMP(timezone=True), nullable=False),
+    CheckConstraint("status IN ('draft','active','archived')", name="collections_status_check"),
+)
+
+collection_products = Table(
+    "collection_products",
+    metadata,
+    Column("collection_id", String(120), ForeignKey("collections.id", ondelete="CASCADE"), primary_key=True),
+    Column("product_id", String(120), ForeignKey("products.id", ondelete="CASCADE"), primary_key=True),
+    Column("sort_order", Integer, nullable=False, server_default="0"),
+)
+Index("idx_collection_products_product", collection_products.c.product_id)
+
+product_media = Table(
+    "product_media",
+    metadata,
+    Column("id", String(160), primary_key=True),
+    Column("product_id", String(120), ForeignKey("products.id", ondelete="CASCADE"), nullable=False),
+    Column("url", Text, nullable=False),
+    Column("alt_text", Text, nullable=False),
+    Column("kind", String(32), nullable=False),
+    Column("sort_order", Integer, nullable=False, server_default="0"),
+    Column("created_at", TIMESTAMP(timezone=True), nullable=False),
+)
+Index("idx_product_media_product", product_media.c.product_id, product_media.c.sort_order)
 
 qr_records = Table(
     "qr_records",

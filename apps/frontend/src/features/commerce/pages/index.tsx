@@ -365,7 +365,13 @@ export function CheckoutPage() {
       phone: String(form.get("phone") ?? ""),
       intent,
       notes: String(form.get("notes") ?? ""),
-      itemCount: items.length,
+      items: items.map((item) => ({
+        productId: item.productId,
+        variantId: item.variantId,
+        quantity: item.quantity,
+        giftMessage: item.giftMessage,
+        deliveryPreference: item.deliveryPreference,
+      })),
     });
     setIsSubmitting(false);
 

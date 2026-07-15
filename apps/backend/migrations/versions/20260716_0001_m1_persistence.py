@@ -14,7 +14,16 @@ depends_on = None
 def upgrade() -> None:
     bind = op.get_bind()
     existing = set() if context.is_offline_mode() else set(inspect(bind).get_table_names())
-    metadata.create_all(bind=bind, checkfirst=not context.is_offline_mode())
+    for name in (
+        "products",
+        "product_variants",
+        "qr_records",
+        "qr_experience_contents",
+        "qr_batch_overrides",
+        "submissions",
+        "analytics_events",
+    ):
+        metadata.tables[name].create(bind=bind, checkfirst=not context.is_offline_mode())
     if "submissions" in existing:
         op.execute("ALTER TABLE submissions DROP CONSTRAINT IF EXISTS submissions_status_check")
         op.execute(

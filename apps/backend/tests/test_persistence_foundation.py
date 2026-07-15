@@ -18,6 +18,9 @@ def test_m1_metadata_contains_durable_public_tables():
         "qr_batch_overrides",
         "submissions",
         "analytics_events",
+        "collections",
+        "collection_products",
+        "product_media",
     } <= set(metadata.tables)
 
 

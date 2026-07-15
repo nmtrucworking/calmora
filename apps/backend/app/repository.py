@@ -69,17 +69,21 @@ class SqlAlchemyRepository:
                 )
             )
 
-    def list(self) -> list[dict[str, Any]]:
+    def list(self, published_only: bool = False) -> list[dict[str, Any]]:
+        statement = select(products.c.data).order_by(products.c.created_at)
+        if published_only:
+            statement = statement.where(products.c.status == "active")
         with self.engine.connect() as connection:
-            rows = connection.execute(select(products.c.data).order_by(products.c.created_at)).scalars().all()
+            rows = connection.execute(statement).scalars().all()
         return deepcopy(list(rows))
 
-    def get(self, slug_or_id: str) -> dict[str, Any] | None:
+    def get(self, slug_or_id: str, published_only: bool = False) -> dict[str, Any] | None:
         normalized = slug_or_id.strip().lower()
+        statement = select(products.c.data).where((products.c.slug == normalized) | (products.c.id == normalized))
+        if published_only:
+            statement = statement.where(products.c.status == "active")
         with self.engine.connect() as connection:
-            value = connection.execute(
-                select(products.c.data).where((products.c.slug == normalized) | (products.c.id == normalized))
-            ).scalar_one_or_none()
+            value = connection.execute(statement).scalar_one_or_none()
         return deepcopy(value) if value else None
 
     def get_record(self, code: str) -> dict[str, Any] | None:

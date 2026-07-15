@@ -10,6 +10,9 @@ from app.core.errors import success
 from app.modules.common import now_utc, sanitize_text
 
 AllowedEvent = Literal[
+    "catalog_load_failed",
+    "catalog_local_fallback",
+    "page_view",
     "contact_start",
     "feedback_submit",
     "feedback_start",

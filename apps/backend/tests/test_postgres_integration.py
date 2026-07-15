@@ -71,6 +71,11 @@ def test_seed_is_idempotent_and_api_reads_database():
     app = create_app(settings, SqlAlchemyRepository())
     with TestClient(app) as client:
         assert client.get("/api/products/petal-pack").json()["data"]["name"] == "Senova Petal Pack"
+        assert [item["slug"] for item in client.get("/api/v1/products").json()["data"]] == [
+            "classic",
+            "petal-pack",
+        ]
+        assert client.get("/api/v1/products/gift-set").status_code == 404
         assert client.get("/api/qr/PP-2601-A").json()["data"]["status"] == "active"
 
         payload = {
@@ -80,6 +85,13 @@ def test_seed_is_idempotent_and_api_reads_database():
         first_submit = client.post("/api/submissions", json=payload, headers={"Idempotency-Key": "pg-contact-001"})
         second_submit = client.post("/api/submissions", json=payload, headers={"Idempotency-Key": "pg-contact-001"})
         assert first_submit.json()["data"] == second_submit.json()["data"]
+
+    with psycopg.connect(_psycopg_url()) as connection:
+        catalog_tables = connection.execute(
+            "SELECT tablename FROM pg_tables WHERE schemaname = 'public' "
+            "AND tablename IN ('collections', 'collection_products', 'product_media') ORDER BY tablename"
+        ).fetchall()
+    assert [row[0] for row in catalog_tables] == ["collection_products", "collections", "product_media"]
 
 
 def test_submission_idempotency_is_safe_under_concurrency():

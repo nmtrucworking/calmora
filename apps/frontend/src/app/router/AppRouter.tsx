@@ -5,7 +5,8 @@ import { SiteLayout } from "@app/layout/SiteLayout";
 import { AnimatePresence, MotionConfig, motion } from "framer-motion";
 import { pageTransitionVariants } from "@shared/motion/animationSystem";
 import { preloadImages } from "@shared/utils/imagePreload";
-import { getProductBySlug } from "@features/products/data/products";
+import { getProductBySlug as getSeedProductBySlug } from "@features/products/data/products";
+import { useProductCatalog } from "@app/providers/ProductCatalogContext";
 import { collections } from "@features/content/commerceContent";
 import { commerceText, getLocalizedProduct, getLocalizedSeo } from "@features/content/i18n";
 import { useLanguage, type Language } from "@app/providers/LanguageContext";
@@ -265,7 +266,7 @@ function getRouteImagePaths(pathname: string) {
     pathname.startsWith("/feedback/")
   ) {
     const productSlug = pathname.split("/")[2] ?? "";
-    const product = getProductBySlug(productSlug);
+    const product = getSeedProductBySlug(productSlug);
 
     return product ? [...sharedImagePaths, product.image] : sharedImagePaths;
   }
@@ -362,7 +363,7 @@ function updateMetadata(pathname: string, language: Language) {
     pathname.startsWith("/products/") ||
     pathname.startsWith("/experience/") ||
     pathname.startsWith("/feedback/")
-      ? getProductBySlug(productSlug)
+      ? getSeedProductBySlug(productSlug)
       : undefined;
   const product = baseProduct ? getLocalizedProduct(baseProduct, language) : undefined;
   const qrSeo: SeoContent | undefined = pathname.startsWith("/q/")
@@ -402,6 +403,7 @@ function updateMetadata(pathname: string, language: Language) {
 function PublicRoutes() {
   const { pathname, search } = useRouter();
   const { language } = useLanguage();
+  const { getProductBySlug, isLoading: isCatalogLoading } = useProductCatalog();
   const normalizedPath = pathname.length > 1 ? pathname.replace(/\/+$/, "") : pathname;
   const productSlug = normalizedPath.split("/")[2] ?? "";
   const collectionSlug = normalizedPath.split("/")[2] ?? "";
@@ -421,7 +423,14 @@ function PublicRoutes() {
   }, [language, normalizedPath, search]);
 
   let pageComponent;
-  if (normalizedPath === landingPath) {
+  if (
+    isCatalogLoading &&
+    (normalizedPath.startsWith("/products/") ||
+      normalizedPath.startsWith("/experience/") ||
+      normalizedPath.startsWith("/feedback/"))
+  ) {
+    pageComponent = <RouteFallback />;
+  } else if (normalizedPath === landingPath) {
     pageComponent = <SenovaLandingPage />;
   } else if (normalizedPath === "/about") {
     pageComponent = <AboutPage />;

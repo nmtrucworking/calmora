@@ -29,9 +29,16 @@
 | DONE | BE-106 | Migration map status legacy sang canonical; dữ liệu `in_progress` được kiểm chứng thành `contacted` |
 | DONE | BE-107 | PostgreSQL migration/repository/API tests gồm legacy adoption, seed hai lần và concurrent idempotency |
 | DONE | BE-108 | Backup/restore runbook và drill PostgreSQL 16; record counts source/restore khớp |
-| NEXT | BE-200 → BE-206 | Catalog API v1 contract, visibility/caching hoàn chỉnh và hỗ trợ frontend cutover |
+| DONE | BE-200 | Schema `products`, `product_variants`, `collections`, join collection-product và product media reference |
+| DONE | BE-201 | Ba product hiện tại được validate/import đầy đủ và idempotent vào PostgreSQL |
+| DONE | BE-202 | `/api/v1/products` list/detail chỉ expose `active`; `/api` giữ draft compatibility; OpenAPI/error contract có test |
+| DONE | BE-203 | ETag/Cache-Control cho list/detail; ETag thay đổi theo payload DB được kiểm chứng |
+| DONE | BE-204 | Backend/FE contract tests cho camelCase, envelope, draft visibility và pre-order items |
+| DONE | BE-205 | FE catalog provider gọi API thật; loading/error telemetry; không dùng local fallback khi API đã cấu hình; QR không che business error |
+| DONE | BE-206 | Checkout gửi `items[]` + idempotency key ổn định; server validate và snapshot product/variant name |
+| NEXT | BE-300 → BE-308 | Admin identity/session, RBAC, audit, product/QR/lead admin và security tests |
 
-M0 và M1 đã hoàn tất theo automated quality gate và PostgreSQL 16 integration/restore drill. PostgreSQL + SQLAlchemy + Alembic hiện là persistence path; app startup không còn thay đổi schema. M2 là phase kế tiếp.
+M0, M1 và M2 đã hoàn tất theo automated quality gate, PostgreSQL 16 integration/restore drill và frontend production build. PostgreSQL + SQLAlchemy + Alembic là persistence path; FE dùng API cho catalog/QR/submission khi API được cấu hình. M3 là phase kế tiếp.
 
 ## 1. Mục tiêu triển khai
 

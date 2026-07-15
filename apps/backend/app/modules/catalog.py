@@ -15,16 +15,20 @@ class CatalogRepository:
     def __init__(self, seed_dir: Path):
         self._products: list[dict[str, Any]] = _load_seed(seed_dir / "products.json")
 
-    def list(self) -> list[dict[str, Any]]:
-        return deepcopy(self._products)
+    def list(self, published_only: bool = False) -> list[dict[str, Any]]:
+        products = self._products
+        if published_only:
+            products = [product for product in products if product.get("status") == "active"]
+        return deepcopy(products)
 
-    def get(self, slug_or_id: str) -> dict[str, Any] | None:
+    def get(self, slug_or_id: str, published_only: bool = False) -> dict[str, Any] | None:
         normalized = slug_or_id.strip().lower()
         item = next(
             (
                 product
                 for product in self._products
-                if product.get("slug") == normalized or product.get("id") == normalized
+                if (product.get("slug") == normalized or product.get("id") == normalized)
+                and (not published_only or product.get("status") == "active")
             ),
             None,
         )
@@ -35,11 +39,11 @@ class CatalogService:
     def __init__(self, repository: CatalogRepository):
         self.repository = repository
 
-    def list_products(self) -> list[dict[str, Any]]:
-        return self.repository.list()
+    def list_products(self, published_only: bool = False) -> list[dict[str, Any]]:
+        return self.repository.list(published_only=published_only)
 
-    def get_product(self, slug: str) -> dict[str, Any]:
-        product = self.repository.get(slug)
+    def get_product(self, slug: str, published_only: bool = False) -> dict[str, Any]:
+        product = self.repository.get(slug, published_only=published_only)
         if not product:
             raise DomainError(404, "PRODUCT_NOT_FOUND", "Product was not found.")
         return product
@@ -95,9 +99,14 @@ def _cached_response(request: Request, data: Any) -> Response | dict[str, Any]:
 
 @router.get("/products", response_model=None)
 async def list_products(request: Request):
-    return _cached_response(request, request.app.state.services.catalog.list_products())
+    published_only = request.url.path.startswith(f"{request.app.state.settings.api_prefix}/v1/")
+    return _cached_response(request, request.app.state.services.catalog.list_products(published_only=published_only))
 
 
 @router.get("/products/{slug}", response_model=None)
 async def get_product(slug: str, request: Request):
-    return _cached_response(request, request.app.state.services.catalog.get_product(slug))
+    published_only = request.url.path.startswith(f"{request.app.state.settings.api_prefix}/v1/")
+    return _cached_response(
+        request,
+        request.app.state.services.catalog.get_product(slug, published_only=published_only),
+    )

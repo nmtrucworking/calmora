@@ -79,6 +79,8 @@ Lỗi dùng dạng:
 | `GET` | `/api/products` | Trả ba sản phẩm theo thứ tự Classic, Petal Pack, Gift Set. |
 | `GET` | `/api/products/{slug}` | Chi tiết product hoặc `PRODUCT_NOT_FOUND`. |
 
+`/api` là compatibility contract và vẫn trả Gift Set đang ở `draft`. `/api/v1/products` và detail v1 chỉ expose product `active`; draft trả `PRODUCT_NOT_FOUND`. Catalog response có `ETag` và `Cache-Control: public, max-age=60`; ETag đổi theo payload database.
+
 Catalog được import idempotent từ `app/seed/products.json` vào PostgreSQL. `gift-set` có trạng thái `draft` nhưng vẫn public để giữ đúng hành vi frontend hiện tại.
 
 ### QR
