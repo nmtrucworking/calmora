@@ -45,9 +45,10 @@
 | DONE | BE-306 | Permission export riêng; CSV chỉ gồm allowlist field, audit, giới hạn 1.000 dòng/365 ngày |
 | DONE | BE-307 | Dashboard aggregate ở backend, hỗ trợ date range và IANA timezone chuẩn hóa về UTC |
 | DONE | BE-308 | PostgreSQL integration test cho auth, CSRF, deny-by-default RBAC, session revoke, reset, export và audit |
-| NEXT | BE-400 → BE-405 | Content revision/publish, media, outbox worker, distributed rate limit và observability |
+| DONE | BE-400 | Content item/revision draft → in-review → published; return-draft/unpublish, optimistic version, audit và published revision immutable |
+| NEXT | BE-401 → BE-406 | QR content publish, media, outbox worker, distributed rate limit, observability và production runbook |
 
-M0-M3 đã hoàn tất theo automated quality gate, PostgreSQL 16 integration/restore drill và frontend production build. PostgreSQL + SQLAlchemy + Alembic là persistence path; FE dùng API thật cho catalog/QR/submission và admin authentication. M4 là phase kế tiếp.
+M0-M3 và BE-400 đã hoàn tất theo automated quality gate, PostgreSQL 16 integration/restore drill và frontend production build. PostgreSQL + SQLAlchemy + Alembic là persistence path; FE dùng API thật cho catalog/QR/submission và admin authentication. M4 đang tiếp tục với BE-401.
 
 ## 1. Mục tiêu triển khai
 

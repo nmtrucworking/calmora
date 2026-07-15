@@ -11,7 +11,7 @@ from app.core.config import Settings, get_settings
 from app.core.errors import install_error_handlers, success
 from app.core.logging import configure_logging
 from app.core.middleware import PayloadLimitMiddleware, install_request_middleware
-from app.modules import admin, analytics, catalog, qr, submissions, system
+from app.modules import admin, analytics, catalog, content, qr, submissions, system
 from app.repository import SqlAlchemyRepository
 from app.services import build_services
 
@@ -53,6 +53,7 @@ def create_app(settings: Settings | None = None, repository: Any | None = None) 
         submissions.router,
         analytics.router,
         admin.router,
+        content.router,
     ):
         application.include_router(feature_router, prefix=settings.api_prefix)
         application.include_router(feature_router, prefix=f"{settings.api_prefix}/v1", include_in_schema=True)

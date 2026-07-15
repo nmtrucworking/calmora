@@ -133,6 +133,7 @@ Các kind được hỗ trợ: `feedback`, `pre-order`, `sample-interest`, `cont
 - QR: list/upsert, trạng thái `active/paused/revoked`, destination bắt buộc thuộc `/experience/`.
 - Lead: filter/page/detail/status/assign/note và CSV export có permission riêng, allowlist field, cap 1.000 dòng trong 365 ngày.
 - Dashboard: aggregate server-side theo khoảng thời gian và IANA timezone; audit log lưu actor/action/target/request ID.
+- Content: item/revision draft, submit/return review, publish và unpublish; public API chỉ đọc current published revision.
 
 Session admin là opaque token lưu hash trong PostgreSQL, truyền bằng cookie HttpOnly 8 giờ. Mutation bắt buộc double-submit CSRF và permission server-side; password dùng Argon2id.
 
@@ -156,6 +157,7 @@ Alembic quản lý schema; migration hiện tại tạo/adopt các bảng:
 | `qr_records`, `qr_experience_contents`, `qr_batch_overrides` | QR registry/content/override | PK/composite PK, product FK, seed hash |
 | `admin_users`, `roles`, `permissions`, `admin_sessions` | Identity, RBAC và session admin | email/token hash unique, role/permission joins, expiry/revoke |
 | `audit_logs`, `password_reset_tokens`, `lead_activities` | Audit, reset password và lịch sử xử lý lead | actor/target/request ID, token expiry, submission FK |
+| `content_items`, `content_revisions` | Content workflow và public revision pointer | unique key/revision, optimistic version, immutable published state |
 
 Seed JSON vẫn được version trong source control nhưng chỉ là nguồn import; API runtime đọc PostgreSQL. Import dùng `ON CONFLICT DO NOTHING` để không overwrite dữ liệu hiện hữu. Submissions, analytics, catalog và QR dùng chung được giữa nhiều backend instance.
 

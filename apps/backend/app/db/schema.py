@@ -12,6 +12,7 @@ from sqlalchemy import (
     String,
     Table,
     Text,
+    UniqueConstraint,
 )
 from sqlalchemy.dialects.postgresql import JSONB
 
@@ -240,3 +241,44 @@ lead_activities = Table(
     Column("created_at", TIMESTAMP(timezone=True), nullable=False),
 )
 Index("idx_lead_activity_submission", lead_activities.c.submission_id, lead_activities.c.created_at.desc())
+
+content_items = Table(
+    "content_items",
+    metadata,
+    Column("id", String(36), primary_key=True),
+    Column("content_key", String(160), nullable=False, unique=True),
+    Column("content_type", String(80), nullable=False),
+    Column("locale", String(10), nullable=False),
+    Column("status", String(32), nullable=False),
+    Column(
+        "current_published_revision_id",
+        String(36),
+        ForeignKey("content_revisions.id", name="content_items_current_revision_fk", use_alter=True),
+    ),
+    Column("created_by", String(36), ForeignKey("admin_users.id"), nullable=False),
+    Column("created_at", TIMESTAMP(timezone=True), nullable=False),
+    Column("updated_at", TIMESTAMP(timezone=True), nullable=False),
+    CheckConstraint("status IN ('draft','published','unpublished')", name="content_items_status_check"),
+)
+
+content_revisions = Table(
+    "content_revisions",
+    metadata,
+    Column("id", String(36), primary_key=True),
+    Column("item_id", String(36), ForeignKey("content_items.id", ondelete="CASCADE"), nullable=False),
+    Column("revision_no", Integer, nullable=False),
+    Column("status", String(32), nullable=False),
+    Column("data", JSONB, nullable=False),
+    Column("source_note", Text),
+    Column("review_note", Text),
+    Column("version", Integer, nullable=False, server_default="1"),
+    Column("created_by", String(36), ForeignKey("admin_users.id"), nullable=False),
+    Column("reviewed_by", String(36), ForeignKey("admin_users.id")),
+    Column("published_by", String(36), ForeignKey("admin_users.id")),
+    Column("created_at", TIMESTAMP(timezone=True), nullable=False),
+    Column("updated_at", TIMESTAMP(timezone=True), nullable=False),
+    Column("published_at", TIMESTAMP(timezone=True)),
+    CheckConstraint("status IN ('draft','in_review','published','superseded')", name="content_revisions_status_check"),
+    UniqueConstraint("item_id", "revision_no", name="content_revisions_item_revision_key"),
+)
+Index("idx_content_revisions_item_status", content_revisions.c.item_id, content_revisions.c.status)

@@ -32,6 +32,8 @@ Remove-Item Env:ADMIN_PASSWORD
 
 Admin API dùng session cookie HttpOnly 8 giờ. Frontend phải gửi `credentials: include`; các mutation đồng thời gửi giá trị cookie `senova_admin_csrf` trong header `X-CSRF-Token`. Chạy bootstrap lại với cùng email không ghi đè tài khoản hiện hữu.
 
+Content workflow nằm dưới `/api/v1/admin/content-*`; public read dùng `GET /api/v1/content/{contentKey}` và chỉ trả revision đang publish. Revision đã publish không thể sửa trực tiếp; cần tạo revision draft mới.
+
 Ứng dụng chỉ kiểm tra kết nối lúc startup; không tự tạo hoặc thay đổi schema. Migration production phải chạy như một bước deploy riêng.
 
 API mặc định ở `http://localhost:8000`, Swagger UI ở `http://localhost:8000/docs`.

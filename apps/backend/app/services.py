@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any
 
 from app.admin_repository import AdminRepository
+from app.content_repository import ContentRepository
 from app.core.config import Settings
 from app.core.rate_limit import InMemoryRateLimiter
 from app.modules.admin import AdminService
@@ -22,6 +23,7 @@ class Services:
     analytics: AnalyticsService
     rate_limiter: InMemoryRateLimiter
     admin: AdminService | None
+    content: ContentRepository | None
 
 
 def build_services(settings: Settings, repository: Any, seed_dir: Path) -> Services:
@@ -42,4 +44,5 @@ def build_services(settings: Settings, repository: Any, seed_dir: Path) -> Servi
         analytics=analytics,
         rate_limiter=InMemoryRateLimiter(),
         admin=AdminService(AdminRepository(repository), settings.app_env) if hasattr(repository, "_engine") else None,
+        content=ContentRepository(repository) if hasattr(repository, "_engine") else None,
     )

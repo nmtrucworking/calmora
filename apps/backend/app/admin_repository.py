@@ -20,6 +20,11 @@ PERMISSION_CODES = (
     "analytics.read",
     "audit.read",
     "sessions.revoke",
+    "content.read",
+    "content.write",
+    "content.review",
+    "content.publish",
+    "content.unpublish",
 )
 
 

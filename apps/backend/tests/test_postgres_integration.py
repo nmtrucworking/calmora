@@ -49,6 +49,11 @@ def migrated_database():
         )
 
     alembic = Config("alembic.ini")
+    command.upgrade(alembic, "20260716_0003")
+    clear_engine_cache()
+    AdminRepository(SqlAlchemyRepository()).bootstrap_admin(
+        "admin@senova.test", "Admin", hasher.hash("Very-Secure-Password-2026")
+    )
     command.upgrade(alembic, "head")
     clear_engine_cache()
     yield
@@ -287,3 +292,89 @@ def test_admin_password_reset_revokes_existing_session():
             ).status_code
             == 200
         )
+
+
+def test_content_revision_workflow_keeps_published_revision_immutable():
+    repository = SqlAlchemyRepository()
+    with repository.engine.begin() as db:
+        db.execute(
+            text("UPDATE admin_users SET password_hash=:password WHERE email='admin@senova.test'"),
+            {"password": hasher.hash("Very-Secure-Password-2026")},
+        )
+    settings = Settings(app_env="test", database_url=_psycopg_url(), receipt_secret="integration-secret")
+    app = create_app(settings, repository)
+    with TestClient(app) as client:
+        login = client.post(
+            "/api/v1/auth/login", json={"email": "admin@senova.test", "password": "Very-Secure-Password-2026"}
+        )
+        assert login.status_code == 200
+        csrf = client.cookies.get(CSRF_COOKIE)
+        headers = {"X-CSRF-Token": csrf}
+        created = client.post(
+            "/api/v1/admin/content-items",
+            json={
+                "key": "journal/lotus-origin.vi",
+                "contentType": "journal",
+                "locale": "vi",
+                "data": {"title": "Nguồn gốc sen"},
+                "sourceNote": "Editorial source A",
+            },
+            headers=headers,
+        )
+        assert created.status_code == 201
+        item_id, revision_id = created.json()["data"].values()
+        assert client.get("/api/v1/content/journal/lotus-origin.vi").status_code == 404
+
+        updated = client.patch(
+            f"/api/v1/admin/content-revisions/{revision_id}",
+            json={"data": {"title": "Nguồn gốc hoa sen"}, "sourceNote": "Source A", "expectedVersion": 1},
+            headers=headers,
+        )
+        assert updated.status_code == 200
+        assert (
+            client.post(
+                f"/api/v1/admin/content-revisions/{revision_id}/submit-review",
+                json={"expectedVersion": 2},
+                headers=headers,
+            ).status_code
+            == 200
+        )
+        assert (
+            client.post(
+                f"/api/v1/admin/content-revisions/{revision_id}/publish",
+                json={"expectedVersion": 3},
+                headers=headers,
+            ).status_code
+            == 200
+        )
+        public = client.get("/api/v1/content/journal/lotus-origin.vi")
+        assert public.status_code == 200
+        assert public.json()["data"]["data"]["title"] == "Nguồn gốc hoa sen"
+        immutable = client.patch(
+            f"/api/v1/admin/content-revisions/{revision_id}",
+            json={"data": {"title": "Mutated"}, "expectedVersion": 4},
+            headers=headers,
+        )
+        assert immutable.status_code == 409
+
+        next_revision = client.post(f"/api/v1/admin/content-items/{item_id}/revisions", headers=headers).json()["data"][
+            "revisionId"
+        ]
+        assert (
+            client.post(
+                f"/api/v1/admin/content-revisions/{next_revision}/submit-review",
+                json={"expectedVersion": 1},
+                headers=headers,
+            ).status_code
+            == 200
+        )
+        assert (
+            client.post(
+                f"/api/v1/admin/content-revisions/{next_revision}/return-draft",
+                json={"expectedVersion": 2, "note": "Cần bổ sung nguồn"},
+                headers=headers,
+            ).status_code
+            == 200
+        )
+        assert client.post(f"/api/v1/admin/content-items/{item_id}/unpublish", headers=headers).status_code == 200
+        assert client.get("/api/v1/content/journal/lotus-origin.vi").status_code == 404
