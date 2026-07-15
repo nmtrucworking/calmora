@@ -5,100 +5,127 @@ from copy import deepcopy
 import pytest
 from fastapi.testclient import TestClient
 
-import app.main as main
+from app.core.config import Settings
+from app.main import create_app
+
+
+class MemoryRepository:
+    def __init__(self):
+        self.submissions: dict[str, dict] = {}
+        self.idempotency_keys: dict[str, str] = {}
+        self.analytics_events: list[dict] = []
+        self.initialized = False
+
+    def initialize(self):
+        self.initialized = True
+
+    def insert_submission(self, entry, idempotency_key):
+        if idempotency_key and idempotency_key in self.idempotency_keys:
+            return deepcopy(self.submissions[self.idempotency_keys[idempotency_key]]), False
+        self.submissions[entry["id"]] = deepcopy(entry)
+        if idempotency_key:
+            self.idempotency_keys[idempotency_key] = entry["id"]
+        return deepcopy(entry), True
+
+    def get_submission(self, submission_id):
+        return deepcopy(self.submissions.get(submission_id))
+
+    def insert_analytics_event(self, entry):
+        self.analytics_events.append(deepcopy(entry))
 
 
 @pytest.fixture()
-def storage(monkeypatch):
-    submissions: dict[str, dict] = {}
-    idempotency_keys: dict[str, str] = {}
-    analytics_events: list[dict] = []
-
-    def insert_submission(entry, idempotency_key):
-        if idempotency_key and idempotency_key in idempotency_keys:
-            return deepcopy(submissions[idempotency_keys[idempotency_key]]), False
-        submissions[entry["id"]] = deepcopy(entry)
-        if idempotency_key:
-            idempotency_keys[idempotency_key] = entry["id"]
-        return deepcopy(entry), True
-
-    monkeypatch.setattr(main, "initialize_database", lambda: None)
-    monkeypatch.setattr(main, "insert_submission", insert_submission)
-    monkeypatch.setattr(main, "find_stored_submission", lambda submission_id: deepcopy(submissions.get(submission_id)))
-    monkeypatch.setattr(main, "insert_analytics_event", lambda entry: analytics_events.append(deepcopy(entry)))
-    return submissions, analytics_events
+def storage():
+    return MemoryRepository()
 
 
 @pytest.fixture()
 def client(storage):
-    main.rate_limits.clear()
-    with TestClient(main.app) as test_client:
+    settings = Settings(app_env="test", database_url="", receipt_secret="test-receipt-secret")
+    app = create_app(settings=settings, repository=storage)
+    with TestClient(app) as test_client:
         yield test_client
 
 
-def test_health(client: TestClient):
-    response = client.get("/api/health")
+def test_health_version_compatibility_and_request_id(client: TestClient, storage):
+    response = client.get("/api/health", headers={"X-Request-ID": "request-test-001"})
     assert response.status_code == 200
+    assert response.headers["x-request-id"] == "request-test-001"
     assert response.json() == {"success": True, "data": {"status": "ok"}}
+    assert client.get("/api/v1/health").status_code == 200
+    assert storage.initialized
 
 
-def test_product_catalog_and_detail(client: TestClient):
+def test_product_catalog_detail_and_http_cache(client: TestClient):
     catalog = client.get("/api/products")
     assert catalog.status_code == 200
     assert [item["slug"] for item in catalog.json()["data"]] == ["classic", "petal-pack", "gift-set"]
-
-    detail = client.get("/api/products/petal-pack")
-    assert detail.status_code == 200
-    assert detail.json()["data"]["name"] == "Senova Petal Pack"
-
+    assert catalog.headers["cache-control"] == "public, max-age=60"
+    assert client.get("/api/products", headers={"If-None-Match": catalog.headers["etag"]}).status_code == 304
+    assert client.get("/api/v1/products/petal-pack").json()["data"]["name"] == "Senova Petal Pack"
     missing = client.get("/api/products/unknown")
     assert missing.status_code == 404
     assert missing.json()["error"]["code"] == "PRODUCT_NOT_FOUND"
 
 
-def test_qr_resolve_and_experience(client: TestClient):
+def test_qr_resolve_inactive_states_and_experience(client: TestClient):
     resolved = client.get("/api/qr/pp-2601-a")
-    assert resolved.status_code == 200
-    assert resolved.json()["data"]["status"] == "active"
     assert resolved.json()["data"]["redirectUrl"].startswith("/experience/petal-pack?")
-
+    assert client.get("/api/qr/PP-2509-X").json()["data"]["status"] == "paused"
+    assert client.get("/api/qr/CL-2501-Z").json()["data"]["status"] == "expired"
+    assert client.get("/api/qr/GS-2508-R").json()["data"]["status"] == "revoked"
     experience = client.get("/api/qr/experience/petal-pack?batch=PP-2601-A")
-    assert experience.status_code == 200
     assert experience.json()["data"]["productSlug"] == "petal-pack"
 
 
-def test_submission_validation_persistence_and_public_status(client: TestClient, storage):
-    invalid = client.post("/api/submissions", json={"kind": "contact", "payload": {"name": "An"}})
-    assert invalid.status_code == 422
-    assert invalid.json()["error"]["code"] == "VALIDATION_ERROR"
-
+def test_submission_receipt_idempotency_and_no_public_enumeration(client: TestClient, storage):
     payload = {
         "kind": "contact",
-        "payload": {
-            "name": "<An>",
-            "email": "an@example.com",
-            "topic": "Tư vấn",
-            "message": "Tôi muốn tìm hiểu Calmora.",
-            "website": "",
-        },
+        "payload": {"name": "<An>", "email": "an@example.com", "topic": "Tu van", "message": "Xin chao", "website": ""},
     }
     first = client.post("/api/submissions", json=payload, headers={"Idempotency-Key": "contact-test-001"})
     second = client.post("/api/submissions", json=payload, headers={"Idempotency-Key": "contact-test-001"})
-    assert first.status_code == second.status_code == 200
-    assert first.json()["data"]["id"] == second.json()["data"]["id"]
-
-    submission_id = first.json()["data"]["id"]
-    status = client.get(f"/api/submissions/{submission_id}")
-    assert status.status_code == 200
+    assert first.json()["data"] == second.json()["data"]
+    receipt = first.json()["data"]
+    assert client.get(f"/api/submissions/{receipt['id']}").status_code == 422
+    assert client.get(f"/api/submissions/{receipt['id']}?receiptToken=invalid-token-value-12345").status_code == 404
+    status = client.get(f"/api/submissions/{receipt['id']}?receiptToken={receipt['receiptToken']}")
     assert status.json()["data"]["status"] == "new"
     assert "payload" not in status.json()["data"]
-    assert storage[0][submission_id]["payload"]["name"] == "An"
+    assert storage.submissions[receipt["id"]]["payload"]["name"] == "An"
 
 
-def test_analytics_event_is_persisted(client: TestClient, storage):
+def test_preorder_requires_items_and_snapshots_server_catalog(client: TestClient, storage):
+    base = {"name": "An", "email": "an@example.com", "phone": "0900000000"}
+    invalid = client.post("/api/submissions", json={"kind": "pre-order", "payload": {**base, "itemCount": 1}})
+    assert invalid.status_code == 422
     response = client.post(
-        "/api/analytics/events",
-        json={"eventName": "product_view", "productSlug": "classic", "path": "/products/classic"},
+        "/api/submissions",
+        json={
+            "kind": "pre-order",
+            "payload": {
+                **base,
+                "items": [
+                    {"productId": "petal-pack", "variantId": "petal-single", "quantity": 2, "productName": "forged"}
+                ],
+            },
+        },
     )
     assert response.status_code == 200
-    assert len(storage[1]) == 1
+    stored = storage.submissions[response.json()["data"]["id"]]["payload"]["items"][0]
+    assert stored["productName"] == "Senova Petal Pack"
+    assert stored["variantName"] != "forged"
+
+
+def test_analytics_allowlist_and_persistence(client: TestClient, storage):
+    accepted = client.post("/api/analytics/events", json={"eventName": "product_view", "productSlug": "classic"})
+    assert accepted.status_code == 200
+    assert len(storage.analytics_events) == 1
+    rejected = client.post("/api/analytics/events", json={"eventName": "arbitrary_pii_dump"})
+    assert rejected.status_code == 422
+
+
+def test_payload_limit(client: TestClient):
+    response = client.post("/api/submissions", content=b"x" * 70_000, headers={"Content-Type": "application/json"})
+    assert response.status_code == 413
+    assert response.json()["error"]["code"] == "PAYLOAD_TOO_LARGE"

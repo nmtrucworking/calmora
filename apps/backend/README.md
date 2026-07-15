@@ -22,4 +22,21 @@ cd apps/backend
 python -m pytest -q
 ```
 
+Quality gate đầy đủ:
+
+```powershell
+python -m ruff format --check app tests
+python -m ruff check app tests
+python -m mypy app
+python -m pytest -q
+```
+
+## Versioning và submission receipt
+
+- Các route public hiện tại vẫn hoạt động dưới `/api` trong giai đoạn chuyển đổi.
+- Contract versioned được expose song song dưới `/api/v1`. Chưa có ngày sunset cho `/api`; mọi deprecation phải được thông báo ít nhất một release trước.
+- `POST /api/submissions` trả cả `id` và `receiptToken`. Tra cứu public bắt buộc gọi `GET /api/submissions/{id}?receiptToken=...`; response không chứa payload/PII.
+- `pre-order` bắt buộc có `phone` và `items[]`. Backend chỉ nhận `productId`, `variantId`, `quantity` rồi tự snapshot tên product/variant từ catalog; label/price từ client bị bỏ qua.
+- Lead status canonical là `new → contacted → qualified → closed`. Mapping legacy được khóa trong `app/modules/lead_status.py`; migration dữ liệu được thực hiện ở BE-106 và phải báo lỗi với giá trị lạ.
+
 Xem contract và ghi chú vận hành tại [`docs/02-current-implementation.md`](./docs/02-current-implementation.md).
