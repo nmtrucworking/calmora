@@ -43,8 +43,8 @@ Ký hiệu:
 | ID | Use case | Actor | Status |
 | --- | --- | --- | --- |
 | UC-PUB-01 | Kiểm tra health/readiness | A-01/hạ tầng | `CURRENT/NEXT` |
-| UC-PUB-02 | Xem danh sách sản phẩm | A-01 | `NEXT` |
-| UC-PUB-03 | Xem chi tiết sản phẩm | A-01 | `NEXT` |
+| UC-PUB-02 | Xem danh sách sản phẩm | A-01 | `CURRENT` |
+| UC-PUB-03 | Xem chi tiết sản phẩm | A-01 | `CURRENT` |
 | UC-PUB-04 | Xem collection | A-01 | `TARGET` |
 | UC-PUB-05 | Tìm kiếm sản phẩm/nội dung | A-01 | `TARGET` |
 | UC-PUB-06 | Xem trang nội dung/journal/chính sách | A-01 | `TARGET` |
@@ -189,7 +189,7 @@ Acceptance:
 ## 5. UC-PUB-02/03 — Product list and detail
 
 **Actor:** A-01.  
-**Status:** `NEXT`.
+**Status:** `CURRENT` với `/api/products`; contract `/api/v1` và catalog database là `NEXT`.
 
 Preconditions:
 
@@ -343,7 +343,7 @@ Acceptance:
 ## 11. UC-SUB-01..05 — Create submissions
 
 **Actor:** A-03.  
-**Status:** `CURRENT`, persistence là `NEXT`.
+**Status:** `CURRENT`, persistence PostgreSQL qua Psycopg 3. Alembic migration và admin workflow là `NEXT`.
 
 Common flow:
 

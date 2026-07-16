@@ -1,6 +1,6 @@
 # Senova Backend Documentation
 
-> Bộ tài liệu đặc tả backend đầy đủ cho repository `calmora`.
+> Bộ tài liệu đặc tả backend đầy đủ cho repository `senova` (service vẫn dùng tên Calmora/Senova ở một số metadata tương thích).
 >
 > Phạm vi tài liệu bao phủ cả trạng thái hiện tại, kiến trúc mục tiêu và các trường hợp mở rộng khi Senova chuyển từ website giới thiệu/thu thập quan tâm sang nền tảng nội dung, QR trải nghiệm, thương mại và quản trị vận hành.
 
@@ -63,6 +63,7 @@ Vì vậy, backend mục tiêu được thiết kế theo hướng **modular mon
 | [`09-deployment-observability-and-operations.md`](./09-deployment-observability-and-operations.md) | Môi trường, Docker, CI/CD, migration, logging, metrics, alert, backup, restore và runbook. |
 | [`10-implementation-roadmap.md`](./10-implementation-roadmap.md) | Lộ trình chuyển từ backend hiện tại sang kiến trúc đầy đủ theo milestone và stage gate. |
 | [`11-use-cases-and-workflows.md`](./11-use-cases-and-workflows.md) | Danh mục use case đầy đủ, actor, luồng chính, luồng lỗi/biên, permission, audit, analytics và traceability. |
+| [`12-frontend-backend-contract.md`](./12-frontend-backend-contract.md) | Bản đồ trực tiếp từ source FE sang model/API/validation/workflow BE, các quyết định tương thích và khoảng trống cần đóng trước go-live. |
 | [`features/qr-product-cultural-story.md`](./features/qr-product-cultural-story.md) | Đặc tả chuyên sâu QR và câu chuyện văn hóa sản phẩm hiện có. |
 
 ## 4. Thứ tự đọc đề xuất
@@ -70,19 +71,21 @@ Vì vậy, backend mục tiêu được thiết kế theo hướng **modular mon
 ### Backend developer mới
 
 1. `README.md`.
-2. `01-system-scope-and-architecture.md`.
-3. `11-use-cases-and-workflows.md`.
-4. `02-domain-model-and-business-rules.md`.
-5. `04-api-contracts.md`.
-6. `03-database-design.md`.
-7. Các tài liệu bảo mật, test và vận hành.
+2. `12-frontend-backend-contract.md`.
+3. `01-system-scope-and-architecture.md`.
+4. `11-use-cases-and-workflows.md`.
+5. `02-domain-model-and-business-rules.md`.
+6. `04-api-contracts.md`.
+7. `03-database-design.md`.
+8. Các tài liệu bảo mật, test và vận hành.
 
 ### Frontend developer
 
-1. `04-api-contracts.md`.
-2. `11-use-cases-and-workflows.md`.
-3. `features/qr-product-cultural-story.md`.
-4. Các phần error, auth và cache liên quan.
+1. `12-frontend-backend-contract.md`.
+2. `04-api-contracts.md`.
+3. `11-use-cases-and-workflows.md`.
+4. `features/qr-product-cultural-story.md`.
+5. Các phần error, auth và cache liên quan.
 
 ### QA/tester
 

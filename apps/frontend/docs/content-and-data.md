@@ -5,7 +5,7 @@ The current app does not load Markdown route drafts at build time. Content lives
 ## Main Content Sources
 
 - `src/features/content/luxuryCopy.ts` - layout navigation/footer copy, landing copy, luxury product copy, and ordered product IDs.
-- `src/features/products/data/products.ts` - base product model for Classic, Petal Pack, and Gift Set.
+- `src/features/products/data/products.ts` - development fallback and TypeScript product contract for Classic, Petal Pack, and Gift Set.
 - `src/features/content/i18n.ts` - localized product, commerce, account, journal, policy, and service copy.
 - `src/features/content/sitePages.ts` - SEO metadata, standard page content, thank-you messages, and QR records.
 - `src/features/content/qrExperience.ts` - product-specific QR experience copy.
@@ -40,7 +40,7 @@ Product links should use:
 
 ## Forms And Submission Flow
 
-Forms use `src/shared/api/submissions.ts`. The current flow is mock/validation-oriented, not real commerce.
+Forms use `src/shared/api/submissions.ts`. Khi `VITE_API_BASE_URL` được cấu hình, form gọi backend thật với idempotency key ổn định; checkout gửi `items[]` gồm product, variant và quantity. Local persistence chỉ dùng khi chưa cấu hình API.
 
 Common form surfaces:
 
@@ -54,7 +54,11 @@ Thank-you behavior and copy are defined in `src/features/content/sitePages.ts` a
 
 ## QR Data
 
-QR records are currently static in `src/features/content/sitePages.ts`.
+QR seed vẫn tồn tại để development không có API. Khi `VITE_API_BASE_URL` được cấu hình, QR resolve dùng backend và không fallback sang local record nếu backend trả business error.
+
+## Runtime Catalog
+
+`ProductCatalogProvider` tải `/api/products` để giữ compatibility với Gift Set draft hiện tại. Loading và API error không bị che bằng dữ liệu local; fallback chỉ bật khi không có `VITE_API_BASE_URL`. `/api/v1/products` là contract publish-only cho cutover sau khi Gift Set được publish.
 
 Use `/q/:code` for QR redirect testing. The redirect page looks up the code and sends users to the product experience route with query metadata.
 

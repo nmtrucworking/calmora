@@ -4,11 +4,11 @@
 
 - Mốc triển khai: `CURRENT`.
 - Runtime: FastAPI + Uvicorn.
-- Persistence: PostgreSQL qua Psycopg 3, dùng transaction và kiểu `JSONB`/`TIMESTAMPTZ`.
+- Persistence: PostgreSQL qua SQLAlchemy 2.x/Psycopg 3; schema được version bằng Alembic.
 - API prefix mặc định: `/api`.
 - Chế độ commerce: inquiry/pre-order, chưa thu tiền trực tuyến.
 
-Phạm vi hiện thực gồm catalog sản phẩm công khai, resolve/nội dung QR, ghi nhận QR scan, tiếp nhận form và analytics event. Authentication, admin, payment, inventory và fulfillment chưa thuộc mốc này.
+Phạm vi hiện thực gồm catalog sản phẩm công khai, resolve/nội dung QR, ghi nhận QR scan, tiếp nhận form, analytics event và admin có authentication/RBAC/audit. Payment, inventory và fulfillment chưa thuộc mốc này.
 
 ## 2. Chạy ứng dụng
 
@@ -42,7 +42,7 @@ Backend từ chối khởi động nếu thiếu `DATABASE_URL` hoặc URL khôn
 python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT
 ```
 
-Backend tự bootstrap bảng/index khi process khởi động. Sau deploy, kiểm tra `/api/health`, tạo thử một submission và xác nhận record trong PostgreSQL.
+Deploy chạy `python -m alembic upgrade head` và `python -m app.seed_import` trước khi khởi động web process. App chỉ kiểm tra kết nối, không tự thay đổi schema.
 
 ### Supabase Postgres
 
@@ -52,7 +52,7 @@ Supabase dùng PostgreSQL chuẩn nên backend kết nối trực tiếp bằng 
 2. Mở **Connect** và chọn **Session pooler** (port `5432`) cho backend Render chạy lâu dài, đặc biệt khi môi trường chỉ hỗ trợ IPv4.
 3. Copy connection string, thay `[YOUR-PASSWORD]`, rồi lưu toàn bộ URL vào secret `DATABASE_URL` trên Render.
 4. Bật SSL và ưu tiên connection string có `sslmode=require`.
-5. Redeploy backend; process khởi động sẽ tạo `submissions`, `analytics_events` và các index nếu chưa có.
+5. Chạy Alembic migration và seed import trong release step, sau đó redeploy web process.
 
 Không đưa database password, connection string, anon key hoặc service-role key vào frontend hay source control. Nếu sau này expose các bảng qua Supabase Data API, phải bật RLS và thiết kế policy riêng; backend hiện tại truy cập database từ trusted server bằng credential bí mật.
 
@@ -79,7 +79,9 @@ Lỗi dùng dạng:
 | `GET` | `/api/products` | Trả ba sản phẩm theo thứ tự Classic, Petal Pack, Gift Set. |
 | `GET` | `/api/products/{slug}` | Chi tiết product hoặc `PRODUCT_NOT_FOUND`. |
 
-Catalog được seed từ `app/seed/products.json`. `gift-set` có trạng thái `draft` nhưng vẫn public để giữ đúng hành vi frontend hiện tại.
+`/api` là compatibility contract và vẫn trả Gift Set đang ở `draft`. `/api/v1/products` và detail v1 chỉ expose product `active`; draft trả `PRODUCT_NOT_FOUND`. Catalog response có `ETag` và `Cache-Control: public, max-age=60`; ETag đổi theo payload database.
+
+Catalog được import idempotent từ `app/seed/products.json` vào PostgreSQL. `gift-set` có trạng thái `draft` nhưng vẫn public để giữ đúng hành vi frontend hiện tại.
 
 ### QR
 
@@ -122,7 +124,19 @@ Các kind được hỗ trợ: `feedback`, `pre-order`, `sample-interest`, `cont
 - hỗ trợ `Idempotency-Key` 8-128 ký tự an toàn, được scope theo kind;
 - lưu payload dạng `JSONB` trong PostgreSQL nhưng không trả payload/PII qua status lookup công khai.
 
-`GET /api/submissions/{id}` chỉ trả `id`, `kind`, `status`, `createdAt`, `updatedAt`. Endpoint quản trị đọc payload chưa được triển khai vì chưa có authentication/RBAC.
+`GET /api/submissions/{id}` chỉ trả `id`, `kind`, `status`, `createdAt`, `updatedAt`; raw payload chỉ được đọc qua admin API có permission.
+
+### Admin
+
+- Auth: `POST /api/v1/auth/login`, `GET /auth/me`, `POST /auth/logout`, password reset và revoke-all session.
+- Product: list/detail/upsert và chuyển `draft/active/archived` với optimistic version.
+- QR: list/upsert, trạng thái `active/paused/revoked`, destination bắt buộc thuộc `/experience/`.
+- QR content: draft/publish theo product-version-locale; QR active bắt buộc trỏ published content, batch override chỉ thay guidance/notice.
+- Lead: filter/page/detail/status/assign/note và CSV export có permission riêng, allowlist field, cap 1.000 dòng trong 365 ngày.
+- Dashboard: aggregate server-side theo khoảng thời gian và IANA timezone; audit log lưu actor/action/target/request ID.
+- Content: item/revision draft, submit/return review, publish và unpublish; public API chỉ đọc current published revision.
+
+Session admin là opaque token lưu hash trong PostgreSQL, truyền bằng cookie HttpOnly 8 giờ. Mutation bắt buộc double-submit CSRF và permission server-side; password dùng Argon2id.
 
 ### Analytics
 
@@ -134,18 +148,25 @@ Các kind được hỗ trợ: `feedback`, `pre-order`, `sample-interest`, `cont
 
 ## 4. Persistence schema
 
-Các bảng/index được bootstrap idempotently khi ứng dụng khởi động:
+Alembic quản lý schema; migration hiện tại tạo/adopt các bảng:
 
 | Table | Dữ liệu chính | Index/constraint |
 | --- | --- | --- |
 | `submissions` | kind, `JSONB` payload, status, `TIMESTAMPTZ` | PK `id`, unique `idempotency_key`, status check, index `(kind, created_at)` |
 | `analytics_events` | event name, `JSONB` event, `TIMESTAMPTZ` | PK `id`, index `(event_name, created_at)` |
+| `products`, `product_variants` | public catalog snapshot | unique slug/ID, product FK, status/index |
+| `qr_records`, `qr_experience_contents`, `qr_batch_overrides` | QR registry/content/override | PK/composite PK, product FK, seed hash |
+| `admin_users`, `roles`, `permissions`, `admin_sessions` | Identity, RBAC và session admin | email/token hash unique, role/permission joins, expiry/revoke |
+| `audit_logs`, `password_reset_tokens`, `lead_activities` | Audit, reset password và lịch sử xử lý lead | actor/target/request ID, token expiry, submission FK |
+| `content_items`, `content_revisions` | Content workflow và public revision pointer | unique key/revision, optimistic version, immutable published state |
 
-QR, QR experience và catalog vẫn là seed JSON có version trong source control. Submissions và analytics nằm trong PostgreSQL, tồn tại qua restart và dùng chung được giữa nhiều backend instance. Bước tiếp theo cho thay đổi schema là bổ sung Alembic migration có version.
+Seed JSON vẫn được version trong source control nhưng chỉ là nguồn import; API runtime đọc PostgreSQL. Import dùng `ON CONFLICT DO NOTHING` để không overwrite dữ liệu hiện hữu. Submissions, analytics, catalog và QR dùng chung được giữa nhiều backend instance.
 
 ## 5. Security và privacy
 
 - CORS chỉ cho phép origin khai báo trong `FRONTEND_ORIGINS`.
+- Admin mutation yêu cầu permission và CSRF; cookie session là HttpOnly/SameSite Strict và bật Secure ở staging/production.
+- Login/reset bị rate limit; sai mật khẩu liên tiếp khóa tài khoản tạm thời; password hash dùng Argon2id.
 - Không có endpoint public liệt kê submissions hoặc đọc raw payload.
 - Không dùng destination do client cung cấp để redirect QR.
 - Không log raw payload trong code ứng dụng.
@@ -167,16 +188,16 @@ Test hiện bao phủ:
 - QR resolve và experience content;
 - submission validation, sanitization, persistence, status privacy và idempotency;
 - analytics persistence.
+- admin auth/CSRF/RBAC deny-by-default, reset/revoke session, optimistic concurrency, QR/lead/export/dashboard và audit trên PostgreSQL.
 
 ## 7. Giới hạn và bước tiếp theo
 
 Các phần sau chưa phải `CURRENT`:
 
-1. Alembic migration cho các thay đổi schema production.
-2. Redis/distributed rate limiting.
-3. Authentication, RBAC và admin API xử lý lead.
-4. Notification worker/email sau khi nhận submission.
-5. Catalog CMS, inventory, order, payment và fulfillment.
-6. Observability production: structured log, metrics, tracing và alert.
+1. Redis/distributed rate limiting.
+2. Content revision/publish và media storage.
+3. Notification outbox/worker và email sau khi nhận submission hoặc yêu cầu reset password.
+4. Catalog CMS nâng cao, inventory, order, payment và fulfillment.
+5. Metrics, tracing và alert production.
 
-Khi triển khai production, ưu tiên PostgreSQL/migration, admin authentication và backup/restore trước khi mở quyền xử lý dữ liệu khách hàng.
+Khi triển khai production, chạy migration/bootstrap admin qua secret manager, kiểm tra backup/restore và cấu hình HTTPS trước khi mở quyền xử lý dữ liệu khách hàng.

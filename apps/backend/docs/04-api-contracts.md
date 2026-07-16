@@ -237,7 +237,16 @@ Quy tắc:
 
 ## 10. Public catalog API
 
-### 10.1. List products — `NEXT`
+### 10.0. Contract tương thích hiện tại — `CURRENT`
+
+```http
+GET /api/products
+GET /api/products/{slug}
+```
+
+Hai endpoint đọc seed `app/seed/products.json`, trả đầy đủ read model mà frontend hiện dùng. `gift-set` vẫn được public dù có status `draft` để giữ tương thích. Contract `/api/v1` bên dưới là bước chuyển tiếp khi catalog được đưa vào database/CMS.
+
+### 10.1. List products — `NEXT` cho `/api/v1`; `/api/products` là `CURRENT`
 
 ```http
 GET /api/v1/products?collection=featured&status=available&locale=vi

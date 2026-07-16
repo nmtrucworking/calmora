@@ -56,5 +56,7 @@ Use route checks after path migrations so docs, sitemap, content, and router sta
 ## Notes
 
 - The project uses TypeScript project references; `tsc -b` is part of the build pipeline.
+- Admin authentication uses the backend `/api/v1/auth/login`, `/auth/me`, and `/auth/logout` endpoints. It no longer accepts demo credentials or a session stored in `sessionStorage`.
+- Admin API requests include cookies. Mutations copy the `senova_admin_csrf` cookie into the `X-CSRF-Token` header.
 - The 3D/story bundle is large. This is currently expected; address it with route-level code splitting only when performance work is in scope.
 - Vite may warn about large chunks because Three.js and story canvas are part of the app.

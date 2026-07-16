@@ -72,9 +72,11 @@ export type AnalyticsPoint = {
 };
 
 export type AdminSession = {
+  id?: string;
   name: string;
   email: string;
   role: string;
+  permissions?: string[];
 };
 
 export type AdminState = {

@@ -13,12 +13,20 @@ export async function resolveQr(code: string): Promise<QrResolveResult> {
     const result = (await response.json()) as ApiResponse<QrResolveResult>;
 
     if (!response.ok || !result.success || !result.data) {
-      return resolveQrCode(code);
+      return {
+        code: code.trim().toUpperCase(),
+        status: "unknown",
+        message: result.error?.message ?? "QR code is not recognized.",
+      };
     }
 
     return result.data;
   } catch {
-    return resolveQrCode(code);
+    return {
+      code: code.trim().toUpperCase(),
+      status: "unknown",
+      message: "QR service is temporarily unavailable.",
+    };
   }
 }
 

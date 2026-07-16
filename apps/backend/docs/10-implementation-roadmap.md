@@ -17,7 +17,10 @@ Backend hiện có:
 - QR scan tracking.
 - Submission cho 5 kind.
 - Analytics event ingestion.
-- Seed JSON cho QR/content/override.
+- Product catalog API và seed JSON cho product/QR/content/override.
+- PostgreSQL qua Psycopg 3 cho submission và analytics.
+- Idempotency cho submission.
+- API test cho các luồng public chính.
 - CORS từ environment.
 - Sanitize text cơ bản.
 - Honeypot.
@@ -25,11 +28,10 @@ Backend hiện có:
 
 Hạn chế quan trọng:
 
-- Submission/analytics/rate limit mất khi restart.
-- Nhiều worker làm dữ liệu phân mảnh.
-- Chưa có PostgreSQL/ORM/Alembic.
-- Chưa có catalog API.
-- Chưa có test đầy đủ.
+- Rate limit còn mất khi restart và phân mảnh giữa nhiều worker; submission/analytics đã bền vững trong PostgreSQL.
+- Chưa có ORM/Alembic; schema hiện được bootstrap idempotently lúc process khởi động.
+- Catalog và QR/content còn là seed JSON, chưa quản trị qua database/admin.
+- Test hiện bao phủ critical public flow nhưng chưa có đầy đủ security/performance/migration test.
 - Chưa có typed settings/structured logging/request ID.
 - Public `GET /submissions/{id}` không phù hợp production nếu chỉ dựa vào ID.
 - Chưa có authentication/RBAC/admin.
@@ -37,7 +39,7 @@ Hạn chế quan trọng:
 
 ## 3. Nguyên tắc ưu tiên
 
-1. **Persistence trước mở rộng**: không thêm nhiều form/admin trên in-memory state.
+1. **Hoàn thiện persistence trước mở rộng**: không nối admin khi QR/catalog còn là seed và chưa có migration/audit phù hợp.
 2. **Contract trước code**: chốt schema/error trước khi frontend chuyển adapter.
 3. **Security by default**: admin mutation không public.
 4. **Inquiry trước transaction**: chưa tích hợp payment/order giả.
@@ -50,8 +52,8 @@ Hạn chế quan trọng:
 | Milestone | Mục tiêu | Ưu tiên |
 | --- | --- | --- |
 | M0 | Chuẩn hóa nền tảng và test hiện trạng | P0 |
-| M1 | PostgreSQL persistence cho QR/submission/analytics | P0 |
-| M2 | Product catalog API và frontend integration | P0/P1 |
+| M1 | Hoàn thiện PostgreSQL migration cho QR/submission/analytics (`PARTIAL`: submission/analytics đã có) | P0 |
+| M2 | Product catalog API và frontend integration (`PARTIAL`: API đã có, FE còn local) | P0/P1 |
 | M3 | Admin tối thiểu cho content/QR/submission | P1 |
 | M4 | Content CMS, media và analytics vận hành | P1 |
 | M5 | Customer account/wishlist/cart | P2 |
@@ -132,11 +134,11 @@ app/
 - [ ] Request ID có trong response/log.
 - [ ] README chạy local cập nhật.
 
-## 6. M1 — Durable persistence
+## 6. M1 — Durable persistence (`PARTIAL`)
 
 ### Mục tiêu
 
-Loại bỏ dữ liệu nghiệp vụ in-memory và chuẩn bị scale nhiều worker.
+Hoàn thiện phần persistence đã bắt đầu: submission/analytics hiện ở PostgreSQL; QR/catalog vẫn cần migration và rate limit cần giải pháp distributed khi scale nhiều worker.
 
 ### Công việc
 
@@ -806,7 +808,7 @@ PR cần:
 
 | Risk | Khả năng | Tác động | Giảm thiểu |
 | --- | --- | --- | --- |
-| Mất submission do memory | cao nếu deploy hiện tại | cao | M1 persistence |
+| Mất/không nhất quán rate-limit state giữa các instance | trung bình khi scale nhiều worker | trung bình | M1 distributed rate limit |
 | QR content sai version | trung bình | cao về trải nghiệm/uy tín | publish workflow + activation validation |
 | PII lộ qua log/export | trung bình | cao | redaction + permission + audit |
 | Overbuild commerce sớm | cao | trung bình-cao | inquiry mode, stage gate |

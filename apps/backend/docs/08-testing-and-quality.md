@@ -233,7 +233,7 @@ Kiểm tra:
 | Honeypot | 400 `SPAM_DETECTED` |
 | Vượt rate limit | 429 |
 | Payload dài/quá lớn | 413/422 theo middleware |
-| Restart app với in-memory | test ghi nhận rủi ro hiện tại, không coi là behavior production |
+| Restart app với PostgreSQL | submission vẫn đọc được sau restart; rate-limit bucket reset là giới hạn đã biết |
 
 ### 10.5. Analytics
 
