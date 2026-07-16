@@ -19,6 +19,9 @@ class Settings(BaseSettings):
     max_request_bytes: int = Field(default=65_536, ge=1_024, le=10_485_760)
     trusted_proxy_ips: str = ""
     log_level: str = "INFO"
+    admin_email: str = ""
+    admin_name: str = "Senova Administrator"
+    admin_password: str = Field(default="", repr=False)
 
     @field_validator("api_prefix")
     @classmethod
@@ -38,6 +41,12 @@ class Settings(BaseSettings):
 
     @model_validator(mode="after")
     def validate_deployment_settings(self) -> Settings:
+        if bool(self.admin_email) != bool(self.admin_password):
+            raise ValueError("ADMIN_EMAIL and ADMIN_PASSWORD must be configured together")
+        if self.admin_password and len(self.admin_password) < 12:
+            raise ValueError("ADMIN_PASSWORD must contain at least 12 characters")
+        if self.admin_email and "@" not in self.admin_email:
+            raise ValueError("ADMIN_EMAIL must be a valid email address")
         if self.app_env in {"staging", "production"}:
             if not self.database_url:
                 raise ValueError("DATABASE_URL is required outside local/test")

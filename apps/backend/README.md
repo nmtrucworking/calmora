@@ -30,6 +30,11 @@ python -m app.bootstrap_admin
 Remove-Item Env:ADMIN_PASSWORD
 ```
 
+Khi deploy, có thể cấu hình `ADMIN_EMAIL`, `ADMIN_NAME` và `ADMIN_PASSWORD` trong environment.
+Backend sẽ tự tạo admin khi khởi động nếu email chưa tồn tại. Sau lần deploy đầu tiên,
+xóa cả `ADMIN_EMAIL` và `ADMIN_PASSWORD` khỏi environment; bootstrap không ghi đè mật khẩu của
+tài khoản hiện hữu.
+
 Admin API dùng session cookie HttpOnly 8 giờ. Frontend phải gửi `credentials: include`; các mutation đồng thời gửi giá trị cookie `senova_admin_csrf` trong header `X-CSRF-Token`. Chạy bootstrap lại với cùng email không ghi đè tài khoản hiện hữu.
 
 Content workflow nằm dưới `/api/v1/admin/content-*`; public read dùng `GET /api/v1/content/{contentKey}` và chỉ trả revision đang publish. Revision đã publish không thể sửa trực tiếp; cần tạo revision draft mới.

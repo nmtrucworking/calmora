@@ -7,6 +7,7 @@ from typing import Any
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.admin_repository import AdminRepository
 from app.core.config import Settings, get_settings
 from app.core.errors import install_error_handlers, success
 from app.core.logging import configure_logging
@@ -25,6 +26,12 @@ def create_app(settings: Settings | None = None, repository: Any | None = None) 
     @asynccontextmanager
     async def lifespan(_: FastAPI):
         repository.initialize()
+        if settings.admin_email and settings.admin_password:
+            AdminRepository(repository).bootstrap_admin(
+                settings.admin_email.strip().lower(),
+                settings.admin_name.strip() or "Senova Administrator",
+                admin.hasher.hash(settings.admin_password),
+            )
         yield
 
     application = FastAPI(title="Calmora / Senova Backend", version="1.1.0", lifespan=lifespan)

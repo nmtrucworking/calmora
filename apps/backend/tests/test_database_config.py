@@ -25,3 +25,15 @@ def test_production_settings_fail_fast_without_database():
 def test_production_settings_reject_weak_receipt_secret():
     with pytest.raises(ValueError, match="RECEIPT_SECRET"):
         Settings(app_env="production", database_url="postgresql://localhost/senova", receipt_secret="change-me")
+
+
+def test_admin_bootstrap_credentials_must_be_complete_and_strong():
+    with pytest.raises(ValueError, match="configured together"):
+        Settings(admin_email="admin@senova.vn")
+    with pytest.raises(ValueError, match="at least 12"):
+        Settings(admin_email="admin@senova.vn", admin_password="too-short")
+
+
+def test_admin_bootstrap_credentials_accept_valid_pair():
+    settings = Settings(admin_email="admin@senova.vn", admin_password="a-secure-admin-password")
+    assert settings.admin_email == "admin@senova.vn"

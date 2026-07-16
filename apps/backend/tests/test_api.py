@@ -56,6 +56,42 @@ def test_health_version_compatibility_and_request_id(client: TestClient, storage
     assert storage.initialized
 
 
+def test_startup_bootstraps_configured_admin(monkeypatch, storage):
+    created = {}
+
+    class BootstrapRepository:
+        def __init__(self, repository):
+            assert repository is storage
+
+        def bootstrap_admin(self, email, name, password_hash):
+            created.update(email=email, name=name, password_hash=password_hash)
+
+    class FakeHasher:
+        @staticmethod
+        def hash(password):
+            return f"hashed:{password}"
+
+    monkeypatch.setattr("app.main.AdminRepository", BootstrapRepository)
+    monkeypatch.setattr("app.main.admin.hasher", FakeHasher())
+    settings = Settings(
+        app_env="test",
+        database_url="",
+        receipt_secret="test-receipt-secret",
+        admin_email="Admin@Senova.vn",
+        admin_name="Administrator",
+        admin_password="a-secure-admin-password",
+    )
+
+    with TestClient(create_app(settings=settings, repository=storage)):
+        pass
+
+    assert created == {
+        "email": "admin@senova.vn",
+        "name": "Administrator",
+        "password_hash": "hashed:a-secure-admin-password",
+    }
+
+
 def test_product_catalog_detail_and_http_cache(client: TestClient):
     catalog = client.get("/api/products")
     assert catalog.status_code == 200
