@@ -45,6 +45,17 @@ QR content admin nằm dưới `/api/v1/admin/qr-contents` và `/admin/qr-overri
 
 API mặc định ở `http://localhost:8000`, Swagger UI ở `http://localhost:8000/docs`.
 
+## Deploy trên Render
+
+Cấu hình Web Service với các giá trị sau:
+
+- Root Directory: `apps/backend`
+- Build Command: `./render-build.sh`
+- Start Command: `python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+- Health Check Path: `/api/v1/health/ready`
+
+Build script cài dependency, chạy Alembic migration và import seed idempotent trước khi Render khởi động web process. File `.python-version` ghim runtime ở Python 3.12, cùng phiên bản với CI.
+
 ## Kiểm thử
 
 ```powershell
