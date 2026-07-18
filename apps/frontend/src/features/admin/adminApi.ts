@@ -49,7 +49,18 @@ async function requestEnvelope<T>(path: string, init?: RequestInit): Promise<{ d
   } catch {
     throw new AdminApiError("NETWORK_ERROR", "Không kết nối được máy chủ.", 0);
   }
-  const result = (await response.json()) as ApiResponse<T> & { meta?: ApiMeta };
+  let result: ApiResponse<T> & { meta?: ApiMeta };
+  try {
+    result = (await response.json()) as ApiResponse<T> & { meta?: ApiMeta };
+  } catch {
+    throw new AdminApiError(
+      response.status === 404 ? "API_NOT_CONFIGURED" : "INVALID_API_RESPONSE",
+      response.status === 404
+        ? "Admin API chưa được cấu hình hoặc không đúng địa chỉ."
+        : "Máy chủ trả về phản hồi không hợp lệ.",
+      response.status,
+    );
+  }
   if (!response.ok || !result.success || result.data === undefined) {
     const error = new AdminApiError(
       result.error?.code ?? "ADMIN_API_ERROR",

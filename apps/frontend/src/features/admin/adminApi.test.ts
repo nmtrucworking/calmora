@@ -29,4 +29,21 @@ describe("admin API adapter", () => {
       new AdminApiError("VERSION_CONFLICT", "Reload", 409),
     );
   });
+
+  it("reports an actionable error for an empty 404 response", async () => {
+    vi.stubEnv("VITE_API_BASE_URL", "");
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
+      ok: false,
+      status: 404,
+      json: async () => { throw new SyntaxError("Unexpected end of JSON input"); },
+    }));
+
+    await expect(listAdminSubmissions()).rejects.toEqual(
+      new AdminApiError(
+        "API_NOT_CONFIGURED",
+        "Admin API chưa được cấu hình hoặc không đúng địa chỉ.",
+        404,
+      ),
+    );
+  });
 });
