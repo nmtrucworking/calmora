@@ -20,6 +20,7 @@ from app.core.errors import DomainError, success
 
 SESSION_COOKIE = "senova_admin_session"
 CSRF_COOKIE = "senova_admin_csrf"
+POSTGRES_TIMEZONE_ALIASES = {"Asia/Saigon": "Asia/Ho_Chi_Minh"}
 hasher = PasswordHasher(time_cost=3, memory_cost=65536, parallelism=4)
 
 
@@ -679,7 +680,8 @@ async def dashboard(
     start, end = normalized(fromDate), normalized(toDate)
     if start and end and start >= end:
         raise DomainError(422, "VALIDATION_ERROR", "fromDate must be before toDate.")
-    result = request.app.state.services.admin.repository.dashboard(start, end, timezone, productSlug, source)
+    database_timezone = POSTGRES_TIMEZONE_ALIASES.get(timezone, timezone)
+    result = request.app.state.services.admin.repository.dashboard(start, end, database_timezone, productSlug, source)
     result["range"] = {
         "fromDate": start.isoformat() if start else None,
         "toDate": end.isoformat() if end else None,
