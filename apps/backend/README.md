@@ -56,6 +56,8 @@ Cấu hình Web Service với các giá trị sau:
 
 Build script cài dependency, chạy Alembic migration và import seed idempotent trước khi Render khởi động web process. File `.python-version` ghim runtime ở Python 3.12, cùng phiên bản với CI.
 
+Nếu một nền tảng bị cấu hình chạy thẳng web process trên database hoàn toàn trống, startup có một lớp bảo vệ khởi tạo schema và seed dưới PostgreSQL advisory lock. Lớp bảo vệ này chỉ xử lý lần khởi tạo đầu tiên; các migration của những release tiếp theo vẫn phải chạy qua build/pre-deploy command.
+
 ## Kiểm thử
 
 ```powershell
