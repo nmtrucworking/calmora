@@ -10,6 +10,8 @@
 
 Phạm vi hiện thực gồm catalog sản phẩm công khai, resolve/nội dung QR, ghi nhận QR scan, tiếp nhận form, analytics event và admin có authentication/RBAC/audit. Payment, inventory và fulfillment chưa thuộc mốc này.
 
+Frontend runtime đọc catalog, QR content/batch override và admin data qua API. Migration `20260718_0005` thêm version QR bất biến `fe-cutover-2026-07` và chỉ đổi ba QR seed khi JSONB vẫn khớp chính xác seed cũ, nhờ đó không ghi đè dữ liệu vận hành đã chỉnh sửa.
+
 ## 2. Chạy ứng dụng
 
 ```powershell
@@ -134,6 +136,7 @@ Các kind được hỗ trợ: `feedback`, `pre-order`, `sample-interest`, `cont
 - QR content: draft/publish theo product-version-locale; QR active bắt buộc trỏ published content, batch override chỉ thay guidance/notice.
 - Lead: filter/page/detail/status/assign/note và CSV export có permission riêng, allowlist field, cap 1.000 dòng trong 365 ngày.
 - Dashboard: aggregate server-side theo khoảng thời gian và IANA timezone; audit log lưu actor/action/target/request ID.
+- Admin response chuẩn hóa `camelCase`, có optimistic `version`; lead list hỗ trợ search/filter/page, assignment lấy từ admin active; QR content và batch override có list/detail/draft/publish/active-disable workflow.
 - Content: item/revision draft, submit/return review, publish và unpublish; public API chỉ đọc current published revision.
 
 Session admin là opaque token lưu hash trong PostgreSQL, truyền bằng cookie HttpOnly 8 giờ. Mutation bắt buộc double-submit CSRF và permission server-side; password dùng Argon2id.

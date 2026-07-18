@@ -2,12 +2,12 @@ import { useEffect } from "react";
 import { ArrowRight, Check, MessageSquare, Quote } from "lucide-react";
 import { Link } from "@app/router/RouterContext";
 import { useRouter } from "@app/router/RouterState";
-import { getQrExperienceContent } from "@features/content/qrExperience";
-import { getQrBatchContentOverride } from "@features/qr/data/qrBatchOverrides";
 import { trackEvent } from "@shared/analytics/analytics";
 import { QrFeedbackForm } from "@features/qr/components/QrFeedbackForm";
 import type { SenovaProduct } from "@features/products/data/products";
 import { systemStyles as styles } from "@shared/styles/systemPageClasses";
+import { DEFAULT_QR_CONTENT_VERSION } from "@shared/api/qrExperience";
+import { useQrExperience } from "@features/qr/services/useQrExperience";
 
 type ExperiencePageProps = {
   product?: SenovaProduct;
@@ -18,13 +18,17 @@ export default function ExperiencePage({ product }: ExperiencePageProps) {
   const params = new URLSearchParams(search);
   const batchCode = params.get("batch") ?? "";
   const source = params.get("source") ?? "qr";
-  const qrContent = product ? getQrExperienceContent(product.slug) : undefined;
+  const contentVersion = params.get("version") ?? DEFAULT_QR_CONTENT_VERSION;
+  const locale = params.get("locale") === "en" ? "en" : "vi";
+  const { content: qrContent, error, isLoading, retry } = useQrExperience(product?.slug, {
+    version: contentVersion,
+    batch: batchCode,
+    locale,
+  });
   const contentViewed = params.get("content") ?? qrContent?.contentViewed ?? "unknown-scan";
-  const contentVersion = params.get("version") ?? qrContent?.version ?? "v1";
-  const batchOverride = batchCode ? getQrBatchContentOverride(batchCode, contentVersion) : undefined;
 
   useEffect(() => {
-    if (!product) return;
+    if (!product || !qrContent) return;
 
     trackEvent({
       eventName: "experience_start",
@@ -34,7 +38,7 @@ export default function ExperiencePage({ product }: ExperiencePageProps) {
       contentViewed,
       contentVersion,
     });
-  }, [batchCode, contentVersion, contentViewed, product, source]);
+  }, [batchCode, contentVersion, contentViewed, product, qrContent, source]);
 
   if (!product) {
     return (
@@ -49,12 +53,23 @@ export default function ExperiencePage({ product }: ExperiencePageProps) {
     );
   }
 
-  const activeQrContent = qrContent ?? getQrExperienceContent(product.slug);
-  const guidance = batchOverride?.guidanceOverride ?? {
-    title: activeQrContent.guidanceTitle,
-    intro: activeQrContent.guidanceIntro,
-    steps: activeQrContent.guidanceSteps,
-  };
+  if (isLoading) {
+    return <section className={styles.qrPanel}><p className={styles.eyebrow}>Trải nghiệm</p><h1>Đang tải nội dung…</h1></section>;
+  }
+
+  if (error || !qrContent) {
+    return (
+      <section className={styles.qrPanel}>
+        <p className={styles.eyebrow}>Trải nghiệm</p>
+        <h1>Chưa thể tải nội dung QR.</h1>
+        <p className={styles.bodyText}>{error?.message ?? "Nội dung hiện không khả dụng."}</p>
+        <button type="button" className={styles.primaryButton} onClick={retry}>Thử lại</button>
+      </section>
+    );
+  }
+
+  const activeQrContent = qrContent;
+  const guidance = activeQrContent.guidance;
 
   return (
     <article className={styles.page}>
@@ -88,15 +103,15 @@ export default function ExperiencePage({ product }: ExperiencePageProps) {
       <section className={styles.formLayout}>
         <div className={styles.sectionHeader}>
           <p className={styles.eyebrow}>Câu chuyện văn hóa</p>
-          <h2 className={styles.title}>{activeQrContent.storyTitle}</h2>
+          <h2 className={styles.title}>{activeQrContent.story.title}</h2>
         </div>
         <article className={styles.panel}>
           <Quote aria-hidden="true" className="text-accent" />
-          {activeQrContent.storyParagraphs.map((paragraph) => (
+          {activeQrContent.story.paragraphs.map((paragraph) => (
             <p key={paragraph}>{paragraph}</p>
           ))}
           <p>
-            <strong className="text-text">{activeQrContent.prompt}</strong>
+            <strong className="text-text">{activeQrContent.reflectionPrompt}</strong>
           </p>
         </article>
       </section>
@@ -106,7 +121,7 @@ export default function ExperiencePage({ product }: ExperiencePageProps) {
           <p className={styles.eyebrow}>Hướng dẫn trải nghiệm</p>
           <h2 className={styles.title}>{guidance.title}</h2>
           <p className={styles.lead}>{guidance.intro}</p>
-          {batchOverride?.notice ? <p className={styles.lead}>{batchOverride.notice}</p> : null}
+          {activeQrContent.batchNotice ? <p className={styles.lead}>{activeQrContent.batchNotice}</p> : null}
         </div>
         <div className={styles.stepGrid}>
           {guidance.steps.map((step) => (

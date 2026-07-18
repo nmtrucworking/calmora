@@ -72,6 +72,10 @@ class QrOverrideWrite(BaseModel):
     notice: str | None = Field(default=None, max_length=2000)
 
 
+class OverrideStatusWrite(BaseModel):
+    status: str
+
+
 class AdminService:
     def __init__(self, repository: AdminRepository, app_env: str):
         self.repository = repository
@@ -284,7 +288,7 @@ async def save_product(
         {"version": result["version"]},
         getattr(request.state, "request_id", None),
     )
-    return success(result)
+    return success(repository.get_product(product_id))
 
 
 @router.post("/admin/products/{product_id}/status")
@@ -308,12 +312,20 @@ async def product_status(
         {},
         getattr(request.state, "request_id", None),
     )
-    return success({"status": payload.status})
+    return success(request.app.state.services.admin.repository.get_product(product_id))
 
 
 @router.get("/admin/qr")
 async def admin_qr(request: Request, _: dict[str, Any] = Depends(require("qr.read"))):
     return success(request.app.state.services.admin.repository.list_qr())
+
+
+@router.get("/admin/qr/{code}")
+async def admin_qr_detail(code: str, request: Request, _: dict[str, Any] = Depends(require("qr.read"))):
+    item = request.app.state.services.admin.repository.get_qr(code)
+    if not item:
+        raise DomainError(404, "QR_NOT_FOUND", "QR record was not found.")
+    return success(item)
 
 
 @router.put("/admin/qr/{code}")
@@ -339,12 +351,52 @@ async def save_qr(
     request.app.state.services.admin.repository.audit(
         identity["id"], "qr.write", "qr_record", normalized, {}, getattr(request.state, "request_id", None)
     )
-    return success({"code": normalized})
+    return success(request.app.state.services.admin.repository.get_qr(normalized))
+
+
+@router.post("/admin/qr/{code}/status")
+async def qr_status(
+    code: str,
+    payload: StatusWrite,
+    request: Request,
+    identity: dict[str, Any] = Depends(require("qr.manage", True)),
+):
+    if payload.status not in {"active", "paused", "revoked"}:
+        raise DomainError(422, "VALIDATION_ERROR", "Invalid QR status.")
+    repository = request.app.state.services.admin.repository
+    normalized = code.strip().upper()
+    current = repository.get_qr(normalized)
+    if not current:
+        raise DomainError(404, "QR_NOT_FOUND", "QR record was not found.")
+    if payload.status == "active" and not repository.published_qr_content_exists(
+        str(current.get("productSlug", "")), str(current.get("contentVersion", "v1")), str(current.get("locale", "vi"))
+    ):
+        raise DomainError(409, "QR_CONTENT_NOT_PUBLISHED", "QR activation requires published content.")
+    if not repository.set_qr_status(normalized, payload.status, payload.expectedVersion):
+        raise DomainError(409, "VERSION_CONFLICT", "QR record was changed by another editor.")
+    repository.audit(
+        identity["id"], f"qr.{payload.status}", "qr_record", normalized, {}, getattr(request.state, "request_id", None)
+    )
+    return success(repository.get_qr(normalized))
 
 
 @router.get("/admin/qr-contents")
 async def qr_contents(request: Request, _: dict[str, Any] = Depends(require("qr.read"))):
     return success(request.app.state.services.admin.repository.list_qr_contents())
+
+
+@router.get("/admin/qr-contents/{product}/{version}/{locale}")
+async def qr_content_detail(
+    product: str,
+    version: str,
+    locale: str,
+    request: Request,
+    _: dict[str, Any] = Depends(require("qr.read")),
+):
+    item = request.app.state.services.admin.repository.get_qr_content(product, version, locale)
+    if not item:
+        raise DomainError(404, "QR_CONTENT_NOT_FOUND", "QR content was not found.")
+    return success(item)
 
 
 @router.put("/admin/qr-contents/{product}/{version}/{locale}")
@@ -371,7 +423,7 @@ async def save_qr_content(
         {},
         getattr(request.state, "request_id", None),
     )
-    return success({"status": "draft"})
+    return success(request.app.state.services.admin.repository.get_qr_content(product, version, locale))
 
 
 @router.post("/admin/qr-contents/{product}/{version}/{locale}/publish")
@@ -392,7 +444,32 @@ async def publish_qr_content(
         {},
         getattr(request.state, "request_id", None),
     )
-    return success({"status": "published"})
+    return success(request.app.state.services.admin.repository.get_qr_content(product, version, locale))
+
+
+@router.get("/admin/qr-overrides")
+async def qr_overrides(
+    request: Request,
+    product: str | None = None,
+    version: str | None = None,
+    status: str | None = None,
+    _: dict[str, Any] = Depends(require("qr.read")),
+):
+    return success(request.app.state.services.admin.repository.list_qr_overrides(product, version, status))
+
+
+@router.get("/admin/qr-overrides/{batch}/{product}/{version}")
+async def qr_override_detail(
+    batch: str,
+    product: str,
+    version: str,
+    request: Request,
+    _: dict[str, Any] = Depends(require("qr.read")),
+):
+    item = request.app.state.services.admin.repository.get_qr_override(batch, product, version)
+    if not item:
+        raise DomainError(404, "QR_OVERRIDE_NOT_FOUND", "QR batch override was not found.")
+    return success(item)
 
 
 @router.put("/admin/qr-overrides/{batch}/{product}/{version}")
@@ -422,7 +499,32 @@ async def save_qr_override(
         {},
         getattr(request.state, "request_id", None),
     )
-    return success({"active": True})
+    return success(request.app.state.services.admin.repository.get_qr_override(data["batchCode"], product, version))
+
+
+@router.patch("/admin/qr-overrides/{batch}/{product}/{version}/status")
+async def qr_override_status(
+    batch: str,
+    product: str,
+    version: str,
+    payload: OverrideStatusWrite,
+    request: Request,
+    identity: dict[str, Any] = Depends(require("qr.manage", True)),
+):
+    if payload.status not in {"active", "disabled"}:
+        raise DomainError(422, "VALIDATION_ERROR", "Invalid QR override status.")
+    repository = request.app.state.services.admin.repository
+    if not repository.set_qr_override_status(batch, product, version, payload.status):
+        raise DomainError(404, "QR_OVERRIDE_NOT_FOUND", "QR batch override was not found.")
+    repository.audit(
+        identity["id"],
+        "qr.override_status",
+        "qr_override",
+        f"{batch}:{product}:{version}",
+        {"status": payload.status},
+        getattr(request.state, "request_id", None),
+    )
+    return success(repository.get_qr_override(batch, product, version))
 
 
 @router.get("/admin/submissions")
@@ -430,13 +532,25 @@ async def leads(
     request: Request,
     status: str | None = None,
     kind: str | None = None,
+    q: str | None = None,
     page: int = 1,
     pageSize: int = 20,
     _: dict[str, Any] = Depends(require("submissions.read")),
 ):
     page, pageSize = max(1, page), min(max(1, pageSize), 100)
-    items, total = request.app.state.services.admin.repository.list_leads(status, kind, page, pageSize)
+    items, total = request.app.state.services.admin.repository.list_leads(status, kind, q, page, pageSize)
     return {"success": True, "data": items, "meta": {"page": page, "pageSize": pageSize, "total": total}}
+
+
+@router.get("/admin/users")
+async def admin_users(
+    request: Request,
+    status: str = "active",
+    _: dict[str, Any] = Depends(require("submissions.assign")),
+):
+    if status not in {"active", "disabled"}:
+        raise DomainError(422, "VALIDATION_ERROR", "Invalid admin user status.")
+    return success(request.app.state.services.admin.repository.list_admin_users(status))
 
 
 @router.get("/admin/submissions/{submission_id}")
@@ -548,6 +662,8 @@ async def dashboard(
     fromDate: datetime | None = None,
     toDate: datetime | None = None,
     timezone: str = "UTC",
+    productSlug: str | None = None,
+    source: str | None = None,
     _: dict[str, Any] = Depends(require("analytics.read")),
 ):
     try:
@@ -563,7 +679,7 @@ async def dashboard(
     start, end = normalized(fromDate), normalized(toDate)
     if start and end and start >= end:
         raise DomainError(422, "VALIDATION_ERROR", "fromDate must be before toDate.")
-    result = request.app.state.services.admin.repository.dashboard(start, end)
+    result = request.app.state.services.admin.repository.dashboard(start, end, timezone, productSlug, source)
     result["range"] = {
         "fromDate": start.isoformat() if start else None,
         "toDate": end.isoformat() if end else None,

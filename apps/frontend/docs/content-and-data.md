@@ -54,11 +54,13 @@ Thank-you behavior and copy are defined in `src/features/content/sitePages.ts` a
 
 ## QR Data
 
-QR seed vẫn tồn tại để development không có API. Khi `VITE_API_BASE_URL` được cấu hình, QR resolve dùng backend và không fallback sang local record nếu backend trả business error.
+PostgreSQL/API là nguồn runtime cho QR resolve, experience content và batch override. Version mặc định sau cutover là `fe-cutover-2026-07`. Fixture TypeScript chỉ được dùng bởi Vite local development khi không có `VITE_API_BASE_URL`; production/staging không fallback khi thiếu cấu hình hoặc backend trả lỗi.
+
+Trang `/admin/qr-content` quản lý draft/publish cho locale `vi` và `en`, clone version đã publish và batch override. Published content là bất biến.
 
 ## Runtime Catalog
 
-`ProductCatalogProvider` tải `/api/products` để giữ compatibility với Gift Set draft hiện tại. Loading và API error không bị che bằng dữ liệu local; fallback chỉ bật khi không có `VITE_API_BASE_URL`. `/api/v1/products` là contract publish-only cho cutover sau khi Gift Set được publish.
+`ProductCatalogProvider` tải `/api/products` để giữ compatibility với Gift Set draft hiện tại. Loading và API error không bị che bằng dữ liệu local; fallback chỉ bật trong Vite local development khi không có `VITE_API_BASE_URL`. `/api/v1/products` là contract publish-only cho cutover sau khi Gift Set được publish.
 
 Use `/q/:code` for QR redirect testing. The redirect page looks up the code and sends users to the product experience route with query metadata.
 

@@ -1,4 +1,4 @@
-import { getApiBaseUrl, hasApiBaseUrl } from "@shared/api/config";
+import { canUseDevFixtures, getApiBaseUrl, hasApiBaseUrl } from "@shared/api/config";
 
 export type SubmissionKind = "feedback" | "pre-order" | "sample-interest" | "contact" | "partners";
 
@@ -13,8 +13,6 @@ export type ApiResponse<T> = {
 
 type SubmissionPayload = Record<string, unknown>;
 
-const storageKey = "senova.form.submissions";
-
 function hashString(value: string) {
   let hash = 2166136261;
   for (let index = 0; index < value.length; index += 1) {
@@ -22,12 +20,6 @@ function hashString(value: string) {
     hash = Math.imul(hash, 16777619);
   }
   return (hash >>> 0).toString(36).padStart(8, "0");
-}
-
-function sanitize(value: unknown) {
-  if (typeof value !== "string") return value;
-
-  return value.replace(/[<>]/g, "").trim();
 }
 
 export async function submitForm(
@@ -76,29 +68,13 @@ export async function submitForm(
     }
   }
 
-  await new Promise((resolve) => window.setTimeout(resolve, 420));
-
-  const entry = {
-    id: `${kind}-${Date.now()}`,
-    kind,
-    payload: Object.fromEntries(
-      Object.entries(payload).map(([key, value]) => [key, sanitize(value)]),
-    ),
-    createdAt: new Date().toISOString(),
-  };
-
-  try {
-    const previous = JSON.parse(localStorage.getItem(storageKey) ?? "[]") as typeof entry[];
-    localStorage.setItem(storageKey, JSON.stringify([...previous.slice(-49), entry]));
-  } catch {
-    return {
-      success: false,
-      error: {
-        code: "LOCAL_SAVE_FAILED",
-        message: "Thông tin chưa được ghi nhận. Vui lòng kiểm tra trình duyệt và thử lại.",
-      },
-    };
+  if (canUseDevFixtures()) {
+    await new Promise((resolve) => window.setTimeout(resolve, 120));
+    return { success: true, data: { id: `dev-${kind}-${Date.now()}` } };
   }
 
-  return { success: true, data: { id: entry.id } };
+  return {
+    success: false,
+    error: { code: "API_NOT_CONFIGURED", message: "Dịch vụ tiếp nhận chưa được cấu hình." },
+  };
 }

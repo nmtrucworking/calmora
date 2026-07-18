@@ -23,6 +23,7 @@ export type AdminProduct = {
   status: ProductStatus;
   variants: ProductVariant[];
   updatedAt: string;
+  version?: number;
 };
 
 export type QrRecord = {
@@ -38,6 +39,8 @@ export type QrRecord = {
   expiresAt?: string;
   scans: number;
   createdAt: string;
+  updatedAt?: string;
+  version?: number;
 };
 
 export type SubmissionActivity = {
@@ -53,6 +56,7 @@ export type Submission = {
   kind: SubmissionKind;
   status: SubmissionStatus;
   assignee: string;
+  assignedTo?: string;
   customer: {
     name: string;
     email: string;
@@ -84,6 +88,50 @@ export type AdminState = {
   qrRecords: QrRecord[];
   submissions: Submission[];
   analytics: AnalyticsPoint[];
+  dashboard?: AdminDashboard;
+};
+
+export type AdminDashboard = {
+  activeProducts: number;
+  activeQrRecords: number;
+  openLeads: number;
+  totalScans: number;
+  totalSubmissions: number;
+  conversionRate: number;
+  submissionsByStatus: Record<string, number>;
+  series: AnalyticsPoint[];
+  scansByProduct: { productSlug: string; scans: number }[];
+  range: { fromDate?: string; toDate?: string; timezone: string };
+};
+
+export type AdminUser = { id: string; name: string; email: string; status: "active" | "disabled" };
+
+export type QrExperienceStep = { label: string; title: string; text: string };
+export type AdminQrContent = {
+  productSlug: string;
+  version: string;
+  locale: "vi" | "en";
+  status: "draft" | "published";
+  contentViewed: string;
+  eyebrow: string;
+  title: string;
+  lede: string;
+  story: { title: string; paragraphs: string[] };
+  culture: { title: string; paragraphs: string[]; sourceNotes: string[] };
+  guidance: { title: string; intro: string; steps: QrExperienceStep[]; safetyNote?: string | null };
+  reflectionPrompt: string;
+  cta: { primary: { label: string; href: string }; secondary?: { label: string; href: string } };
+  updatedAt?: string;
+};
+
+export type AdminQrOverride = {
+  batchCode: string;
+  productSlug: string;
+  contentVersion: string;
+  status: "active" | "disabled";
+  guidanceOverride?: AdminQrContent["guidance"];
+  notice?: string;
+  updatedAt?: string;
 };
 
 export type ToastMessage = {

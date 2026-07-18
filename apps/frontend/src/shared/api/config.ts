@@ -5,3 +5,7 @@ export function getApiBaseUrl() {
 export function hasApiBaseUrl() {
   return getApiBaseUrl().length > 0;
 }
+
+export function canUseDevFixtures() {
+  return import.meta.env.DEV && !hasApiBaseUrl();
+}

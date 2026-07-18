@@ -13,6 +13,7 @@ from pydantic import BaseModel, Field
 
 from app.core.errors import DomainError, success
 from app.modules.common import now_utc, parse_datetime, sanitize_text
+from app.seed.cutover import CUTOVER_VERSION, build_cutover_contents, build_cutover_override
 
 QrStatus = Literal["active", "paused", "expired", "revoked"]
 
@@ -27,8 +28,11 @@ class ScanRequest(BaseModel):
 class QrRepository:
     def __init__(self, seed_dir: Path):
         self.records = _load(seed_dir / "qr_records.json")
-        self.contents = _load(seed_dir / "qr_experience_content.json")
-        self.overrides = _load(seed_dir / "qr_batch_overrides.json")
+        for record in self.records:
+            if record.get("code") in {"PP-2601-A", "CL-2601-A", "GS-2601-A"} and record.get("contentVersion") == "v1":
+                record["contentVersion"] = CUTOVER_VERSION
+        self.contents = [*_load(seed_dir / "qr_experience_content.json"), *build_cutover_contents(seed_dir)]
+        self.overrides = [*_load(seed_dir / "qr_batch_overrides.json"), build_cutover_override(seed_dir)]
 
     def get_record(self, code: str) -> dict[str, Any] | None:
         item = next((value for value in self.records if value.get("code") == code.strip().upper()), None)
