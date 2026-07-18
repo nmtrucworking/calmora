@@ -173,14 +173,16 @@ def test_admin_auth_csrf_rbac_audit_and_session_revoke():
         assert client.get("/api/v1/admin/dashboard?timezone=Invalid%2FZone").status_code == 422
         qr_items = client.get("/api/v1/admin/qr").json()["data"]
         qr_item = next(item for item in qr_items if item["code"] == "PP-2601-A")
+        qr_data = {key: value for key, value in qr_item.items() if key not in {"id", "version", "updatedAt", "scans"}}
         qr_saved = client.put(
             "/api/v1/admin/qr/PP-2601-A",
-            json={"data": qr_item["data"], "expectedVersion": qr_item["version"]},
+            json={"data": qr_data, "expectedVersion": qr_item["version"]},
             headers={"X-CSRF-Token": csrf},
         )
         assert qr_saved.status_code == 200
         qr_item = next(item for item in client.get("/api/v1/admin/qr").json()["data"] if item["code"] == "PP-2601-A")
-        v2_record = {**qr_item["data"], "contentVersion": "v2", "status": "active"}
+        qr_data = {key: value for key, value in qr_item.items() if key not in {"id", "version", "updatedAt", "scans"}}
+        v2_record = {**qr_data, "contentVersion": "v2", "status": "active"}
         blocked_activation = client.put(
             "/api/v1/admin/qr/PP-2601-A",
             json={"data": v2_record, "expectedVersion": qr_item["version"]},
