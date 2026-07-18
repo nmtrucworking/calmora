@@ -6,6 +6,8 @@ import { cx } from "@shared/utils/classNames";
 
 const BACKGROUND_MUSIC_SRC = "/media/reflections_in_iea.mp3";
 const BACKGROUND_MUSIC_VOLUME = 0.28;
+const FADE_IN_DURATION_MS = 900;
+const FADE_OUT_DURATION_MS = 260;
 
 type AmbientSoundButtonProps = {
   className?: string;
@@ -15,6 +17,7 @@ type AmbientSoundButtonProps = {
 export function AmbientSoundButton({ className, compact = false }: AmbientSoundButtonProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const fadeFrameRef = useRef<number | null>(null);
   const { language } = useLanguage();
   const copy = {
     vi: {
@@ -31,9 +34,45 @@ export function AmbientSoundButton({ className, compact = false }: AmbientSoundB
     },
   }[language];
 
+  const cancelFade = () => {
+    if (fadeFrameRef.current !== null) {
+      window.cancelAnimationFrame(fadeFrameRef.current);
+      fadeFrameRef.current = null;
+    }
+  };
+
+  const fadeTo = (audio: HTMLAudioElement, targetVolume: number, duration: number, onComplete?: () => void) => {
+    cancelFade();
+
+    const initialVolume = audio.volume;
+    const startedAt = window.performance.now();
+
+    const updateVolume = (now: number) => {
+      const progress = Math.min((now - startedAt) / duration, 1);
+      audio.volume = initialVolume + (targetVolume - initialVolume) * progress;
+
+      if (progress < 1) {
+        fadeFrameRef.current = window.requestAnimationFrame(updateVolume);
+        return;
+      }
+
+      fadeFrameRef.current = null;
+      onComplete?.();
+    };
+
+    fadeFrameRef.current = window.requestAnimationFrame(updateVolume);
+  };
+
   const stop = () => {
-    audioRef.current?.pause();
+    const audio = audioRef.current;
+
     setIsPlaying(false);
+
+    if (!audio) return;
+
+    fadeTo(audio, 0, FADE_OUT_DURATION_MS, () => {
+      audio.pause();
+    });
   };
 
   const start = async () => {
@@ -41,13 +80,16 @@ export function AmbientSoundButton({ className, compact = false }: AmbientSoundB
 
     if (!audio) return;
 
-    audio.volume = BACKGROUND_MUSIC_VOLUME;
+    cancelFade();
+    audio.volume = 0;
 
     try {
       await audio.play();
       setIsPlaying(true);
+      fadeTo(audio, BACKGROUND_MUSIC_VOLUME, FADE_IN_DURATION_MS);
     } catch {
       // Browsers may reject playback when the click no longer counts as a user gesture.
+      audio.volume = BACKGROUND_MUSIC_VOLUME;
       setIsPlaying(false);
     }
   };
@@ -56,13 +98,14 @@ export function AmbientSoundButton({ className, compact = false }: AmbientSoundB
     const audio = audioRef.current;
 
     return () => {
+      cancelFade();
       audio?.pause();
     };
   }, []);
 
   return (
     <>
-      <audio ref={audioRef} src={BACKGROUND_MUSIC_SRC} loop preload="metadata" />
+      <audio ref={audioRef} src={BACKGROUND_MUSIC_SRC} loop preload="auto" />
       <button
         type="button"
         className={cx(
