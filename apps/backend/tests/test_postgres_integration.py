@@ -73,7 +73,7 @@ def test_legacy_data_is_preserved_and_status_is_migrated():
 def test_seed_is_idempotent_and_api_reads_database():
     first = import_seeds()
     second = import_seeds()
-    assert first == {"products": 3, "variants": 6, "qrRecords": 6, "contents": 3, "overrides": 2}
+    assert first == {"products": 3, "variants": 6, "qrRecords": 6, "contents": 6, "overrides": 3}
     assert second == {"products": 0, "variants": 0, "qrRecords": 0, "contents": 0, "overrides": 0}
 
     settings = Settings(app_env="test", database_url=_psycopg_url(), receipt_secret="integration-secret")

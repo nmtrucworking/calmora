@@ -730,11 +730,14 @@ class AdminRepository:
             series_rows = db.execute(
                 text(
                     "WITH scan_days AS ("
-                    f" SELECT date_trunc('day', created_at AT TIME ZONE :timezone)::date day,count(*) scans FROM analytics_events {event_where} GROUP BY 1"
+                    f" SELECT date_trunc('day', created_at AT TIME ZONE :timezone)::date AS bucket_day,"
+                    f"count(*) AS scans FROM analytics_events {event_where} GROUP BY 1"
                     "), submission_days AS ("
-                    f" SELECT date_trunc('day', created_at AT TIME ZONE :timezone)::date day,count(*) submissions FROM submissions {submission_where} GROUP BY 1"
-                    ") SELECT COALESCE(s.day,l.day) day,COALESCE(s.scans,0) scans,COALESCE(l.submissions,0) submissions "
-                    "FROM scan_days s FULL JOIN submission_days l ON l.day=s.day ORDER BY 1"
+                    f" SELECT date_trunc('day', created_at AT TIME ZONE :timezone)::date AS bucket_day,"
+                    f"count(*) AS submissions FROM submissions {submission_where} GROUP BY 1"
+                    ") SELECT COALESCE(s.bucket_day,l.bucket_day) AS day,COALESCE(s.scans,0) AS scans,"
+                    "COALESCE(l.submissions,0) AS submissions FROM scan_days s FULL JOIN submission_days l "
+                    "ON l.bucket_day=s.bucket_day ORDER BY 1"
                 ),
                 params,
             ).mappings()
