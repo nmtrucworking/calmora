@@ -4,9 +4,10 @@ import { useEffect, type ReactNode } from "react";
 import { useAdminStore } from "./AdminStore";
 import type { AnalyticsPoint, ProductStatus, QrStatus, SubmissionStatus } from "./types";
 
-type Status = ProductStatus | QrStatus | SubmissionStatus;
+type Status = ProductStatus | QrStatus | SubmissionStatus | "published";
 
 const statusLabels: Record<Status, string> = {
+  published: "Đã xuất bản",
   draft: "Bản nháp",
   active: "Đang hoạt động",
   archived: "Đã lưu trữ",

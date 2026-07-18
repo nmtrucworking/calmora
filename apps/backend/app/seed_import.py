@@ -10,6 +10,7 @@ from sqlalchemy.dialects.postgresql import insert
 
 from app.db.schema import product_variants, products, qr_batch_overrides, qr_experience_contents, qr_records
 from app.db.session import get_engine
+from app.seed.cutover import CUTOVER_VERSION, build_cutover_contents, build_cutover_override
 
 SEED_DIR = Path(__file__).resolve().parent / "seed"
 
@@ -27,6 +28,8 @@ def load_and_validate() -> dict[str, list[dict[str, Any]]]:
         if not isinstance(value, list) or not all(isinstance(item, dict) for item in value):
             raise ValueError(f"{name}.json must contain an array of objects")
         result[name] = value
+    result["qr_experience_content"].extend(build_cutover_contents(SEED_DIR))
+    result["qr_batch_overrides"].append(build_cutover_override(SEED_DIR))
     product_ids = {item.get("id") for item in result["products"]}
     if None in product_ids or len(product_ids) != len(result["products"]):
         raise ValueError("Product seed IDs must be present and unique")
@@ -93,6 +96,18 @@ def import_seeds() -> dict[str, int]:
             counts["qrRecords"] += int(connection.execute(statement).first() is not None)
         for content in seed["qr_experience_content"]:
             key = f"{content['productSlug']}:{content['version']}:{content.get('locale', 'vi')}"
+            if content["version"] == CUTOVER_VERSION:
+                existing = connection.execute(
+                    qr_experience_contents.select()
+                    .with_only_columns(qr_experience_contents.c.data)
+                    .where(
+                        qr_experience_contents.c.product_id == content["productSlug"],
+                        qr_experience_contents.c.version == content["version"],
+                        qr_experience_contents.c.locale == content.get("locale", "vi"),
+                    )
+                ).scalar_one_or_none()
+                if existing is not None and canonical_hash(existing) != canonical_hash(content):
+                    raise RuntimeError(f"Cutover content collision for {key}; existing data was not overwritten")
             statement = (
                 insert(qr_experience_contents)
                 .values(
@@ -117,6 +132,20 @@ def import_seeds() -> dict[str, int]:
             )
             counts["contents"] += int(connection.execute(statement).first() is not None)
         for override in seed["qr_batch_overrides"]:
+            if override["contentVersion"] == CUTOVER_VERSION:
+                existing = connection.execute(
+                    qr_batch_overrides.select()
+                    .with_only_columns(qr_batch_overrides.c.data)
+                    .where(
+                        qr_batch_overrides.c.batch_code == override["batchCode"],
+                        qr_batch_overrides.c.product_id == override["productSlug"],
+                        qr_batch_overrides.c.content_version == override["contentVersion"],
+                    )
+                ).scalar_one_or_none()
+                if existing is not None and canonical_hash(existing) != canonical_hash(override):
+                    raise RuntimeError(
+                        f"Cutover override collision for {override['batchCode']}:{override['productSlug']}"
+                    )
             statement = (
                 insert(qr_batch_overrides)
                 .values(

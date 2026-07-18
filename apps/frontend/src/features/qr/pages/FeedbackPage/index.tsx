@@ -1,11 +1,12 @@
 import { useEffect } from "react";
 import { Link } from "@app/router/RouterContext";
 import { useRouter } from "@app/router/RouterState";
-import { getQrExperienceContent } from "@features/content/qrExperience";
 import { trackEvent } from "@shared/analytics/analytics";
 import { QrFeedbackForm } from "@features/qr/components/QrFeedbackForm";
 import type { SenovaProduct } from "@features/products/data/products";
 import { systemStyles as styles } from "@shared/styles/systemPageClasses";
+import { DEFAULT_QR_CONTENT_VERSION } from "@shared/api/qrExperience";
+import { useQrExperience } from "@features/qr/services/useQrExperience";
 
 type FeedbackPageProps = {
   product?: SenovaProduct;
@@ -16,12 +17,13 @@ export default function FeedbackPage({ product }: FeedbackPageProps) {
   const params = new URLSearchParams(search);
   const batchCode = params.get("batch") ?? "";
   const source = params.get("source") ?? "qr";
-  const qrContent = product ? getQrExperienceContent(product.slug) : undefined;
+  const contentVersion = params.get("version") ?? DEFAULT_QR_CONTENT_VERSION;
+  const locale = params.get("locale") === "en" ? "en" : "vi";
+  const { content: qrContent } = useQrExperience(product?.slug, { version: contentVersion, batch: batchCode, locale });
   const contentViewed = params.get("content") ?? qrContent?.contentViewed ?? "unknown-feedback";
-  const contentVersion = params.get("version") ?? qrContent?.version ?? "v1";
 
   useEffect(() => {
-    if (!product) return;
+    if (!product || !qrContent) return;
 
     trackEvent({
       eventName: "feedback_start",
@@ -31,7 +33,7 @@ export default function FeedbackPage({ product }: FeedbackPageProps) {
       contentViewed,
       contentVersion,
     });
-  }, [batchCode, contentVersion, contentViewed, product, source]);
+  }, [batchCode, contentVersion, contentViewed, product, qrContent, source]);
 
   if (!product) {
     return (

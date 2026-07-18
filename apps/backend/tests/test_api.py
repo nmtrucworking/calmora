@@ -118,11 +118,15 @@ def test_catalog_etag_changes_when_published_data_changes(client: TestClient):
 def test_qr_resolve_inactive_states_and_experience(client: TestClient):
     resolved = client.get("/api/qr/pp-2601-a")
     assert resolved.json()["data"]["redirectUrl"].startswith("/experience/petal-pack?")
+    assert resolved.json()["data"]["contentVersion"] == "fe-cutover-2026-07"
     assert client.get("/api/qr/PP-2509-X").json()["data"]["status"] == "paused"
     assert client.get("/api/qr/CL-2501-Z").json()["data"]["status"] == "expired"
     assert client.get("/api/qr/GS-2508-R").json()["data"]["status"] == "revoked"
     experience = client.get("/api/qr/experience/petal-pack?batch=PP-2601-A")
     assert experience.json()["data"]["productSlug"] == "petal-pack"
+    cutover = client.get("/api/qr/experience/petal-pack?version=fe-cutover-2026-07&batch=PP-2601-A")
+    assert cutover.json()["data"]["title"] == "Mở một cánh sen, bắt đầu một khoảng lặng."
+    assert cutover.json()["data"]["batchNotice"]
 
 
 def test_submission_receipt_idempotency_and_no_public_enumeration(client: TestClient, storage):

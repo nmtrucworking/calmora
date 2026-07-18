@@ -29,7 +29,7 @@ Ký hiệu:
 | --- | --- | --- | --- | --- |
 | Product list/detail | `features/products/data/products.ts` | Catalog ba sản phẩm | `GET /api/products`, `GET /api/products/{slug}` | `WIRED-PARTIAL`: BE có, FE còn đọc local |
 | QR redirect `/q/:code` | `shared/api/qr.ts` | Resolve và ghi scan | `GET /api/qr/{code}`, `POST /api/qr/{code}/scan` | `CURRENT`, có local fallback |
-| QR experience | `features/content/qrExperience.ts` | Nội dung theo product/version/locale/batch | `GET /api/qr/experience/{productSlug}` | `WIRED-PARTIAL`: FE còn đọc local |
+| QR experience | `shared/api/qrExperience.ts` | Nội dung theo product/version/locale/batch | `GET /api/qr/experience/{productSlug}` | `CURRENT`; fixture chỉ dành cho Vite local không cấu hình API |
 | Feedback QR | `QrFeedbackForm.tsx` | Tạo submission `feedback` | `POST /api/submissions` | `CURRENT` khi có `VITE_API_BASE_URL` |
 | Contact | `ContactPage` | Tạo submission `contact` | `POST /api/submissions` | `CURRENT` khi có API URL |
 | Partners | `PartnersPage` | Tạo submission `partners` | `POST /api/submissions` | `CURRENT` khi có API URL |
@@ -37,7 +37,7 @@ Ký hiệu:
 | Checkout inquiry | `commerce/pages/index.tsx` | Tạo submission `pre-order` | `POST /api/submissions` | `PARTIAL`: thiếu line items |
 | Page/QR/form analytics | `shared/analytics/analytics.ts` | Event không chứa PII | `POST /api/analytics/events` | `CURRENT`, localStorage chỉ là debug fallback |
 | Admin login | `features/admin/AdminApp.tsx` | Session demo | Auth API mục tiêu | `NEXT`; tuyệt đối không dùng credential demo ở production |
-| Admin products/QR/leads/analytics | `features/admin/*` | CRUD, workflow, dashboard | `/api/v1/admin/*` | `NEXT`; toàn bộ store hiện là memory |
+| Admin products/QR/leads/analytics/content | `features/admin/*` | CRUD, workflow, dashboard, QR content/override | `/api/v1/admin/*` | `CURRENT`; dữ liệu runtime từ PostgreSQL, tải theo từng màn |
 | Wishlist/account/order status | `commerce/pages/index.tsx` | UI mô phỏng | Account/commerce API | `TARGET`, không thuộc MVP inquiry |
 
 ## 3. Quy ước contract bắt buộc

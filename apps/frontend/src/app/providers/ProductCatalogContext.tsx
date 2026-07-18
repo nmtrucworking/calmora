@@ -1,7 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { products as localProducts, type SenovaProduct } from "@features/products/data/products";
-import { hasApiBaseUrl } from "@shared/api/config";
+import { canUseDevFixtures, hasApiBaseUrl } from "@shared/api/config";
 import { CatalogApiError, fetchProducts } from "@shared/api/products";
 import { trackEvent } from "@shared/analytics/analytics";
 
@@ -16,15 +16,21 @@ const ProductCatalogContext = createContext<ProductCatalogContextValue | undefin
 
 export function ProductCatalogProvider({ children }: { children: ReactNode }) {
   const usesRemoteApi = hasApiBaseUrl();
-  const [products, setProducts] = useState<SenovaProduct[]>(usesRemoteApi ? [] : localProducts);
+  const usesFixtures = canUseDevFixtures();
+  const [products, setProducts] = useState<SenovaProduct[]>(usesFixtures ? localProducts : []);
   const [isLoading, setIsLoading] = useState(usesRemoteApi);
-  const [error, setError] = useState<CatalogApiError>();
+  const [error, setError] = useState<CatalogApiError | undefined>(
+    !usesRemoteApi && !usesFixtures
+      ? new CatalogApiError("API_NOT_CONFIGURED", "Product catalog API is not configured.")
+      : undefined,
+  );
 
   useEffect(() => {
-    if (!usesRemoteApi) {
+    if (usesFixtures) {
       trackEvent({ eventName: "catalog_local_fallback", source: "api_not_configured" });
       return;
     }
+    if (!usesRemoteApi) return;
     const controller = new AbortController();
     void fetchProducts(controller.signal)
       .then((catalog) => {
@@ -43,7 +49,7 @@ export function ProductCatalogProvider({ children }: { children: ReactNode }) {
       })
       .finally(() => setIsLoading(false));
     return () => controller.abort();
-  }, [usesRemoteApi]);
+  }, [usesFixtures, usesRemoteApi]);
 
   const value = useMemo<ProductCatalogContextValue>(
     () => ({

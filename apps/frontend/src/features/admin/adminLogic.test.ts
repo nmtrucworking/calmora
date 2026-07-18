@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { adminReducer } from "./AdminStore";
-import { initialAdminState } from "./data";
+import { legacyAdminFixture } from "./data";
 import { filterProducts, getAdminRedirect, validateProduct } from "./adminLogic";
 import type { AdminSession } from "./types";
 
@@ -19,20 +19,22 @@ describe("admin route guard", () => {
 
 describe("admin reducer", () => {
   it("tạo sản phẩm và cập nhật KPI nguồn", () => {
-    const product = { ...initialAdminState.products[0], id: "new-product", slug: "new-product", name: "New Product" };
-    const state = adminReducer(initialAdminState, { type: "product/save", product });
-    expect(state.products).toHaveLength(initialAdminState.products.length + 1);
+    const product = { ...legacyAdminFixture.products[0], id: "new-product", slug: "new-product", name: "New Product" };
+    const state = adminReducer(legacyAdminFixture, { type: "product/save", product });
+    expect(state.products).toHaveLength(legacyAdminFixture.products.length + 1);
     expect(state.products[0].slug).toBe("new-product");
   });
 
   it("đổi trạng thái QR", () => {
-    const state = adminReducer(initialAdminState, { type: "qr/status", id: "qr-1", status: "paused" });
+    const record = { ...legacyAdminFixture.qrRecords[0], status: "paused" as const };
+    const state = adminReducer(legacyAdminFixture, { type: "qr/save", record });
     expect(state.qrRecords.find((record) => record.id === "qr-1")?.status).toBe("paused");
   });
 
   it("phân công và thêm hoạt động vào submission", () => {
-    const assigned = adminReducer(initialAdminState, { type: "submission/update", id: "sub-1", status: "contacted", assignee: "Thu Hà" });
-    const withActivity = adminReducer(assigned, { type: "submission/activity", id: "sub-1", content: "Đã gọi điện", author: "Thu Hà" });
+    const source = legacyAdminFixture.submissions[0];
+    const assigned = adminReducer(legacyAdminFixture, { type: "submission/save", submission: { ...source, status: "contacted", assignee: "Thu Hà" } });
+    const withActivity = adminReducer(assigned, { type: "submission/save", submission: { ...source, assignee: "Thu Hà", activities: [{ id: "a", content: "Đã gọi điện", author: "Thu Hà", createdAt: new Date().toISOString() }] } });
     const submission = withActivity.submissions.find((item) => item.id === "sub-1");
     expect(submission?.assignee).toBe("Thu Hà");
     expect(submission?.activities[0].content).toBe("Đã gọi điện");
@@ -41,13 +43,13 @@ describe("admin reducer", () => {
 
 describe("filter và validation", () => {
   it("lọc sản phẩm theo từ khóa và trạng thái", () => {
-    expect(filterProducts(initialAdminState.products, "petal", "active").map((item) => item.slug)).toEqual(["petal-pack"]);
-    expect(filterProducts(initialAdminState.products, "", "draft")).toHaveLength(1);
+    expect(filterProducts(legacyAdminFixture.products, "petal", "active").map((item) => item.slug)).toEqual(["petal-pack"]);
+    expect(filterProducts(legacyAdminFixture.products, "", "draft")).toHaveLength(1);
   });
 
   it("bắt slug trùng và mô tả quá ngắn", () => {
-    const invalid = { ...initialAdminState.products[0], id: "another", shortDescription: "Ngắn" };
-    const errors = validateProduct(invalid, initialAdminState.products, invalid.id);
+    const invalid = { ...legacyAdminFixture.products[0], id: "another", shortDescription: "Ngắn" };
+    const errors = validateProduct(invalid, legacyAdminFixture.products, invalid.id);
     expect(errors.slug).toBe("Slug này đã được sử dụng.");
     expect(errors.shortDescription).toBeTruthy();
   });

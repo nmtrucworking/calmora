@@ -1,6 +1,13 @@
 import type { AdminState } from "./types";
 
 export const initialAdminState: AdminState = {
+  products: [],
+  qrRecords: [],
+  submissions: [],
+  analytics: [],
+};
+
+export const legacyAdminFixture: AdminState = {
   products: [
     {
       id: "classic",

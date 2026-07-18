@@ -1,12 +1,17 @@
 import { resolveQrCode } from "@features/qr/services/qrRegistry";
 import type { QrResolveResult } from "@features/qr/types/qr";
 import type { ApiResponse } from "@shared/api/submissions";
-import { getApiBaseUrl, hasApiBaseUrl } from "@shared/api/config";
+import { canUseDevFixtures, getApiBaseUrl, hasApiBaseUrl } from "@shared/api/config";
 
 export async function resolveQr(code: string): Promise<QrResolveResult> {
-  if (!hasApiBaseUrl()) {
+  if (canUseDevFixtures()) {
     return resolveQrCode(code);
   }
+  if (!hasApiBaseUrl()) return {
+    code: code.trim().toUpperCase(),
+    status: "unknown",
+    message: "QR service is not configured.",
+  };
 
   try {
     const response = await fetch(`${getApiBaseUrl()}/api/qr/${encodeURIComponent(code)}`);
