@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { AdminApiError, listAdminSubmissions } from "./adminApi";
+import { AdminApiError, listAdminSubmissions, loginAdmin, logoutAdmin } from "./adminApi";
 
 afterEach(() => {
   vi.unstubAllEnvs();
@@ -28,6 +28,33 @@ describe("admin API adapter", () => {
     await expect(listAdminSubmissions()).rejects.toEqual(
       new AdminApiError("VERSION_CONFLICT", "Reload", 409),
     );
+  });
+
+  it("hydrates the cross-origin CSRF token after login", async () => {
+    vi.stubEnv("VITE_API_BASE_URL", "https://api.test");
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ success: true, data: { name: "Admin", email: "admin@senova.test", role: "admin" } }),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ success: true, data: { csrfToken: "cross-origin-token" } }),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ success: true, data: { loggedOut: true } }),
+      });
+    vi.stubGlobal("fetch", fetchMock);
+
+    await loginAdmin("admin@senova.test", "correct-horse-battery-staple");
+    await logoutAdmin();
+
+    expect(fetchMock.mock.calls[1][0]).toBe("https://api.test/api/v1/auth/csrf");
+    expect(fetchMock.mock.calls[2][1]).toMatchObject({
+      credentials: "include",
+      headers: expect.objectContaining({ "X-CSRF-Token": "cross-origin-token" }),
+    });
   });
 
   it("reports an actionable error for an empty 404 response", async () => {
