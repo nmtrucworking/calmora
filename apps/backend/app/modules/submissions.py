@@ -67,16 +67,7 @@ class SubmissionService:
     @staticmethod
     def _validate(kind: SubmissionKind, payload: dict[str, Any]) -> None:
         required = {
-            "feedback": [
-                "skuOrLot",
-                "source",
-                "contentViewed",
-                "sensoryFeedback",
-                "acceptablePriceRange",
-                "purchaseIntentPurpose",
-                "optInConsent",
-                "productSlug",
-            ],
+            "feedback": ["contentViewed", "optInConsent", "productSlug"],
             "sample-interest": [
                 "name",
                 "email",
@@ -94,6 +85,17 @@ class SubmissionService:
         missing = [field for field in required[kind] if not payload.get(field)]
         if missing:
             raise DomainError(422, "VALIDATION_ERROR", f"Missing required fields: {', '.join(missing)}")
+        if kind == "feedback":
+            is_quick_feedback = bool(payload.get("mostMemorable")) and isinstance(payload.get("clarityScore"), int)
+            is_detailed_feedback = all(
+                payload.get(field)
+                for field in ("sensoryFeedback", "acceptablePriceRange", "purchaseIntentPurpose")
+            )
+            if not is_quick_feedback and not is_detailed_feedback:
+                raise DomainError(422, "VALIDATION_ERROR", "Feedback answers are incomplete.")
+            clarity_score = payload.get("clarityScore")
+            if clarity_score is not None and (isinstance(clarity_score, bool) or not 1 <= clarity_score <= 5):
+                raise DomainError(422, "VALIDATION_ERROR", "clarityScore must be between 1 and 5.")
         email = payload.get("email")
         if email and not re.fullmatch(r"[^\s@]+@[^\s@]+\.[^\s@]+", str(email)):
             raise DomainError(422, "VALIDATION_ERROR", "Email is invalid.")

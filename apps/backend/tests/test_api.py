@@ -211,6 +211,49 @@ def test_preorder_requires_zalo_and_policy_consent(client: TestClient):
     assert "policyConsent" in missing_policy.json()["error"]["message"]
 
 
+def test_quick_feedback_uses_qr_metadata_without_personal_fields(client: TestClient, storage):
+    response = client.post(
+        "/api/submissions",
+        json={
+            "kind": "feedback",
+            "payload": {
+                "productId": "petal-pack",
+                "productSlug": "petal-pack",
+                "qrCode": "PP-2601-A",
+                "batchCode": "PP-2601-A",
+                "contentVersion": "v2",
+                "contentViewed": "petal-pack-ritual",
+                "completedStep": "complete",
+                "mostMemorable": "aroma",
+                "clarityScore": 5,
+                "comment": "",
+                "locale": "vi",
+                "optInConsent": True,
+            },
+        },
+    )
+    assert response.status_code == 200
+    stored = storage.submissions[response.json()["data"]["id"]]["payload"]
+    assert stored["mostMemorable"] == "aroma"
+    assert "email" not in stored
+    assert "skuOrLot" not in stored
+
+    invalid = client.post(
+        "/api/submissions",
+        json={
+            "kind": "feedback",
+            "payload": {
+                "productSlug": "petal-pack",
+                "contentViewed": "ritual",
+                "optInConsent": True,
+                "mostMemorable": "aroma",
+                "clarityScore": 6,
+            },
+        },
+    )
+    assert invalid.status_code == 422
+
+
 def test_analytics_allowlist_and_persistence(client: TestClient, storage):
     accepted = client.post("/api/analytics/events", json={"eventName": "product_view", "productSlug": "classic"})
     assert accepted.status_code == 200
