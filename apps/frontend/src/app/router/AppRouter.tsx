@@ -29,6 +29,7 @@ const loadContactPage = () => import("@features/inquiry/pages/ContactPage");
 const loadPartnersPage = () => import("@features/inquiry/pages/PartnersPage");
 const loadThankYouPage = () => import("@features/inquiry/pages/ThankYouPage");
 const loadQrRedirectPage = () => import("@features/qr/pages/QrRedirectPage");
+const loadTracePage = () => import("@features/trace/pages/TracePage");
 const loadNotFoundPage = () => import("@features/system/pages/NotFoundPage");
 const loadCommercePages = () => import("@features/commerce/pages");
 const loadAdminApp = () => import("@features/admin/AdminApp");
@@ -45,6 +46,7 @@ const ContactPage = lazy(loadContactPage);
 const PartnersPage = lazy(loadPartnersPage);
 const ThankYouPage = lazy(loadThankYouPage);
 const QrRedirectPage = lazy(loadQrRedirectPage);
+const TracePage = lazy(loadTracePage);
 const NotFoundPage = lazy(loadNotFoundPage);
 const CollectionsPage = lazy(() =>
   loadCommercePages().then((module) => ({ default: module.CollectionsPage })),
@@ -381,9 +383,16 @@ function updateMetadata(pathname: string, language: Language) {
         robots: "noindex,follow",
       }
     : undefined;
-  const fallbackSeo: SeoContent = qrSeo ?? pageSeo[pathname] ?? product?.seo ?? pageSeo["/404"];
+  const traceSeo: SeoContent | undefined = pathname.startsWith("/trace/")
+    ? {
+        title: "Truy xuất sản phẩm Senova | Calmora",
+        description: "Kiểm tra nguồn gốc lô, trạng thái kích hoạt và bằng chứng dữ liệu của sản phẩm Senova.",
+        robots: "noindex,follow",
+      }
+    : undefined;
+  const fallbackSeo: SeoContent = traceSeo ?? qrSeo ?? pageSeo[pathname] ?? product?.seo ?? pageSeo["/404"];
   const seo = getLocalizedSeo(pathname, fallbackSeo, language);
-  const canonicalPath = qrSeo || pageSeo[pathname] || commerceText[language].seo[pathname] || product ? pathname : "/404";
+  const canonicalPath = traceSeo || qrSeo || pageSeo[pathname] || commerceText[language].seo[pathname] || product ? pathname : "/404";
   const canonical = `${canonicalBaseUrl}${canonicalPath === "/" ? "" : canonicalPath}`;
   const image = seo.image ?? `${canonicalBaseUrl}/assets/brand/calmora-mark.png`;
 
@@ -418,6 +427,7 @@ function PublicRoutes() {
   const journalSlug = normalizedPath.split("/")[2] ?? "";
   const product = getProductBySlug(productSlug);
   const qrCode = normalizedPath.startsWith("/q/") ? normalizedPath.replace("/q/", "") : "";
+  const traceCode = normalizedPath.startsWith("/trace/") ? normalizedPath.replace("/trace/", "") : "";
   const serviceContent = commerceText[language].services[normalizedPath];
   const policyContent = commerceText[language].policies[normalizedPath];
 
@@ -504,6 +514,8 @@ function PublicRoutes() {
     pageComponent = <StandardPage content={standardPages["/terms"]} />;
   } else if (qrCode) {
     pageComponent = <QrRedirectPage code={qrCode} />;
+  } else if (traceCode) {
+    pageComponent = <TracePage publicCode={traceCode} />;
   } else {
     pageComponent = <NotFoundPage />;
   }

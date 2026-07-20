@@ -111,7 +111,8 @@ export default function QrRedirectPage({ code }: QrRedirectPageProps) {
       });
 
       timer = window.setTimeout(() => {
-        if (!resolvedResult.redirectUrl) return;
+        const target = resolvedResult.traceUrl ?? resolvedResult.redirectUrl;
+        if (!target) return;
 
         trackEvent({
           eventName: "qr_redirect_success",
@@ -122,7 +123,7 @@ export default function QrRedirectPage({ code }: QrRedirectPageProps) {
           contentVersion: resolvedResult.contentVersion,
           destination: resolvedResult.destination,
         });
-        navigate(resolvedResult.redirectUrl);
+        navigate(target);
       }, 320);
     });
 
@@ -151,7 +152,7 @@ export default function QrRedirectPage({ code }: QrRedirectPageProps) {
     <section className={styles.qrPanel}>
       <QrCode className={styles.qrIcon} aria-hidden="true" />
       <p className={styles.eyebrow}>QR Senova</p>
-      <h1>Dang mo trai nghiem {result.productSlug}.</h1>
+      <h1>{result.flowType === "experience" || !result.flowType ? "Dang mo trai nghiem" : "Dang mo ho so truy xuat"} {result.productSlug}.</h1>
       <p className={styles.bodyText}>Ma lo {result.batchCode ?? result.code} dang duoc ghi nhan.</p>
       {result.contentVersion ? <span className={styles.statusBadge}>Noi dung {result.contentVersion}</span> : null}
     </section>

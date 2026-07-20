@@ -24,6 +24,8 @@ export type QrResolveResult = {
   contentViewed?: string;
   destination?: string;
   redirectUrl?: string;
+  traceUrl?: string;
+  flowType?: "experience" | "unit-trace" | "batch-trace";
   status: QrStatus | "unknown";
   message?: string;
 };
