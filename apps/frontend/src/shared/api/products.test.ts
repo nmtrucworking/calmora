@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { fetchProducts } from "@shared/api/products";
+import { fetchCancellationPolicy, fetchProducts } from "@shared/api/products";
 
 afterEach(() => vi.unstubAllGlobals());
 
@@ -27,5 +27,23 @@ describe("product API adapter", () => {
     await expect(fetchProducts()).rejects.toEqual(
       expect.objectContaining({ code: "CATALOG_UNAVAILABLE", message: "Unavailable", name: "CatalogApiError" }),
     );
+  });
+
+  it("loads the backend cancellation policy", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({
+          success: true,
+          data: {
+            id: "senova-preorder-v1",
+            stages: { paidBeforePreparation: { refundPercent: 90 } },
+          },
+        }),
+      }),
+    );
+    const policy = await fetchCancellationPolicy("senova-preorder-v1");
+    expect(policy.stages.paidBeforePreparation.refundPercent).toBe(90);
   });
 });

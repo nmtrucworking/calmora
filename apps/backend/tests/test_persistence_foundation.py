@@ -13,6 +13,7 @@ def test_m1_metadata_contains_durable_public_tables():
     assert {
         "products",
         "product_variants",
+        "cancellation_policies",
         "qr_records",
         "qr_experience_contents",
         "qr_batch_overrides",
@@ -27,4 +28,6 @@ def test_m1_metadata_contains_durable_public_tables():
 def test_seed_is_valid_and_hash_is_stable():
     seed = load_and_validate()
     assert [product["slug"] for product in seed["products"]] == ["classic", "petal-pack", "gift-set"]
+    assert [policy["id"] for policy in seed["cancellation_policies"]] == ["senova-preorder-v1"]
+    assert all(product["metadata"]["contentVersion"] == "p0.2" for product in seed["products"])
     assert canonical_hash({"b": 2, "a": 1}) == canonical_hash({"a": 1, "b": 2})

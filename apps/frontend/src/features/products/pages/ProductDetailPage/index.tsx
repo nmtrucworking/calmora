@@ -117,6 +117,12 @@ export default function ProductDetailPage({ product: baseProduct }: ProductDetai
     return <ProductNotFound />;
   }
 
+  const selectedVariantData = product.variants.find((variant) => variant.id === selectedVariant) ?? product.variants[0];
+  const enabledDeliveryScopes = selectedVariantData?.deliveryScopes?.filter((scope) => scope.enabled) ?? [];
+  const unavailableStatuses = ["TEMPORARILY_UNAVAILABLE", "SOLD_OUT", "DISCONTINUED"];
+  const canPreorder =
+    selectedVariantData?.available !== false &&
+    !unavailableStatuses.includes(baseProduct.commerce?.status ?? "PRE_ORDER");
   const relatedProducts = orderedLuxuryProducts.filter((productId) => productId !== baseProduct.id);
 
   return (
@@ -169,16 +175,37 @@ export default function ProductDetailPage({ product: baseProduct }: ProductDetai
                     </button>
                   ))}
                 </div>
+                <div className="grid gap-2 border-t border-[rgba(243,239,229,0.14)] pt-4 text-[0.88rem] text-text-inverse-muted">
+                  <p className="m-0">
+                    Thời gian chuẩn bị: {selectedVariantData?.preparationTime
+                      ? `${selectedVariantData.preparationTime.min}–${selectedVariantData.preparationTime.max} ngày làm việc`
+                      : "Senova sẽ xác nhận sau khi nhận yêu cầu"}
+                  </p>
+                  <p className="m-0">
+                    Phạm vi giao hàng: {enabledDeliveryScopes.length
+                      ? enabledDeliveryScopes.map((scope) => scope.label).join(", ")
+                      : "Xác nhận theo sản phẩm"}
+                  </p>
+                  {selectedVariantData?.preparationTime?.isAssumption ? (
+                    <p className="m-0 text-[0.78rem] text-accent-gold">Thông tin dự kiến, đang được kiểm chứng.</p>
+                  ) : null}
+                </div>
               </div>
 
               <div className="mt-8 flex flex-wrap gap-4">
-                <LuxuryButton
-                  href={`/order-request?product=${baseProduct.id}&variant=${selectedVariant}&quantity=1&intent=personal&source=product-detail`}
-                  variant="dark"
-                >
-                  {copy.addToBag}
-                  <ArrowRight aria-hidden="true" className="h-4 w-4" />
-                </LuxuryButton>
+                {canPreorder ? (
+                  <LuxuryButton
+                    href={`/order-request?product=${baseProduct.id}&variant=${selectedVariant}&quantity=1&intent=personal&source=product-detail`}
+                    variant="dark"
+                  >
+                    {copy.addToBag}
+                    <ArrowRight aria-hidden="true" className="h-4 w-4" />
+                  </LuxuryButton>
+                ) : (
+                  <span className="inline-flex min-h-11 items-center border border-[rgba(243,239,229,0.3)] px-5 text-sm text-text-inverse-muted">
+                    Tạm ngừng nhận đặt trước
+                  </span>
+                )}
                 <LuxuryButton href={`/experience/${baseProduct.id}`} variant="light">
                   {language === "vi" ? "Xem nghi thức sử dụng" : "View usage ritual"}
                 </LuxuryButton>

@@ -28,7 +28,9 @@ class Services:
 
 def build_services(settings: Settings, repository: Any, seed_dir: Path) -> Services:
     catalog_repository = (
-        repository if all(hasattr(repository, name) for name in ("list", "get")) else CatalogRepository(seed_dir)
+        repository
+        if all(hasattr(repository, name) for name in ("list", "get", "get_policy"))
+        else CatalogRepository(seed_dir)
     )
     qr_repository = (
         repository

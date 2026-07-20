@@ -73,8 +73,8 @@ def test_legacy_data_is_preserved_and_status_is_migrated():
 def test_seed_is_idempotent_and_api_reads_database():
     first = import_seeds()
     second = import_seeds()
-    assert first == {"products": 3, "variants": 6, "qrRecords": 6, "contents": 6, "overrides": 3}
-    assert second == {"products": 0, "variants": 0, "qrRecords": 0, "contents": 0, "overrides": 0}
+    assert first == {"products": 3, "variants": 6, "policies": 1, "qrRecords": 6, "contents": 6, "overrides": 3}
+    assert second == {"products": 0, "variants": 0, "policies": 0, "qrRecords": 0, "contents": 0, "overrides": 0}
 
     settings = Settings(app_env="test", database_url=_psycopg_url(), receipt_secret="integration-secret")
     app = create_app(settings, SqlAlchemyRepository())
@@ -83,8 +83,10 @@ def test_seed_is_idempotent_and_api_reads_database():
         assert [item["slug"] for item in client.get("/api/v1/products").json()["data"]] == [
             "classic",
             "petal-pack",
+            "gift-set",
         ]
-        assert client.get("/api/v1/products/gift-set").status_code == 404
+        assert client.get("/api/v1/products/gift-set").status_code == 200
+        assert client.get("/api/v1/cancellation-policies/senova-preorder-v1").status_code == 200
         assert client.get("/api/qr/PP-2601-A").json()["data"]["status"] == "active"
 
         payload = {

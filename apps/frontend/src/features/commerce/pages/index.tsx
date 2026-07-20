@@ -31,6 +31,8 @@ import { products, type ProductId } from "@features/products/data/products";
 import { submitForm } from "@shared/api/submissions";
 import { useProductCatalog } from "@app/providers/ProductCatalogContext";
 import { trackEvent } from "@shared/analytics/analytics";
+import { fetchCancellationPolicy, type CancellationPolicy } from "@shared/api/products";
+import { hasApiBaseUrl } from "@shared/api/config";
 import { luxuryMotion } from "@shared/styles/luxuryEffects";
 import { cx } from "@shared/utils/classNames";
 
@@ -376,10 +378,23 @@ export function CheckoutPage() {
     : [];
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [cancellationPolicy, setCancellationPolicy] = useState<CancellationPolicy>();
 
   useEffect(() => {
     trackEvent({ eventName: "checkout_start", source: params.get("source") ?? "direct", productSlug: queryProduct?.slug });
   }, [params, queryProduct?.slug]);
+
+  useEffect(() => {
+    const policyId = selectedVariant?.cancellationPolicyId ?? selectedProduct?.commerce?.cancellationPolicyId;
+    if (!policyId || !hasApiBaseUrl()) return;
+    const controller = new AbortController();
+    void fetchCancellationPolicy(policyId, controller.signal)
+      .then(setCancellationPolicy)
+      .catch((reason: unknown) => {
+        if (!(reason instanceof DOMException && reason.name === "AbortError")) setCancellationPolicy(undefined);
+      });
+    return () => controller.abort();
+  }, [selectedProduct?.commerce?.cancellationPolicyId, selectedVariant?.cancellationPolicyId]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -512,6 +527,21 @@ export function CheckoutPage() {
             <input className="mt-1" name="policyConsent" type="checkbox" value="yes" required />
             <span>Đây là yêu cầu đặt trước, chưa phải giao dịch thanh toán trực tiếp. Tôi đồng ý để Senova xác nhận cấu hình, lịch giao và chính sách hủy trước khi chuyển khoản.</span>
           </label>
+          {cancellationPolicy ? (
+            <details className="rounded-lg border border-border-strong p-4 text-sm leading-relaxed text-text-muted">
+              <summary className="cursor-pointer font-bold text-primary-strong">Chính sách hủy và hoàn tiền</summary>
+              <ul className="mb-0 grid gap-2 pl-5">
+                <li>{cancellationPolicy.stages.paidBeforePreparation.description}: hoàn {cancellationPolicy.stages.paidBeforePreparation.refundPercent}%.</li>
+                <li>{cancellationPolicy.stages.preparingStandardProduct.description}: hoàn {cancellationPolicy.stages.preparingStandardProduct.refundPercent}%.</li>
+                <li>{cancellationPolicy.stages.customizedProduct.description}: hoàn {cancellationPolicy.stages.customizedProduct.refundPercent}%.</li>
+                <li>{cancellationPolicy.stages.handedToCarrier.description}: không hỗ trợ hủy.</li>
+              </ul>
+            </details>
+          ) : (
+            <p className="m-0 text-sm leading-relaxed text-text-muted">
+              Mức hoàn tiền phụ thuộc trạng thái chuẩn bị và sẽ được Senova xác nhận trước khi chuyển khoản.
+            </p>
+          )}
           {error ? (
             <p className="m-0 rounded-lg border border-[rgba(185,86,114,0.26)] bg-[rgba(185,86,114,0.08)] px-4 py-3 text-[0.9rem] font-bold text-accent-strong" role="alert">
               {error}
@@ -533,7 +563,19 @@ export function CheckoutPage() {
                   <p className="m-0 text-[0.95rem] font-bold text-primary-strong">{item.quantity} × {product.name}</p>
                   {variant ? <p className="m-0 text-sm text-text-muted">{variant.label}</p> : null}
                   <p className="m-0 text-sm text-text-muted">Giá dự kiến: {baseProduct?.priceLabel || "Liên hệ để nhận giá dự kiến"}</p>
-                  <p className="m-0 text-sm text-text-muted">{baseProduct?.shippingNote || "Senova sẽ xác nhận thời gian chuẩn bị và phạm vi giao hàng."}</p>
+                  <p className="m-0 text-sm text-text-muted">
+                    Thời gian chuẩn bị: {variant?.preparationTime
+                      ? `${variant.preparationTime.min}–${variant.preparationTime.max} ngày làm việc`
+                      : "Senova sẽ xác nhận sau khi nhận yêu cầu"}
+                  </p>
+                  <p className="m-0 text-sm text-text-muted">
+                    Phạm vi giao hàng: {variant?.deliveryScopes?.some((scope) => scope.enabled)
+                      ? variant.deliveryScopes.filter((scope) => scope.enabled).map((scope) => scope.label).join(", ")
+                      : "Xác nhận theo sản phẩm"}
+                  </p>
+                  {variant?.preparationTime?.isAssumption ? (
+                    <p className="m-0 text-xs font-bold text-accent-strong">Thông tin dự kiến, đang được kiểm chứng.</p>
+                  ) : null}
                 </div>
               ) : null;
             })

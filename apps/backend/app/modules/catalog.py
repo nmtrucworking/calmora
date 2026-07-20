@@ -9,11 +9,19 @@ from typing import Any
 from fastapi import APIRouter, Request, Response
 
 from app.core.errors import DomainError, success
+from app.modules.catalog_models import CancellationPolicyContract, ProductContract
 
 
 class CatalogRepository:
     def __init__(self, seed_dir: Path):
-        self._products: list[dict[str, Any]] = _load_seed(seed_dir / "products.json")
+        self._products = [
+            ProductContract.model_validate(item).model_dump(mode="json")
+            for item in _load_seed(seed_dir / "products.json")
+        ]
+        self._policies = [
+            CancellationPolicyContract.model_validate(item).model_dump(mode="json")
+            for item in _load_seed(seed_dir / "cancellation_policies.json")
+        ]
 
     def list(self, published_only: bool = False) -> list[dict[str, Any]]:
         products = self._products
@@ -34,6 +42,17 @@ class CatalogRepository:
         )
         return deepcopy(item) if item else None
 
+    def get_policy(self, policy_id: str, active_only: bool = True) -> dict[str, Any] | None:
+        item = next(
+            (
+                policy
+                for policy in self._policies
+                if policy.get("id") == policy_id and (not active_only or policy.get("status") == "active")
+            ),
+            None,
+        )
+        return deepcopy(item) if item else None
+
 
 class CatalogService:
     def __init__(self, repository: CatalogRepository):
@@ -47,6 +66,12 @@ class CatalogService:
         if not product:
             raise DomainError(404, "PRODUCT_NOT_FOUND", "Product was not found.")
         return product
+
+    def get_cancellation_policy(self, policy_id: str, active_only: bool = True) -> dict[str, Any]:
+        policy = self.repository.get_policy(policy_id, active_only=active_only)
+        if not policy:
+            raise DomainError(404, "CANCELLATION_POLICY_NOT_FOUND", "Cancellation policy was not found.")
+        return policy
 
     def snapshot_item(self, item: dict[str, Any]) -> dict[str, Any]:
         product_id = str(item.get("productId") or item.get("productSlug") or "")
@@ -109,4 +134,13 @@ async def get_product(slug: str, request: Request):
     return _cached_response(
         request,
         request.app.state.services.catalog.get_product(slug, published_only=published_only),
+    )
+
+
+@router.get("/cancellation-policies/{policy_id}", response_model=None)
+async def get_cancellation_policy(policy_id: str, request: Request):
+    active_only = request.url.path.startswith(f"{request.app.state.settings.api_prefix}/v1/")
+    return _cached_response(
+        request,
+        request.app.state.services.catalog.get_cancellation_policy(policy_id, active_only=active_only),
     )

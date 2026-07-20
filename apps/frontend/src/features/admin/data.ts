@@ -18,7 +18,7 @@ export const legacyAdminFixture: AdminState = {
       tagline: "Giữ hương sen trong nhịp sống mỗi ngày.",
       shortDescription: "Dòng trà hương sen nền tảng cho nghi thức thưởng trà hằng ngày.",
       image: "/assets/products/classic-pack-optimized.jpg",
-      priceLabel: "Từ 320.000 VND",
+      priceLabel: "Liên hệ để nhận giá dự kiến",
       availability: "Đang nhận đặt trước theo lô nhỏ",
       status: "active",
       variants: [
@@ -36,7 +36,7 @@ export const legacyAdminFixture: AdminState = {
       tagline: "Mở một cánh sen, bắt đầu một khoảng lặng.",
       shortDescription: "Phần trà một ly trong hình dáng búp sen, kết nối cùng trải nghiệm QR.",
       image: "/assets/products/petal-pack-optimized.jpg",
-      priceLabel: "Từ 480.000 VND",
+      priceLabel: "Liên hệ để nhận giá dự kiến",
       availability: "Lô PP-2601-A đang nhận inquiry",
       status: "active",
       variants: [

@@ -46,6 +46,22 @@ product_variants = Table(
 )
 Index("idx_product_variants_product", product_variants.c.product_id)
 
+cancellation_policies = Table(
+    "cancellation_policies",
+    metadata,
+    Column("id", String(120), primary_key=True),
+    Column("version", String(40), nullable=False),
+    Column("status", String(32), nullable=False),
+    Column("data", JSONB, nullable=False),
+    Column("seed_key", String(160), nullable=True),
+    Column("seed_hash", String(64), nullable=True),
+    Column("created_at", TIMESTAMP(timezone=True), nullable=False),
+    Column("updated_at", TIMESTAMP(timezone=True), nullable=False),
+    CheckConstraint("status IN ('draft','active','archived')", name="cancellation_policies_status_check"),
+    UniqueConstraint("id", "version", name="cancellation_policies_id_version_key"),
+)
+Index("idx_cancellation_policies_status", cancellation_policies.c.status)
+
 collections = Table(
     "collections",
     metadata,

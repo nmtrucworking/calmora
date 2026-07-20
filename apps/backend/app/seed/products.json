@@ -2,116 +2,347 @@
   {
     "id": "classic",
     "slug": "classic",
+    "sku": "SEN-CLS-10",
     "name": "Senova Classic",
+    "shortName": "Classic",
+    "productLine": "CLASSIC",
     "line": "classic",
     "eyebrow": "GIỮ / Nghi thức hằng ngày",
     "role": "Giữ",
     "tagline": "Giữ hương sen trong nhịp sống mỗi ngày.",
     "shortDescription": "Dành cho những khoảng lặng có thể lặp lại mỗi ngày.",
+    "fullDescription": "Dòng trà hương sen nền tảng, được trình bày trong hình thức thuận tiện để pha và thưởng thức thường xuyên.",
     "description": "Dòng trà hương sen nền tảng, được trình bày trong hình thức thuận tiện để pha và thưởng thức thường xuyên.",
     "href": "/products/classic",
     "image": "/assets/products/classic-pack-optimized.jpg",
     "status": "active",
-    "priceLabel": "Từ 320.000 VND",
-    "availability": "Mở danh sách đặt trước theo lô nhỏ",
+    "priceLabel": "Liên hệ để nhận giá dự kiến",
+    "availability": "Đang nhận yêu cầu đặt trước",
+    "commerce": {
+      "status": "PRE_ORDER",
+      "statusLabel": "Đang nhận yêu cầu đặt trước",
+      "priceType": "CONTACT",
+      "currency": "VND",
+      "displayPrice": false,
+      "minimumQuantity": 1,
+      "maximumQuantity": 20,
+      "responseTime": {"min": 1, "max": 2, "unit": "BUSINESS_DAY"},
+      "cancellationPolicyId": "senova-preorder-v1"
+    },
+    "specification": {
+      "ingredients": [{"name": "Trà xanh Thái Nguyên ướp hương sen", "verified": false}],
+      "netWeight": {"value": 20, "unit": "g"},
+      "servings": 10,
+      "unitsPerPackage": 10,
+      "unitDescription": "10 túi lọc, mỗi túi 2 g",
+      "origin": ["Thái Nguyên", "Nguồn sen cập nhật từ backend"],
+      "packagingMaterials": ["Bao bì giấy", "Túi lọc"],
+      "isPrototype": true,
+      "isAssumption": true,
+      "verificationStatus": "IN_TESTING",
+      "contentVersion": "p0.2"
+    },
+    "brewing": {
+      "waterTemperature": {"min": 80, "max": 85, "unit": "C"},
+      "waterVolume": {"min": 180, "max": 220, "unit": "ml"},
+      "steepingTime": {"min": 3, "max": 4, "unit": "minute"},
+      "maximumInfusions": 2,
+      "steps": [
+        {"id": "open", "order": 1, "title": "Mở gói", "description": "Mở bao bì đơn vị ngay trước khi pha."},
+        {"id": "place", "order": 2, "title": "Đặt túi trà", "description": "Đặt túi trà vào dụng cụ pha."},
+        {"id": "pour", "order": 3, "title": "Rót nước", "description": "Rót nước theo thông số đang hiển thị."},
+        {"id": "wait", "order": 4, "title": "Chờ", "description": "Chờ trà chiết xuất trước khi thưởng thức."}
+      ],
+      "warnings": ["Thông số pha đang trong giai đoạn kiểm chứng."],
+      "isAssumption": true,
+      "verificationStatus": "IN_TESTING",
+      "contentVersion": "p0.2"
+    },
+    "storage": {
+      "shelfLifeMonths": 9,
+      "storageInstructions": ["Bảo quản nơi khô ráo, thoáng mát.", "Tránh ánh nắng trực tiếp."],
+      "afterOpeningInstructions": "Sử dụng ngay sau khi mở bao bì đơn vị.",
+      "isAssumption": true,
+      "verificationStatus": "IN_TESTING",
+      "contentVersion": "p0.2"
+    },
+    "safety": {
+      "allergenInformation": [],
+      "usageWarnings": ["Không sử dụng nếu bao bì hoặc sản phẩm có dấu hiệu hư hỏng."],
+      "foodSafetyStatus": "IN_TESTING",
+      "microbiologyTested": false,
+      "moistureTested": false,
+      "isAssumption": true,
+      "verificationStatus": "IN_TESTING",
+      "contentVersion": "p0.2"
+    },
+    "fulfillment": {
+      "deliveryScopes": [{"code": "VN", "label": "Toàn quốc", "enabled": true}],
+      "pickupAvailable": false,
+      "shippingFeeType": "CONFIRMED_LATER",
+      "fragile": false,
+      "requiresSpecialPackaging": false,
+      "deliveryNotes": "Phạm vi và phí giao hàng được xác nhận theo từng yêu cầu.",
+      "isAssumption": true,
+      "verificationStatus": "IN_TESTING",
+      "contentVersion": "p0.2"
+    },
     "variants": [
-      {"id": "daily-box", "label": "Hộp 12 gói", "note": "Nhịp thưởng trà hằng ngày"},
-      {"id": "trial-set", "label": "Bộ thử 3 gói", "note": "Dành cho lần chạm đầu tiên"}
+      {
+        "id": "daily-box", "sku": "SEN-CLS-10", "label": "Hộp 10 túi lọc", "note": "Nhịp thưởng trà hằng ngày",
+        "currency": "VND", "priceType": "CONTACT", "unitsPerPackage": 10, "minimumQuantity": 1, "maximumQuantity": 20,
+        "preparationTime": {"min": 3, "max": 5, "unit": "BUSINESS_DAY", "isAssumption": true},
+        "deliveryScopes": [{"code": "VN", "label": "Toàn quốc", "enabled": true}],
+        "available": true, "cancellationPolicyId": "senova-preorder-v1"
+      },
+      {
+        "id": "trial-set", "sku": "SEN-CLS-03", "label": "Bộ thử 3 túi", "note": "Dành cho lần chạm đầu tiên",
+        "currency": "VND", "priceType": "CONTACT", "unitsPerPackage": 3, "minimumQuantity": 1, "maximumQuantity": 20,
+        "preparationTime": {"min": 3, "max": 5, "unit": "BUSINESS_DAY", "isAssumption": true},
+        "deliveryScopes": [{"code": "VN", "label": "Toàn quốc", "enabled": true}],
+        "available": true, "cancellationPolicyId": "senova-preorder-v1"
+      }
     ],
-    "includedItems": ["Trà hương sen định lượng từng lần pha", "Thẻ hướng dẫn pha", "Bao bì giấy mỹ thuật có niêm phong"],
-    "dimensions": "Hộp 12 x 8 x 5 cm",
-    "brewingNotes": ["Dùng 180 ml nước nóng", "Chờ 4-5 phút", "Thưởng thức khi hương sen vừa mở"],
-    "shippingNote": "Dự kiến giao trong 3-5 ngày làm việc sau khi concierge xác nhận.",
-    "giftOptions": ["Thêm thiệp lời nhắn", "Gói giấy lụa", "Lên lịch giao theo ngày"],
-    "badges": ["Everyday ritual", "Single serve", "Preorder"],
+    "experience": {
+      "ritualAvailable": true,
+      "ritualSlug": "classic",
+      "steps": [],
+      "story": {"summary": "Giữ một khoảng chậm trong nhịp sống mỗi ngày.", "fullContentUrl": "/story"},
+      "qrEnabled": true
+    },
+    "media": {
+      "thumbnail": "/assets/products/classic-pack-optimized.jpg",
+      "heroImage": "/assets/products/classic-pack-optimized.jpg",
+      "gallery": [],
+      "instructionImages": [],
+      "altText": "Hộp trà hương sen Senova Classic"
+    },
+    "includedItems": ["Trà hương sen định lượng từng lần pha", "Thẻ hướng dẫn pha", "Bao bì có niêm phong"],
+    "dimensions": "Thông tin kích thước đang được cập nhật",
+    "brewingNotes": ["Thông số pha đang được hoàn thiện"],
+    "shippingNote": "Senova sẽ xác nhận thời gian chuẩn bị và phạm vi giao hàng sau khi nhận yêu cầu.",
+    "giftOptions": ["Thêm thiệp lời nhắn"],
+    "badges": ["Nghi thức hằng ngày", "Đặt trước"],
     "primaryAction": {"label": "Mở trải nghiệm Classic", "href": "/experience/classic"},
-    "secondaryAction": {"label": "Đăng ký đặt trước", "href": "/order-request?product=classic"},
+    "secondaryAction": {"label": "Gửi yêu cầu đặt trước", "href": "/order-request?product=classic"},
     "heroAlt": "Hộp trà hương sen Senova Classic",
-    "suitableFor": ["Sử dụng hằng ngày", "Khoảng nghỉ tại nhà hoặc nơi làm việc", "Người mới tiếp cận trà hương sen"],
-    "highlights": ["Định lượng cho một lần pha", "Thao tác gọn và dễ hình thành thói quen", "Điểm vào phù hợp cho người mới"],
-    "experienceSteps": [
-      {"title": "Mở gói", "text": "Lấy một phần trà đã được định lượng."},
-      {"title": "Pha trà", "text": "Thực hiện theo hướng dẫn trên bao bì."},
-      {"title": "Giữ một khoảng chậm", "text": "Để hương sen và vị trà dần hiện ra."}
-    ],
-    "seo": {"title": "Senova Classic | Calmora", "description": "Trà hương sen cho nhịp thưởng trà hằng ngày."}
+    "suitableFor": ["Sử dụng hằng ngày", "Người mới tiếp cận trà hương sen"],
+    "highlights": ["Định lượng cho một lần pha", "Thao tác gọn"],
+    "experienceSteps": [{"title": "Mở gói", "text": "Mở bao bì đơn vị."}, {"title": "Pha trà", "text": "Pha theo thông số hiển thị."}],
+    "seo": {
+      "title": "Senova Classic | Calmora",
+      "description": "Trà hương sen cho nhịp thưởng trà hằng ngày.",
+      "keywords": ["Senova", "trà hương sen", "Classic"],
+      "canonicalUrl": "/products/classic"
+    },
+    "metadata": {"contentVersion": "p0.2", "publishedAt": null, "updatedAt": null}
   },
   {
     "id": "petal-pack",
     "slug": "petal-pack",
+    "sku": "SEN-PET-03",
     "name": "Senova Petal Pack",
+    "shortName": "Petal Pack",
+    "productLine": "PETAL_PACK",
     "line": "petal-pack",
     "eyebrow": "MỞ / Trải nghiệm chủ đạo",
     "role": "Mở",
-    "tagline": "Mở một cánh sen, bắt đầu một khoảng lặng.",
-    "shortDescription": "Phần trà một ly trong hình dáng búp sen, kết nối thao tác pha với trải nghiệm giác quan.",
-    "description": "Phần trà cho một lần pha, đặt trong túi lọc và được bao quanh bởi cánh sen sấy tạo hình búp sen.",
+    "tagline": "Mở cánh sen, chạm hương Việt.",
+    "shortDescription": "Một phần trà cho một lần pha, tạo hình thành búp sen.",
+    "fullDescription": "Petal Pack kết hợp trà hương sen định lượng với cánh sen tạo hình búp, giúp thao tác pha trà trở thành một nghi thức trực quan.",
+    "description": "Một phần trà cho một lần pha trong hình dáng búp sen.",
     "href": "/products/petal-pack",
     "image": "/assets/products/petal-pack-optimized.jpg",
     "status": "active",
-    "priceLabel": "Từ 480.000 VND",
-    "availability": "Lô trải nghiệm PP-2601-A đang nhận inquiry",
+    "priceLabel": "Liên hệ để nhận giá dự kiến",
+    "availability": "Đang nhận yêu cầu đặt trước",
+    "commerce": {
+      "status": "PRE_ORDER", "statusLabel": "Đang nhận yêu cầu đặt trước", "priceType": "CONTACT", "currency": "VND",
+      "displayPrice": false, "minimumQuantity": 1, "maximumQuantity": 10,
+      "responseTime": {"min": 1, "max": 2, "unit": "BUSINESS_DAY"}, "cancellationPolicyId": "senova-preorder-v1"
+    },
+    "specification": {
+      "ingredients": [
+        {"name": "Trà xanh Thái Nguyên", "quantity": 2, "unit": "g", "origin": "Thái Nguyên", "verified": false},
+        {"name": "Cánh sen tạo hình búp", "verified": false}
+      ],
+      "servings": 3, "unitsPerPackage": 3, "unitDescription": "3 búp sen cho 3 lần pha",
+      "dimensions": {"height": 5.5, "unit": "cm"},
+      "origin": ["Thái Nguyên", "Nguồn sen cập nhật từ backend"],
+      "packagingMaterials": [], "isPrototype": true, "isAssumption": true,
+      "verificationStatus": "IN_TESTING", "contentVersion": "p0.2"
+    },
+    "brewing": {
+      "waterTemperature": {"min": 80, "max": 85, "unit": "C"},
+      "waterVolume": {"min": 220, "max": 250, "unit": "ml"},
+      "steepingTime": {"min": 5, "max": 7, "unit": "minute"}, "maximumInfusions": 2,
+      "steps": [
+        {"id": "observe", "order": 1, "title": "Quan sát búp sen", "description": "Quan sát hình dáng búp sen trước khi pha."},
+        {"id": "open-lightly", "order": 2, "title": "Tách nhẹ cánh sen", "description": "Tách nhẹ cánh bên ngoài để thưởng hương, không mở rời toàn bộ búp."},
+        {"id": "brew-whole-bud", "order": 3, "title": "Pha nguyên búp sen", "description": "Đặt nguyên búp sen vào dụng cụ pha và rót nước theo thông số hiển thị."},
+        {"id": "wait", "order": 4, "title": "Chờ trà chiết xuất", "description": "Chờ theo thời gian hướng dẫn trước khi thưởng thức."}
+      ],
+      "warnings": ["Thông số pha đang trong giai đoạn kiểm chứng."],
+      "isAssumption": true, "verificationStatus": "IN_TESTING", "contentVersion": "p0.2"
+    },
+    "storage": {
+      "shelfLifeMonths": 6, "storageInstructions": ["Bảo quản nơi khô ráo, thoáng mát.", "Tránh ánh nắng trực tiếp."],
+      "afterOpeningInstructions": "Sử dụng ngay sau khi mở bao bì đơn vị.",
+      "isAssumption": true, "verificationStatus": "IN_TESTING", "contentVersion": "p0.2"
+    },
+    "safety": {
+      "allergenInformation": [], "usageWarnings": ["Không sử dụng sản phẩm có dấu hiệu ẩm mốc hoặc mùi bất thường."],
+      "foodSafetyStatus": "IN_TESTING", "microbiologyTested": false, "moistureTested": false,
+      "isAssumption": true, "verificationStatus": "IN_TESTING", "contentVersion": "p0.2"
+    },
+    "fulfillment": {
+      "deliveryScopes": [{"code": "HCM", "label": "TP. Hồ Chí Minh", "enabled": true}],
+      "pickupAvailable": false, "shippingFeeType": "CONFIRMED_LATER", "fragile": true, "requiresSpecialPackaging": true,
+      "deliveryNotes": "Phạm vi giao hàng được xác nhận theo từng yêu cầu.",
+      "isAssumption": true, "verificationStatus": "IN_TESTING", "contentVersion": "p0.2"
+    },
     "variants": [
-      {"id": "petal-single", "label": "Set 6 Petal Pack", "note": "Trải nghiệm cá nhân"},
-      {"id": "petal-hosting", "label": "Set 18 Petal Pack", "note": "Cho tasting và booth"}
+      {
+        "id": "petal-single", "sku": "SEN-PET-03", "label": "Hộp 3 búp", "note": "Trải nghiệm cá nhân",
+        "currency": "VND", "priceType": "CONTACT", "unitsPerPackage": 3, "minimumQuantity": 1, "maximumQuantity": 10,
+        "preparationTime": {"min": 5, "max": 7, "unit": "BUSINESS_DAY", "isAssumption": true},
+        "deliveryScopes": [{"code": "HCM", "label": "TP. Hồ Chí Minh", "enabled": true}],
+        "available": true, "cancellationPolicyId": "senova-preorder-v1"
+      },
+      {
+        "id": "petal-hosting", "sku": "SEN-PET-09", "label": "Hộp 9 búp", "note": "Cho tasting và sự kiện nhỏ",
+        "currency": "VND", "priceType": "CONTACT", "unitsPerPackage": 9, "minimumQuantity": 1, "maximumQuantity": 10,
+        "preparationTime": {"min": 5, "max": 7, "unit": "BUSINESS_DAY", "isAssumption": true},
+        "deliveryScopes": [{"code": "HCM", "label": "TP. Hồ Chí Minh", "enabled": true}],
+        "available": true, "cancellationPolicyId": "senova-preorder-v1"
+      }
     ],
-    "includedItems": ["Petal Pack tạo hình búp sen", "Trà túi lọc một ly", "Thẻ QR câu chuyện và phản hồi", "Hướng dẫn nghi thức mở - pha"],
-    "dimensions": "Hộp 18 x 12 x 7 cm, mỗi Petal Pack trong khay riêng",
-    "brewingNotes": ["Tách nhẹ cánh sen để thưởng hương", "Pha nguyên búp sen theo thông số hiển thị", "Chờ trà chiết xuất rồi thưởng thức"],
-    "shippingNote": "Concierge xác nhận lịch giao và điều kiện bảo quản.",
-    "giftOptions": ["Thiệp cá nhân hóa", "QR lời nhắn", "Gói riêng từng khách mời"],
-    "badges": ["Signature experience", "QR story", "Limited batch"],
+    "experience": {
+      "ritualAvailable": true, "ritualSlug": "petal-pack", "steps": [],
+      "story": {"summary": "Petal Pack biến một lần pha trà thành nghi thức mở, cảm nhận và thưởng thức.", "fullContentUrl": "/story"},
+      "qrEnabled": true
+    },
+    "media": {
+      "thumbnail": "/assets/products/petal-pack-optimized.jpg", "heroImage": "/assets/products/petal-pack-optimized.jpg",
+      "gallery": [], "instructionImages": [], "altText": "Senova Petal Pack tạo hình búp sen"
+    },
+    "includedItems": ["Petal Pack tạo hình búp sen", "Thẻ QR câu chuyện và phản hồi"],
+    "dimensions": "Thông tin kích thước đang được kiểm chứng",
+    "brewingNotes": ["Tách nhẹ cánh sen để thưởng hương", "Pha nguyên búp sen theo thông số hiển thị"],
+    "shippingNote": "Senova sẽ xác nhận thời gian chuẩn bị và phạm vi giao hàng sau khi nhận yêu cầu.",
+    "giftOptions": ["Thiệp cá nhân hóa"], "badges": ["Trải nghiệm chủ đạo", "QR", "Đặt trước"],
     "primaryAction": {"label": "Bắt đầu trải nghiệm", "href": "/experience/petal-pack"},
-    "secondaryAction": {"label": "Gửi phản hồi", "href": "/feedback/petal-pack"},
-    "batchLabel": "Lô thử nghiệm PP-2601-A",
-    "heroAlt": "Senova Petal Pack tạo hình búp sen với phần trà bên trong",
-    "suitableFor": ["Trải nghiệm thưởng trà mới", "Booth hoặc sự kiện", "Quà tặng nhỏ có tính trải nghiệm"],
-    "highlights": ["Một phần trà cho một lần pha", "Cánh sen tạo hình búp", "QR tiếp nối câu chuyện sản phẩm"],
+    "secondaryAction": {"label": "Gửi yêu cầu đặt trước", "href": "/order-request?product=petal-pack"},
+    "batchLabel": "Lô thử nghiệm PP-2601-A", "heroAlt": "Senova Petal Pack tạo hình búp sen",
+    "suitableFor": ["Trải nghiệm thưởng trà mới", "Quà tặng nhỏ"],
+    "highlights": ["Một phần trà cho một lần pha", "Pha nguyên búp sen", "QR tiếp nối trải nghiệm"],
     "experienceSteps": [
-      {"title": "Mở cánh sen", "text": "Mở nhẹ từng lớp cánh và quan sát cấu trúc."},
-      {"title": "Cảm nhận", "text": "Cảm nhận hình dáng, chất liệu và hương."},
-      {"title": "Pha trà", "text": "Thực hiện theo hướng dẫn trên bao bì."},
-      {"title": "Chờ", "text": "Để hương và vị dần hiện ra."},
-      {"title": "Thưởng thức", "text": "Quan sát màu nước và ghi lại phản hồi."}
+      {"title": "Tách nhẹ cánh sen", "text": "Tách nhẹ phần cánh bên ngoài để thưởng hương."},
+      {"title": "Pha nguyên búp sen", "text": "Đặt nguyên búp sen vào dụng cụ pha."}
     ],
-    "seo": {"title": "Senova Petal Pack | Calmora", "description": "Trải nghiệm trà hương sen bằng hình dáng búp sen và nội dung QR."}
+    "seo": {
+      "title": "Senova Petal Pack | Calmora", "description": "Trải nghiệm trà hương sen trong hình dáng búp sen.",
+      "keywords": ["Senova", "Petal Pack", "trà hương sen"], "canonicalUrl": "/products/petal-pack"
+    },
+    "metadata": {"contentVersion": "p0.2", "publishedAt": null, "updatedAt": null}
   },
   {
     "id": "gift-set",
     "slug": "gift-set",
+    "sku": "SEN-GFT-01",
     "name": "Senova Gift Set",
+    "shortName": "Gift Set",
+    "productLine": "GIFT_SET",
     "line": "gift-set",
     "eyebrow": "TRAO / Quà tặng văn hóa",
     "role": "Trao",
     "tagline": "Trao hương sen, gửi một lời trân trọng.",
     "shortDescription": "Bộ quà kết hợp sản phẩm, trải nghiệm và câu chuyện văn hóa.",
-    "description": "Bộ quà dự kiến kết hợp trà hương sen, Petal Pack, hướng dẫn pha và thẻ câu chuyện.",
+    "fullDescription": "Bộ quà dự kiến kết hợp Senova Classic, Petal Pack, hướng dẫn pha và thẻ câu chuyện.",
+    "description": "Bộ quà trà sen được cấu hình theo người nhận và dịp tặng.",
     "href": "/products/gift-set",
     "image": "/assets/products/gift-set-optimized.jpg",
-    "status": "draft",
-    "priceLabel": "Báo giá theo cấu hình quà tặng",
-    "availability": "Nhận tư vấn corporate và seasonal gifting",
+    "status": "active",
+    "priceLabel": "Liên hệ để nhận giá dự kiến",
+    "availability": "Đang nhận yêu cầu tư vấn cấu hình",
+    "commerce": {
+      "status": "PRE_ORDER", "statusLabel": "Đang nhận yêu cầu tư vấn cấu hình", "priceType": "CONTACT", "currency": "VND",
+      "displayPrice": false, "minimumQuantity": 1, "maximumQuantity": 100,
+      "responseTime": {"min": 1, "max": 2, "unit": "BUSINESS_DAY"}, "cancellationPolicyId": "senova-preorder-v1"
+    },
+    "specification": {
+      "ingredients": [
+        {"name": "Senova Classic", "verified": false},
+        {"name": "Senova Petal Pack", "verified": false},
+        {"name": "Thẻ câu chuyện và hướng dẫn", "verified": false}
+      ],
+      "servings": 1, "unitsPerPackage": 1, "unitDescription": "Một bộ quà tặng theo cấu hình",
+      "origin": ["Việt Nam"], "packagingMaterials": ["Hộp quà", "Giấy mỹ thuật"],
+      "isPrototype": true, "isAssumption": true, "verificationStatus": "IN_TESTING", "contentVersion": "p0.2"
+    },
+    "brewing": {
+      "steps": [
+        {"id": "message", "order": 1, "title": "Đọc lời nhắn", "description": "Bắt đầu bằng lời nhắn của người trao."},
+        {"id": "choose", "order": 2, "title": "Chọn trải nghiệm", "description": "Chọn Classic hoặc Petal Pack và làm theo hướng dẫn tương ứng."}
+      ],
+      "warnings": ["Thông số pha phụ thuộc sản phẩm được chọn trong bộ."],
+      "isAssumption": true, "verificationStatus": "IN_TESTING", "contentVersion": "p0.2"
+    },
+    "storage": {
+      "storageInstructions": ["Bảo quản theo sản phẩm có yêu cầu nghiêm ngặt nhất trong bộ."],
+      "isAssumption": true, "verificationStatus": "IN_TESTING", "contentVersion": "p0.2"
+    },
+    "safety": {
+      "allergenInformation": [], "usageWarnings": ["Đọc hướng dẫn của từng sản phẩm trong bộ trước khi sử dụng."],
+      "foodSafetyStatus": "IN_TESTING", "microbiologyTested": false, "moistureTested": false,
+      "isAssumption": true, "verificationStatus": "IN_TESTING", "contentVersion": "p0.2"
+    },
+    "fulfillment": {
+      "deliveryScopes": [{"code": "HCM", "label": "TP. Hồ Chí Minh", "enabled": true}],
+      "pickupAvailable": false, "shippingFeeType": "CONFIRMED_LATER", "fragile": true, "requiresSpecialPackaging": true,
+      "deliveryNotes": "Phạm vi, phí và lịch giao được xác nhận theo cấu hình.",
+      "isAssumption": true, "verificationStatus": "IN_TESTING", "contentVersion": "p0.2"
+    },
     "variants": [
-      {"id": "gift-personal", "label": "Personal Gift Set", "note": "Quà tặng cá nhân cao cấp"},
-      {"id": "gift-corporate", "label": "Corporate Edition", "note": "Cấu hình cho đối tác và sự kiện"}
+      {
+        "id": "gift-personal", "sku": "SEN-GFT-01-P", "label": "Gift Set cá nhân", "note": "Quà tặng cá nhân",
+        "currency": "VND", "priceType": "CONTACT", "unitsPerPackage": 1, "minimumQuantity": 1, "maximumQuantity": 10,
+        "preparationTime": {"min": 7, "max": 10, "unit": "BUSINESS_DAY", "isAssumption": true},
+        "deliveryScopes": [{"code": "HCM", "label": "TP. Hồ Chí Minh", "enabled": true}],
+        "available": true, "cancellationPolicyId": "senova-preorder-v1"
+      },
+      {
+        "id": "gift-corporate", "sku": "SEN-GFT-01-C", "label": "Gift Set doanh nghiệp", "note": "Cấu hình cho đối tác và sự kiện",
+        "currency": "VND", "priceType": "CONTACT", "unitsPerPackage": 1, "minimumQuantity": 10, "maximumQuantity": 100,
+        "preparationTime": {"min": 7, "max": 10, "unit": "BUSINESS_DAY", "isAssumption": true},
+        "deliveryScopes": [{"code": "HCM", "label": "TP. Hồ Chí Minh", "enabled": true}],
+        "available": true, "cancellationPolicyId": "senova-preorder-v1"
+      }
     ],
-    "includedItems": ["Senova Classic", "Senova Petal Pack", "Thẻ câu chuyện và hướng dẫn pha", "Hộp quà cứng có lời nhắn"],
-    "dimensions": "Hộp quà 28 x 20 x 9 cm, có thể điều chỉnh theo cấu hình",
-    "brewingNotes": ["Bắt đầu bằng lời nhắn", "Chọn Classic hoặc Petal Pack", "Dùng QR để tiếp tục câu chuyện"],
-    "shippingNote": "Concierge xác nhận số lượng, ngày giao, người nhận và lời nhắn.",
-    "giftOptions": ["Đóng dấu logo đối tác", "Thiệp song ngữ", "Giao nhiều địa chỉ", "Phiên bản theo mùa"],
-    "badges": ["Gifting", "Corporate", "Custom quote"],
-    "primaryAction": {"label": "Đăng ký nhận thông tin", "href": "/order-request?product=gift-set"},
+    "experience": {
+      "ritualAvailable": true, "ritualSlug": "gift-set", "steps": [],
+      "story": {"summary": "Một món quà kết nối sản phẩm, lời nhắn và câu chuyện văn hóa.", "fullContentUrl": "/story"},
+      "qrEnabled": true
+    },
+    "media": {
+      "thumbnail": "/assets/products/gift-set-optimized.jpg", "heroImage": "/assets/products/gift-set-optimized.jpg",
+      "gallery": [], "instructionImages": [], "altText": "Bộ quà trà sen Senova Gift Set"
+    },
+    "includedItems": ["Senova Classic", "Senova Petal Pack", "Thẻ câu chuyện", "Hộp quà"],
+    "dimensions": "Kích thước được xác nhận theo cấu hình",
+    "brewingNotes": ["Chọn Classic hoặc Petal Pack và làm theo hướng dẫn tương ứng"],
+    "shippingNote": "Senova sẽ xác nhận thời gian chuẩn bị và phạm vi giao hàng sau khi nhận yêu cầu.",
+    "giftOptions": ["Lời nhắn", "Tên người nhận", "Thiệp"], "badges": ["Quà tặng", "Cá nhân hóa", "Đặt trước"],
+    "primaryAction": {"label": "Gửi yêu cầu đặt trước", "href": "/order-request?product=gift-set"},
     "secondaryAction": {"label": "Liên hệ tư vấn", "href": "/contact?topic=gift-set"},
     "heroAlt": "Bộ quà trà sen Senova Gift Set",
-    "suitableFor": ["Quà tri ân", "Quà lưu niệm", "Quà đối tác", "Phiên bản theo mùa"],
-    "highlights": ["Kết hợp sản phẩm và câu chuyện văn hóa", "Điều chỉnh lời nhắn và QR", "Phù hợp quà tặng đối tác"],
-    "experienceSteps": [
-      {"title": "Mở hộp", "text": "Tiếp cận từng thành phần theo trình tự."},
-      {"title": "Đọc lời nhắn", "text": "Nhận biết dụng ý của người trao."},
-      {"title": "Chọn trải nghiệm", "text": "Chọn Classic hoặc Petal Pack."},
-      {"title": "Tiếp tục câu chuyện", "text": "Dùng thẻ hoặc QR để đọc thêm."}
-    ],
-    "seo": {"title": "Senova Gift Set | Calmora", "description": "Bộ quà trà sen kết nối sản phẩm, lời nhắn và câu chuyện văn hóa."}
+    "suitableFor": ["Quà tri ân", "Quà đối tác", "Phiên bản theo mùa"],
+    "highlights": ["Kết hợp sản phẩm và câu chuyện", "Cấu hình theo người nhận"],
+    "experienceSteps": [{"title": "Đọc lời nhắn", "text": "Bắt đầu bằng lời nhắn."}, {"title": "Chọn trải nghiệm", "text": "Chọn sản phẩm trong bộ."}],
+    "seo": {
+      "title": "Senova Gift Set | Calmora", "description": "Bộ quà trà sen kết nối sản phẩm, lời nhắn và câu chuyện văn hóa.",
+      "keywords": ["Senova", "Gift Set", "quà tặng trà sen"], "canonicalUrl": "/products/gift-set"
+    },
+    "metadata": {"contentVersion": "p0.2", "publishedAt": null, "updatedAt": null}
   }
 ]

@@ -107,7 +107,7 @@ const productCopy: Record<Language, Record<ProductId, ProductCopy>> = {
       description:
         "Dòng trà hương sen nền tảng, được trình bày trong hình thức thuận tiện để người dùng có thể pha và thưởng thức thường xuyên.",
       shortDescription: "Dành cho những khoảng lặng có thể lặp lại mỗi ngày.",
-      priceLabel: "Từ 320.000 VND",
+      priceLabel: "Liên hệ để nhận giá dự kiến",
       availability: "Mở danh sách đặt trước theo lô nhỏ",
       variants: [
         { id: "daily-box", label: "Hộp 12 gói", note: "Nhịp thưởng trà hằng ngày" },
@@ -157,7 +157,7 @@ const productCopy: Record<Language, Record<ProductId, ProductCopy>> = {
         "Phần trà cho một lần pha, đặt trong túi lọc và được bao quanh bởi cánh sen sấy tạo hình búp sen.",
       shortDescription:
         "Phần trà một ly trong hình dáng búp sen, biến thao tác pha trà thành trải nghiệm giác quan.",
-      priceLabel: "Từ 480.000 VND",
+      priceLabel: "Liên hệ để nhận giá dự kiến",
       availability: "Lô trải nghiệm PP-2601-A đang nhận inquiry",
       variants: [
         { id: "petal-single", label: "Set 6 Petal Pack", note: "Trải nghiệm cá nhân" },

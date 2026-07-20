@@ -1,0 +1,47 @@
+[
+  {
+    "id": "senova-preorder-v1",
+    "version": "1.0",
+    "currency": "VND",
+    "status": "active",
+    "reviewStatus": "DRAFT_LEGAL_REVIEW_REQUIRED",
+    "stages": {
+      "beforePayment": {
+        "refundPercent": 100,
+        "allowCancellation": true,
+        "description": "Chưa phát sinh thanh toán"
+      },
+      "paidBeforePreparation": {
+        "refundPercent": 90,
+        "allowCancellation": true,
+        "description": "Đã thanh toán, chưa bắt đầu chuẩn bị"
+      },
+      "preparingStandardProduct": {
+        "refundPercent": 70,
+        "allowCancellation": true,
+        "description": "Đang chuẩn bị sản phẩm tiêu chuẩn"
+      },
+      "customizedProduct": {
+        "refundPercent": 50,
+        "allowCancellation": true,
+        "description": "Sản phẩm cá nhân hóa đã được duyệt"
+      },
+      "handedToCarrier": {
+        "refundPercent": 0,
+        "allowCancellation": false,
+        "description": "Đã bàn giao đơn vị vận chuyển"
+      },
+      "sellerUnableToFulfill": {
+        "refundPercent": 100,
+        "allowCancellation": true,
+        "description": "Senova không thể thực hiện yêu cầu"
+      },
+      "defectiveOrIncorrectProduct": {
+        "refundPercent": 100,
+        "allowCancellation": true,
+        "allowReplacement": true,
+        "description": "Sản phẩm lỗi hoặc sai cấu hình do Senova"
+      }
+    }
+  }
+]
