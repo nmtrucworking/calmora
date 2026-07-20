@@ -89,9 +89,19 @@ class QrService:
         if not record:
             raise DomainError(404, "QR_NOT_FOUND", "QR code is not recognized.")
         status = self.status(record)
-        result = {key: record.get(key) for key in ("code", "productSlug", "batchCode", "contentVersion", "destination")}
-        result.update({"contentViewed": f"{record['productSlug']}-scan", "status": status})
+        flow_type = record.get("flowType", "experience")
+        result = {
+            key: record.get(key)
+            for key in ("code", "productSlug", "batchCode", "contentVersion", "destination", "traceUrl")
+        }
+        result.update({"contentViewed": f"{record['productSlug']}-scan", "flowType": flow_type, "status": status})
         if status == "active":
+            if flow_type in {"unit-trace", "batch-trace"}:
+                trace_url = record.get("traceUrl")
+                if not trace_url or not trace_url.startswith("/trace/"):
+                    raise DomainError(500, "QR_DESTINATION_INVALID", "QR trace destination is not allowed.")
+                result.update({"redirectUrl": None, "traceUrl": trace_url})
+                return result
             destination = record.get("destination", "")
             if not destination.startswith("/experience/"):
                 raise DomainError(500, "QR_DESTINATION_INVALID", "QR destination is not allowed.")

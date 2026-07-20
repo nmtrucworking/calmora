@@ -22,6 +22,14 @@ class Settings(BaseSettings):
     admin_email: str = ""
     admin_name: str = "Senova Administrator"
     admin_password: str = Field(default="", repr=False)
+    trace_secret_pepper: str = Field(default="local-trace-secret-pepper-change-me", repr=False)
+    ledger_adapter: Literal["database", "evm", "fabric"] = "database"
+    ledger_network: str = "database-local"
+    ledger_rpc_url: str = ""
+    ledger_contract_address: str = ""
+    ledger_signer_key_ref: str = Field(default="", repr=False)
+    ledger_confirmations: int = Field(default=1, ge=1, le=100)
+    ledger_outbox_batch_size: int = Field(default=20, ge=1, le=100)
 
     @field_validator("api_prefix")
     @classmethod
@@ -52,8 +60,17 @@ class Settings(BaseSettings):
                 raise ValueError("DATABASE_URL is required outside local/test")
             if len(self.receipt_secret) < 32 or "change-me" in self.receipt_secret:
                 raise ValueError("RECEIPT_SECRET must be a unique secret of at least 32 characters")
+            if len(self.trace_secret_pepper) < 32 or "change-me" in self.trace_secret_pepper:
+                raise ValueError("TRACE_SECRET_PEPPER must be a unique secret of at least 32 characters")
             if not self.cors_origins or "*" in self.cors_origins:
                 raise ValueError("FRONTEND_ORIGINS must explicitly list allowed origins")
+        if self.ledger_adapter == "evm":
+            if not self.ledger_rpc_url or not self.ledger_contract_address or not self.ledger_signer_key_ref:
+                raise ValueError(
+                    "LEDGER_RPC_URL, LEDGER_CONTRACT_ADDRESS and LEDGER_SIGNER_KEY_REF are required for EVM"
+                )
+            if not self.ledger_signer_key_ref.startswith("env:"):
+                raise ValueError("LEDGER_SIGNER_KEY_REF must use env:<VARIABLE_NAME>")
         return self
 
 

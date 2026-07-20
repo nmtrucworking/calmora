@@ -2,9 +2,11 @@ from __future__ import annotations
 
 from sqlalchemy import (
     TIMESTAMP,
+    BigInteger,
     Boolean,
     CheckConstraint,
     Column,
+    Date,
     ForeignKey,
     Index,
     Integer,
@@ -97,11 +99,209 @@ product_media = Table(
 )
 Index("idx_product_media_product", product_media.c.product_id, product_media.c.sort_order)
 
+trace_batches = Table(
+    "trace_batches",
+    metadata,
+    Column("id", String(36), primary_key=True),
+    Column("batch_code", String(64), nullable=False, unique=True),
+    Column("product_slug", String(120), nullable=False),
+    Column("content_version", String(64)),
+    Column("status", String(32), nullable=False),
+    Column("production_date", Date),
+    Column("packaged_at", TIMESTAMP(timezone=True)),
+    Column("best_before", Date),
+    Column("source_summary", JSONB, nullable=False),
+    Column("public_visibility", Boolean, nullable=False, server_default="false"),
+    Column("revision", Integer, nullable=False, server_default="1"),
+    Column("version", Integer, nullable=False, server_default="1"),
+    Column("created_by", String(36), ForeignKey("admin_users.id", use_alter=True)),
+    Column("approved_by", String(36), ForeignKey("admin_users.id", use_alter=True)),
+    Column("recall_reason", Text),
+    Column("public_message", Text),
+    Column("created_at", TIMESTAMP(timezone=True), nullable=False),
+    Column("updated_at", TIMESTAMP(timezone=True), nullable=False),
+    CheckConstraint(
+        "status IN ('draft','processing','qa_pending','approved','distributed','recalled','closed','void')",
+        name="trace_batches_status_check",
+    ),
+)
+Index("idx_trace_batches_product_status", trace_batches.c.product_slug, trace_batches.c.status)
+
+trace_units = Table(
+    "trace_units",
+    metadata,
+    Column("id", String(36), primary_key=True),
+    Column("batch_id", String(36), ForeignKey("trace_batches.id"), nullable=False),
+    Column("public_code", String(32), nullable=False, unique=True),
+    Column("secret_digest", String(128), nullable=False, unique=True),
+    Column("status", String(32), nullable=False),
+    Column("risk_level", String(16), nullable=False, server_default="normal"),
+    Column("risk_score", Integer, nullable=False, server_default="0"),
+    Column("scan_count", Integer, nullable=False, server_default="0"),
+    Column("unique_client_count", Integer, nullable=False, server_default="0"),
+    Column("printed_at", TIMESTAMP(timezone=True)),
+    Column("packed_at", TIMESTAMP(timezone=True)),
+    Column("distributed_at", TIMESTAMP(timezone=True)),
+    Column("activated_at", TIMESTAMP(timezone=True)),
+    Column("first_activation_request_id", String(36)),
+    Column("version", Integer, nullable=False, server_default="1"),
+    Column("created_at", TIMESTAMP(timezone=True), nullable=False),
+    Column("updated_at", TIMESTAMP(timezone=True), nullable=False),
+    CheckConstraint(
+        "status IN ('generated','printed','packed','distributed','activated','recheck',"
+        "'suspicious','compromised','recalled','void')",
+        name="trace_units_status_check",
+    ),
+    CheckConstraint("risk_level IN ('normal','watch','high','confirmed')", name="trace_units_risk_check"),
+)
+Index("idx_trace_units_batch_status", trace_units.c.batch_id, trace_units.c.status)
+Index("idx_trace_units_risk", trace_units.c.risk_level, trace_units.c.updated_at.desc())
+
+trace_events = Table(
+    "trace_events",
+    metadata,
+    Column("id", String(36), primary_key=True),
+    Column("entity_type", String(16), nullable=False),
+    Column("entity_id", String(36), nullable=False),
+    Column("event_type", String(64), nullable=False),
+    Column("status", String(16), nullable=False, server_default="draft"),
+    Column("occurred_at", TIMESTAMP(timezone=True), nullable=False),
+    Column("recorded_at", TIMESTAMP(timezone=True), nullable=False),
+    Column("location_code", String(64)),
+    Column("actor_org", String(128)),
+    Column("payload_json", JSONB, nullable=False),
+    Column("payload_hash", String(80), nullable=False),
+    Column("supersedes_event_id", String(36), ForeignKey("trace_events.id")),
+    Column("created_by", String(36), ForeignKey("admin_users.id", use_alter=True)),
+    Column("approved_by", String(36), ForeignKey("admin_users.id", use_alter=True)),
+    Column("approved_at", TIMESTAMP(timezone=True)),
+    Column("created_at", TIMESTAMP(timezone=True), nullable=False),
+)
+Index("idx_trace_events_entity_time", trace_events.c.entity_type, trace_events.c.entity_id, trace_events.c.occurred_at)
+
+trace_documents = Table(
+    "trace_documents",
+    metadata,
+    Column("id", String(36), primary_key=True),
+    Column("batch_id", String(36), ForeignKey("trace_batches.id")),
+    Column("event_id", String(36), ForeignKey("trace_events.id")),
+    Column("document_type", String(64), nullable=False),
+    Column("storage_key", String(500), nullable=False),
+    Column("sha256", String(80), nullable=False),
+    Column("mime_type", String(128)),
+    Column("size_bytes", BigInteger),
+    Column("issued_by", String(255)),
+    Column("issued_at", TIMESTAMP(timezone=True)),
+    Column("visibility", String(16), nullable=False, server_default="private"),
+    Column("created_at", TIMESTAMP(timezone=True), nullable=False),
+)
+
+trace_scan_events = Table(
+    "trace_scan_events",
+    metadata,
+    Column("id", String(36), primary_key=True),
+    Column("unit_id", String(36), ForeignKey("trace_units.id")),
+    Column("qr_code", String(32), nullable=False),
+    Column("occurred_at", TIMESTAMP(timezone=True), nullable=False),
+    Column("source", String(64)),
+    Column("path", String(500)),
+    Column("campaign", String(100)),
+    Column("referrer_origin", String(255)),
+    Column("client_token_hash", String(80)),
+    Column("ip_prefix_hash", String(80)),
+    Column("user_agent_family", String(80)),
+    Column("region_code", String(32)),
+    Column("risk_delta", Integer, nullable=False, server_default="0"),
+    Column("request_id", String(128)),
+)
+
+trace_activation_attempts = Table(
+    "trace_activation_attempts",
+    metadata,
+    Column("id", String(36), primary_key=True),
+    Column("unit_id", String(36), ForeignKey("trace_units.id"), nullable=False),
+    Column("result", String(32), nullable=False),
+    Column("occurred_at", TIMESTAMP(timezone=True), nullable=False),
+    Column("idempotency_key_hash", String(80)),
+    Column("client_token_hash", String(80)),
+    Column("ip_prefix_hash", String(80)),
+    Column("user_agent_family", String(80)),
+    Column("region_code", String(32)),
+    Column("risk_delta", Integer, nullable=False, server_default="0"),
+    Column("request_id", String(128), nullable=False),
+)
+Index(
+    "idx_trace_activation_idempotency",
+    trace_activation_attempts.c.unit_id,
+    trace_activation_attempts.c.idempotency_key_hash,
+    unique=True,
+)
+
+trace_risk_reviews = Table(
+    "trace_risk_reviews",
+    metadata,
+    Column("id", String(36), primary_key=True),
+    Column("unit_id", String(36), ForeignKey("trace_units.id"), nullable=False),
+    Column("decision", String(32), nullable=False),
+    Column("reason", Text, nullable=False),
+    Column("previous_risk_level", String(16)),
+    Column("next_risk_level", String(16)),
+    Column("reviewed_by", String(36), ForeignKey("admin_users.id", use_alter=True), nullable=False),
+    Column("created_at", TIMESTAMP(timezone=True), nullable=False),
+)
+
+ledger_anchors = Table(
+    "ledger_anchors",
+    metadata,
+    Column("id", String(36), primary_key=True),
+    Column("entity_type", String(16), nullable=False),
+    Column("entity_id", String(36), nullable=False),
+    Column("revision", Integer, nullable=False),
+    Column("schema_version", String(32), nullable=False),
+    Column("root_hash", String(80), nullable=False),
+    Column("previous_root_hash", String(80)),
+    Column("network", String(64), nullable=False),
+    Column("contract_address", String(128)),
+    Column("transaction_id", String(160)),
+    Column("block_number", BigInteger),
+    Column("status", String(24), nullable=False),
+    Column("submitted_at", TIMESTAMP(timezone=True)),
+    Column("confirmed_at", TIMESTAMP(timezone=True)),
+    Column("error_code", String(64)),
+    Column("error_message", Text),
+    Column("retry_count", Integer, nullable=False, server_default="0"),
+    Column("created_at", TIMESTAMP(timezone=True), nullable=False),
+    Column("updated_at", TIMESTAMP(timezone=True), nullable=False),
+    UniqueConstraint("entity_type", "entity_id", "revision", "network", name="uq_ledger_anchor"),
+)
+
+ledger_outbox = Table(
+    "ledger_outbox",
+    metadata,
+    Column("id", String(36), primary_key=True),
+    Column("aggregate_type", String(16), nullable=False),
+    Column("aggregate_id", String(36), nullable=False),
+    Column("revision", Integer, nullable=False),
+    Column("command_json", JSONB, nullable=False),
+    Column("status", String(24), nullable=False, server_default="pending"),
+    Column("available_at", TIMESTAMP(timezone=True), nullable=False),
+    Column("locked_at", TIMESTAMP(timezone=True)),
+    Column("locked_by", String(128)),
+    Column("attempts", Integer, nullable=False, server_default="0"),
+    Column("last_error", Text),
+    Column("created_at", TIMESTAMP(timezone=True), nullable=False),
+    Column("updated_at", TIMESTAMP(timezone=True), nullable=False),
+)
+Index("idx_ledger_outbox_claim", ledger_outbox.c.status, ledger_outbox.c.available_at)
+
 qr_records = Table(
     "qr_records",
     metadata,
     Column("code", String(80), primary_key=True),
     Column("product_id", String(120), ForeignKey("products.id"), nullable=True),
+    Column("flow_type", String(24), nullable=False, server_default="experience"),
+    Column("trace_batch_id", String(36), ForeignKey("trace_batches.id")),
+    Column("trace_unit_id", String(36), ForeignKey("trace_units.id")),
     Column("data", JSONB, nullable=False),
     Column("seed_key", String(120), nullable=True),
     Column("seed_hash", String(64), nullable=True),

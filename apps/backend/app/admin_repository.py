@@ -25,6 +25,13 @@ PERMISSION_CODES = (
     "content.review",
     "content.publish",
     "content.unpublish",
+    "trace.batches.write",
+    "trace.batches.approve",
+    "trace.units.write",
+    "trace.units.export_secrets",
+    "trace.risk.review",
+    "trace.recall",
+    "trace.ledger.write",
 )
 
 

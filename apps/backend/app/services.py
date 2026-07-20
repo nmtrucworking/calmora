@@ -13,6 +13,7 @@ from app.modules.analytics import AnalyticsService
 from app.modules.catalog import CatalogRepository, CatalogService
 from app.modules.qr import QrRepository, QrService
 from app.modules.submissions import SubmissionService
+from app.modules.trace import TraceRepository, TraceService
 
 
 @dataclass
@@ -24,6 +25,7 @@ class Services:
     rate_limiter: InMemoryRateLimiter
     admin: AdminService | None
     content: ContentRepository | None
+    trace: TraceService | None
 
 
 def build_services(settings: Settings, repository: Any, seed_dir: Path) -> Services:
@@ -47,4 +49,5 @@ def build_services(settings: Settings, repository: Any, seed_dir: Path) -> Servi
         rate_limiter=InMemoryRateLimiter(),
         admin=AdminService(AdminRepository(repository), settings.app_env) if hasattr(repository, "_engine") else None,
         content=ContentRepository(repository) if hasattr(repository, "_engine") else None,
+        trace=TraceService(TraceRepository(repository), settings) if hasattr(repository, "_engine") else None,
     )

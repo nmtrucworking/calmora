@@ -449,3 +449,102 @@ def test_content_revision_workflow_keeps_published_revision_immutable():
         )
         assert client.post(f"/api/v1/admin/content-items/{item_id}/unpublish", headers=headers).status_code == 200
         assert client.get("/api/v1/content/journal/lotus-origin.vi").status_code == 404
+
+
+def test_traceability_activation_and_database_ledger_proof():
+    repository = SqlAlchemyRepository()
+    AdminRepository(repository).bootstrap_admin(
+        "trace-admin@senova.test", "Trace Admin", hasher.hash("Trace-Secure-Password-2026")
+    )
+    settings = Settings(
+        app_env="test",
+        database_url=_psycopg_url(),
+        receipt_secret="integration-secret",
+        trace_secret_pepper="trace-integration-pepper",
+    )
+    app = create_app(settings, repository)
+
+    with TestClient(app) as client:
+        login = client.post(
+            "/api/v1/auth/login",
+            json={"email": "trace-admin@senova.test", "password": "Trace-Secure-Password-2026"},
+        )
+        assert login.status_code == 200
+        csrf = client.cookies.get(CSRF_COOKIE)
+        headers = {"X-CSRF-Token": csrf}
+
+        created = client.post(
+            "/api/v1/admin/trace/batches",
+            json={
+                "batchCode": "PP-TRACE-INTEGRATION",
+                "productSlug": "petal-pack",
+                "contentVersion": "v2",
+                "productionDate": "2026-07-21",
+                "sourceSummary": {"lotusRegion": "Đồng Tháp"},
+            },
+            headers=headers,
+        )
+        assert created.status_code == 200
+        batch_id = created.json()["data"]["id"]
+        event = client.post(
+            f"/api/v1/admin/trace/batches/{batch_id}/events",
+            json={
+                "eventType": "lotus_received",
+                "occurredAt": "2026-07-20T02:30:00Z",
+                "locationCode": "VN-DT",
+                "payload": {"supplier": "pilot"},
+            },
+            headers=headers,
+        )
+        assert event.status_code == 200
+        approved = client.post(f"/api/v1/admin/trace/batches/{batch_id}/approve", headers=headers)
+        assert approved.status_code == 200
+
+        issue = client.post(
+            f"/api/v1/admin/trace/batches/{batch_id}/units/issue",
+            json={"quantity": 1, "codeProfile": "petal-pack-v1", "exportFormat": "csv"},
+            headers=headers,
+        )
+        assert issue.status_code == 200
+        issued = issue.json()["data"]["units"][0]
+        assert issued["secretCode"] not in issue.request.headers.values()
+
+        unit_id, version = issued["unitId"], 1
+        for action in ("mark-printed", "mark-packed", "mark-distributed"):
+            transitioned = client.post(
+                f"/api/v1/admin/trace/units/{unit_id}/transition",
+                json={"action": action, "expectedVersion": version},
+                headers=headers,
+            )
+            assert transitioned.status_code == 200
+            version = transitioned.json()["data"]["version"]
+
+        public_code = issued["publicCode"]
+        resolved = client.get(f"/api/v1/qr/{public_code}").json()["data"]
+        assert resolved["flowType"] == "unit-trace"
+        assert resolved["traceUrl"] == f"/trace/{public_code}"
+        assert (
+            client.get(f"/api/v1/trace/units/{public_code}").json()["data"]["verification"]["status"]
+            == "valid-unactivated"
+        )
+
+        activated = client.post(
+            f"/api/v1/trace/units/{public_code}/activate",
+            json={"secretCode": issued["secretCode"], "clientToken": "integration-browser"},
+            headers={"Idempotency-Key": "activate-integration-001"},
+        )
+        assert activated.status_code == 200
+        assert activated.json()["data"]["result"] == "activated"
+        replay = client.post(
+            f"/api/v1/trace/units/{public_code}/activate",
+            json={"secretCode": issued["secretCode"], "clientToken": "integration-browser"},
+            headers={"Idempotency-Key": "activate-integration-001"},
+        )
+        assert replay.status_code == 200
+
+        processed = client.post("/api/v1/admin/trace/anchors/process", headers=headers)
+        assert processed.status_code == 200
+        proof = client.get(f"/api/v1/trace/units/{public_code}/proof").json()["data"]
+        assert proof["anchorStatus"] == "confirmed"
+        assert proof["match"] is True
+        assert proof["transactionId"].startswith("db:")

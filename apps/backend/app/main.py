@@ -13,7 +13,7 @@ from app.core.errors import install_error_handlers, success
 from app.core.logging import configure_logging
 from app.core.middleware import PayloadLimitMiddleware, install_request_middleware
 from app.deployment import prepare_initial_database
-from app.modules import admin, analytics, catalog, content, qr, submissions, system
+from app.modules import admin, analytics, catalog, content, qr, submissions, system, trace
 from app.repository import SqlAlchemyRepository
 from app.services import build_services
 
@@ -31,11 +31,15 @@ def create_app(settings: Settings | None = None, repository: Any | None = None) 
             prepare_initial_database(repository.engine)
         repository.initialize()
         if settings.admin_email and settings.admin_password:
-            AdminRepository(repository).bootstrap_admin(
-                settings.admin_email.strip().lower(),
-                settings.admin_name.strip() or "Senova Administrator",
-                admin.hasher.hash(settings.admin_password),
-            )
+            try:
+                AdminRepository(repository).bootstrap_admin(
+                    settings.admin_email.strip().lower(),
+                    settings.admin_name.strip() or "Senova Administrator",
+                    admin.hasher.hash(settings.admin_password),
+                )
+            except AttributeError:
+                if hasattr(repository, "engine") or hasattr(repository, "_engine"):
+                    raise
         yield
 
     application = FastAPI(title="Calmora / Senova Backend", version="1.1.0", lifespan=lifespan)
@@ -65,6 +69,7 @@ def create_app(settings: Settings | None = None, repository: Any | None = None) 
         analytics.router,
         admin.router,
         content.router,
+        trace.router,
     ):
         application.include_router(feature_router, prefix=settings.api_prefix)
         application.include_router(feature_router, prefix=f"{settings.api_prefix}/v1", include_in_schema=True)
