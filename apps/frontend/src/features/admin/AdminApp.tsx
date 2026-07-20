@@ -69,6 +69,10 @@ import "./admin.css";
 
 const PAGE_SIZE = 5;
 const AdminSessionContext = createContext<AdminSession | null>(null);
+
+function loadInBackground(promise: Promise<unknown>) {
+  void promise.catch(() => undefined);
+}
 function useAdminPermission(permission: string) {
   const session = useContext(AdminSessionContext);
   return !session?.permissions || session.permissions.includes(permission);
@@ -218,7 +222,7 @@ function AdminShell({ session, onLogout, children }: { session: AdminSession; on
 
 function DashboardPage() {
   const { dashboard, analytics, submissions, loadDashboard, loadSubmissions } = useAdminStore();
-  useEffect(() => { void loadDashboard(); void loadSubmissions({ pageSize: 5 }); }, []);
+  useEffect(() => { loadInBackground(loadDashboard()); loadInBackground(loadSubmissions({ pageSize: 5 })); }, []);
   const recent = submissions.slice(0, 5);
 
   return (
@@ -257,7 +261,7 @@ function ProductsPage() {
   const pageCount = Math.ceil(filtered.length / PAGE_SIZE);
   const visible = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
   const canWrite = useAdminPermission("catalog.write");
-  useEffect(() => { void loadProducts(); }, []);
+  useEffect(() => { loadInBackground(loadProducts()); }, []);
 
   return (
     <>
@@ -287,7 +291,7 @@ function ProductFormPage({ id }: { id?: string }) {
   const canWrite = useAdminPermission("catalog.write");
   const canPublish = useAdminPermission("catalog.publish");
 
-  useEffect(() => { void loadProducts(); }, []);
+  useEffect(() => { loadInBackground(loadProducts()); }, []);
   useEffect(() => { if (existing) setForm(existing); }, [existing]);
 
   if (id && !existing) return isLoading || products.length === 0
@@ -367,7 +371,7 @@ function QrPage() {
   const filtered = useMemo(() => qrRecords.filter((record) => `${record.code} ${record.productSlug} ${record.campaign}`.toLowerCase().includes(query.toLowerCase()) && (status === "all" || record.status === status)), [qrRecords, query, status]);
   const visible = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
   const productName = (slug: string) => products.find((product) => product.slug === slug)?.name ?? slug;
-  useEffect(() => { void loadQr(); void loadProducts(); }, []);
+  useEffect(() => { loadInBackground(loadQr()); loadInBackground(loadProducts()); }, []);
 
   return <><PageHeader eyebrow="Trải nghiệm số" title="Mã QR" description="Theo dõi mã phát hành, lô sản phẩm, phiên bản nội dung và lượt quét." action={<Link className="adminButton adminButton--primary" href="/admin/qr/new"><Plus size={16} />Tạo mã QR</Link>} /><section className="adminCard"><div className="adminToolbar"><label className="adminSearch"><Search size={16} /><input aria-label="Tìm mã QR" placeholder="Tìm mã, sản phẩm hoặc chiến dịch..." value={query} onChange={(event) => { setQuery(event.target.value); setPage(1); }} /></label><select className="adminSelect" aria-label="Lọc trạng thái QR" value={status} onChange={(event) => { setStatus(event.target.value); setPage(1); }}><option value="all">Tất cả trạng thái</option><option value="active">Đang hoạt động</option><option value="paused">Tạm dừng</option><option value="expired">Hết hạn</option><option value="revoked">Đã thu hồi</option></select></div>{visible.length ? <div className="adminTableWrap"><table className="adminTable"><thead><tr><th>Xem trước</th><th>Mã QR</th><th>Sản phẩm / Lô</th><th>Chiến dịch</th><th>Lượt quét</th><th>Trạng thái</th><th><span className="sr-only">Thao tác</span></th></tr></thead><tbody>{visible.map((record) => <tr key={record.code}><td><AdminQrCode code={record.code} compact size={58} /></td><td><Link className="adminTable__link" href={`/admin/qr/${encodeURIComponent(record.code)}`}>{record.code}</Link><br /><small>{record.contentVersion} · {(record.locale ?? "vi").toUpperCase()}</small></td><td><strong>{productName(record.productSlug)}</strong><br /><small>{record.batchCode}</small></td><td>{record.campaign}</td><td>{record.scans.toLocaleString("vi-VN")}</td><td><StatusBadge status={record.status} /></td><td><div className="adminRowActions"><Link href={`/admin/qr/${encodeURIComponent(record.code)}`} aria-label={`Xem ${record.code}`}><Eye size={15} /></Link></div></td></tr>)}</tbody></table></div> : <EmptyState title="Không tìm thấy mã QR" description="Thử thay đổi từ khóa hoặc bộ lọc trạng thái." />}<Pagination page={page} pageCount={Math.ceil(filtered.length / PAGE_SIZE)} total={filtered.length} onPage={setPage} /></section></>;
 }
@@ -381,7 +385,7 @@ function QrFormPage({ id }: { id?: string }) {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
   const [confirm, setConfirm] = useState<QrStatus | null>(null);
-  useEffect(() => { void loadQr(); void loadProducts(); }, []);
+  useEffect(() => { loadInBackground(loadQr()); loadInBackground(loadProducts()); }, []);
   useEffect(() => { if (existing) setForm(existing); }, [existing]);
   if (id && !existing) return isLoading || qrRecords.length === 0
     ? <section className="adminCard"><EmptyState title="Đang tải mã QR" description="Vui lòng chờ dữ liệu từ backend." /></section>
@@ -419,13 +423,13 @@ function SubmissionsPage() {
   const [total, setTotal] = useState(0);
   useEffect(() => {
     const timer = window.setTimeout(() => {
-      void loadSubmissions({
+      loadInBackground(loadSubmissions({
         q: query || undefined,
         status: status === "all" ? undefined : status as SubmissionStatus,
         kind: kind === "all" ? undefined : kind as SubmissionKind,
         page,
         pageSize: PAGE_SIZE,
-      }).then(setTotal);
+      }).then(setTotal));
     }, 200);
     return () => window.clearTimeout(timer);
   }, [kind, page, query, status]);
@@ -439,7 +443,7 @@ function SubmissionDetailPage({ id }: { id: string }) {
   const [assignee, setAssignee] = useState(submission?.assignedTo ?? "");
   const [note, setNote] = useState("");
   const [saving, setSaving] = useState(false);
-  useEffect(() => { void loadSubmission(id); void loadAdminUsers(); }, [id]);
+  useEffect(() => { loadInBackground(loadSubmission(id)); loadInBackground(loadAdminUsers()); }, [id]);
   useEffect(() => { if (submission) { setStatus(submission.status); setAssignee(submission.assignedTo ?? ""); } }, [submission]);
   if (!submission) return isLoading
     ? <section className="adminCard"><EmptyState title="Đang tải yêu cầu" description="Vui lòng chờ dữ liệu từ backend." /></section>
@@ -467,7 +471,7 @@ function QrContentPage() {
   const canManage = useAdminPermission("qr.manage");
   const readOnly = form.status === "published" || !canManage;
 
-  useEffect(() => { void loadQrContentData(); void loadProducts(); }, []);
+  useEffect(() => { loadInBackground(loadQrContentData()); loadInBackground(loadProducts()); }, []);
   useEffect(() => {
     if (!form.productSlug && products[0]) setForm(emptyQrContent(products[0].slug));
   }, [form.productSlug, products]);
@@ -549,13 +553,13 @@ function AnalyticsPage() {
   useEffect(() => {
     const toDate = new Date();
     const fromDate = new Date(toDate.getTime() - Number(period) * 86_400_000);
-    void loadDashboard({
+    loadInBackground(loadDashboard({
       fromDate: fromDate.toISOString(), toDate: toDate.toISOString(),
       productSlug: product === "all" ? undefined : product,
       source: source === "all" ? undefined : source,
-    });
+    }));
   }, [period, product, source]);
-  useEffect(() => { void loadProducts(); }, []);
+  useEffect(() => { loadInBackground(loadProducts()); }, []);
   return <><PageHeader eyebrow="Dữ liệu vận hành" title="Phân tích" description="Hiểu hiệu quả của các điểm chạm QR và nhu cầu khách hàng qua dữ liệu backend." /><div className="adminAnalyticsControls"><select className="adminSelect" aria-label="Khoảng thời gian" value={period} onChange={(event) => setPeriod(event.target.value)}><option value="7">7 ngày gần nhất</option><option value="30">30 ngày gần nhất</option><option value="90">90 ngày gần nhất</option></select><select className="adminSelect" aria-label="Lọc sản phẩm" value={product} onChange={(event) => setProduct(event.target.value)}><option value="all">Tất cả sản phẩm</option>{products.map((item) => <option key={item.id} value={item.slug}>{item.name}</option>)}</select><select className="adminSelect" aria-label="Lọc nguồn" value={source} onChange={(event) => setSource(event.target.value)}><option value="all">Tất cả nguồn</option><option value="QR">QR</option><option value="Website">Website</option><option value="Landing page">Landing page</option><option value="Đối tác">Đối tác</option></select></div><section className="adminKpiGrid"><KpiCard label="Lượt quét trong kỳ" value={totalScans.toLocaleString("vi-VN")} delta={`Bộ lọc ${period} ngày`} icon={<QrCode size={20} />} /><KpiCard label="Yêu cầu ghi nhận" value={String(selectedSubmissions)} delta="Từ các nguồn đã chọn" icon={<ClipboardList size={20} />} tone="gold" /><KpiCard label="Tỷ lệ chuyển đổi" value={`${conversion.toFixed(2)}%`} delta="Yêu cầu / lượt quét" icon={<TrendingUp size={20} />} tone="blue" /><KpiCard label="Sản phẩm theo dõi" value={String(product === "all" ? products.length : 1)} delta="Có dữ liệu QR" icon={<Boxes size={20} />} tone="pink" /></section><div className="adminGrid"><section className="adminCard"><div className="adminCard__header"><div><h2>Xu hướng lượt quét</h2><p>Dữ liệu theo ngày</p></div><Sparkles size={17} color="#a87b28" /></div><div className="adminCard__body"><LineChart data={analytics} /></div></section><section className="adminCard"><div className="adminCard__header"><div><h2>Lượt quét theo sản phẩm</h2><p>Tổng hợp từ backend</p></div></div><div className="adminCard__body"><div className="adminBreakdown">{breakdown.map((item) => <div className="adminBreakdown__row" key={item.label}><span>{item.label}</span><div className="adminBreakdown__track"><div className="adminBreakdown__bar" style={{ width: `${(item.value / maxBreakdown) * 100}%` }} /></div><strong>{item.value}</strong></div>)}</div></div></section></div><section className="adminCard"><div className="adminCard__header"><div><h2>Yêu cầu khách hàng theo ngày</h2><p>Tín hiệu quan tâm trong kỳ</p></div></div><div className="adminCard__body"><LineChart data={analytics} mode="submissions" /></div></section></>;
 }
 

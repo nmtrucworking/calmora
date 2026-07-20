@@ -29,7 +29,11 @@ export class AdminApiError extends Error {
   }
 }
 
+let cachedCsrfToken = "";
+
 function csrfToken() {
+  if (cachedCsrfToken) return cachedCsrfToken;
+  if (typeof document === "undefined") return "";
   const entry = document.cookie.split("; ").find((value) => value.startsWith("senova_admin_csrf="));
   return entry ? decodeURIComponent(entry.split("=").slice(1).join("=")) : "";
 }
@@ -85,11 +89,28 @@ function resourceData(value: Record<string, unknown>) {
   return data;
 }
 
-export function loginAdmin(email: string, password: string) {
-  return request<AdminSession>("/auth/login", { method: "POST", body: JSON.stringify({ email, password }) });
+async function refreshCsrfToken() {
+  const result = await request<{ csrfToken: string }>("/auth/csrf");
+  cachedCsrfToken = result.csrfToken;
 }
-export function getAdminSession() { return request<AdminSession>("/auth/me"); }
-export function logoutAdmin() { return request<{ loggedOut: boolean }>("/auth/logout", { method: "POST", body: "{}" }); }
+
+export async function loginAdmin(email: string, password: string) {
+  const session = await request<AdminSession>("/auth/login", { method: "POST", body: JSON.stringify({ email, password }) });
+  await refreshCsrfToken();
+  return session;
+}
+export async function getAdminSession() {
+  const session = await request<AdminSession>("/auth/me");
+  await refreshCsrfToken();
+  return session;
+}
+export async function logoutAdmin() {
+  try {
+    return await request<{ loggedOut: boolean }>("/auth/logout", { method: "POST", body: "{}" });
+  } finally {
+    cachedCsrfToken = "";
+  }
+}
 
 export function listAdminProducts() { return request<AdminProduct[]>("/admin/products"); }
 export function getAdminProduct(id: string) { return request<AdminProduct>(`/admin/products/${encodeURIComponent(id)}`); }

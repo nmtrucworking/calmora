@@ -28,6 +28,11 @@ def digest(value: str) -> str:
     return hashlib.sha256(value.encode()).hexdigest()
 
 
+def admin_cookie_policy(app_env: str) -> tuple[bool, str]:
+    secure = app_env in {"staging", "production"}
+    return secure, "none" if secure else "strict"
+
+
 class LoginRequest(BaseModel):
     email: str = Field(min_length=3, max_length=320)
     password: str = Field(min_length=10, max_length=1024)
@@ -141,6 +146,14 @@ class AdminService:
         ):
             raise DomainError(403, "CSRF_FAILED", "CSRF validation failed.")
 
+    def csrf_token(self, request: Request) -> str:
+        token = request.cookies.get(SESSION_COOKIE)
+        cookie_csrf = request.cookies.get(CSRF_COOKIE, "")
+        stored = self.repository.session_csrf_hash(digest(token)) if token else None
+        if not stored or not cookie_csrf or not hmac.compare_digest(stored, digest(cookie_csrf)):
+            raise DomainError(403, "CSRF_FAILED", "CSRF validation failed.")
+        return cookie_csrf
+
 
 def current_identity(request: Request) -> dict[str, Any]:
     return request.app.state.services.admin.authenticate(request)
@@ -176,17 +189,25 @@ async def login(payload: LoginRequest, request: Request, response: Response):
     identity, token, csrf = request.app.state.services.admin.login(
         payload.email, payload.password, getattr(request.state, "request_id", None)
     )
-    secure = request.app.state.settings.app_env in {"staging", "production"}
+    secure, same_site = admin_cookie_policy(request.app.state.settings.app_env)
     response.set_cookie(
-        SESSION_COOKIE, token, httponly=True, secure=secure, samesite="strict", max_age=28800, path="/api"
+        SESSION_COOKIE, token, httponly=True, secure=secure, samesite=same_site, max_age=28800, path="/api"
     )
-    response.set_cookie(CSRF_COOKIE, csrf, httponly=False, secure=secure, samesite="strict", max_age=28800, path="/api")
+    response.set_cookie(
+        CSRF_COOKIE, csrf, httponly=False, secure=secure, samesite=same_site, max_age=28800, path="/api"
+    )
     return success(identity)
 
 
 @router.get("/auth/me")
 async def me(identity: dict[str, Any] = Depends(current_identity)):
     return success(AdminService.public_identity(identity))
+
+
+@router.get("/auth/csrf")
+async def csrf(request: Request, identity: dict[str, Any] = Depends(current_identity)):
+    del identity
+    return success({"csrfToken": request.app.state.services.admin.csrf_token(request)})
 
 
 @router.post("/auth/logout")
@@ -198,8 +219,9 @@ async def logout(
     request.app.state.services.admin.repository.audit(
         identity["id"], "admin.logout", "admin_session", None, {}, getattr(request.state, "request_id", None)
     )
-    response.delete_cookie(SESSION_COOKIE, path="/api")
-    response.delete_cookie(CSRF_COOKIE, path="/api")
+    secure, same_site = admin_cookie_policy(request.app.state.settings.app_env)
+    response.delete_cookie(SESSION_COOKIE, path="/api", httponly=True, secure=secure, samesite=same_site)
+    response.delete_cookie(CSRF_COOKIE, path="/api", secure=secure, samesite=same_site)
     return success({"loggedOut": True})
 
 
