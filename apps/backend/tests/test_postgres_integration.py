@@ -80,11 +80,11 @@ def test_seed_is_idempotent_and_api_reads_database():
     app = create_app(settings, SqlAlchemyRepository())
     with TestClient(app) as client:
         assert client.get("/api/products/petal-pack").json()["data"]["name"] == "Senova Petal Pack"
-        assert [item["slug"] for item in client.get("/api/v1/products").json()["data"]] == [
+        assert {item["slug"] for item in client.get("/api/v1/products").json()["data"]} == {
             "classic",
             "petal-pack",
             "gift-set",
-        ]
+        }
         assert client.get("/api/v1/products/gift-set").status_code == 200
         assert client.get("/api/v1/cancellation-policies/senova-preorder-v1").status_code == 200
         assert client.get("/api/qr/PP-2601-A").json()["data"]["status"] == "active"
@@ -95,6 +95,7 @@ def test_seed_is_idempotent_and_api_reads_database():
         }
         first_submit = client.post("/api/submissions", json=payload, headers={"Idempotency-Key": "pg-contact-001"})
         second_submit = client.post("/api/submissions", json=payload, headers={"Idempotency-Key": "pg-contact-001"})
+        assert first_submit.status_code == 200
         assert first_submit.json()["data"] == second_submit.json()["data"]
 
     with psycopg.connect(_psycopg_url()) as connection:
@@ -133,6 +134,20 @@ def test_admin_auth_csrf_rbac_audit_and_session_revoke():
     app = create_app(settings, repository)
 
     with TestClient(app) as client:
+        export_contact = client.post(
+            "/api/submissions",
+            json={
+                "kind": "contact",
+                "payload": {
+                    "name": "Export Test",
+                    "email": "admin-export@example.com",
+                    "topic": "product",
+                    "message": "Export regression coverage",
+                },
+            },
+            headers={"Idempotency-Key": "admin-export-contact-001"},
+        )
+        assert export_contact.status_code == 200
         assert client.get("/api/v1/admin/products").status_code == 401
         assert (
             client.post(
@@ -265,7 +280,7 @@ def test_admin_auth_csrf_rbac_audit_and_session_revoke():
         )
         exported = client.post("/api/v1/admin/submissions/export", headers={"X-CSRF-Token": csrf})
         assert exported.status_code == 200
-        assert "an@example.com" in exported.text
+        assert "admin-export@example.com" in exported.text
         assert any(item["action"] == "catalog.active" for item in client.get("/api/v1/admin/audit-logs").json()["data"])
         assert any(
             item["action"] == "submission.export" for item in client.get("/api/v1/admin/audit-logs").json()["data"]

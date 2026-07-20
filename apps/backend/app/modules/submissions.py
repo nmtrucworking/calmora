@@ -88,8 +88,7 @@ class SubmissionService:
         if kind == "feedback":
             is_quick_feedback = bool(payload.get("mostMemorable")) and isinstance(payload.get("clarityScore"), int)
             is_detailed_feedback = all(
-                payload.get(field)
-                for field in ("sensoryFeedback", "acceptablePriceRange", "purchaseIntentPurpose")
+                payload.get(field) for field in ("sensoryFeedback", "acceptablePriceRange", "purchaseIntentPurpose")
             )
             if not is_quick_feedback and not is_detailed_feedback:
                 raise DomainError(422, "VALIDATION_ERROR", "Feedback answers are incomplete.")

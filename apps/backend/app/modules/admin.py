@@ -7,7 +7,7 @@ import hmac
 import io
 import secrets
 from datetime import UTC, datetime
-from typing import Any
+from typing import Any, Literal
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from argon2 import PasswordHasher
@@ -28,7 +28,7 @@ def digest(value: str) -> str:
     return hashlib.sha256(value.encode()).hexdigest()
 
 
-def admin_cookie_policy(app_env: str) -> tuple[bool, str]:
+def admin_cookie_policy(app_env: str) -> tuple[bool, Literal["strict", "none"]]:
     secure = app_env in {"staging", "production"}
     return secure, "none" if secure else "strict"
 

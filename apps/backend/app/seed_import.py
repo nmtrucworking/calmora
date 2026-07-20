@@ -36,9 +36,7 @@ def load_and_validate() -> dict[str, list[dict[str, Any]]]:
         if not isinstance(value, list) or not all(isinstance(item, dict) for item in value):
             raise ValueError(f"{name}.json must contain an array of objects")
         result[name] = value
-    result["products"] = [
-        ProductContract.model_validate(item).model_dump(mode="json") for item in result["products"]
-    ]
+    result["products"] = [ProductContract.model_validate(item).model_dump(mode="json") for item in result["products"]]
     result["cancellation_policies"] = [
         CancellationPolicyContract.model_validate(item).model_dump(mode="json")
         for item in result["cancellation_policies"]
