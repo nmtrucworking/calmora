@@ -138,7 +138,7 @@ export function SiteLayout({
 
           <div className="flex items-center justify-end gap-2 max-[520px]:gap-2">
             <Link
-              href="/reorder"
+              href="/order-request"
               className={cx(
                 "inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap border px-3 text-[0.72rem] font-[650] uppercase tracking-[0.12em] no-underline transition-colors duration-200 max-[1120px]:hidden",
                 isTransparentHeader
@@ -201,7 +201,7 @@ export function SiteLayout({
           <nav className="grid gap-3" aria-label={copy.mobileNavAria}>
             {renderNavLinks("mobile")}
             <Link
-              href="/reorder"
+              href="/order-request"
               className="inline-flex min-h-11 items-center justify-center rounded-[var(--radius-sm)] border border-primary bg-primary font-[650] !text-on-primary no-underline"
               onClick={() => setIsMenuOpen(false)}
               tabIndex={isMenuOpen ? undefined : -1}

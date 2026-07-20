@@ -89,7 +89,7 @@ class SubmissionService:
             ],
             "contact": ["name", "email", "topic", "message"],
             "partners": ["name", "email", "organization", "message"],
-            "pre-order": ["name", "email", "phone", "items"],
+            "pre-order": ["name", "email", "phone", "zalo", "policyConsent", "items"],
         }
         missing = [field for field in required[kind] if not payload.get(field)]
         if missing:

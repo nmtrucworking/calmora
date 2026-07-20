@@ -84,6 +84,16 @@ export const pageSeo: Record<string, SeoContent> = {
     description:
       "Đăng ký quan tâm mẫu thử và góp phản hồi validation cho Senova Petal Pack, Senova Gift Set.",
   },
+  "/order-request": {
+    title: "Yêu cầu đặt trước Senova | Calmora",
+    description:
+      "Chọn cấu hình và gửi yêu cầu đặt trước để Senova xác nhận qua email và Zalo trong 1–2 ngày làm việc.",
+  },
+  "/order-request/success": {
+    title: "Senova đã ghi nhận yêu cầu đặt trước | Calmora",
+    description: "Senova đã ghi nhận yêu cầu và sẽ liên hệ để xác nhận trước khi chuyển khoản.",
+    robots: "noindex,follow",
+  },
   "/contact": {
     title: "Liên hệ Senova | Calmora",
     description:

@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight, Check, QrCode, ShoppingBag } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, QrCode } from "lucide-react";
 import { useState } from "react";
 import { EditorialSection } from "@shared/components/luxury/EditorialSection";
 import { ImageReveal } from "@shared/components/luxury/ImageReveal";
@@ -6,7 +6,6 @@ import { LuxuryButton } from "@shared/components/luxury/LuxuryButton";
 import { ProductStatement } from "@shared/components/luxury/ProductStatement";
 import { SectionEyebrow } from "@shared/components/luxury/SectionEyebrow";
 import { orderedLuxuryProducts, productLuxuryCopy } from "@features/content/luxuryCopy";
-import { useInquiryBag } from "@app/providers/InquiryBagContext";
 import { useLanguage, type Language } from "@app/providers/LanguageContext";
 import { Link } from "@app/router/RouterContext";
 import type { SenovaProduct } from "@features/products/data/products";
@@ -42,7 +41,7 @@ const detailCopy: Record<
     notFoundText: "Mã đường dẫn này chưa có nội dung công khai. Bạn có thể quay về bộ sưu tập Senova.",
     notFoundCta: "Về trang sản phẩm",
     configuration: "Cấu hình",
-    addToBag: "Thêm vào inquiry bag",
+    addToBag: "Gửi yêu cầu đặt trước",
     included: "Trong cấu hình này",
     materials: "Chất liệu và chi tiết",
     ritual: "Nghi thức sử dụng",
@@ -62,7 +61,7 @@ const detailCopy: Record<
     notFoundText: "This route does not have public content yet. You can return to the Senova collection.",
     notFoundCta: "Back to products",
     configuration: "Configuration",
-    addToBag: "Add to inquiry bag",
+    addToBag: "Send preorder request",
     included: "Included",
     materials: "Materials and details",
     ritual: "Usage ritual",
@@ -99,10 +98,19 @@ function ProductNotFound() {
 }
 
 export default function ProductDetailPage({ product: baseProduct }: ProductDetailPageProps) {
-  const { addItem } = useInquiryBag();
   const { language } = useLanguage();
   const copy = detailCopy[language];
-  const product = baseProduct ? productLuxuryCopy[language][baseProduct.id] : undefined;
+  const localizedProduct = baseProduct ? productLuxuryCopy[language][baseProduct.id] : undefined;
+  const product =
+    baseProduct && localizedProduct
+      ? {
+          ...localizedProduct,
+          priceLabel: baseProduct.priceLabel,
+          availability: baseProduct.availability,
+          variants: baseProduct.variants,
+          shippingNote: baseProduct.shippingNote,
+        }
+      : undefined;
   const [selectedVariant, setSelectedVariant] = useState(product?.variants[0]?.id);
 
   if (!baseProduct || !product) {
@@ -165,14 +173,14 @@ export default function ProductDetailPage({ product: baseProduct }: ProductDetai
 
               <div className="mt-8 flex flex-wrap gap-4">
                 <LuxuryButton
+                  href={`/order-request?product=${baseProduct.id}&variant=${selectedVariant}&quantity=1&intent=personal&source=product-detail`}
                   variant="dark"
-                  onClick={() => addItem({ productId: baseProduct.id, variantId: selectedVariant })}
                 >
                   {copy.addToBag}
-                  <ShoppingBag aria-hidden="true" className="h-4 w-4" />
+                  <ArrowRight aria-hidden="true" className="h-4 w-4" />
                 </LuxuryButton>
-                <LuxuryButton href={product.secondaryAction.href} variant="light">
-                  {product.secondaryAction.label}
+                <LuxuryButton href={`/experience/${baseProduct.id}`} variant="light">
+                  {language === "vi" ? "Xem nghi thức sử dụng" : "View usage ritual"}
                 </LuxuryButton>
               </div>
             </div>
@@ -310,7 +318,7 @@ export default function ProductDetailPage({ product: baseProduct }: ProductDetai
       <EditorialSection className="bg-[var(--senova-forest-black)] text-text-inverse">
         <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-8 max-[760px]:grid-cols-1">
           <ProductStatement eyebrow="Concierge" title={copy.preorderTitle} text={copy.preorderText} dark />
-          <LuxuryButton href="/reorder" variant="dark">
+          <LuxuryButton href={`/order-request?product=${baseProduct.id}&source=product-detail-footer`} variant="dark">
             {copy.preorder}
             <ArrowRight aria-hidden="true" className="h-4 w-4" />
           </LuxuryButton>

@@ -124,7 +124,7 @@ const productCopy: Record<Language, Record<ProductId, ProductCopy>> = {
       giftOptions: ["Thêm thiệp lời nhắn", "Gói giấy lụa", "Lên lịch giao theo ngày"],
       badges: ["Everyday ritual", "Single serve", "Preorder"],
       primaryAction: { label: "Mở trải nghiệm Classic", href: "/experience/classic" },
-      secondaryAction: { label: "Đăng ký đặt trước", href: "/reorder?product=classic" },
+      secondaryAction: { label: "Đăng ký đặt trước", href: "/order-request?product=classic" },
       heroAlt: "Hộp trà hương sen Senova Classic",
       suitableFor: [
         "Sử dụng hằng ngày",
@@ -170,7 +170,7 @@ const productCopy: Record<Language, Record<ProductId, ProductCopy>> = {
         "Hướng dẫn nghi thức mở - pha",
       ],
       dimensions: "Mỗi Petal Pack được bảo quản trong khay riêng, hộp 18 x 12 x 7 cm",
-      brewingNotes: ["Mở từng lớp cánh sen", "Dùng 200 ml nước nóng", "Chờ 5 phút và quét QR trong lúc đợi"],
+      brewingNotes: ["Tách nhẹ cánh sen để thưởng hương", "Pha nguyên búp sen theo thông số hiển thị", "Chờ trà chiết xuất rồi thưởng thức"],
       shippingNote: "Hàng thử nghiệm được concierge xác nhận lịch giao và điều kiện bảo quản.",
       giftOptions: ["Thiệp cá nhân hóa", "QR lời nhắn", "Gói riêng từng khách mời"],
       badges: ["Signature experience", "QR story", "Limited batch"],
@@ -229,7 +229,7 @@ const productCopy: Record<Language, Record<ProductId, ProductCopy>> = {
       shippingNote: "Concierge xác nhận số lượng, ngày giao, tên người nhận và lời nhắn trước khi chốt đơn.",
       giftOptions: ["Đóng dấu logo đối tác", "Thiệp song ngữ", "Giao nhiều địa chỉ", "Phiên bản theo mùa"],
       badges: ["Gifting", "Corporate", "Custom quote"],
-      primaryAction: { label: "Đăng ký nhận thông tin", href: "/reorder?product=gift-set" },
+      primaryAction: { label: "Đăng ký nhận thông tin", href: "/order-request?product=gift-set" },
       secondaryAction: { label: "Liên hệ tư vấn", href: "/contact?topic=gift-set" },
       heroAlt: "Bộ quà trà sen Senova Gift Set",
       suitableFor: ["Quà tri ân", "Quà lưu niệm", "Quà đối tác", "Phiên bản theo mùa"],
@@ -278,7 +278,7 @@ const productCopy: Record<Language, Record<ProductId, ProductCopy>> = {
       giftOptions: ["Add a message card", "Tissue wrapping", "Schedule delivery by date"],
       badges: ["Everyday ritual", "Single serve", "Preorder"],
       primaryAction: { label: "Open the Classic experience", href: "/experience/classic" },
-      secondaryAction: { label: "Join preorder", href: "/reorder?product=classic" },
+      secondaryAction: { label: "Join preorder", href: "/order-request?product=classic" },
       heroAlt: "Senova Classic lotus tea box",
       suitableFor: [
         "Daily use",
@@ -378,7 +378,7 @@ const productCopy: Record<Language, Record<ProductId, ProductCopy>> = {
       shippingNote: "Concierge confirms quantity, delivery date, recipient names and messages before production.",
       giftOptions: ["Partner logo mark", "Bilingual card", "Multi-address delivery", "Seasonal edition"],
       badges: ["Gifting", "Corporate", "Custom quote"],
-      primaryAction: { label: "Request information", href: "/reorder?product=gift-set" },
+      primaryAction: { label: "Request information", href: "/order-request?product=gift-set" },
       secondaryAction: { label: "Contact concierge", href: "/contact?topic=gift-set" },
       heroAlt: "Senova Gift Set lotus tea gift box",
       suitableFor: ["Appreciation gifts", "Souvenirs", "Partner gifting", "Seasonal editions"],
@@ -600,7 +600,7 @@ export const commerceText: Record<
         description:
           "Trang gợi ý quà tặng cá nhân, thiệp lời nhắn, bao bì và lịch giao cho những dịp cần sự trang trọng.",
         ctaLabel: "Gửi yêu cầu quà tặng",
-        ctaHref: "/checkout?intent=gifting",
+        ctaHref: "/order-request?intent=gifting",
         blocks: [
           { title: "Gift message", text: "Thêm lời nhắn riêng, QR câu chuyện hoặc thiệp song ngữ." },
           { title: "Presentation", text: "Gói giấy lụa, niêm phong và cấu hình hộp theo người nhận." },
@@ -626,7 +626,7 @@ export const commerceText: Record<
         title: "Một điểm chạm riêng cho khách hàng cần được tư vấn.",
         description: "Concierge hỗ trợ chọn sản phẩm, cấu hình quà tặng, lịch tasting và thông tin lô thử nghiệm.",
         ctaLabel: "Đặt lịch concierge",
-        ctaHref: "/checkout?intent=concierge",
+        ctaHref: "/order-request?intent=concierge",
         blocks: [
           { title: "Product guidance", text: "Chọn Classic, Petal Pack hay Gift Set theo người nhận và dịp tặng." },
           { title: "Private support", text: "Liên hệ qua email hoặc điện thoại trước khi xác nhận inquiry." },
@@ -640,7 +640,7 @@ export const commerceText: Record<
         description:
           "Giao diện booking mock cho tasting cá nhân, đối tác hoặc sự kiện nhỏ, tập trung vào nghi thức mở - pha - kể chuyện.",
         ctaLabel: "Yêu cầu lịch tasting",
-        ctaHref: "/checkout?intent=private-tasting",
+        ctaHref: "/order-request?intent=private-tasting",
         blocks: [
           { title: "Format", text: "30-45 phút, tối ưu cho 4-12 khách mời." },
           { title: "Products", text: "Thử Classic, mở Petal Pack và xem cấu hình Gift Set." },
@@ -727,7 +727,7 @@ export const commerceText: Record<
       collectionsDescription:
         "Khám phá các cấu hình sản phẩm theo ritual, gifting và private tasting, tất cả đều kết nối với concierge thay vì checkout tự động.",
       clientNote: "Client note",
-      collectionMoodFallback: "Mỗi sản phẩm có thể được thêm vào inquiry bag để đội ngũ Senova xác nhận riêng.",
+      collectionMoodFallback: "Mỗi sản phẩm có thể được chọn cấu hình để đội ngũ Senova xác nhận riêng.",
       edits: "Edits",
       chooseMoment: "Chọn theo khoảnh khắc.",
       giftingConcierge: "Gifting concierge",
@@ -743,7 +743,7 @@ export const commerceText: Record<
       wishlistTitle: "Những cấu hình đang được lưu lại.",
       wishlistNote: "Wishlist đang là UI mock cho giai đoạn chưa có đăng nhập.",
       wishlistAside: "Khách có thể lưu sản phẩm và gửi inquiry khi đã sẵn sàng.",
-      inquiryBag: "Inquiry bag",
+      inquiryBag: "Danh sách đặt trước",
       bagTitle: "Giỏ yêu cầu trước khi concierge xác nhận.",
       bagDescription: "Đây không phải giỏ thanh toán. Senova sẽ dùng thông tin này để tư vấn cấu hình phù hợp.",
       bagCount: "dòng sản phẩm đang được quan tâm.",
@@ -850,7 +850,7 @@ export const commerceText: Record<
         description:
           "A gifting page for personal sets, message cards, packaging and delivery timing for considered occasions.",
         ctaLabel: "Send gifting request",
-        ctaHref: "/checkout?intent=gifting",
+        ctaHref: "/order-request?intent=gifting",
         blocks: [
           { title: "Gift message", text: "Add a private note, QR story or bilingual card." },
           { title: "Presentation", text: "Tissue wrap, seal and box configuration by recipient." },
@@ -876,7 +876,7 @@ export const commerceText: Record<
         title: "A private touchpoint for clients who want guidance.",
         description: "Concierge supports product choice, gifting configuration, tasting dates and trial batch details.",
         ctaLabel: "Book concierge",
-        ctaHref: "/checkout?intent=concierge",
+        ctaHref: "/order-request?intent=concierge",
         blocks: [
           { title: "Product guidance", text: "Choose Classic, Petal Pack or Gift Set by recipient and occasion." },
           { title: "Private support", text: "Connect by email or phone before confirming an inquiry." },
@@ -890,7 +890,7 @@ export const commerceText: Record<
         description:
           "A mock booking interface for personal, partner or intimate event tastings centered on opening, brewing and storytelling.",
         ctaLabel: "Request tasting time",
-        ctaHref: "/checkout?intent=private-tasting",
+        ctaHref: "/order-request?intent=private-tasting",
         blocks: [
           { title: "Format", text: "30-45 minutes, ideal for 4-12 guests." },
           { title: "Products", text: "Taste Classic, open Petal Pack and review Gift Set configurations." },

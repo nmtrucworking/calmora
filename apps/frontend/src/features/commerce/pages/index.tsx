@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
 import {
   ArrowRight,
   CalendarDays,
@@ -29,6 +29,8 @@ import { useInquiryBag } from "@app/providers/InquiryBagContext";
 import { useRouter } from "@app/router/RouterState";
 import { products, type ProductId } from "@features/products/data/products";
 import { submitForm } from "@shared/api/submissions";
+import { useProductCatalog } from "@app/providers/ProductCatalogContext";
+import { trackEvent } from "@shared/analytics/analytics";
 import { luxuryMotion } from "@shared/styles/luxuryEffects";
 import { cx } from "@shared/utils/classNames";
 
@@ -329,7 +331,7 @@ export function BagPage() {
           <aside className={cx(panelClass, "sticky top-28 grid gap-4")}>
             <p className={eyebrowClass}>{text.ui.nextStep}</p>
             <p className={bodyClass}>{text.ui.nextStepText}</p>
-            <Link href="/checkout" className={primaryButtonClass}>
+            <Link href="/order-request" className={primaryButtonClass}>
               {text.ui.continueInquiry}
               <ArrowRight className="h-4 w-4" />
             </Link>
@@ -347,30 +349,62 @@ export function BagPage() {
 
 export function CheckoutPage() {
   const { items, clearBag } = useInquiryBag();
+  const { products: catalogProducts } = useProductCatalog();
   const { navigate, search } = useRouter();
   const { language } = useLanguage();
   const { text } = useCommerceCopy();
-  const intent = new URLSearchParams(search).get("intent") ?? "preorder";
+  const params = useMemo(() => new URLSearchParams(search), [search]);
+  const intent = params.get("intent") ?? "personal";
+  const requestedProduct = params.get("product");
+  const requestedVariant = params.get("variant");
+  const requestedQuantity = Math.max(1, Number.parseInt(params.get("quantity") ?? "1", 10) || 1);
+  const queryProduct = catalogProducts.find((product) => product.slug === requestedProduct);
+  const bagItem = items[0];
+  const [selectedProductId, setSelectedProductId] = useState<ProductId | "">(
+    queryProduct?.id ?? bagItem?.productId ?? "",
+  );
+  const selectedProduct =
+    catalogProducts.find((product) => product.id === selectedProductId) ?? catalogProducts[0];
+  const [selectedVariantId, setSelectedVariantId] = useState(
+    requestedVariant ?? bagItem?.variantId ?? selectedProduct?.variants[0]?.id ?? "",
+  );
+  const [quantity, setQuantity] = useState(queryProduct ? requestedQuantity : bagItem?.quantity ?? 1);
+  const selectedVariant =
+    selectedProduct?.variants.find((variant) => variant.id === selectedVariantId) ?? selectedProduct?.variants[0];
+  const requestItems = selectedProduct
+    ? [{ productId: selectedProduct.id, variantId: selectedVariant?.id, quantity }]
+    : [];
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    trackEvent({ eventName: "checkout_start", source: params.get("source") ?? "direct", productSlug: queryProduct?.slug });
+  }, [params, queryProduct?.slug]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError("");
     setIsSubmitting(true);
     const form = new FormData(event.currentTarget);
+    const zaloUsesPhone = form.get("zaloUsesPhone") === "yes";
+    const zalo = zaloUsesPhone ? String(form.get("phone") ?? "") : String(form.get("zalo") ?? "");
+    if (!zalo || form.get("policyConsent") !== "yes") {
+      setError("Vui lòng cung cấp số Zalo và đồng ý chính sách trước khi gửi.");
+      setIsSubmitting(false);
+      return;
+    }
     const result = await submitForm("pre-order", {
       name: String(form.get("name") ?? ""),
       email: String(form.get("email") ?? ""),
       phone: String(form.get("phone") ?? ""),
+      zalo,
+      policyConsent: true,
       intent,
       notes: String(form.get("notes") ?? ""),
-      items: items.map((item) => ({
+      items: requestItems.map((item) => ({
         productId: item.productId,
         variantId: item.variantId,
         quantity: item.quantity,
-        giftMessage: item.giftMessage,
-        deliveryPreference: item.deliveryPreference,
       })),
     });
     setIsSubmitting(false);
@@ -380,17 +414,18 @@ export function CheckoutPage() {
       return;
     }
 
+    trackEvent({ eventName: "checkout_submit", source: params.get("source") ?? "direct", productSlug: queryProduct?.slug });
     clearBag();
-    navigate("/checkout/thank-you");
+    navigate(`/order-request/success?request=${encodeURIComponent(result.data?.id ?? "")}`);
   };
 
   return (
     <article className={pageClass}>
       <section className={heroClass}>
         <div>
-          <p className={eyebrowClass}>{text.ui.checkoutEyebrow}</p>
-          <h1 className={titleClass}>{text.ui.checkoutTitle}</h1>
-          <p className={bodyClass}>{text.ui.checkoutDescription}</p>
+          <p className={eyebrowClass}>Yêu cầu đặt trước</p>
+          <h1 className={titleClass}>Gửi yêu cầu, chưa thanh toán trực tuyến.</h1>
+          <p className={bodyClass}>Senova sẽ liên hệ qua email và Zalo trong 1–2 ngày làm việc để xác nhận sản phẩm, thời gian chuẩn bị, phạm vi giao hàng và thông tin chuyển khoản.</p>
         </div>
         <aside className={panelClass}>
           <p className={eyebrowClass}>{text.ui.intent}</p>
@@ -399,6 +434,51 @@ export function CheckoutPage() {
       </section>
       <section className="grid grid-cols-[minmax(0,1fr)_22rem] items-start gap-5 max-[900px]:grid-cols-1">
         <form className={cx(panelClass, "grid gap-4")} onSubmit={handleSubmit}>
+          <div className="grid grid-cols-2 gap-4 max-[680px]:grid-cols-1">
+            <label className="grid gap-2">
+              <span className={eyebrowClass}>Sản phẩm</span>
+              <select
+                className={fieldClass}
+                value={selectedProduct?.id ?? ""}
+                onChange={(event) => {
+                  const productId = event.target.value as ProductId;
+                  const nextProduct = catalogProducts.find((product) => product.id === productId);
+                  setSelectedProductId(productId);
+                  setSelectedVariantId(nextProduct?.variants[0]?.id ?? "");
+                }}
+                required
+              >
+                {catalogProducts.map((product) => (
+                  <option key={product.id} value={product.id}>{product.name}</option>
+                ))}
+              </select>
+            </label>
+            <label className="grid gap-2">
+              <span className={eyebrowClass}>Cấu hình</span>
+              <select
+                className={fieldClass}
+                value={selectedVariant?.id ?? ""}
+                onChange={(event) => setSelectedVariantId(event.target.value)}
+                required
+              >
+                {selectedProduct?.variants.map((variant) => (
+                  <option key={variant.id} value={variant.id}>{variant.label}</option>
+                ))}
+              </select>
+            </label>
+          </div>
+          <label className="grid gap-2">
+            <span className={eyebrowClass}>Số lượng</span>
+            <input
+              className={fieldClass}
+              type="number"
+              min={selectedVariant?.minimumQuantity ?? selectedProduct?.commerce?.minimumQuantity ?? 1}
+              max={selectedVariant?.maximumQuantity ?? selectedProduct?.commerce?.maximumQuantity ?? 1000}
+              value={quantity}
+              onChange={(event) => setQuantity(Math.max(1, Number.parseInt(event.target.value, 10) || 1))}
+              required
+            />
+          </label>
           <div className="grid grid-cols-2 gap-4 max-[680px]:grid-cols-1">
             <label className="grid gap-2">
               <span className={eyebrowClass}>{text.ui.name}</span>
@@ -413,26 +493,49 @@ export function CheckoutPage() {
             <span className={eyebrowClass}>{text.ui.email}</span>
             <input className={fieldClass} name="email" type="email" required />
           </label>
+          <fieldset className="grid gap-3 rounded-lg border border-border-strong p-4">
+            <legend className={eyebrowClass}>Zalo xác nhận</legend>
+            <label className="flex min-h-11 items-center gap-3">
+              <input name="zaloUsesPhone" type="checkbox" value="yes" defaultChecked />
+              <span>Dùng số điện thoại trên cho Zalo</span>
+            </label>
+            <label className="grid gap-2">
+              <span className={eyebrowClass}>Số Zalo khác (nếu có)</span>
+              <input className={fieldClass} name="zalo" type="tel" autoComplete="tel" />
+            </label>
+          </fieldset>
           <label className="grid gap-2">
             <span className={eyebrowClass}>{text.ui.notesLabel}</span>
             <textarea className={cx(fieldClass, "min-h-36 resize-y")} name="notes" placeholder={text.ui.notesPlaceholder} />
+          </label>
+          <label className="flex items-start gap-3 rounded-lg border border-border-strong p-4 leading-relaxed">
+            <input className="mt-1" name="policyConsent" type="checkbox" value="yes" required />
+            <span>Đây là yêu cầu đặt trước, chưa phải giao dịch thanh toán trực tiếp. Tôi đồng ý để Senova xác nhận cấu hình, lịch giao và chính sách hủy trước khi chuyển khoản.</span>
           </label>
           {error ? (
             <p className="m-0 rounded-lg border border-[rgba(185,86,114,0.26)] bg-[rgba(185,86,114,0.08)] px-4 py-3 text-[0.9rem] font-bold text-accent-strong" role="alert">
               {error}
             </p>
           ) : null}
-          <button className={primaryButtonClass} type="submit" disabled={isSubmitting}>
+          <button className={primaryButtonClass} type="submit" disabled={isSubmitting || !selectedProduct}>
             {isSubmitting ? text.ui.submitting : text.ui.submitInquiry}
           </button>
         </form>
         <aside className={cx(panelClass, "grid gap-4")}>
           <p className={eyebrowClass}>{text.ui.review}</p>
-          {items.length ? (
-            items.map((item) => {
-              const baseProduct = products.find((product) => product.id === item.productId);
+          {requestItems.length ? (
+            requestItems.map((item) => {
+              const baseProduct = catalogProducts.find((product) => product.id === item.productId);
               const product = baseProduct ? getLocalizedProduct(baseProduct, language) : undefined;
-              return product ? <p key={item.productId} className="m-0 text-[0.95rem] font-bold text-primary-strong">{item.quantity} x {product.name}</p> : null;
+              const variant = baseProduct?.variants.find((value) => value.id === item.variantId);
+              return product ? (
+                <div key={item.productId} className="grid gap-2 border-b border-border pb-4 last:border-0">
+                  <p className="m-0 text-[0.95rem] font-bold text-primary-strong">{item.quantity} × {product.name}</p>
+                  {variant ? <p className="m-0 text-sm text-text-muted">{variant.label}</p> : null}
+                  <p className="m-0 text-sm text-text-muted">Giá dự kiến: {baseProduct?.priceLabel || "Liên hệ để nhận giá dự kiến"}</p>
+                  <p className="m-0 text-sm text-text-muted">{baseProduct?.shippingNote || "Senova sẽ xác nhận thời gian chuẩn bị và phạm vi giao hàng."}</p>
+                </div>
+              ) : null;
             })
           ) : (
             <p className={bodyClass}>{text.ui.emptyCheckout}</p>
@@ -445,14 +548,18 @@ export function CheckoutPage() {
 
 export function CheckoutThankYouPage() {
   const { text } = useCommerceCopy();
+  const { search } = useRouter();
+  const requestCode = new URLSearchParams(search).get("request");
 
   return (
     <section className={cx(panelClass, "mx-auto my-16 max-w-[48rem] text-center")}>
       <CheckCircle2 className="mx-auto h-12 w-12 text-primary" />
       <p className={eyebrowClass}>{text.ui.inquiryReceived}</p>
       <h1 className="font-display text-[clamp(2rem,5vw,4rem)] leading-none text-primary-strong">{text.ui.thankYouTitle}</h1>
-      <p className={bodyClass}>{text.ui.thankYouText}</p>
-      <Link href="/account/orders" className={primaryButtonClass}>{text.ui.viewMockStatus}</Link>
+      <p className={bodyClass}>Senova sẽ liên hệ qua email và Zalo trong 1–2 ngày làm việc để xác nhận cấu hình sản phẩm, thời gian chuẩn bị, phạm vi giao hàng và thông tin chuyển khoản.</p>
+      {requestCode ? <p className="font-bold text-primary-strong">Mã yêu cầu: {requestCode}</p> : null}
+      <p className={bodyClass}>Yêu cầu này chưa phải xác nhận giao hàng cuối cùng.</p>
+      <Link href="/products" className={primaryButtonClass}>Tiếp tục xem sản phẩm</Link>
     </section>
   );
 }

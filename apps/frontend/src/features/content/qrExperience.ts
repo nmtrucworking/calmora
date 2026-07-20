@@ -89,8 +89,8 @@ export const qrExperienceContent: Record<ProductId, QrExperienceContent> = {
       },
       {
         label: "03",
-        title: "Pha phần trà bên trong",
-        text: "Lấy túi trà, đặt vào cốc, dùng khoảng 200 ml nước nóng và làm theo hướng dẫn trên bao bì.",
+        title: "Pha nguyên búp sen",
+        text: "Đặt nguyên búp sen vào dụng cụ pha và rót nước theo thông số đang hiển thị.",
       },
       {
         label: "04",
