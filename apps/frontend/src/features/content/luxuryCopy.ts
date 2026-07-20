@@ -408,7 +408,7 @@ export const productLuxuryCopy: Record<Language, Record<ProductId, ProductLuxury
         "Người quan tâm thiết kế và nghi thức trà",
       ],
       experienceSteps: [
-        { title: "Mở cánh sen", text: "Mở nhẹ từng lớp để quan sát cấu trúc búp sen trước khi pha." },
+        { title: "Tách nhẹ cánh sen", text: "Tách nhẹ phần cánh bên ngoài để thưởng hương, không mở rời toàn bộ búp." },
         { title: "Chạm hương", text: "Dành một khoảnh khắc cho hương sen và chất liệu trước khi rót nước." },
         { title: "Pha trà", text: "Đặt phần trà vào chén và thực hiện theo hướng dẫn trên thẻ." },
         { title: "Thưởng thức", text: "Quan sát màu nước, nếm chậm và tiếp tục câu chuyện qua QR." },

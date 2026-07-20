@@ -25,6 +25,15 @@ export type SenovaProduct = {
     maximumQuantity: number;
     cancellationPolicyId?: string;
   };
+  brewing?: {
+    waterTemperature?: { min: number; max: number; unit: "C" };
+    waterVolume?: { min: number; max: number; unit: "ml" };
+    steepingTime?: { min: number; max: number; unit: "minute" | "second" };
+    warnings: string[];
+    isAssumption: boolean;
+    verificationStatus: "NOT_TESTED" | "IN_TESTING" | "VERIFIED" | "REQUIRES_RETEST";
+    contentVersion: string;
+  };
   variants: {
     id: string;
     label: string;
@@ -90,6 +99,13 @@ export const products: SenovaProduct[] = [
       status: "PRE_ORDER", statusLabel: "Đang nhận yêu cầu đặt trước", priceType: "CONTACT",
       currency: "VND", displayPrice: false, minimumQuantity: 1, maximumQuantity: 20,
       cancellationPolicyId: "senova-preorder-v1",
+    },
+    brewing: {
+      waterTemperature: { min: 80, max: 85, unit: "C" },
+      waterVolume: { min: 180, max: 220, unit: "ml" },
+      steepingTime: { min: 3, max: 4, unit: "minute" },
+      warnings: ["Thông số pha đang trong giai đoạn kiểm chứng."],
+      isAssumption: true, verificationStatus: "IN_TESTING", contentVersion: "p0.2",
     },
     variants: [
       {
@@ -178,6 +194,13 @@ export const products: SenovaProduct[] = [
       currency: "VND", displayPrice: false, minimumQuantity: 1, maximumQuantity: 10,
       cancellationPolicyId: "senova-preorder-v1",
     },
+    brewing: {
+      waterTemperature: { min: 80, max: 85, unit: "C" },
+      waterVolume: { min: 220, max: 250, unit: "ml" },
+      steepingTime: { min: 5, max: 7, unit: "minute" },
+      warnings: ["Thông số pha đang trong giai đoạn kiểm chứng."],
+      isAssumption: true, verificationStatus: "IN_TESTING", contentVersion: "p0.2",
+    },
     variants: [
       {
         id: "petal-single", label: "Hộp 3 búp", note: "Trải nghiệm cá nhân",
@@ -229,7 +252,7 @@ export const products: SenovaProduct[] = [
     experienceSteps: [
       {
         title: "Mở cánh sen",
-        text: "Mở nhẹ từng lớp cánh để quan sát cấu trúc Petal Pack và cảm nhận hình dáng trước khi pha.",
+        text: "Tách nhẹ phần cánh bên ngoài để thưởng hương, không mở rời toàn bộ búp.",
       },
       {
         title: "Cảm nhận",

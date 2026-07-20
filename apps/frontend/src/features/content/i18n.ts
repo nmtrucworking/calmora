@@ -191,7 +191,7 @@ const productCopy: Record<Language, Record<ProductId, ProductCopy>> = {
         "Nội dung QR tiếp nối câu chuyện sau khi người dùng cầm sản phẩm",
       ],
       experienceSteps: [
-        { title: "Mở cánh sen", text: "Mở nhẹ từng lớp cánh để quan sát cấu trúc Petal Pack trước khi pha." },
+        { title: "Tách nhẹ cánh sen", text: "Tách nhẹ phần cánh bên ngoài để thưởng hương, không mở rời toàn bộ búp." },
         { title: "Cảm nhận", text: "Dành một khoảnh khắc để nhìn hình dáng, chất liệu và hương trước khi rót nước." },
         { title: "Pha trà", text: "Đặt phần trà vào cốc và thực hiện theo hướng dẫn in trên bao bì." },
         { title: "Chờ", text: "Để hương và vị dần hiện ra. Trang QR có thể cung cấp câu chuyện ngắn trong lúc đợi." },

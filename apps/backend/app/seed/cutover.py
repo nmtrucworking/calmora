@@ -65,7 +65,7 @@ _VISIBLE_CONTENT: dict[str, dict[str, Any]] = {
             "steps": [
                 {
                     "label": "01",
-                    "title": "Mở nhẹ từng lớp cánh",
+                    "title": "Tách nhẹ cánh sen",
                     "text": "Không cần vội lấy phần trà; hãy quan sát cấu trúc búp sen và cảm nhận chất liệu trước.",
                 },
                 {

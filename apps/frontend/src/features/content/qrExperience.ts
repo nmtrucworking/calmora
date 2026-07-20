@@ -79,8 +79,8 @@ export const qrExperienceContent: Record<ProductId, QrExperienceContent> = {
     guidanceSteps: [
       {
         label: "01",
-        title: "Mở nhẹ từng lớp cánh",
-        text: "Không cần vội lấy phần trà; hãy quan sát cấu trúc búp sen và cảm nhận chất liệu trước.",
+        title: "Tách nhẹ cánh sen",
+        text: "Tách nhẹ phần cánh bên ngoài để thưởng hương, không mở rời toàn bộ búp sen.",
       },
       {
         label: "02",
