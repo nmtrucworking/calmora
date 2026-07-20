@@ -52,8 +52,7 @@ def upgrade() -> None:
         for variant in product["variants"]:
             bind.execute(
                 sa.text(
-                    "UPDATE product_variants SET name=:name,data=CAST(:data AS jsonb),updated_at=now() "
-                    "WHERE id=:id"
+                    "UPDATE product_variants SET name=:name,data=CAST(:data AS jsonb),updated_at=now() WHERE id=:id"
                 ),
                 {
                     "id": f"{product['id']}:{variant['id']}",
@@ -64,6 +63,4 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    metadata.tables["cancellation_policies"].drop(
-        bind=op.get_bind(), checkfirst=not context.is_offline_mode()
-    )
+    metadata.tables["cancellation_policies"].drop(bind=op.get_bind(), checkfirst=not context.is_offline_mode())
