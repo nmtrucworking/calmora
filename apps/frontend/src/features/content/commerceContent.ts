@@ -74,7 +74,7 @@ export const services: Record<string, ServiceContent> = {
     description:
       "Trang goi y qua tang ca nhan, thiep loi nhan, bao bi va lich giao cho nhung dip can su trang trong.",
     ctaLabel: "Gui yeu cau qua tang",
-    ctaHref: "/checkout?intent=gifting",
+    ctaHref: "/order-request?intent=gifting",
     blocks: [
       { title: "Gift message", text: "Them loi nhan rieng, QR cau chuyen hoac thiep song ngu." },
       { title: "Presentation", text: "Goi giay lua, niem phong va cau hinh hop theo nguoi nhan." },
@@ -102,7 +102,7 @@ export const services: Record<string, ServiceContent> = {
     description:
       "Concierge ho tro chon san pham, cau hinh qua tang, lich tasting va thong tin lo thu nghiem.",
     ctaLabel: "Dat lich concierge",
-    ctaHref: "/checkout?intent=concierge",
+    ctaHref: "/order-request?intent=concierge",
     blocks: [
       { title: "Product guidance", text: "Chon Classic, Petal Pack hay Gift Set theo nguoi nhan va dip tang." },
       { title: "Private support", text: "Lien he qua email hoac dien thoai truoc khi xac nhan inquiry." },
@@ -116,7 +116,7 @@ export const services: Record<string, ServiceContent> = {
     description:
       "UI booking mock cho tasting ca nhan, doi tac hoac su kien nho, tap trung vao nghi thuc mo - pha - ke chuyen.",
     ctaLabel: "Yeu cau lich tasting",
-    ctaHref: "/checkout?intent=private-tasting",
+    ctaHref: "/order-request?intent=private-tasting",
     blocks: [
       { title: "Format", text: "30-45 phut, toi uu cho 4-12 khach moi." },
       { title: "Products", text: "Thu Classic, mo Petal Pack va xem cau hinh Gift Set." },

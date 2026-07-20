@@ -15,10 +15,27 @@ export type SenovaProduct = {
   status: "draft" | "active" | "archived";
   priceLabel: string;
   availability: string;
+  commerce?: {
+    status: "IN_DEVELOPMENT" | "EARLY_ACCESS" | "PRE_ORDER" | "AVAILABLE" | "TEMPORARILY_UNAVAILABLE" | "SOLD_OUT" | "DISCONTINUED";
+    statusLabel: string;
+    priceType: "FIXED" | "ESTIMATED" | "STARTING_FROM" | "CONTACT";
+    currency: "VND";
+    displayPrice: boolean;
+    minimumQuantity: number;
+    maximumQuantity: number;
+  };
   variants: {
     id: string;
     label: string;
     note: string;
+    price?: number;
+    currency?: "VND";
+    priceType?: "FIXED" | "ESTIMATED" | "STARTING_FROM" | "CONTACT";
+    minimumQuantity?: number;
+    maximumQuantity?: number;
+    preparationTime?: { min: number; max: number; unit: "BUSINESS_DAY"; isAssumption: boolean };
+    deliveryScopes?: { code: string; label: string; enabled: boolean }[];
+    available?: boolean;
   }[];
   includedItems: string[];
   dimensions: string;
@@ -87,7 +104,7 @@ export const products: SenovaProduct[] = [
     },
     secondaryAction: {
       label: "Đăng ký đặt trước",
-      href: "/reorder?product=classic",
+      href: "/order-request?product=classic",
     },
     heroAlt: "Hộp trà hương sen Senova Classic",
     suitableFor: [
@@ -150,7 +167,7 @@ export const products: SenovaProduct[] = [
       "Hướng dẫn nghi thức mở - pha",
     ],
     dimensions: "Mỗi Petal Pack được bảo quản trong khay riêng, hộp 18 x 12 x 7 cm",
-    brewingNotes: ["Mở từng lớp cánh sen", "Dùng 200 ml nước nóng", "Chờ 5 phút và quét QR trong lúc đợi"],
+    brewingNotes: ["Tách nhẹ cánh sen để thưởng hương", "Pha nguyên búp sen theo thông số hiển thị", "Chờ trà chiết xuất rồi thưởng thức"],
     shippingNote: "Hàng thử nghiệm được concierge xác nhận lịch giao và điều kiện bảo quản.",
     giftOptions: ["Thiệp cá nhân hóa", "QR lời nhắn", "Gói riêng từng khách mời"],
     badges: ["Signature experience", "QR story", "Limited batch"],
@@ -239,7 +256,7 @@ export const products: SenovaProduct[] = [
     badges: ["Gifting", "Corporate", "Custom quote"],
     primaryAction: {
       label: "Đăng ký nhận thông tin",
-      href: "/reorder?product=gift-set",
+      href: "/order-request?product=gift-set",
     },
     secondaryAction: {
       label: "Liên hệ tư vấn",

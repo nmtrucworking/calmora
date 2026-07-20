@@ -147,7 +147,13 @@ def test_submission_receipt_idempotency_and_no_public_enumeration(client: TestCl
 
 
 def test_preorder_requires_items_and_snapshots_server_catalog(client: TestClient, storage):
-    base = {"name": "An", "email": "an@example.com", "phone": "0900000000"}
+    base = {
+        "name": "An",
+        "email": "an@example.com",
+        "phone": "0900000000",
+        "zalo": "0900000000",
+        "policyConsent": True,
+    }
     invalid = client.post("/api/submissions", json={"kind": "pre-order", "payload": {**base, "itemCount": 1}})
     assert invalid.status_code == 422
     response = client.post(
@@ -166,6 +172,25 @@ def test_preorder_requires_items_and_snapshots_server_catalog(client: TestClient
     stored = storage.submissions[response.json()["data"]["id"]]["payload"]["items"][0]
     assert stored["productName"] == "Senova Petal Pack"
     assert stored["variantName"] != "forged"
+
+
+def test_preorder_requires_zalo_and_policy_consent(client: TestClient):
+    payload = {
+        "name": "An",
+        "email": "an@example.com",
+        "phone": "0900000000",
+        "items": [{"productId": "classic", "quantity": 1}],
+    }
+    missing_zalo = client.post("/api/submissions", json={"kind": "pre-order", "payload": payload})
+    assert missing_zalo.status_code == 422
+    assert "zalo" in missing_zalo.json()["error"]["message"]
+
+    missing_policy = client.post(
+        "/api/submissions",
+        json={"kind": "pre-order", "payload": {**payload, "zalo": "0900000000"}},
+    )
+    assert missing_policy.status_code == 422
+    assert "policyConsent" in missing_policy.json()["error"]["message"]
 
 
 def test_analytics_allowlist_and_persistence(client: TestClient, storage):

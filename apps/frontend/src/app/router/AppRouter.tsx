@@ -25,7 +25,6 @@ const loadProductDetailPage = () => import("@features/products/pages/ProductDeta
 const loadStandardPage = () => import("@features/system/pages/SystemPages/StandardPage");
 const loadExperiencePage = () => import("@features/qr/pages/ExperiencePage");
 const loadFeedbackPage = () => import("@features/qr/pages/FeedbackPage");
-const loadPreOrderPage = () => import("@features/inquiry/pages/PreOrderPage");
 const loadContactPage = () => import("@features/inquiry/pages/ContactPage");
 const loadPartnersPage = () => import("@features/inquiry/pages/PartnersPage");
 const loadThankYouPage = () => import("@features/inquiry/pages/ThankYouPage");
@@ -42,7 +41,6 @@ const ProductDetailPage = lazy(loadProductDetailPage);
 const StandardPage = lazy(loadStandardPage);
 const ExperiencePage = lazy(loadExperiencePage);
 const FeedbackPage = lazy(loadFeedbackPage);
-const PreOrderPage = lazy(loadPreOrderPage);
 const ContactPage = lazy(loadContactPage);
 const PartnersPage = lazy(loadPartnersPage);
 const ThankYouPage = lazy(loadThankYouPage);
@@ -56,7 +54,6 @@ const CollectionDetailPage = lazy(() =>
 );
 const SearchPage = lazy(() => loadCommercePages().then((module) => ({ default: module.SearchPage })));
 const WishlistPage = lazy(() => loadCommercePages().then((module) => ({ default: module.WishlistPage })));
-const BagPage = lazy(() => loadCommercePages().then((module) => ({ default: module.BagPage })));
 const CheckoutPage = lazy(() => loadCommercePages().then((module) => ({ default: module.CheckoutPage })));
 const CheckoutThankYouPage = lazy(() =>
   loadCommercePages().then((module) => ({ default: module.CheckoutThankYouPage })),
@@ -85,6 +82,16 @@ const pageMotionSelector = "section, article, aside, form, figure, [data-luxury-
 
 function RouteFallback() {
   return <div style={{ minHeight: "60vh" }} />;
+}
+
+function Redirect({ to }: { to: string }) {
+  const { navigate } = useRouter();
+
+  useEffect(() => {
+    navigate(to);
+  }, [navigate, to]);
+
+  return <RouteFallback />;
 }
 
 function FocusSections({ children, enabled }: { children: ReactNode; enabled: boolean }) {
@@ -255,7 +262,9 @@ function getRouteImagePaths(pathname: string) {
     pathname === "/search" ||
     pathname === "/wishlist" ||
     pathname === "/bag" ||
-    pathname === "/checkout"
+    pathname === "/checkout" ||
+    pathname === "/order-request" ||
+    pathname === "/order-request/success"
   ) {
     return [productsBackgroundUrl, ...sharedImagePaths, ...productImagePaths];
   }
@@ -330,7 +339,6 @@ function preloadSecondaryRoutes() {
           loadStandardPage(),
           loadExperiencePage(),
           loadFeedbackPage(),
-          loadPreOrderPage(),
           loadContactPage(),
           loadPartnersPage(),
           loadThankYouPage(),
@@ -452,12 +460,14 @@ function PublicRoutes() {
     pageComponent = <SearchPage />;
   } else if (normalizedPath === "/wishlist") {
     pageComponent = <WishlistPage />;
-  } else if (normalizedPath === "/bag") {
-    pageComponent = <BagPage />;
-  } else if (normalizedPath === "/checkout") {
+  } else if (normalizedPath === "/order-request") {
     pageComponent = <CheckoutPage />;
-  } else if (normalizedPath === "/checkout/thank-you") {
+  } else if (normalizedPath === "/order-request/success") {
     pageComponent = <CheckoutThankYouPage />;
+  } else if (["/bag", "/checkout", "/reorder", "/pre-order"].includes(normalizedPath)) {
+    pageComponent = <Redirect to={`/order-request${search}`} />;
+  } else if (normalizedPath === "/checkout/thank-you") {
+    pageComponent = <Redirect to={`/order-request/success${search}`} />;
   } else if (serviceContent) {
     pageComponent = <ServicePage content={serviceContent} />;
   } else if (policyContent) {
@@ -478,8 +488,6 @@ function PublicRoutes() {
     pageComponent = product ? <ExperiencePage product={product} /> : <NotFoundPage />;
   } else if (normalizedPath.startsWith("/feedback/")) {
     pageComponent = product ? <FeedbackPage product={product} /> : <NotFoundPage />;
-  } else if (normalizedPath === "/reorder" || normalizedPath === "/pre-order") {
-    pageComponent = <PreOrderPage />;
   } else if (normalizedPath === "/contact") {
     pageComponent = <ContactPage />;
   } else if (normalizedPath === "/partners") {
