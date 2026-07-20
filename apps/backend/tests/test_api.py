@@ -99,9 +99,17 @@ def test_product_catalog_detail_and_http_cache(client: TestClient):
     assert catalog.headers["cache-control"] == "public, max-age=60"
     assert client.get("/api/products", headers={"If-None-Match": catalog.headers["etag"]}).status_code == 304
     assert client.get("/api/v1/products/petal-pack").json()["data"]["name"] == "Senova Petal Pack"
-    assert [item["slug"] for item in client.get("/api/v1/products").json()["data"]] == ["classic", "petal-pack"]
+    assert [item["slug"] for item in client.get("/api/v1/products").json()["data"]] == [
+        "classic",
+        "petal-pack",
+        "gift-set",
+    ]
     assert client.get("/api/products/gift-set").status_code == 200
-    assert client.get("/api/v1/products/gift-set").status_code == 404
+    assert client.get("/api/v1/products/gift-set").status_code == 200
+    policy = client.get("/api/v1/cancellation-policies/senova-preorder-v1")
+    assert policy.status_code == 200
+    assert policy.json()["data"]["stages"]["paidBeforePreparation"]["refundPercent"] == 90
+    assert client.get("/api/v1/cancellation-policies/unknown").status_code == 404
     missing = client.get("/api/products/unknown")
     assert missing.status_code == 404
     assert missing.json()["error"]["code"] == "PRODUCT_NOT_FOUND"
@@ -113,6 +121,16 @@ def test_catalog_etag_changes_when_published_data_changes(client: TestClient):
     repository._products[0]["name"] = "Senova Classic Updated"
     second = client.get("/api/v1/products")
     assert first.headers["etag"] != second.headers["etag"]
+
+
+def test_product_contract_exposes_assumption_and_fulfillment_data(client: TestClient):
+    product = client.get("/api/v1/products/petal-pack").json()["data"]
+    assert product["commerce"]["priceType"] == "CONTACT"
+    assert product["specification"]["isAssumption"] is True
+    assert product["specification"]["verificationStatus"] == "IN_TESTING"
+    assert product["specification"]["contentVersion"] == "p0.2"
+    assert product["variants"][0]["preparationTime"]["isAssumption"] is True
+    assert product["fulfillment"]["deliveryScopes"][0]["code"] == "HCM"
 
 
 def test_qr_resolve_inactive_states_and_experience(client: TestClient):

@@ -8,6 +8,7 @@ from sqlalchemy.dialects.postgresql import insert
 
 from app.db.schema import (
     analytics_events,
+    cancellation_policies,
     products,
     qr_batch_overrides,
     qr_experience_contents,
@@ -82,6 +83,14 @@ class SqlAlchemyRepository:
         statement = select(products.c.data).where((products.c.slug == normalized) | (products.c.id == normalized))
         if published_only:
             statement = statement.where(products.c.status == "active")
+        with self.engine.connect() as connection:
+            value = connection.execute(statement).scalar_one_or_none()
+        return deepcopy(value) if value else None
+
+    def get_policy(self, policy_id: str, active_only: bool = True) -> dict[str, Any] | None:
+        statement = select(cancellation_policies.c.data).where(cancellation_policies.c.id == policy_id)
+        if active_only:
+            statement = statement.where(cancellation_policies.c.status == "active")
         with self.engine.connect() as connection:
             value = connection.execute(statement).scalar_one_or_none()
         return deepcopy(value) if value else None

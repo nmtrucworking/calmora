@@ -23,6 +23,7 @@ export type SenovaProduct = {
     displayPrice: boolean;
     minimumQuantity: number;
     maximumQuantity: number;
+    cancellationPolicyId?: string;
   };
   variants: {
     id: string;
@@ -36,6 +37,7 @@ export type SenovaProduct = {
     preparationTime?: { min: number; max: number; unit: "BUSINESS_DAY"; isAssumption: boolean };
     deliveryScopes?: { code: string; label: string; enabled: boolean }[];
     available?: boolean;
+    cancellationPolicyId?: string;
   }[];
   includedItems: string[];
   dimensions: string;
@@ -82,11 +84,26 @@ export const products: SenovaProduct[] = [
     href: "/products/classic",
     image: "/assets/products/classic-pack-optimized.jpg",
     status: "active",
-    priceLabel: "Từ 320.000 VND",
-    availability: "Mở danh sách đặt trước theo lô nhỏ",
+    priceLabel: "Liên hệ để nhận giá dự kiến",
+    availability: "Đang nhận yêu cầu đặt trước",
+    commerce: {
+      status: "PRE_ORDER", statusLabel: "Đang nhận yêu cầu đặt trước", priceType: "CONTACT",
+      currency: "VND", displayPrice: false, minimumQuantity: 1, maximumQuantity: 20,
+      cancellationPolicyId: "senova-preorder-v1",
+    },
     variants: [
-      { id: "daily-box", label: "Hộp 12 gói", note: "Nhịp thưởng trà hằng ngày" },
-      { id: "trial-set", label: "Bộ thử 3 gói", note: "Dành cho lần chạm đầu tiên" },
+      {
+        id: "daily-box", label: "Hộp 10 túi lọc", note: "Nhịp thưởng trà hằng ngày",
+        preparationTime: { min: 3, max: 5, unit: "BUSINESS_DAY", isAssumption: true },
+        deliveryScopes: [{ code: "VN", label: "Toàn quốc", enabled: true }], available: true,
+        cancellationPolicyId: "senova-preorder-v1",
+      },
+      {
+        id: "trial-set", label: "Bộ thử 3 túi", note: "Dành cho lần chạm đầu tiên",
+        preparationTime: { min: 3, max: 5, unit: "BUSINESS_DAY", isAssumption: true },
+        deliveryScopes: [{ code: "VN", label: "Toàn quốc", enabled: true }], available: true,
+        cancellationPolicyId: "senova-preorder-v1",
+      },
     ],
     includedItems: [
       "Trà hương sen định lượng từng lần pha",
@@ -95,7 +112,7 @@ export const products: SenovaProduct[] = [
     ],
     dimensions: "Hộp 12 x 8 x 5 cm, phù hợp kệ trà hoặc bàn làm việc",
     brewingNotes: ["Dùng 180 ml nước nóng", "Chờ 4-5 phút", "Thưởng thức khi hương sen vừa mở"],
-    shippingNote: "Dự kiến giao trong 3-5 ngày làm việc sau khi xác nhận concierge.",
+    shippingNote: "Senova sẽ xác nhận thời gian chuẩn bị và phạm vi giao hàng sau khi nhận yêu cầu.",
     giftOptions: ["Thêm thiệp lời nhắn", "Gói giấy lụa", "Lên lịch giao theo ngày"],
     badges: ["Everyday ritual", "Single serve", "Preorder"],
     primaryAction: {
@@ -154,11 +171,26 @@ export const products: SenovaProduct[] = [
     href: "/products/petal-pack",
     image: "/assets/products/petal-pack-optimized.jpg",
     status: "active",
-    priceLabel: "Từ 480.000 VND",
-    availability: "Lô trải nghiệm PP-2601-A đang nhận inquiry",
+    priceLabel: "Liên hệ để nhận giá dự kiến",
+    availability: "Đang nhận yêu cầu đặt trước",
+    commerce: {
+      status: "PRE_ORDER", statusLabel: "Đang nhận yêu cầu đặt trước", priceType: "CONTACT",
+      currency: "VND", displayPrice: false, minimumQuantity: 1, maximumQuantity: 10,
+      cancellationPolicyId: "senova-preorder-v1",
+    },
     variants: [
-      { id: "petal-single", label: "Set 6 Petal Pack", note: "Trải nghiệm cá nhân" },
-      { id: "petal-hosting", label: "Set 18 Petal Pack", note: "Cho tasting và booth" },
+      {
+        id: "petal-single", label: "Hộp 3 búp", note: "Trải nghiệm cá nhân",
+        preparationTime: { min: 5, max: 7, unit: "BUSINESS_DAY", isAssumption: true },
+        deliveryScopes: [{ code: "HCM", label: "TP. Hồ Chí Minh", enabled: true }], available: true,
+        cancellationPolicyId: "senova-preorder-v1",
+      },
+      {
+        id: "petal-hosting", label: "Hộp 9 búp", note: "Cho tasting và sự kiện nhỏ",
+        preparationTime: { min: 5, max: 7, unit: "BUSINESS_DAY", isAssumption: true },
+        deliveryScopes: [{ code: "HCM", label: "TP. Hồ Chí Minh", enabled: true }], available: true,
+        cancellationPolicyId: "senova-preorder-v1",
+      },
     ],
     includedItems: [
       "Petal Pack tạo hình búp sen",
@@ -168,7 +200,7 @@ export const products: SenovaProduct[] = [
     ],
     dimensions: "Mỗi Petal Pack được bảo quản trong khay riêng, hộp 18 x 12 x 7 cm",
     brewingNotes: ["Tách nhẹ cánh sen để thưởng hương", "Pha nguyên búp sen theo thông số hiển thị", "Chờ trà chiết xuất rồi thưởng thức"],
-    shippingNote: "Hàng thử nghiệm được concierge xác nhận lịch giao và điều kiện bảo quản.",
+    shippingNote: "Senova sẽ xác nhận thời gian chuẩn bị và phạm vi giao hàng sau khi nhận yêu cầu.",
     giftOptions: ["Thiệp cá nhân hóa", "QR lời nhắn", "Gói riêng từng khách mời"],
     badges: ["Signature experience", "QR story", "Limited batch"],
     primaryAction: {
@@ -236,12 +268,29 @@ export const products: SenovaProduct[] = [
     role: "Trao",
     href: "/products/gift-set",
     image: "/assets/products/gift-set-optimized.jpg",
-    status: "draft",
-    priceLabel: "Báo giá theo cấu hình quà tặng",
-    availability: "Nhận tư vấn corporate và seasonal gifting",
+    status: "active",
+    priceLabel: "Liên hệ để nhận giá dự kiến",
+    availability: "Đang nhận yêu cầu tư vấn cấu hình",
+    commerce: {
+      status: "PRE_ORDER", statusLabel: "Đang nhận yêu cầu tư vấn cấu hình", priceType: "CONTACT",
+      currency: "VND", displayPrice: false, minimumQuantity: 1, maximumQuantity: 100,
+      cancellationPolicyId: "senova-preorder-v1",
+    },
     variants: [
-      { id: "gift-personal", label: "Personal Gift Set", note: "Quà tặng cá nhân cao cấp" },
-      { id: "gift-corporate", label: "Corporate Edition", note: "Cấu hình cho đối tác và sự kiện" },
+      {
+        id: "gift-personal", label: "Gift Set cá nhân", note: "Quà tặng cá nhân",
+        minimumQuantity: 1, maximumQuantity: 10,
+        preparationTime: { min: 7, max: 10, unit: "BUSINESS_DAY", isAssumption: true },
+        deliveryScopes: [{ code: "HCM", label: "TP. Hồ Chí Minh", enabled: true }], available: true,
+        cancellationPolicyId: "senova-preorder-v1",
+      },
+      {
+        id: "gift-corporate", label: "Gift Set doanh nghiệp", note: "Cấu hình cho đối tác và sự kiện",
+        minimumQuantity: 10, maximumQuantity: 100,
+        preparationTime: { min: 7, max: 10, unit: "BUSINESS_DAY", isAssumption: true },
+        deliveryScopes: [{ code: "HCM", label: "TP. Hồ Chí Minh", enabled: true }], available: true,
+        cancellationPolicyId: "senova-preorder-v1",
+      },
     ],
     includedItems: [
       "Senova Classic",
@@ -251,7 +300,7 @@ export const products: SenovaProduct[] = [
     ],
     dimensions: "Hộp quà 28 x 20 x 9 cm, có thể điều chỉnh theo cấu hình doanh nghiệp",
     brewingNotes: ["Bắt đầu bằng lời nhắn", "Chọn Classic hoặc Petal Pack", "Dùng QR để tiếp tục câu chuyện"],
-    shippingNote: "Concierge xác nhận số lượng, ngày giao, tên người nhận và lời nhắn trước khi chốt đơn.",
+    shippingNote: "Senova sẽ xác nhận thời gian chuẩn bị và phạm vi giao hàng sau khi nhận yêu cầu.",
     giftOptions: ["Đóng dấu logo đối tác", "Thiệp song ngữ", "Giao nhiều địa chỉ", "Phiên bản theo mùa"],
     badges: ["Gifting", "Corporate", "Custom quote"],
     primaryAction: {

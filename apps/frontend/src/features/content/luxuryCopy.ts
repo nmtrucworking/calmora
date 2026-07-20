@@ -376,7 +376,7 @@ export const productLuxuryCopy: Record<Language, Record<ProductId, ProductLuxury
         "Phần trà cho một lần pha, đặt trong túi lọc và được bao quanh bởi cánh sen sấy tạo hình búp sen.",
       shortDescription:
         "Sản phẩm biểu tượng của Senova, biến thao tác pha trà thành một khoảnh khắc mở, chạm hương và thưởng thức.",
-      priceLabel: "Từ 480.000 VND",
+      priceLabel: "Liên hệ để nhận giá dự kiến",
       availability: "Lô trải nghiệm PP-2601-A đang nhận inquiry",
       image: "/assets/products/petal-pack-optimized.jpg",
       heroAlt: "Senova Petal Pack tạo hình búp sen với phần trà bên trong",
@@ -429,7 +429,7 @@ export const productLuxuryCopy: Record<Language, Record<ProductId, ProductLuxury
       description:
         "Dòng trà hương sen nền tảng, được trình bày trong hình thức thuận tiện để pha và thưởng thức thường xuyên.",
       shortDescription: "Nhịp trà hằng ngày, gọn, rõ và dễ lặp lại.",
-      priceLabel: "Từ 320.000 VND",
+      priceLabel: "Liên hệ để nhận giá dự kiến",
       availability: "Mở danh sách đặt trước theo lô nhỏ",
       image: "/assets/products/classic-pack-optimized.jpg",
       heroAlt: "Hộp trà hương sen Senova Classic",
