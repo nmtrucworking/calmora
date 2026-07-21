@@ -63,6 +63,6 @@ describe("QR experience API adapter", () => {
 
     expect(result.productSlug).toBe("petal-pack");
     expect(result.contentViewed).toBe("petal-pack-scan");
-    expect(result.guidance.steps).toHaveLength(4);
+    expect(result.guidance.steps).toHaveLength(6);
   });
 });

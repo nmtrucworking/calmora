@@ -278,7 +278,9 @@ function PublicRoutes() {
   );
 
   const isFullBleedContent =
-    normalizedPath === "/products" || (normalizedPath.startsWith("/products/") && Boolean(product));
+    normalizedPath === "/products" ||
+    (normalizedPath.startsWith("/products/") && Boolean(product)) ||
+    normalizedPath === "/experience/petal-pack";
 
   return (
     <SiteLayout isLanding={pathname === landingPath} isFullBleedContent={isFullBleedContent}>

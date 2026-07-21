@@ -12,7 +12,7 @@ def test_cutover_content_preserves_visible_frontend_copy_and_metadata():
     assert {item["version"] for item in contents} == {CUTOVER_VERSION}
     petal = next(item for item in contents if item["productSlug"] == "petal-pack")
     assert petal["title"] == "Mở một cánh sen, bắt đầu một khoảng lặng."
-    assert len(petal["guidance"]["steps"]) == 4
+    assert len(petal["guidance"]["steps"]) == 6
     assert petal["culture"]["title"]
     assert petal["cta"]["primary"]["href"]
 

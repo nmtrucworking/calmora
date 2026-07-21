@@ -1,0 +1,900 @@
+.experience {
+  --ritual-header-height: 4rem;
+  background: var(--senova-forest-black);
+  color: var(--text-inverse);
+  padding-top: var(--ritual-header-height);
+}
+
+.scene {
+  position: relative;
+  min-height: calc(100svh - var(--ritual-header-height));
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--senova-forest-black);
+  animation: sceneEnter 850ms var(--ease-luxury) both;
+}
+
+.media,
+.media > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.media > img {
+  object-fit: cover;
+  object-position: center;
+  filter: saturate(0.86) contrast(1.02);
+  animation: imageReveal 920ms var(--ease-luxury) both;
+}
+
+.scene[data-scene="0"] .media > img {
+  object-position: 62% center;
+}
+
+.scene[data-scene="1"] .media > img {
+  object-position: 57% center;
+}
+
+.scene[data-scene="3"] .media > img,
+.scene[data-scene="6"] .media > img {
+  object-position: 64% center;
+}
+
+.scene[data-scene="4"] .media > img {
+  object-position: 68% center;
+}
+
+.sceneVeil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(90deg, rgba(9, 18, 14, 0.9) 0%, rgba(9, 18, 14, 0.66) 38%, rgba(9, 18, 14, 0.08) 72%),
+    linear-gradient(180deg, rgba(7, 14, 11, 0.35) 0%, transparent 28%, rgba(7, 14, 11, 0.58) 100%);
+}
+
+.scene[data-scene="0"] .sceneVeil::after {
+  content: "";
+  position: absolute;
+  top: -35%;
+  right: 7%;
+  width: 22%;
+  height: 170%;
+  transform: rotate(16deg);
+  background: linear-gradient(90deg, transparent, rgba(248, 223, 147, 0.18), transparent);
+  filter: blur(12px);
+  animation: productSheen 1000ms var(--ease-luxury) 180ms both;
+}
+
+.sceneFrame {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: calc(100svh - var(--ritual-header-height));
+  width: min(100%, var(--page-max));
+  margin-inline: auto;
+  padding: clamp(1rem, 3vw, 2rem) clamp(1rem, 5vw, 4.5rem) max(1.15rem, env(safe-area-inset-bottom));
+}
+
+.identityBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 2.75rem;
+  color: rgba(255, 250, 240, 0.78);
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.identityBar > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.identityBar button {
+  display: inline-flex;
+  min-height: 2.5rem;
+  flex: none;
+  align-items: center;
+  gap: 0.45rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+}
+
+.identityBar svg {
+  width: 1rem;
+}
+
+.sceneCopy {
+  align-self: center;
+  width: min(39rem, 54vw);
+  padding-block: clamp(2rem, 8vh, 6rem);
+  animation: copyEnter 800ms var(--ease-luxury) 100ms both;
+}
+
+.sceneLabel {
+  margin: 0 0 1rem;
+  color: var(--accent-gold);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.sceneCopy h1 {
+  max-width: 14ch;
+  margin: 0;
+  color: var(--text-inverse);
+  font-family: var(--font-display);
+  font-size: clamp(2.55rem, 6vw, 5.75rem);
+  font-weight: 500;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+
+.sceneCopy > p:not(.sceneLabel) {
+  max-width: 37rem;
+  margin: 1.35rem 0 0;
+  color: rgba(255, 250, 240, 0.84);
+  font-size: clamp(1rem, 1.55vw, 1.18rem);
+  line-height: 1.72;
+}
+
+.revealTagline {
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 2vw, 1.55rem) !important;
+}
+
+.revealTagline span {
+  margin-inline: 0.35rem;
+  color: var(--accent-gold);
+}
+
+.sceneCopy > .batchLine {
+  margin-top: 0.45rem !important;
+  color: rgba(255, 250, 240, 0.62) !important;
+  font-size: 0.8rem !important;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.sceneCopy > .caution {
+  max-width: 34rem;
+  margin-top: 0.7rem;
+  padding-left: 1rem;
+  border-left: 1px solid var(--accent-gold);
+  color: var(--text-inverse) !important;
+  font-weight: 650;
+}
+
+.sceneAction {
+  display: flex;
+  align-items: end;
+  width: min(31rem, 100%);
+  padding-top: 1rem;
+}
+
+.primaryAction,
+.primaryLink {
+  display: inline-flex;
+  min-height: 3.6rem;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border: 1px solid var(--accent-gold);
+  background: var(--accent-gold);
+  color: var(--senova-forest-black);
+  padding: 0.9rem 1.1rem 0.9rem 1.25rem;
+  cursor: pointer;
+  font-weight: 750;
+  text-decoration: none;
+  transition: background 220ms ease, color 220ms ease, transform 220ms ease;
+}
+
+.primaryAction:hover,
+.primaryLink:hover {
+  transform: translateY(-2px);
+  background: var(--senova-gold-400);
+}
+
+.primaryAction svg,
+.primaryLink svg {
+  width: 1.1rem;
+}
+
+.compareBefore,
+.compareAfter {
+  animation-duration: 5s !important;
+  animation-iteration-count: infinite !important;
+}
+
+.compareBefore {
+  animation-name: compareBefore !important;
+}
+
+.compareAfter {
+  animation-name: compareAfter !important;
+}
+
+.compareLabel {
+  position: absolute;
+  right: clamp(1rem, 4vw, 4rem);
+  bottom: clamp(5rem, 10vh, 8rem);
+  z-index: 2;
+  color: var(--text-inverse);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.compareLabel span {
+  display: block;
+  animation: compareText 5s ease-in-out infinite;
+}
+
+.compareLabel span + span {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: max-content;
+  animation-delay: -2.5s;
+}
+
+.sensoryVerse {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 2.2vw, 1.65rem) !important;
+  line-height: 1.55 !important;
+}
+
+.aromaChoices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 1.5rem;
+}
+
+.aromaChoices button {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid rgba(255, 250, 240, 0.4);
+  border-radius: 999px;
+  background: rgba(9, 18, 14, 0.36);
+  color: var(--text-inverse);
+  padding: 0.55rem 0.95rem;
+  cursor: pointer;
+}
+
+.aromaChoices button:disabled {
+  opacity: 0.54;
+}
+
+.aromaChoices .choiceSelected {
+  border-color: var(--accent-gold);
+  background: var(--accent-gold);
+  color: var(--senova-forest-black);
+  opacity: 1;
+}
+
+.aromaChoices svg {
+  width: 0.9rem;
+}
+
+.experimentalLabel {
+  display: inline-flex;
+  margin-top: 1.25rem;
+  border: 1px solid rgba(248, 223, 147, 0.58);
+  border-radius: 999px;
+  color: var(--accent-gold);
+  padding: 0.4rem 0.7rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.brewSpecs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: min(35rem, 100%);
+  margin: 1.25rem 0 0;
+  border-block: 1px solid rgba(248, 223, 147, 0.34);
+}
+
+.brewSpecs div {
+  padding: 0.9rem clamp(0.5rem, 1.5vw, 1rem);
+}
+
+.brewSpecs div + div {
+  border-left: 1px solid rgba(248, 223, 147, 0.25);
+}
+
+.brewSpecs dt {
+  margin-bottom: 0.25rem;
+  color: rgba(255, 250, 240, 0.62);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.brewSpecs dd {
+  margin: 0;
+  color: var(--text-inverse);
+  font-family: var(--font-display);
+  font-size: clamp(1.45rem, 2.7vw, 2.2rem);
+}
+
+.brewSpecs dd span {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+}
+
+.timer {
+  display: grid;
+  justify-items: start;
+  gap: 1rem;
+  margin-top: 1.1rem;
+}
+
+.lotusTimer {
+  position: relative;
+  display: grid;
+  width: clamp(9rem, 24vw, 13rem);
+  aspect-ratio: 1;
+  place-items: center;
+}
+
+.timerPetal {
+  position: absolute;
+  width: 33%;
+  height: 48%;
+  transform-origin: 50% 104%;
+  border: 1px solid rgba(248, 223, 147, 0.38);
+  border-radius: 80% 10% 75% 20%;
+  background: rgba(255, 250, 240, 0.04);
+  opacity: 0.3;
+  transition: background 800ms var(--ease-luxury), opacity 800ms var(--ease-luxury), filter 800ms var(--ease-luxury);
+}
+
+.timerPetal:nth-child(1) { transform: translateY(-44%) rotate(-46deg); }
+.timerPetal:nth-child(2) { transform: translateY(-44%) rotate(46deg); }
+.timerPetal:nth-child(3) { transform: translateY(-38%) rotate(-12deg); }
+.timerPetal:nth-child(4) { transform: translateY(-38%) rotate(12deg); }
+
+.timerPetalActive {
+  border-color: var(--accent-gold);
+  background: rgba(248, 223, 147, 0.18);
+  filter: drop-shadow(0 0 0.7rem rgba(248, 223, 147, 0.26));
+  opacity: 1;
+  animation: petalBreathe 3.8s ease-in-out infinite;
+}
+
+.timerTime {
+  position: relative;
+  z-index: 2;
+  color: var(--text-inverse);
+  font-family: var(--font-display);
+  font-size: clamp(2.1rem, 6vw, 3.4rem);
+  font-variant-numeric: tabular-nums;
+}
+
+.timerCue {
+  min-height: 3.4rem;
+  max-width: 29rem !important;
+  margin: 0 !important;
+  color: var(--text-inverse) !important;
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 1.8vw, 1.35rem) !important;
+  line-height: 1.5 !important;
+}
+
+.timerControl {
+  display: inline-flex;
+  min-height: 2.6rem;
+  align-items: center;
+  gap: 0.45rem;
+  border: 0;
+  background: transparent;
+  color: rgba(255, 250, 240, 0.76);
+  padding: 0;
+  cursor: pointer;
+  font-size: 0.78rem;
+}
+
+.timerControl svg {
+  width: 0.95rem;
+}
+
+.narrationStatus {
+  margin-top: 0 !important;
+  color: var(--accent-gold) !important;
+  font-size: 0.72rem !important;
+  letter-spacing: 0.08em;
+}
+
+.scene[data-tone="ivory"] .sceneVeil {
+  background:
+    linear-gradient(90deg, rgba(255, 250, 240, 0.95) 0%, rgba(255, 250, 240, 0.82) 42%, rgba(255, 250, 240, 0.1) 76%),
+    linear-gradient(180deg, rgba(255, 250, 240, 0.42), transparent 38%, rgba(255, 250, 240, 0.44));
+}
+
+.scene[data-tone="ivory"] .identityBar,
+.scene[data-tone="ivory"] .sceneCopy h1,
+.scene[data-tone="ivory"] .sceneCopy > p,
+.scene[data-tone="ivory"] .identityBar button {
+  color: var(--primary-strong);
+}
+
+.completionLine {
+  font-family: var(--font-display);
+  font-size: clamp(1.2rem, 2vw, 1.6rem) !important;
+}
+
+.memoryChoices {
+  display: flex;
+  max-width: 38rem;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin: 1.35rem 0 0;
+  padding: 0;
+  border: 0;
+}
+
+.memoryChoices legend {
+  width: 100%;
+  margin-bottom: 0.7rem;
+  color: var(--primary-strong);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.memoryChoices label {
+  display: inline-flex;
+  min-height: 2.65rem;
+  align-items: center;
+  border: 1px solid rgba(25, 58, 43, 0.35);
+  border-radius: 999px;
+  background: rgba(255, 250, 240, 0.48);
+  color: var(--primary-strong);
+  padding: 0.5rem 0.85rem;
+  cursor: pointer;
+  font-size: 0.82rem;
+}
+
+.memoryChoices input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+}
+
+.memoryChoices .memorySelected {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: var(--text-inverse);
+}
+
+.completionActions {
+  display: grid;
+  width: min(31rem, 100%);
+  gap: 0.15rem;
+  margin-top: 1.25rem;
+}
+
+.completionActions > button,
+.completionActions > a:not(.primaryLink) {
+  display: inline-flex;
+  min-height: 2.8rem;
+  align-items: center;
+  border: 0;
+  background: transparent;
+  color: var(--primary-strong);
+  padding: 0;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: rgba(25, 58, 43, 0.3);
+  text-underline-offset: 0.25rem;
+}
+
+.sheetBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: grid;
+  align-items: end;
+  background: rgba(5, 12, 9, 0.58);
+  backdrop-filter: blur(5px);
+  animation: backdropEnter 240ms ease both;
+}
+
+.sheet {
+  width: min(100%, 44rem);
+  max-height: min(88svh, 52rem);
+  margin-inline: auto;
+  overflow-y: auto;
+  border-radius: 1.5rem 1.5rem 0 0;
+  background: var(--surface-strong);
+  color: var(--text);
+  padding: 0.65rem clamp(1.1rem, 4vw, 2rem) max(1.5rem, env(safe-area-inset-bottom));
+  box-shadow: var(--shadow-lg);
+  animation: sheetEnter 420ms var(--ease-luxury) both;
+}
+
+.sheetHandle {
+  width: 3.5rem;
+  height: 0.25rem;
+  margin: 0.15rem auto 1.1rem;
+  border-radius: 999px;
+  background: var(--border-strong);
+}
+
+.sheetHeader {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.sheetHeader p {
+  margin: 0 0 0.4rem;
+  color: var(--accent-strong);
+  font-size: 0.7rem;
+  font-weight: 750;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.sheetHeader h2 {
+  margin: 0;
+  color: var(--primary-strong);
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 6vw, 2.65rem);
+  font-weight: 500;
+  line-height: 1.06;
+}
+
+.sheetHeader button {
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  flex: none;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--primary-strong);
+  cursor: pointer;
+}
+
+.sheetHeader svg {
+  width: 1.1rem;
+}
+
+.traceList {
+  margin: 1.5rem 0 0;
+  border-top: 1px solid var(--border);
+}
+
+.traceList div {
+  display: grid;
+  grid-template-columns: minmax(7.5rem, 0.72fr) minmax(0, 1.28fr);
+  gap: 1rem;
+  padding-block: 0.78rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.traceList dt {
+  color: var(--text-muted);
+  font-size: 0.76rem;
+}
+
+.traceList dd {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.sheetNotice {
+  margin: 1rem 0;
+  color: var(--text-muted);
+  font-size: 0.76rem;
+  line-height: 1.6;
+}
+
+.sheetLink {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--primary-strong);
+  font-size: 0.82rem;
+  font-weight: 750;
+}
+
+.sheetLink svg {
+  width: 1rem;
+}
+
+@keyframes sceneEnter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes imageReveal {
+  from { opacity: 0; transform: scale(1.035); filter: saturate(0.72) blur(4px); }
+  to { opacity: 1; transform: scale(1); filter: saturate(0.86) blur(0); }
+}
+
+@keyframes copyEnter {
+  from { opacity: 0; transform: translateY(1rem); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes productSheen {
+  from { opacity: 0; transform: translateX(-180%) rotate(16deg); }
+  35% { opacity: 1; }
+  to { opacity: 0; transform: translateX(180%) rotate(16deg); }
+}
+
+@keyframes compareBefore {
+  0%, 42% { opacity: 1; transform: scale(1); }
+  50%, 92% { opacity: 0; transform: scale(1.025); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes compareAfter {
+  0%, 42% { opacity: 0; transform: scale(1.025); }
+  50%, 92% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.025); }
+}
+
+@keyframes compareText {
+  0%, 38% { opacity: 1; transform: translateY(0); }
+  48%, 88% { opacity: 0; transform: translateY(0.35rem); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes petalBreathe {
+  0%, 100% { filter: drop-shadow(0 0 0.45rem rgba(248, 223, 147, 0.18)); }
+  50% { filter: drop-shadow(0 0 1rem rgba(248, 223, 147, 0.38)); }
+}
+
+@keyframes backdropEnter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes sheetEnter {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@media (max-width: 760px) {
+  .scene {
+    min-height: calc(100svh - var(--ritual-header-height));
+  }
+
+  .sceneFrame {
+    min-height: calc(100svh - var(--ritual-header-height));
+    padding: 0.75rem 1rem max(0.9rem, env(safe-area-inset-bottom));
+  }
+
+  .sceneVeil {
+    background:
+      linear-gradient(180deg, rgba(7, 14, 11, 0.4) 0%, rgba(7, 14, 11, 0.06) 34%, rgba(7, 14, 11, 0.93) 77%, rgba(7, 14, 11, 0.98) 100%);
+  }
+
+  .scene[data-tone="ivory"] .sceneVeil {
+    background:
+      linear-gradient(180deg, rgba(255, 250, 240, 0.2) 0%, rgba(255, 250, 240, 0.06) 34%, rgba(255, 250, 240, 0.93) 73%, rgba(255, 250, 240, 0.98) 100%);
+  }
+
+  .identityBar {
+    min-height: 2.3rem;
+    align-items: start;
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+  }
+
+  .identityBar > div {
+    max-width: 68%;
+  }
+
+  .identityBar button {
+    min-height: 2rem;
+    padding: 0;
+  }
+
+  .identityBar button span {
+    display: none;
+  }
+
+  .sceneCopy {
+    align-self: end;
+    width: 100%;
+    padding-block: 1.25rem 0.8rem;
+  }
+
+  .sceneCopy h1 {
+    max-width: 12.5ch;
+    font-size: clamp(2.15rem, 10vw, 3.35rem);
+  }
+
+  .sceneCopy > p:not(.sceneLabel) {
+    margin-top: 0.8rem;
+    font-size: 0.94rem;
+    line-height: 1.55;
+  }
+
+  .sceneLabel {
+    margin-bottom: 0.55rem;
+    font-size: 0.64rem;
+  }
+
+  .sceneAction {
+    width: 100%;
+    padding-top: 0.55rem;
+  }
+
+  .primaryAction,
+  .primaryLink {
+    min-height: 3.25rem;
+  }
+
+  .scene[data-scene="0"] .media > img { object-position: 66% center; }
+  .scene[data-scene="1"] .media > img { object-position: 57% 34%; }
+  .scene[data-scene="2"] .media > img { object-position: 55% 32%; }
+  .scene[data-scene="3"] .media > img { object-position: 67% 32%; }
+  .scene[data-scene="4"] .media > img { object-position: 66% 32%; }
+  .scene[data-scene="5"] .media > img { object-position: 50% 28%; }
+  .scene[data-scene="6"] .media > img { object-position: 68% 25%; }
+
+  .compareLabel {
+    top: 3.8rem;
+    right: 1rem;
+    bottom: auto;
+  }
+
+  .experimentalLabel {
+    margin-top: 0.8rem;
+  }
+
+  .brewSpecs {
+    margin-top: 0.75rem;
+  }
+
+  .brewSpecs div {
+    padding: 0.65rem 0.4rem;
+  }
+
+  .brewSpecs dt {
+    font-size: 0.58rem;
+  }
+
+  .brewSpecs dd {
+    font-size: 1.45rem;
+  }
+
+  .timer {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 0.4rem 1rem;
+    margin-top: 0.5rem;
+  }
+
+  .lotusTimer {
+    grid-row: span 2;
+    width: clamp(7.25rem, 32vw, 9rem);
+  }
+
+  .timerCue {
+    min-height: 0;
+    font-size: 0.95rem !important;
+  }
+
+  .timerControl {
+    min-height: 2.2rem;
+  }
+
+  .narrationStatus {
+    display: none;
+  }
+
+  .memoryChoices {
+    gap: 0.4rem;
+    margin-top: 0.85rem;
+  }
+
+  .memoryChoices legend {
+    margin-bottom: 0.35rem;
+  }
+
+  .memoryChoices label {
+    min-height: 2.25rem;
+    padding: 0.35rem 0.65rem;
+    font-size: 0.74rem;
+  }
+
+  .completionActions {
+    margin-top: 0.8rem;
+  }
+
+  .completionActions > button,
+  .completionActions > a:not(.primaryLink) {
+    min-height: 2.3rem;
+    font-size: 0.76rem;
+  }
+
+  .traceList div {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+}
+
+@media (max-height: 700px) and (max-width: 760px) {
+  .sceneCopy h1 {
+    font-size: 2rem;
+  }
+
+  .sceneCopy > p:not(.sceneLabel) {
+    font-size: 0.84rem;
+  }
+
+  .sceneCopy {
+    padding-block: 0.5rem;
+  }
+
+  .primaryAction,
+  .primaryLink {
+    min-height: 2.85rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene,
+  .sceneCopy,
+  .media > img,
+  .scene[data-scene="0"] .sceneVeil::after,
+  .timerPetalActive,
+  .sheetBackdrop,
+  .sheet {
+    animation: none !important;
+  }
+
+  .compareBefore {
+    display: none;
+  }
+
+  .compareAfter {
+    opacity: 1;
+  }
+
+  .compareLabel span:first-child {
+    display: none;
+  }
+
+  .compareLabel span + span {
+    position: static;
+    opacity: 1;
+    animation: none;
+  }
+}

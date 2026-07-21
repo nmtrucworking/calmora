@@ -173,14 +173,14 @@
       "verificationStatus": "IN_TESTING", "contentVersion": "p0.2"
     },
     "brewing": {
-      "waterTemperature": {"min": 80, "max": 85, "unit": "C"},
-      "waterVolume": {"min": 220, "max": 250, "unit": "ml"},
-      "steepingTime": {"min": 5, "max": 7, "unit": "minute"}, "maximumInfusions": 2,
+      "waterTemperature": {"min": 85, "max": 85, "unit": "C"},
+      "waterVolume": {"min": 220, "max": 220, "unit": "ml"},
+      "steepingTime": {"min": 3, "max": 3, "unit": "minute"}, "maximumInfusions": 2,
       "steps": [
         {"id": "observe", "order": 1, "title": "Quan sát búp sen", "description": "Quan sát hình dáng búp sen trước khi pha."},
-        {"id": "open-lightly", "order": 2, "title": "Tách nhẹ cánh sen", "description": "Tách nhẹ cánh bên ngoài để thưởng hương, không mở rời toàn bộ búp."},
-        {"id": "brew-whole-bud", "order": 3, "title": "Pha nguyên búp sen", "description": "Đặt nguyên búp sen vào dụng cụ pha và rót nước theo thông số hiển thị."},
-        {"id": "wait", "order": 4, "title": "Chờ trà chiết xuất", "description": "Chờ theo thời gian hướng dẫn trước khi thưởng thức."}
+        {"id": "open-lightly", "order": 2, "title": "Tách nhẹ cánh sen", "description": "Mở nhẹ một khoảng giữa các cánh ngoài; không tháo rời cánh sen và không lấy túi trà ra khỏi búp."},
+        {"id": "brew-whole-bud", "order": 3, "title": "Pha nguyên búp sen", "description": "Đặt nguyên búp vào ly, giữ dây túi lọc bên ngoài và rót 220 ml nước khoảng 85°C chậm quanh búp."},
+        {"id": "wait", "order": 4, "title": "Chờ trà chiết xuất", "description": "Chờ 3 phút trước khi thưởng thức."}
       ],
       "warnings": ["Thông số pha đang trong giai đoạn kiểm chứng."],
       "isAssumption": true, "verificationStatus": "IN_TESTING", "contentVersion": "p0.2"

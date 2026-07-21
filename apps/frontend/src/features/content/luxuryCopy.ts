@@ -395,7 +395,7 @@ export const productLuxuryCopy: Record<Language, Record<ProductId, ProductLuxury
         "Hướng dẫn nghi thức mở - pha",
       ],
       dimensions: "Mỗi Petal Pack được bảo quản trong khay riêng, hộp 18 x 12 x 7 cm.",
-      brewingNotes: ["Tách nhẹ cánh sen để thưởng hương", "Pha nguyên búp sen theo thông số hiển thị", "Chờ trà chiết xuất rồi thưởng thức"],
+      brewingNotes: ["Tách nhẹ, không tháo rời cánh sen", "Pha nguyên búp với 220 ml nước khoảng 85°C", "Chờ 3 phút rồi thưởng thức"],
       giftOptions: ["Thiệp cá nhân hóa", "QR lời nhắn", "Gói riêng từng khách mời"],
       highlights: [
         "Một phần trà tương ứng với một lần pha",
@@ -410,10 +410,10 @@ export const productLuxuryCopy: Record<Language, Record<ProductId, ProductLuxury
         "Người quan tâm thiết kế và nghi thức trà",
       ],
       experienceSteps: [
-        { title: "Tách nhẹ cánh sen", text: "Tách nhẹ phần cánh bên ngoài để thưởng hương, không mở rời toàn bộ búp." },
+        { title: "Tách nhẹ cánh sen", text: "Mở nhẹ một khoảng giữa các cánh ngoài; không tháo rời cánh sen và không lấy túi trà ra khỏi búp." },
         { title: "Chạm hương", text: "Dành một khoảnh khắc cho hương sen và chất liệu trước khi rót nước." },
-        { title: "Pha trà", text: "Đặt phần trà vào chén và thực hiện theo hướng dẫn trên thẻ." },
-        { title: "Thưởng thức", text: "Quan sát màu nước, nếm chậm và tiếp tục câu chuyện qua QR." },
+        { title: "Pha nguyên búp", text: "Đặt nguyên búp vào ly, giữ dây túi lọc bên ngoài và rót 220 ml nước khoảng 85°C chậm quanh búp." },
+        { title: "Chờ rồi thưởng thức", text: "Chờ 3 phút, quan sát màu nước, nếm chậm và tiếp tục câu chuyện qua QR." },
       ],
       culturalNote:
         "Petal Pack dùng hình dáng sen như một thao tác mở, không phải họa tiết phủ ngoài. Giá trị nằm ở nhịp chậm trước khi pha trà.",
@@ -529,7 +529,7 @@ export const productLuxuryCopy: Record<Language, Record<ProductId, ProductLuxury
       ],
       includedItems: ["Lotus-bud Petal Pack", "Single-cup tea filter", "QR story and feedback card", "Open-and-brew ritual guide"],
       dimensions: "Each Petal Pack is protected in its own tray, 18 x 12 x 7 cm box.",
-      brewingNotes: ["Open each lotus layer", "Use 200 ml hot water", "Steep for 5 minutes and scan the QR while waiting"],
+      brewingNotes: ["Open the outer petals slightly without removing them", "Brew the whole bud in 220 ml water at about 85°C", "Wait 3 minutes before tasting"],
       giftOptions: ["Personalized card", "QR message", "Individually wrapped guest pieces"],
       highlights: [
         "One tea portion corresponds to one brew",
@@ -539,10 +539,10 @@ export const productLuxuryCopy: Record<Language, Record<ProductId, ProductLuxury
       ],
       suitableFor: ["Product tasting", "Experience booths", "Small story-led gifts", "Design and tea ritual audiences"],
       experienceSteps: [
-        { title: "Open the petals", text: "Gently unfold each layer to observe the lotus-bud structure before brewing." },
+        { title: "Open lightly", text: "Create a small opening between the outer petals. Do not remove the petals or take the tea bag out of the bud." },
         { title: "Notice aroma", text: "Hold a short pause for lotus aroma and material before pouring water." },
-        { title: "Brew", text: "Place the tea in a cup and follow the card guide." },
-        { title: "Taste", text: "Observe the liquor, drink slowly and continue the story through QR." },
+        { title: "Brew the whole bud", text: "Place the whole bud in a cup, keep the tea-bag string outside, and slowly pour 220 ml water at about 85°C around it." },
+        { title: "Wait and taste", text: "Wait 3 minutes, observe the liquor, drink slowly and continue the story through QR." },
       ],
       culturalNote:
         "Petal Pack uses the lotus as an opening gesture, not surface decoration. Its value sits in the slower beat before brewing.",

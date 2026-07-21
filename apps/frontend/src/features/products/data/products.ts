@@ -195,9 +195,9 @@ export const products: SenovaProduct[] = [
       cancellationPolicyId: "senova-preorder-v1",
     },
     brewing: {
-      waterTemperature: { min: 80, max: 85, unit: "C" },
-      waterVolume: { min: 220, max: 250, unit: "ml" },
-      steepingTime: { min: 5, max: 7, unit: "minute" },
+      waterTemperature: { min: 85, max: 85, unit: "C" },
+      waterVolume: { min: 220, max: 220, unit: "ml" },
+      steepingTime: { min: 3, max: 3, unit: "minute" },
       warnings: ["Thông số pha đang trong giai đoạn kiểm chứng."],
       isAssumption: true, verificationStatus: "IN_TESTING", contentVersion: "p0.2",
     },
@@ -252,7 +252,7 @@ export const products: SenovaProduct[] = [
     experienceSteps: [
       {
         title: "Mở cánh sen",
-        text: "Tách nhẹ phần cánh bên ngoài để thưởng hương, không mở rời toàn bộ búp.",
+        text: "Mở nhẹ một khoảng giữa các cánh ngoài; không tháo rời cánh sen và không lấy túi trà ra khỏi búp.",
       },
       {
         title: "Cảm nhận",
@@ -260,11 +260,11 @@ export const products: SenovaProduct[] = [
       },
       {
         title: "Pha trà",
-        text: "Đặt phần trà vào cốc và thực hiện theo hướng dẫn in trên bao bì của phiên bản sản phẩm.",
+        text: "Đặt nguyên búp vào ly, giữ dây túi lọc bên ngoài và rót 220 ml nước khoảng 85°C chậm quanh búp.",
       },
       {
         title: "Chờ",
-        text: "Để hương và vị dần hiện ra. Trang QR có thể cung cấp câu chuyện ngắn trong khoảng thời gian này.",
+        text: "Chờ 3 phút để hương và vị dần hiện ra; câu chuyện Petal Pack sẽ đồng hành trong khoảng thời gian này.",
       },
       {
         title: "Thưởng thức",

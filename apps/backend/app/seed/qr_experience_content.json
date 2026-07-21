@@ -60,14 +60,17 @@
       "sourceNotes": []
     },
     "guidance": {
-      "title": "Mo - cam nhan - pha",
-      "intro": "Hay de thao tac mo canh tro thanh buoc dau tien cua tach tra.",
+      "title": "Cham - tach nhe - thuong huong - pha - cho - thuong",
+      "intro": "Moi canh chi giu lai mot dong tac de khoang tra dien ra cham va ro.",
       "steps": [
-        { "label": "01", "title": "Mo nhe tung lop canh", "text": "Quan sat cau truc bup sen va cam nhan chat lieu truoc." },
-        { "label": "02", "title": "Cam nhan bang nhieu giac quan", "text": "Nhan biet hinh dang, chat lieu va huong trong khoanh khac dau tien." },
-        { "label": "03", "title": "Pha phan tra ben trong", "text": "Lay tui tra, dat vao coc, dung khoang 200 ml nuoc nong va lam theo huong dan tren bao bi." }
+        { "label": "01", "title": "Cham vao hinh hai cua sen", "text": "Lay bup sen khoi lop bao. Giu nhe o phan day, khong bop canh." },
+        { "label": "02", "title": "Tach nhe de huong sen thuc giac", "text": "Mo nhe mot khoang giua cac canh ngoai. Khong thao roi canh sen va khong lay tui tra ra khoi bup." },
+        { "label": "03", "title": "Thuong huong", "text": "Dua bup sen lai gan. Cham mot nhip. Ghi nhan huong dau tien." },
+        { "label": "04", "title": "Pha nguyen bup", "text": "Dat nguyen bup vao ly. Giu day tui loc ben ngoai va rot 220 ml nuoc khoang 85 do C cham quanh bup." },
+        { "label": "05", "title": "Cho tra", "text": "Cho 3 phut, quan sat canh sen dan mo va mau tra on dinh trong khi nghe cau chuyen Petal Pack." },
+        { "label": "06", "title": "Thuong", "text": "Huong sen da mo. Khoang tra bat dau." }
       ],
-      "safetyNote": "Neu thong so bao bi khac voi noi dung QR, uu tien thong so tren bao bi."
+      "safetyNote": "Huong dan thu nghiem. Neu thong so bao bi khac voi noi dung QR, uu tien thong so tren bao bi."
     },
     "reflectionPrompt": "Dieu khien ban nho nhat la hinh dang bup sen, thao tac mo canh, huong tra hay thoi gian cho?",
     "cta": {

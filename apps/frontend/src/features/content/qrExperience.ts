@@ -74,28 +74,38 @@ export const qrExperienceContent: Record<ProductId, QrExperienceContent> = {
       "Petal Pack không mô phỏng một nghi lễ lịch sử cụ thể. Đây là nghi thức trải nghiệm do Senova thiết kế để người dùng chủ động bước ra khỏi nhịp vội và bắt đầu thưởng trà.",
       "Văn hóa không chỉ được hiểu bằng thông tin. Nó còn được ghi nhớ qua hình dáng, mùi hương, thao tác và cảm giác.",
     ],
-    guidanceTitle: "Mở - cảm nhận - pha",
-    guidanceIntro: "Hãy để thao tác mở cánh trở thành bước đầu tiên của tách trà.",
+    guidanceTitle: "Chạm - tách nhẹ - thưởng hương - pha - chờ - thưởng",
+    guidanceIntro: "Mỗi cảnh chỉ giữ lại một động tác để khoảng trà diễn ra chậm và rõ.",
     guidanceSteps: [
       {
         label: "01",
-        title: "Tách nhẹ cánh sen",
-        text: "Tách nhẹ phần cánh bên ngoài để thưởng hương, không mở rời toàn bộ búp sen.",
+        title: "Chạm vào hình hài của sen",
+        text: "Lấy búp sen khỏi lớp bao. Giữ nhẹ ở phần đáy, không bóp cánh.",
       },
       {
         label: "02",
-        title: "Cảm nhận bằng nhiều giác quan",
-        text: "Nhận biết hình dáng, chất liệu và hương trong khoảnh khắc đầu tiên.",
+        title: "Tách nhẹ để hương sen thức giấc",
+        text: "Mở nhẹ một khoảng giữa các cánh ngoài. Không tháo rời cánh sen và không lấy túi trà ra khỏi búp.",
       },
       {
         label: "03",
-        title: "Pha nguyên búp sen",
-        text: "Đặt nguyên búp sen vào dụng cụ pha và rót nước theo thông số đang hiển thị.",
+        title: "Thưởng hương",
+        text: "Đưa búp sen lại gần. Chậm một nhịp. Ghi nhận hương đầu tiên.",
       },
       {
         label: "04",
-        title: "Chờ rồi thưởng thức",
-        text: "Chờ khoảng 5 phút để hương vị hiện ra, quan sát màu nước và ghi lại điều khiến bạn nhớ nhất.",
+        title: "Pha nguyên búp",
+        text: "Đặt nguyên búp vào ly. Giữ dây túi lọc bên ngoài và rót 220 ml nước khoảng 85°C chậm quanh búp.",
+      },
+      {
+        label: "05",
+        title: "Chờ trà",
+        text: "Chờ 3 phút, quan sát cánh sen dần mở và màu trà ổn định trong khi nghe câu chuyện Petal Pack.",
+      },
+      {
+        label: "06",
+        title: "Thưởng",
+        text: "Hương sen đã mở. Khoảng trà bắt đầu.",
       },
     ],
     prompt:

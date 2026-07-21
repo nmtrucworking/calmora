@@ -4,6 +4,7 @@ import { Link } from "@app/router/RouterContext";
 import { useRouter } from "@app/router/RouterState";
 import { trackEvent } from "@shared/analytics/analytics";
 import { QuickFeedback } from "@features/qr/components/QuickFeedback";
+import { PetalPackExperience } from "@features/qr/components/PetalPackExperience";
 import { RitualTimer } from "@features/qr/components/RitualTimer";
 import { useRitualProgress } from "@features/qr/services/useRitualProgress";
 import type { SenovaProduct } from "@features/products/data/products";
@@ -60,7 +61,7 @@ export default function ExperiencePage({ product }: ExperiencePageProps) {
   const progress = useRitualProgress(storageKey, completeStep);
 
   useEffect(() => {
-    if (!product || !qrContent) return;
+    if (!product || (!qrContent && product.slug !== "petal-pack")) return;
     trackEvent({
       eventName: "experience_intro_view",
       productSlug: product.slug,
@@ -78,6 +79,17 @@ export default function ExperiencePage({ product }: ExperiencePageProps) {
         <p className={styles.bodyText}>Đường dẫn trải nghiệm chưa khớp với sản phẩm Senova.</p>
         <Link href="/products" className={styles.primaryButton}>Xem bộ sản phẩm</Link>
       </section>
+    );
+  }
+
+  if (product.slug === "petal-pack") {
+    return (
+      <PetalPackExperience
+        batchCode={batchCode}
+        contentVersion={contentVersion}
+        contentViewed={contentViewed}
+        product={product}
+      />
     );
   }
 
