@@ -1,30 +1,33 @@
 import { Download } from "lucide-react";
 import { useEffect, useMemo, useRef } from "react";
 import QRCodeStyling from "qr-code-styling";
+import { getPublicQrUrl, getPublicRouteUrl } from "./adminQrUrl";
 
 type QrDownloadExtension = "png" | "svg";
 
 type AdminQrCodeProps = {
-  code: string;
+  code?: string;
   compact?: boolean;
+  destination?: string;
+  downloadName?: string;
   downloadable?: boolean;
   size?: number;
 };
 
-function getPublicSiteOrigin() {
-  const configuredOrigin = import.meta.env.VITE_PUBLIC_SITE_URL?.trim();
-  return (configuredOrigin || window.location.origin).replace(/\/+$/, "");
-}
-
-function getPublicQrUrl(code: string) {
-  const normalizedCode = code.trim() || "PREVIEW";
-  return `${getPublicSiteOrigin()}/q/${encodeURIComponent(normalizedCode)}`;
-}
-
-export function AdminQrCode({ code, compact = false, downloadable = false, size = 280 }: AdminQrCodeProps) {
+export function AdminQrCode({
+  code = "",
+  compact = false,
+  destination,
+  downloadName,
+  downloadable = false,
+  size = 280,
+}: AdminQrCodeProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const qrRef = useRef<QRCodeStyling | null>(null);
-  const qrUrl = useMemo(() => getPublicQrUrl(code), [code]);
+  const qrUrl = useMemo(
+    () => destination ? getPublicRouteUrl(destination) : getPublicQrUrl(code),
+    [code, destination],
+  );
 
   useEffect(() => {
     const gradient = {
@@ -70,7 +73,8 @@ export function AdminQrCode({ code, compact = false, downloadable = false, size 
   }, [compact, qrUrl, size]);
 
   const download = async (extension: QrDownloadExtension) => {
-    const normalizedName = code.trim().toLowerCase().replace(/[^a-z0-9-]+/g, "-") || "preview";
+    const fileLabel = downloadName || code || destination || "preview";
+    const normalizedName = fileLabel.trim().toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/^-|-$/g, "") || "preview";
     await qrRef.current?.download({ name: `senova-${normalizedName}`, extension });
   };
 
@@ -80,7 +84,7 @@ export function AdminQrCode({ code, compact = false, downloadable = false, size 
         ref={containerRef}
         className="adminQrPreview__canvas"
         role="img"
-        aria-label={`Mã QR Senova cho ${code || "bản xem trước"}`}
+        aria-label={`Mã QR Senova cho ${destination || code || "bản xem trước"}`}
       />
       {!compact ? <code className="adminQrPreview__url">{qrUrl}</code> : null}
       {downloadable ? (

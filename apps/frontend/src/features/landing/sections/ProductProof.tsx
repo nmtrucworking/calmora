@@ -16,7 +16,7 @@ export function ProductProof({ language }: { language: Language }) {
     : { eyebrow: "Product information", title: "Confirmed facts are separated from work in progress.", text: "Senova states the status of each item so prototype imagery and design direction are not mistaken for final commercial claims." };
 
   return (
-    <EditorialSection>
+    <EditorialSection className="bg-[var(--page-bg)]">
       <ProductStatement {...heading} />
       <div className="mt-10 grid grid-cols-2 gap-px border border-border bg-border max-[760px]:grid-cols-1">
         {productTrustItems.map((item) => {

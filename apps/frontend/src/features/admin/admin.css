@@ -166,6 +166,11 @@
 .adminQrPreview__actions { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .adminQrPreview--compact { display: block; width: 58px; }
 .adminQrPreview--compact .adminQrPreview__canvas { width: 58px; border-radius: 8px; box-shadow: none; }
+.adminWebsiteQr__urlField { margin-top: 16px; }
+.adminWebsiteQr__summary { display: grid; gap: 7px; margin-top: 18px; padding: 16px; border: 1px solid #e2eae5; border-radius: 11px; background: #f7faf8; }
+.adminWebsiteQr__summary span { color: var(--admin-muted); font-size: 10px; font-weight: 750; letter-spacing: .08em; text-transform: uppercase; }
+.adminWebsiteQr__summary strong { color: var(--admin-ink); font-family: var(--font-display); font-size: 19px; }
+.adminWebsiteQr__summary code { width: fit-content; padding: 4px 7px; border-radius: 5px; color: var(--admin-green); background: var(--admin-green-soft); font-size: 11px; }
 .adminMetaList { margin: 0; padding: 0; list-style: none; }
 .adminMetaList li { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid #edf1ee; font-size: 10px; }
 .adminMetaList li:last-child { border: 0; }

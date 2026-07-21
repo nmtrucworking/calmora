@@ -4,11 +4,14 @@ import {
   Bell,
   Boxes,
   ChevronDown,
+  Copy,
   ClipboardList,
   Clock3,
   Edit3,
   Eye,
+  ExternalLink,
   FileText,
+  Globe2,
   LayoutDashboard,
   Leaf,
   LogOut,
@@ -30,6 +33,8 @@ import { Link } from "@app/router/RouterContext";
 import { useRouter } from "@app/router/RouterState";
 import { AdminStoreProvider, useAdminStore } from "./AdminStore";
 import { AdminQrCode } from "./AdminQrCode";
+import { getPublicRouteUrl } from "./adminQrUrl";
+import { getRegisteredWebsiteRoutes, type WebsiteRouteGroup } from "@app/router/registeredRoutes";
 /* eslint-disable react-hooks/exhaustive-deps, react-hooks/set-state-in-effect */
 import {
   getAdminSession,
@@ -148,6 +153,7 @@ const navItems = [
   { href: "/admin", label: "Tổng quan", icon: LayoutDashboard, permission: "analytics.read" },
   { href: "/admin/products", label: "Sản phẩm", icon: Package, permission: "catalog.read" },
   { href: "/admin/qr", label: "Mã QR", icon: QrCode, permission: "qr.read" },
+  { href: "/admin/site-qr", label: "QR website", icon: Globe2, permission: "qr.manage" },
   { href: "/admin/qr-content", label: "Nội dung QR", icon: FileText, permission: "qr.read" },
   { href: "/admin/submissions", label: "Khách hàng tiềm năng", icon: Users, permission: "submissions.read" },
   { href: "/admin/analytics", label: "Phân tích", icon: BarChart3, permission: "analytics.read" },
@@ -158,6 +164,7 @@ function pageLabel(pathname: string) {
   if (pathname.includes("/products/new")) return "Thêm sản phẩm";
   if (pathname.match(/^\/admin\/products\/[^/]+$/)) return "Chi tiết sản phẩm";
   if (pathname.startsWith("/admin/products")) return "Sản phẩm";
+  if (pathname.startsWith("/admin/site-qr")) return "QR website";
   if (pathname.includes("/qr/new")) return "Tạo mã QR";
   if (pathname.startsWith("/admin/qr-content")) return "Nội dung QR";
   if (pathname.match(/^\/admin\/qr\/[^/]+$/)) return "Chi tiết mã QR";
@@ -376,6 +383,98 @@ function QrPage() {
   return <><PageHeader eyebrow="Trải nghiệm số" title="Mã QR" description="Theo dõi mã phát hành, lô sản phẩm, phiên bản nội dung và lượt quét." action={<Link className="adminButton adminButton--primary" href="/admin/qr/new"><Plus size={16} />Tạo mã QR</Link>} /><section className="adminCard"><div className="adminToolbar"><label className="adminSearch"><Search size={16} /><input aria-label="Tìm mã QR" placeholder="Tìm mã, sản phẩm hoặc chiến dịch..." value={query} onChange={(event) => { setQuery(event.target.value); setPage(1); }} /></label><select className="adminSelect" aria-label="Lọc trạng thái QR" value={status} onChange={(event) => { setStatus(event.target.value); setPage(1); }}><option value="all">Tất cả trạng thái</option><option value="active">Đang hoạt động</option><option value="paused">Tạm dừng</option><option value="expired">Hết hạn</option><option value="revoked">Đã thu hồi</option></select></div>{visible.length ? <div className="adminTableWrap"><table className="adminTable"><thead><tr><th>Xem trước</th><th>Mã QR</th><th>Sản phẩm / Lô</th><th>Chiến dịch</th><th>Lượt quét</th><th>Trạng thái</th><th><span className="sr-only">Thao tác</span></th></tr></thead><tbody>{visible.map((record) => <tr key={record.code}><td><AdminQrCode code={record.code} compact size={58} /></td><td><Link className="adminTable__link" href={`/admin/qr/${encodeURIComponent(record.code)}`}>{record.code}</Link><br /><small>{record.contentVersion} · {(record.locale ?? "vi").toUpperCase()}</small></td><td><strong>{productName(record.productSlug)}</strong><br /><small>{record.batchCode}</small></td><td>{record.campaign}</td><td>{record.scans.toLocaleString("vi-VN")}</td><td><StatusBadge status={record.status} /></td><td><div className="adminRowActions"><Link href={`/admin/qr/${encodeURIComponent(record.code)}`} aria-label={`Xem ${record.code}`}><Eye size={15} /></Link></div></td></tr>)}</tbody></table></div> : <EmptyState title="Không tìm thấy mã QR" description="Thử thay đổi từ khóa hoặc bộ lọc trạng thái." />}<Pagination page={page} pageCount={Math.ceil(filtered.length / PAGE_SIZE)} total={filtered.length} onPage={setPage} /></section></>;
 }
 
+const websiteRouteGroups: WebsiteRouteGroup[] = ["Trang chính", "Sản phẩm", "Trải nghiệm", "Dịch vụ", "Hỗ trợ", "Hệ thống"];
+
+function WebsiteQrPage() {
+  const { products, loadProducts, notify } = useAdminStore();
+  const [selectedPath, setSelectedPath] = useState("/");
+
+  useEffect(() => { loadInBackground(loadProducts()); }, []);
+
+  const routes = useMemo(
+    () => getRegisteredWebsiteRoutes(
+      products
+        .filter((product) => product.status === "active")
+        .map(({ slug, name }) => ({ slug, name })),
+    ),
+    [products],
+  );
+  const selectedRoute = routes.find((route) => route.path === selectedPath) ?? routes[0]!;
+  const publicUrl = getPublicRouteUrl(selectedRoute.path);
+
+  const copyUrl = async () => {
+    try {
+      await navigator.clipboard.writeText(publicUrl);
+      notify("Đã sao chép đường dẫn QR website.");
+    } catch {
+      notify("Không thể sao chép tự động. Hãy sao chép đường dẫn trong ô URL.", "error");
+    }
+  };
+
+  return (
+    <>
+      <PageHeader
+        eyebrow="Điểm chạm website"
+        title="Tạo QR truy cập trang"
+        description="Chọn một route công khai đã được đăng ký, kiểm tra đường dẫn và tải QR để dùng trên ấn phẩm hoặc tại sự kiện."
+      />
+      <div className="adminGrid adminWebsiteQr">
+        <section className="adminCard">
+          <div className="adminCard__header">
+            <div><h2>Trang đích</h2><p>Chỉ các route hợp lệ của website được phép chọn</p></div>
+            <StatusBadge status="active" />
+          </div>
+          <div className="adminCard__body">
+            <div className="adminField">
+              <label htmlFor="website-qr-route">Route website <span>*</span></label>
+              <select id="website-qr-route" value={selectedRoute.path} onChange={(event) => setSelectedPath(event.target.value)}>
+                {websiteRouteGroups.map((group) => {
+                  const groupRoutes = routes.filter((route) => route.group === group);
+                  return groupRoutes.length ? (
+                    <optgroup key={group} label={group}>
+                      {groupRoutes.map((route) => <option key={route.id} value={route.path}>{route.label} · {route.path}</option>)}
+                    </optgroup>
+                  ) : null;
+                })}
+              </select>
+              <small>Sản phẩm chỉ xuất hiện khi đang ở trạng thái hoạt động.</small>
+            </div>
+            <div className="adminField adminWebsiteQr__urlField">
+              <label htmlFor="website-qr-url">URL được mã hóa trong QR</label>
+              <input id="website-qr-url" value={publicUrl} readOnly />
+            </div>
+            <div className="adminWebsiteQr__summary">
+              <span>Trang đã chọn</span>
+              <strong>{selectedRoute.label}</strong>
+              <code>{selectedRoute.path}</code>
+            </div>
+            <div className="adminFormActions">
+              <button className="adminButton adminButton--secondary" type="button" onClick={() => void copyUrl()}>
+                <Copy size={15} />Sao chép URL
+              </button>
+              <a className="adminButton adminButton--ghost" href={publicUrl} target="_blank" rel="noreferrer">
+                <ExternalLink size={15} />Mở trang đích
+              </a>
+            </div>
+          </div>
+        </section>
+        <aside className="adminFormAside">
+          <section className="adminCard">
+            <div className="adminCard__header"><div><h2>Bản xem trước</h2><p>QR cập nhật ngay khi đổi route</p></div></div>
+            <div className="adminCard__body">
+              <AdminQrCode
+                destination={selectedRoute.path}
+                downloadName={`website-${selectedRoute.id}`}
+                downloadable
+              />
+            </div>
+          </section>
+        </aside>
+      </div>
+    </>
+  );
+}
+
 function QrFormPage({ id }: { id?: string }) {
   const { qrRecords, products, saveQrRecord, setQrStatus, notify, loadQr, loadProducts, isLoading } = useAdminStore();
   const { navigate } = useRouter();
@@ -576,6 +675,7 @@ function AdminRoutes() {
   if (normalized.startsWith("/admin/products/")) return <ProductFormPage id={normalized.split("/")[3]} />;
   if (normalized === "/admin/qr") return <QrPage />;
   if (normalized === "/admin/qr/new") return <QrFormPage />;
+  if (normalized === "/admin/site-qr") return <WebsiteQrPage />;
   if (normalized === "/admin/qr-content") return <QrContentPage />;
   if (normalized.startsWith("/admin/qr/")) return <QrFormPage id={normalized.split("/")[3]} />;
   if (normalized === "/admin/submissions") return <SubmissionsPage />;

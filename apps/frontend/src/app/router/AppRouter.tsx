@@ -10,8 +10,9 @@ import { commerceText, getLocalizedProduct, getLocalizedSeo } from "@features/co
 import { useLanguage, type Language } from "@app/providers/LanguageContext";
 import { canonicalBaseUrl, pageSeo, standardPages, type SeoContent } from "@features/content/sitePages";
 import { trackEvent } from "@shared/analytics/analytics";
+import { publicRoutePaths } from "@app/router/registeredRoutes";
 
-const landingPath = "/";
+const landingPath = publicRoutePaths.home;
 
 const loadLandingPage = () => import("@features/landing/page");
 const loadStoryPage = () => import("@features/story/page");
@@ -209,19 +210,19 @@ function PublicRoutes() {
     pageComponent = <RouteFallback />;
   } else if (normalizedPath === landingPath) {
     pageComponent = <SenovaLandingPage />;
-  } else if (normalizedPath === "/about") {
+  } else if (normalizedPath === publicRoutePaths.about) {
     pageComponent = <AboutPage />;
-  } else if (normalizedPath === "/story") {
+  } else if (normalizedPath === publicRoutePaths.story) {
     pageComponent = <StoryPage />;
-  } else if (normalizedPath === "/products") {
+  } else if (normalizedPath === publicRoutePaths.products) {
     pageComponent = <ProductsPage />;
   } else if (normalizedPath.startsWith("/products/")) {
     pageComponent = product ? <ProductDetailPage product={product} /> : <NotFoundPage />;
   } else if (normalizedPath === "/collections" || normalizedPath.startsWith("/collections/")) {
     pageComponent = <Redirect to="/products" />;
-  } else if (normalizedPath === "/order-request") {
+  } else if (normalizedPath === publicRoutePaths.orderRequest) {
     pageComponent = <CheckoutPage />;
-  } else if (normalizedPath === "/order-request/success") {
+  } else if (normalizedPath === publicRoutePaths.orderRequestSuccess) {
     pageComponent = <CheckoutThankYouPage />;
   } else if (["/bag", "/checkout", "/reorder", "/pre-order"].includes(normalizedPath)) {
     pageComponent = <Redirect to={`/order-request${search}`} />;
@@ -237,19 +238,19 @@ function PublicRoutes() {
     pageComponent = product ? <ExperiencePage product={product} /> : <NotFoundPage />;
   } else if (normalizedPath.startsWith("/feedback/")) {
     pageComponent = product ? <FeedbackPage product={product} /> : <NotFoundPage />;
-  } else if (normalizedPath === "/contact") {
+  } else if (normalizedPath === publicRoutePaths.contact) {
     pageComponent = <ContactPage />;
-  } else if (normalizedPath === "/partners") {
+  } else if (normalizedPath === publicRoutePaths.partners) {
     pageComponent = <PartnersPage />;
-  } else if (normalizedPath === "/thank-you") {
+  } else if (normalizedPath === publicRoutePaths.thankYou) {
     pageComponent = <ThankYouPage />;
-  } else if (normalizedPath === "/ritual") {
+  } else if (normalizedPath === publicRoutePaths.ritual) {
     pageComponent = <StandardPage content={standardPages["/ritual"]} showProducts />;
-  } else if (normalizedPath === "/seasonal") {
+  } else if (normalizedPath === publicRoutePaths.seasonal) {
     pageComponent = <StandardPage content={standardPages["/seasonal"]} showProducts />;
-  } else if (normalizedPath === "/privacy") {
+  } else if (normalizedPath === publicRoutePaths.privacy) {
     pageComponent = <StandardPage content={standardPages["/privacy"]} />;
-  } else if (normalizedPath === "/terms") {
+  } else if (normalizedPath === publicRoutePaths.terms) {
     pageComponent = <StandardPage content={standardPages["/terms"]} />;
   } else if (qrCode) {
     pageComponent = <QrRedirectPage code={qrCode} />;

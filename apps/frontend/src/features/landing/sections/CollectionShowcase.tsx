@@ -22,7 +22,7 @@ export function CollectionShowcase({ content, language }: CollectionShowcaseProp
         <div className="grid grid-cols-[minmax(0,0.95fr)_minmax(0,1fr)] gap-10 max-[900px]:grid-cols-1">
           <ProductStatement eyebrow={content.eyebrow} title={content.title} text={content.text} />
           <div className="self-end justify-self-end max-[900px]:justify-self-start">
-            <LuxuryButton href="/products" variant="secondary">
+            <LuxuryButton href="/products" variant="primary">
               {language === "vi" ? "Xem toàn bộ bộ sưu tập" : "View full collection"}
               <ArrowRight aria-hidden="true" className="h-4 w-4" />
             </LuxuryButton>

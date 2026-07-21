@@ -162,7 +162,7 @@ export function SiteLayout({
               className={cx(
                 "inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap border px-3 text-[0.72rem] font-[650] uppercase tracking-[0.12em] no-underline transition-colors duration-200 max-[1120px]:hidden",
                 isTransparentHeader
-                  ? "border-[rgba(243,239,229,0.38)] text-text-inverse hover:border-accent-gold hover:text-accent-gold"
+                  ? "border-accent-gold bg-accent-gold text-[var(--senova-forest-black)] shadow-brand-sm hover:border-[var(--senova-gold-400)] hover:bg-[var(--senova-gold-400)]"
                   : "border-primary bg-primary text-on-primary hover:bg-primary-strong",
               )}
               onClick={() => setIsMenuOpen(false)}
@@ -286,8 +286,12 @@ export function SiteLayout({
                 hello@senova.vn
               </span>
               <span className="inline-flex items-center gap-2">
+                <Mail aria-hidden="true" className="h-3.5 w-3.5" />
+                nmtruc.work@gmail.com
+              </span>
+              <span className="inline-flex items-center gap-2">
                 <MapPin aria-hidden="true" className="h-3.5 w-3.5" />
-                Hanoi, Vietnam
+                Ho Chi Minh, Vietnam
               </span>
             </div>
             <span>© {new Date().getFullYear()} Senova by Calmora</span>
