@@ -9,6 +9,10 @@ import { orderedLuxuryProducts, productLuxuryCopy } from "@features/content/luxu
 import { useLanguage, type Language } from "@app/providers/LanguageContext";
 import { Link } from "@app/router/RouterContext";
 import type { SenovaProduct } from "@features/products/data/products";
+import { getImageAssetByPath } from "@features/content/imageManifest";
+import { ImageStatusLabel } from "@shared/components/media/ImageStatusLabel";
+import { ResponsiveImage } from "@shared/components/media/ResponsiveImage";
+import { productTrustItems, servicePromise, trustStatusLabel } from "@features/content/trustContent";
 
 type ProductDetailPageProps = {
   product?: SenovaProduct;
@@ -124,6 +128,8 @@ export default function ProductDetailPage({ product: baseProduct }: ProductDetai
     selectedVariantData?.available !== false &&
     !unavailableStatuses.includes(baseProduct.commerce?.status ?? "PRE_ORDER");
   const relatedProducts = orderedLuxuryProducts.filter((productId) => productId !== baseProduct.id);
+  const heroAsset = getImageAssetByPath(product.image);
+  const trustItems = productTrustItems.filter((item) => item.productId === baseProduct.id);
 
   return (
     <article className="bg-[var(--page-bg)]">
@@ -212,13 +218,16 @@ export default function ProductDetailPage({ product: baseProduct }: ProductDetai
               </div>
             </div>
 
-            <ImageReveal
-              src={product.image}
-              alt={product.heroAlt}
-              className="aspect-[4/5] border-[rgba(243,239,229,0.16)] bg-[rgba(243,239,229,0.04)]"
-              imageClassName="object-cover"
-              loading="eager"
-            />
+            <div className="relative">
+              <ImageReveal
+                src={product.image}
+                alt={product.heroAlt}
+                className="aspect-[4/5] border-[rgba(243,239,229,0.16)] bg-[rgba(243,239,229,0.04)]"
+                imageClassName="object-cover"
+                loading="eager"
+              />
+              {heroAsset ? <ImageStatusLabel asset={heroAsset} language={language} /> : null}
+            </div>
           </div>
         </div>
       </section>
@@ -269,6 +278,33 @@ export default function ProductDetailPage({ product: baseProduct }: ProductDetai
       </EditorialSection>
 
       <EditorialSection>
+        <ProductStatement
+          eyebrow={language === "vi" ? "Bằng chứng & trạng thái" : "Evidence & status"}
+          title={language === "vi" ? "Thông tin được công bố theo mức độ xác nhận." : "Information is published with an explicit confidence level."}
+          text={language === "vi" ? "Các chi tiết đang kiểm chứng hoặc hoàn thiện không được trình bày như cam kết thương mại cuối cùng." : "Items under validation or development are not presented as final commercial claims."}
+        />
+        <div className="mt-9 grid grid-cols-2 gap-px border border-border bg-border max-[720px]:grid-cols-1">
+          {trustItems.map((item) => (
+            <article key={item.id} className="bg-[var(--surface-paper)] p-6">
+              <span className="text-[0.72rem] font-[700] uppercase tracking-[0.12em] text-accent-strong">{trustStatusLabel[language][item.status]}</span>
+              <h2 className="mt-4 mb-0 text-[0.88rem] font-[650] text-text-muted">{item.label[language]}</h2>
+              <p className="mt-2 mb-0 font-display text-[1.5rem] leading-[1.3]">{item.value[language]}</p>
+            </article>
+          ))}
+          <article className="bg-[var(--surface-paper)] p-6">
+            <span className="text-[0.72rem] font-[700] uppercase tracking-[0.12em] text-accent-strong">{language === "vi" ? "Dịch vụ" : "Service"}</span>
+            <h2 className="mt-4 mb-0 text-[0.88rem] font-[650] text-text-muted">{language === "vi" ? "Cam kết phản hồi" : "Response promise"}</h2>
+            <p className="mt-2 mb-0 font-display text-[1.5rem] leading-[1.3]">{servicePromise.responseTime[language]}</p>
+          </article>
+          <article className="bg-[var(--surface-paper)] p-6">
+            <span className="text-[0.72rem] font-[700] uppercase tracking-[0.12em] text-accent-strong">{language === "vi" ? "Xác nhận đơn" : "Order confirmation"}</span>
+            <h2 className="mt-4 mb-0 text-[0.88rem] font-[650] text-text-muted">{servicePromise.preparationTime[language]}</h2>
+            <p className="mt-2 mb-0 leading-[1.7] text-text">{servicePromise.paymentMethod[language]}</p>
+          </article>
+        </div>
+      </EditorialSection>
+
+      <EditorialSection>
         <ProductStatement eyebrow={copy.ritual} title={product.tagline} text={product.culturalNote} />
         <div className="mt-10 grid grid-cols-4 gap-5 max-[1000px]:grid-cols-2 max-[620px]:grid-cols-1">
           {product.experienceSteps.map((step, index) => (
@@ -315,6 +351,7 @@ export default function ProductDetailPage({ product: baseProduct }: ProductDetai
         <div className="mt-10 grid grid-cols-2 gap-5 max-[760px]:grid-cols-1">
           {relatedProducts.map((productId) => {
             const related = productLuxuryCopy[language][productId];
+            const relatedAsset = getImageAssetByPath(related.image);
 
             return (
               <Link
@@ -322,13 +359,14 @@ export default function ProductDetailPage({ product: baseProduct }: ProductDetai
                 href={`/products/${productId}`}
                 className="grid overflow-hidden border border-border bg-[var(--surface-paper)] text-text no-underline shadow-[var(--shadow-luxury-sm)]"
               >
-                <img
-                  src={related.image}
-                  alt={related.heroAlt}
-                  className="aspect-[16/10] w-full object-cover saturate-[0.86]"
-                  loading="lazy"
-                  decoding="async"
-                />
+                {relatedAsset ? (
+                  <ResponsiveImage
+                    asset={relatedAsset}
+                    alt={related.heroAlt}
+                    className="aspect-[16/10] w-full object-cover saturate-[0.86]"
+                    sizes="(max-width: 760px) 100vw, 50vw"
+                  />
+                ) : null}
                 <div className="p-5">
                   <SectionEyebrow>{related.role}</SectionEyebrow>
                   <h2 className="mt-3 mb-0 font-display text-[clamp(1.6rem,3vw,2.4rem)] font-[430] text-text">
@@ -351,6 +389,18 @@ export default function ProductDetailPage({ product: baseProduct }: ProductDetai
           </LuxuryButton>
         </div>
       </EditorialSection>
+
+      {canPreorder ? (
+        <div className="fixed inset-x-0 bottom-0 z-30 hidden items-center justify-between gap-3 border-t border-border bg-[var(--surface-strong)] px-4 py-3 shadow-brand-md max-[760px]:flex">
+          <span className="min-w-0 truncate text-[0.82rem] font-[650] text-text">{product.name}</span>
+          <LuxuryButton
+            href={`/order-request?product=${baseProduct.id}&variant=${selectedVariant}&quantity=1&intent=personal&source=product-detail-sticky`}
+            className="min-h-10 shrink-0 px-4 py-2"
+          >
+            {language === "vi" ? "Gửi yêu cầu" : "Send request"}
+          </LuxuryButton>
+        </div>
+      ) : null}
     </article>
   );
 }

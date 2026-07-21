@@ -41,15 +41,15 @@ const eyebrowClass = "m-0 text-[0.78rem] font-extrabold uppercase tracking-[0.16
 const heroClass =
   "grid min-h-[min(36rem,calc(100svh-8rem))] grid-cols-[minmax(0,1fr)_minmax(16rem,0.55fr)] items-end gap-[clamp(1.5rem,5vw,4rem)] pt-16 max-[900px]:min-h-0 max-[900px]:grid-cols-1 max-[900px]:pt-8";
 const titleClass =
-  "mt-[0.9rem] mb-0 max-w-[16ch] font-display text-[clamp(2.7rem,7vw,5.4rem)] font-[760] leading-none text-primary-strong";
+  "mt-[0.9rem] mb-0 max-w-[16ch] font-display text-[clamp(2.7rem,7vw,5.4rem)] font-[500] leading-[1.04] text-primary-strong";
 const bodyClass = "text-base leading-[1.75] text-text-muted";
-const panelClass = `rounded-lg p-[clamp(1.25rem,3vw,2rem)] ${luxuryMotion.surface}`;
+const panelClass = `rounded-[var(--radius-md)] p-[clamp(1.25rem,3vw,2rem)] ${luxuryMotion.surface}`;
 const primaryButtonClass =
-  `inline-flex min-h-[2.85rem] items-center justify-center gap-[0.55rem] rounded-full border border-primary bg-primary px-[1.1rem] py-3 text-[0.9rem] font-extrabold text-on-primary no-underline disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 ${luxuryMotion.button}`;
+  `inline-flex min-h-[2.85rem] items-center justify-center gap-[0.55rem] rounded-[var(--radius-sm)] border border-primary bg-primary px-[1.1rem] py-3 text-[0.9rem] font-bold text-on-primary no-underline disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 ${luxuryMotion.button}`;
 const secondaryButtonClass =
-  `inline-flex min-h-[2.85rem] items-center justify-center gap-[0.55rem] rounded-full border border-border-strong bg-surface-strong px-[1.1rem] py-3 text-[0.9rem] font-extrabold text-primary-strong no-underline ${luxuryMotion.button}`;
+  `inline-flex min-h-[2.85rem] items-center justify-center gap-[0.55rem] rounded-[var(--radius-sm)] border border-border-strong bg-surface-strong px-[1.1rem] py-3 text-[0.9rem] font-bold text-primary-strong no-underline ${luxuryMotion.button}`;
 const fieldClass =
-  `w-full rounded-lg border border-border-strong bg-surface-strong px-[0.9rem] py-[0.78rem] text-text outline-none ${luxuryMotion.field}`;
+  `w-full rounded-[var(--radius-sm)] border border-border-strong bg-surface-strong px-[0.9rem] py-[0.78rem] text-text outline-none ${luxuryMotion.field}`;
 
 function useCommerceCopy() {
   const { language } = useLanguage();

@@ -1,36 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://senova.vn/</loc></url>
-  <url><loc>https://senova.vn/about</loc></url>
-  <url><loc>https://senova.vn/story</loc></url>
-  <url><loc>https://senova.vn/ritual</loc></url>
-  <url><loc>https://senova.vn/seasonal</loc></url>
-  <url><loc>https://senova.vn/collections</loc></url>
-  <url><loc>https://senova.vn/collections/signature</loc></url>
-  <url><loc>https://senova.vn/collections/gifting</loc></url>
-  <url><loc>https://senova.vn/collections/daily-ritual</loc></url>
   <url><loc>https://senova.vn/products</loc></url>
   <url><loc>https://senova.vn/products/classic</loc></url>
   <url><loc>https://senova.vn/products/petal-pack</loc></url>
   <url><loc>https://senova.vn/products/gift-set</loc></url>
+  <url><loc>https://senova.vn/ritual</loc></url>
+  <url><loc>https://senova.vn/story</loc></url>
   <url><loc>https://senova.vn/gifting</loc></url>
-  <url><loc>https://senova.vn/corporate-gifting</loc></url>
-  <url><loc>https://senova.vn/concierge</loc></url>
-  <url><loc>https://senova.vn/private-tasting</loc></url>
-  <url><loc>https://senova.vn/journal</loc></url>
-  <url><loc>https://senova.vn/journal/gift-language</loc></url>
-  <url><loc>https://senova.vn/journal/petal-ritual</loc></url>
-  <url><loc>https://senova.vn/journal/seasonal-lotus</loc></url>
+  <url><loc>https://senova.vn/order-request</loc></url>
   <url><loc>https://senova.vn/experience/classic</loc></url>
   <url><loc>https://senova.vn/experience/petal-pack</loc></url>
   <url><loc>https://senova.vn/experience/gift-set</loc></url>
-  <url><loc>https://senova.vn/order-request</loc></url>
   <url><loc>https://senova.vn/contact</loc></url>
   <url><loc>https://senova.vn/partners</loc></url>
   <url><loc>https://senova.vn/shipping</loc></url>
   <url><loc>https://senova.vn/returns</loc></url>
-  <url><loc>https://senova.vn/faq</loc></url>
-  <url><loc>https://senova.vn/care</loc></url>
   <url><loc>https://senova.vn/privacy</loc></url>
   <url><loc>https://senova.vn/terms</loc></url>
 </urlset>

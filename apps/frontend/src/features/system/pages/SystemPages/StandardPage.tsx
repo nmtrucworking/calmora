@@ -3,6 +3,8 @@ import { Link } from "@app/router/RouterContext";
 import type { StandardPageContent } from "@features/content/sitePages";
 import { products } from "@features/products/data/products";
 import { systemStyles as styles } from "@shared/styles/systemPageClasses";
+import { getImageAssetByPath } from "@features/content/imageManifest";
+import { ResponsiveImage } from "@shared/components/media/ResponsiveImage";
 
 type StandardPageProps = {
   content: StandardPageContent;
@@ -55,7 +57,13 @@ export default function StandardPage({ content, showProducts = false }: Standard
           {products.map((product) => (
             <Link href={product.href} className={styles.productCard} key={product.slug}>
               <div className={styles.productImage}>
-                <img src={product.image} alt={product.heroAlt} loading="lazy" />
+                {getImageAssetByPath(product.image) ? (
+                  <ResponsiveImage
+                    asset={getImageAssetByPath(product.image)!}
+                    alt={product.heroAlt}
+                    sizes="(max-width: 760px) 100vw, 33vw"
+                  />
+                ) : null}
               </div>
               <div className={styles.productBody}>
                 <span className={styles.panelLabel}>{product.role}</span>

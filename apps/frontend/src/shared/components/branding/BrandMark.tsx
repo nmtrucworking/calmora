@@ -13,11 +13,11 @@ export function BrandMark({ size = "md" }: BrandMarkProps) {
         "grid place-items-center rounded-[var(--radius-sm)] border border-[rgba(175,149,88,0.24)] bg-[rgba(243,239,229,0.08)]",
         size === "sm" ? "h-8 w-8" : "h-10 w-10",
       )}
-      aria-hidden="false"
+      aria-hidden="true"
     >
       <img
         src="/assets/brand/calmora-mark.png"
-        alt="Calmora Mark"
+        alt=""
         className={cx("object-contain", iconSize)}
         decoding="async"
         fetchPriority="high"

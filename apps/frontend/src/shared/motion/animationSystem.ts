@@ -8,10 +8,10 @@ export const motionEase = {
 
 export const motionDuration = {
   instant: 0.18,
-  fast: 0.32,
-  base: 0.56,
-  reveal: 0.92,
-  slow: 1.18,
+  fast: 0.24,
+  base: 0.36,
+  reveal: 0.48,
+  slow: 0.62,
 } as const;
 
 export const motionViewport = {
@@ -28,37 +28,33 @@ export const transition = {
 } as const;
 
 export const pageTransitionVariants = {
-  hidden: { opacity: 0, y: 10, filter: "blur(4px)" },
+  hidden: { opacity: 0, y: 6 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
     transition: transition.route,
   },
   exit: {
     opacity: 0,
     y: -8,
-    filter: "blur(3px)",
     transition: { duration: 0.22, ease: motionEase.precise },
   },
 } as const;
 
 export const sectionRevealVariants = {
-  hidden: { opacity: 0, y: 26, filter: "blur(5px)" },
+  hidden: { opacity: 0, y: 18 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
     transition: transition.slowReveal,
   },
 } as const;
 
 export const revealVariants = {
-  hidden: { opacity: 0, y: 18, filter: "blur(4px)" },
+  hidden: { opacity: 0, y: 14 },
   visible: {
     opacity: 1,
     y: 0,
-    filter: "blur(0px)",
     transition: transition.reveal,
   },
 } as const;
@@ -69,11 +65,10 @@ export const fadeVariants = {
 } as const;
 
 export const imageRevealVariants = {
-  hidden: { opacity: 0, scale: 1.035, filter: "blur(6px)" },
+  hidden: { opacity: 0, scale: 1.02 },
   visible: {
     opacity: 1,
     scale: 1,
-    filter: "blur(0px)",
     transition: transition.slowReveal,
   },
 } as const;

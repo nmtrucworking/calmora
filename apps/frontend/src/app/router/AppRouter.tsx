@@ -1,19 +1,15 @@
-import { lazy, Suspense, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { lazy, Suspense, useEffect, useRef, type ReactNode } from "react";
 import { RouterProvider } from "@app/router/RouterContext";
 import { useRouter } from "@app/router/RouterState";
 import { SiteLayout } from "@app/layout/SiteLayout";
 import { AnimatePresence, MotionConfig, motion } from "framer-motion";
 import { pageTransitionVariants } from "@shared/motion/animationSystem";
-import { preloadImages } from "@shared/utils/imagePreload";
 import { getProductBySlug as getSeedProductBySlug } from "@features/products/data/products";
 import { useProductCatalog } from "@app/providers/ProductCatalogContext";
-import { collections } from "@features/content/commerceContent";
 import { commerceText, getLocalizedProduct, getLocalizedSeo } from "@features/content/i18n";
 import { useLanguage, type Language } from "@app/providers/LanguageContext";
-import productsBackgroundUrl from "@assets/products-background-optimized.jpg";
 import { canonicalBaseUrl, pageSeo, standardPages, type SeoContent } from "@features/content/sitePages";
 import { trackEvent } from "@shared/analytics/analytics";
-import { CustomCursor } from "@shared/components/ui/CustomCursor";
 
 const landingPath = "/";
 
@@ -48,34 +44,24 @@ const ThankYouPage = lazy(loadThankYouPage);
 const QrRedirectPage = lazy(loadQrRedirectPage);
 const TracePage = lazy(loadTracePage);
 const NotFoundPage = lazy(loadNotFoundPage);
-const CollectionsPage = lazy(() =>
-  loadCommercePages().then((module) => ({ default: module.CollectionsPage })),
-);
-const CollectionDetailPage = lazy(() =>
-  loadCommercePages().then((module) => ({ default: module.CollectionDetailPage })),
-);
-const SearchPage = lazy(() => loadCommercePages().then((module) => ({ default: module.SearchPage })));
-const WishlistPage = lazy(() => loadCommercePages().then((module) => ({ default: module.WishlistPage })));
 const CheckoutPage = lazy(() => loadCommercePages().then((module) => ({ default: module.CheckoutPage })));
 const CheckoutThankYouPage = lazy(() =>
   loadCommercePages().then((module) => ({ default: module.CheckoutThankYouPage })),
 );
 const ServicePage = lazy(() => loadCommercePages().then((module) => ({ default: module.ServicePage })));
 const PolicyPage = lazy(() => loadCommercePages().then((module) => ({ default: module.PolicyPage })));
-const AccountPage = lazy(() => loadCommercePages().then((module) => ({ default: module.AccountPage })));
-const OrderStatusPage = lazy(() =>
-  loadCommercePages().then((module) => ({ default: module.OrderStatusPage })),
-);
-const JournalPage = lazy(() => loadCommercePages().then((module) => ({ default: module.JournalPage })));
 const AdminApp = lazy(loadAdminApp);
-let didSchedulePreload = false;
+const hiddenPublicPaths = new Set([
+  "/collections",
+  "/search",
+  "/wishlist",
+  "/account",
+  "/account/orders",
+  "/account/wishlist",
+  "/order-status",
+  "/journal",
+]);
 
-const productImagePaths = [
-  "/assets/products/classic-pack-optimized.jpg",
-  "/assets/products/petal-pack-optimized.jpg",
-  "/assets/products/gift-set-optimized.jpg",
-];
-const sharedImagePaths = ["/assets/brand/calmora-mark.png"];
 const pageFocusSectionClass = "pageFocusSection";
 const pageFocusActiveClass = "pageFocusActive";
 const pageMotionTargetClass = "pageMotionTarget";
@@ -252,108 +238,6 @@ function FocusSections({ children, enabled }: { children: ReactNode; enabled: bo
   );
 }
 
-function getRouteImagePaths(pathname: string) {
-  if (pathname === landingPath) {
-    return ["/assets/products/petal-pack-optimized.jpg", ...sharedImagePaths];
-  }
-
-  if (
-    pathname === "/products" ||
-    pathname === "/collections" ||
-    pathname.startsWith("/collections/") ||
-    pathname === "/search" ||
-    pathname === "/wishlist" ||
-    pathname === "/bag" ||
-    pathname === "/checkout" ||
-    pathname === "/order-request" ||
-    pathname === "/order-request/success"
-  ) {
-    return [productsBackgroundUrl, ...sharedImagePaths, ...productImagePaths];
-  }
-
-  if (
-    pathname.startsWith("/products/") ||
-    pathname.startsWith("/experience/") ||
-    pathname.startsWith("/feedback/")
-  ) {
-    const productSlug = pathname.split("/")[2] ?? "";
-    const product = getSeedProductBySlug(productSlug);
-
-    return product ? [...sharedImagePaths, product.image] : sharedImagePaths;
-  }
-
-  return sharedImagePaths;
-}
-
-function ImageReadyBoundary({ children, pathname }: { children: ReactNode; pathname: string }) {
-  const imagePaths = useMemo(() => getRouteImagePaths(pathname), [pathname]);
-  const [isReady, setIsReady] = useState(false);
-
-  useEffect(() => {
-    let isCurrent = true;
-
-    void preloadImages(imagePaths, {
-      priority: pathname === "/products" ? "high" : "auto",
-      timeoutMs: pathname === "/products" ? 3200 : 1400,
-    }).then(() => {
-      if (isCurrent) {
-        setIsReady(true);
-      }
-    });
-
-    return () => {
-      isCurrent = false;
-    };
-  }, [imagePaths, pathname]);
-
-  if (!isReady) {
-    return <RouteFallback />;
-  }
-
-  return children;
-}
-
-function preloadSecondaryRoutes() {
-  if (didSchedulePreload) return;
-  didSchedulePreload = true;
-
-  const scheduleIdle = (callback: IdleRequestCallback, options: IdleRequestOptions) => {
-    if ("requestIdleCallback" in window) {
-      return window.requestIdleCallback(callback, options);
-    }
-
-    return globalThis.setTimeout(() => callback({ didTimeout: false, timeRemaining: () => 0 }), 1);
-  };
-
-  window.setTimeout(() => {
-    scheduleIdle(
-      () => {
-        void preloadImages([...sharedImagePaths, ...productImagePaths], {
-          priority: "low",
-          timeoutMs: 3200,
-        });
-
-        void Promise.allSettled([
-          loadAboutPage(),
-          loadStoryPage(),
-          loadProductsPage(),
-          loadProductDetailPage(),
-          loadStandardPage(),
-          loadExperiencePage(),
-          loadFeedbackPage(),
-          loadContactPage(),
-          loadPartnersPage(),
-          loadThankYouPage(),
-          loadQrRedirectPage(),
-          loadNotFoundPage(),
-          loadCommercePages(),
-        ]);
-      },
-      { timeout: 1800 },
-    );
-  }, 900);
-}
-
 function upsertMeta(selector: string, attributes: Record<string, string>) {
   let element = document.head.querySelector<HTMLMetaElement>(selector);
 
@@ -368,31 +252,34 @@ function upsertMeta(selector: string, attributes: Record<string, string>) {
 }
 
 function updateMetadata(pathname: string, language: Language) {
-  const productSlug = pathname.split("/")[2] ?? "";
+  const metadataPath = hiddenPublicPaths.has(pathname) || pathname.startsWith("/collections/") || pathname.startsWith("/journal/")
+    ? "/404"
+    : pathname;
+  const productSlug = metadataPath.split("/")[2] ?? "";
   const baseProduct =
-    pathname.startsWith("/products/") ||
-    pathname.startsWith("/experience/") ||
-    pathname.startsWith("/feedback/")
+    metadataPath.startsWith("/products/") ||
+    metadataPath.startsWith("/experience/") ||
+    metadataPath.startsWith("/feedback/")
       ? getSeedProductBySlug(productSlug)
       : undefined;
   const product = baseProduct ? getLocalizedProduct(baseProduct, language) : undefined;
-  const qrSeo: SeoContent | undefined = pathname.startsWith("/q/")
+  const qrSeo: SeoContent | undefined = metadataPath.startsWith("/q/")
     ? {
         title: "QR Senova | Calmora",
         description: "Trang xu ly ma QR Senova va dieu huong den trai nghiem san pham phu hop.",
         robots: "noindex,follow",
       }
     : undefined;
-  const traceSeo: SeoContent | undefined = pathname.startsWith("/trace/")
+  const traceSeo: SeoContent | undefined = metadataPath.startsWith("/trace/")
     ? {
         title: "Truy xuất sản phẩm Senova | Calmora",
         description: "Kiểm tra nguồn gốc lô, trạng thái kích hoạt và bằng chứng dữ liệu của sản phẩm Senova.",
         robots: "noindex,follow",
       }
     : undefined;
-  const fallbackSeo: SeoContent = traceSeo ?? qrSeo ?? pageSeo[pathname] ?? product?.seo ?? pageSeo["/404"];
-  const seo = getLocalizedSeo(pathname, fallbackSeo, language);
-  const canonicalPath = traceSeo || qrSeo || pageSeo[pathname] || commerceText[language].seo[pathname] || product ? pathname : "/404";
+  const fallbackSeo: SeoContent = traceSeo ?? qrSeo ?? pageSeo[metadataPath] ?? product?.seo ?? pageSeo["/404"];
+  const seo = getLocalizedSeo(metadataPath, fallbackSeo, language);
+  const canonicalPath = traceSeo || qrSeo || pageSeo[metadataPath] || commerceText[language].seo[metadataPath] || product ? metadataPath : "/404";
   const canonical = `${canonicalBaseUrl}${canonicalPath === "/" ? "" : canonicalPath}`;
   const image = seo.image ?? `${canonicalBaseUrl}/assets/brand/calmora-mark.png`;
 
@@ -407,6 +294,7 @@ function updateMetadata(pathname: string, language: Language) {
   upsertMeta('meta[property="og:image"]', { property: "og:image", content: image });
   upsertMeta('meta[property="og:url"]', { property: "og:url", content: canonical });
   upsertMeta('meta[name="twitter:card"]', { name: "twitter:card", content: "summary_large_image" });
+  upsertMeta('meta[property="og:locale"]', { property: "og:locale", content: language === "vi" ? "vi_VN" : "en_US" });
 
   let canonicalLink = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
   if (!canonicalLink) {
@@ -415,6 +303,33 @@ function updateMetadata(pathname: string, language: Language) {
     document.head.appendChild(canonicalLink);
   }
   canonicalLink.href = canonical;
+
+  let structuredData = document.head.querySelector<HTMLScriptElement>('#senova-structured-data');
+  if (!structuredData) {
+    structuredData = document.createElement("script");
+    structuredData.id = "senova-structured-data";
+    structuredData.type = "application/ld+json";
+    document.head.appendChild(structuredData);
+  }
+  structuredData.textContent = JSON.stringify(
+    product
+      ? {
+          "@context": "https://schema.org",
+          "@type": "Product",
+          name: product.name,
+          description: product.description,
+          image: `${canonicalBaseUrl}${product.image}`,
+          brand: { "@type": "Brand", name: "Senova" },
+          manufacturer: { "@type": "Organization", name: "Calmora" },
+        }
+      : {
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "Senova",
+          url: canonicalBaseUrl,
+          parentOrganization: { "@type": "Organization", name: "Calmora" },
+        },
+  );
 }
 
 function PublicRoutes() {
@@ -423,17 +338,11 @@ function PublicRoutes() {
   const { getProductBySlug, isLoading: isCatalogLoading } = useProductCatalog();
   const normalizedPath = pathname.length > 1 ? pathname.replace(/\/+$/, "") : pathname;
   const productSlug = normalizedPath.split("/")[2] ?? "";
-  const collectionSlug = normalizedPath.split("/")[2] ?? "";
-  const journalSlug = normalizedPath.split("/")[2] ?? "";
   const product = getProductBySlug(productSlug);
   const qrCode = normalizedPath.startsWith("/q/") ? normalizedPath.replace("/q/", "") : "";
   const traceCode = normalizedPath.startsWith("/trace/") ? normalizedPath.replace("/trace/", "") : "";
   const serviceContent = commerceText[language].services[normalizedPath];
   const policyContent = commerceText[language].policies[normalizedPath];
-
-  useEffect(() => {
-    preloadSecondaryRoutes();
-  }, []);
 
   useEffect(() => {
     updateMetadata(normalizedPath, language);
@@ -458,18 +367,8 @@ function PublicRoutes() {
     pageComponent = <ProductsPage />;
   } else if (normalizedPath.startsWith("/products/")) {
     pageComponent = product ? <ProductDetailPage product={product} /> : <NotFoundPage />;
-  } else if (normalizedPath === "/collections") {
-    pageComponent = <CollectionsPage />;
-  } else if (normalizedPath.startsWith("/collections/")) {
-    pageComponent = collections.some((collection) => collection.slug === collectionSlug) ? (
-      <CollectionDetailPage slug={collectionSlug} />
-    ) : (
-      <NotFoundPage />
-    );
-  } else if (normalizedPath === "/search") {
-    pageComponent = <SearchPage />;
-  } else if (normalizedPath === "/wishlist") {
-    pageComponent = <WishlistPage />;
+  } else if (normalizedPath === "/collections" || normalizedPath.startsWith("/collections/")) {
+    pageComponent = <Redirect to="/products" />;
   } else if (normalizedPath === "/order-request") {
     pageComponent = <CheckoutPage />;
   } else if (normalizedPath === "/order-request/success") {
@@ -482,18 +381,8 @@ function PublicRoutes() {
     pageComponent = <ServicePage content={serviceContent} />;
   } else if (policyContent) {
     pageComponent = <PolicyPage content={policyContent} />;
-  } else if (normalizedPath === "/account") {
-    pageComponent = <AccountPage />;
-  } else if (normalizedPath === "/account/orders") {
-    pageComponent = <AccountPage view="orders" />;
-  } else if (normalizedPath === "/account/wishlist") {
-    pageComponent = <AccountPage view="wishlist" />;
-  } else if (normalizedPath === "/order-status") {
-    pageComponent = <OrderStatusPage />;
-  } else if (normalizedPath === "/journal") {
-    pageComponent = <JournalPage />;
-  } else if (normalizedPath.startsWith("/journal/")) {
-    pageComponent = <JournalPage slug={journalSlug} />;
+  } else if (hiddenPublicPaths.has(normalizedPath) || normalizedPath.startsWith("/journal/")) {
+    pageComponent = <NotFoundPage />;
   } else if (normalizedPath.startsWith("/experience/")) {
     pageComponent = product ? <ExperiencePage product={product} /> : <NotFoundPage />;
   } else if (normalizedPath.startsWith("/feedback/")) {
@@ -522,20 +411,18 @@ function PublicRoutes() {
 
   const routedPage = (
     <Suspense fallback={<RouteFallback />}>
-      <ImageReadyBoundary key={pathname} pathname={pathname}>
-        <AnimatePresence initial={false}>
-          <motion.div
-            key={pathname}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            variants={pageTransitionVariants}
-            style={{ minHeight: "100vh" }}
-          >
-            <FocusSections enabled={normalizedPath !== "/products"}>{pageComponent}</FocusSections>
-          </motion.div>
-        </AnimatePresence>
-      </ImageReadyBoundary>
+      <AnimatePresence initial={false}>
+        <motion.div
+          key={pathname}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          variants={pageTransitionVariants}
+          style={{ minHeight: "100vh" }}
+        >
+          <FocusSections enabled={false}>{pageComponent}</FocusSections>
+        </motion.div>
+      </AnimatePresence>
     </Suspense>
   );
 
@@ -560,12 +447,7 @@ function AppRoutes() {
     );
   }
 
-  return (
-    <>
-      <CustomCursor />
-      <PublicRoutes />
-    </>
-  );
+  return <PublicRoutes />;
 }
 
 export default function AppRouter() {

@@ -7,6 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "lint:colors": "node scripts/check-brand-colors.mjs",
+    "check": "npm run lint && npm run lint:colors && npm run test && npm run build",
     "test": "vitest run",
     "preview": "vite preview"
   },

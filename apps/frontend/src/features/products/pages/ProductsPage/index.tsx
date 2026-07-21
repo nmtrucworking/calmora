@@ -7,6 +7,9 @@ import { SectionEyebrow } from "@shared/components/luxury/SectionEyebrow";
 import { orderedLuxuryProducts, productLuxuryCopy } from "@features/content/luxuryCopy";
 import { useLanguage } from "@app/providers/LanguageContext";
 import { Link } from "@app/router/RouterContext";
+import { getImageAssetByPath } from "@features/content/imageManifest";
+import { ResponsiveImage } from "@shared/components/media/ResponsiveImage";
+import { ImageStatusLabel } from "@shared/components/media/ImageStatusLabel";
 
 export default function ProductsPage() {
   const { language } = useLanguage();
@@ -40,17 +43,21 @@ export default function ProductsPage() {
   }[language];
 
   const petalPack = productLuxuryCopy[language]["petal-pack"];
+  const petalPackAsset = getImageAssetByPath(petalPack.image);
 
   return (
     <div className="bg-[var(--page-bg)]">
       <section className="relative min-h-[min(43rem,100svh)] overflow-hidden bg-[var(--senova-forest-black)] px-6 pt-28 pb-14 text-text-inverse max-[760px]:px-4">
-        <img
-          src={petalPack.image}
-          alt={petalPack.heroAlt}
-          className="absolute inset-y-0 right-0 h-full w-[58%] object-cover opacity-68 saturate-[0.72] max-[900px]:w-full max-[900px]:opacity-36"
-          decoding="async"
-          fetchPriority="high"
-        />
+        {petalPackAsset ? (
+          <ResponsiveImage
+            asset={petalPackAsset}
+            alt={petalPack.heroAlt}
+            className="absolute inset-y-0 right-0 h-full w-[58%] object-cover opacity-68 saturate-[0.72] max-[900px]:w-full max-[900px]:opacity-36"
+            loading="eager"
+            fetchPriority="high"
+            sizes="(max-width: 900px) 100vw, 58vw"
+          />
+        ) : null}
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(16,26,22,0.94)_0%,rgba(16,26,22,0.7)_48%,rgba(16,26,22,0.18)_100%)]" />
         <div className="relative z-10 mx-auto grid min-h-[30.5rem] max-w-[var(--page-max)] items-end">
           <div className="max-w-[46rem]">
@@ -110,6 +117,7 @@ export default function ProductsPage() {
             {orderedLuxuryProducts.map((productId) => {
               const product = productLuxuryCopy[language][productId];
               const isSignature = productId === "petal-pack";
+              const asset = getImageAssetByPath(product.image);
 
               return (
                 <Link
@@ -117,14 +125,16 @@ export default function ProductsPage() {
                   href={`/products/${productId}`}
                   className="group grid overflow-hidden border border-border bg-[var(--surface-paper)] text-text no-underline shadow-[var(--shadow-luxury-sm)]"
                 >
-                  <div className={isSignature ? "aspect-[16/10]" : "aspect-[4/3]"}>
-                    <img
-                      src={product.image}
-                      alt={product.heroAlt}
-                      className="h-full w-full object-cover saturate-[0.86] transition duration-[900ms] ease-[var(--ease-luxury)] group-hover:scale-[1.015]"
-                      loading="lazy"
-                      decoding="async"
-                    />
+                  <div className={`relative overflow-hidden ${isSignature ? "aspect-[16/10]" : "aspect-[4/3]"}`}>
+                    {asset ? (
+                      <ResponsiveImage
+                        asset={asset}
+                        alt={product.heroAlt}
+                        className="h-full w-full object-cover saturate-[0.86] transition duration-[var(--motion-slow)] ease-[var(--ease-luxury)] group-hover:scale-[1.012]"
+                        sizes="(max-width: 960px) 100vw, 34vw"
+                      />
+                    ) : null}
+                    {asset ? <ImageStatusLabel asset={asset} language={language} /> : null}
                   </div>
                   <div className="grid gap-8 p-6">
                     <div>

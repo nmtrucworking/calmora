@@ -97,7 +97,7 @@ export type LuxuryLayoutCopy = {
 
 export const luxuryLayoutCopy: Record<Language, LuxuryLayoutCopy> = {
   vi: {
-    brand: "CALMORA | SENOVA",
+    brand: "SENOVA by Calmora",
     summary:
       "Senova đặt trà hương sen trong một trải nghiệm có hình dáng, thao tác và câu chuyện để trao đi.",
     navAria: "Điều hướng chính",
@@ -107,11 +107,10 @@ export const luxuryLayoutCopy: Record<Language, LuxuryLayoutCopy> = {
     languageToggle: "Đổi ngôn ngữ",
     preorder: "Đặt trước",
     navigation: [
+      { label: "Sản phẩm", href: "/products" },
+      { label: "Nghi thức", href: "/ritual" },
       { label: "Câu chuyện", href: "/story" },
-      { label: "Bộ sưu tập", href: "/products" },
-      { label: "Trải nghiệm", href: "/ritual" },
-      { label: "Văn hóa", href: "/seasonal" },
-      { label: "Liên hệ", href: "/contact" },
+      { label: "Quà tặng", href: "/gifting" },
     ],
     footerGroups: [
       {
@@ -124,18 +123,20 @@ export const luxuryLayoutCopy: Record<Language, LuxuryLayoutCopy> = {
         ],
       },
       {
-        title: "Dịch vụ",
+        title: "Dịch vụ & chính sách",
         links: [
           { label: "Đặt trước", href: "/order-request" },
           { label: "Quà tặng", href: "/gifting" },
-          { label: "Concierge", href: "/concierge" },
-          { label: "Hợp tác", href: "/partners" },
+          { label: "Giao hàng", href: "/shipping" },
+          { label: "Đổi trả", href: "/returns" },
+          { label: "Dữ liệu cá nhân", href: "/privacy" },
+          { label: "Điều khoản", href: "/terms" },
         ],
       },
     ],
   },
   en: {
-    brand: "CALMORA | SENOVA",
+    brand: "SENOVA by Calmora",
     summary:
       "Senova frames lotus tea through form, gesture and story, prepared for tasting and gifting.",
     navAria: "Primary navigation",
@@ -145,11 +146,10 @@ export const luxuryLayoutCopy: Record<Language, LuxuryLayoutCopy> = {
     languageToggle: "Switch language",
     preorder: "Pre-order",
     navigation: [
+      { label: "Products", href: "/products" },
+      { label: "Ritual", href: "/ritual" },
       { label: "Story", href: "/story" },
-      { label: "Collection", href: "/products" },
-      { label: "Experience", href: "/ritual" },
-      { label: "Culture", href: "/seasonal" },
-      { label: "Contact", href: "/contact" },
+      { label: "Gifting", href: "/gifting" },
     ],
     footerGroups: [
       {
@@ -162,12 +162,14 @@ export const luxuryLayoutCopy: Record<Language, LuxuryLayoutCopy> = {
         ],
       },
       {
-        title: "Service",
+        title: "Service & policies",
         links: [
           { label: "Pre-order", href: "/order-request" },
           { label: "Gifting", href: "/gifting" },
-          { label: "Concierge", href: "/concierge" },
-          { label: "Partners", href: "/partners" },
+          { label: "Shipping", href: "/shipping" },
+          { label: "Returns", href: "/returns" },
+          { label: "Privacy", href: "/privacy" },
+          { label: "Terms", href: "/terms" },
         ],
       },
     ],
@@ -262,7 +264,7 @@ export const luxuryLandingCopy: Record<Language, LuxuryLandingCopy> = {
       secondary: { label: "Trao đổi đơn quà tặng", href: "/contact?topic=gift-set" },
     },
     finalCta: {
-      eyebrow: "Calmora | Senova",
+      eyebrow: "Senova by Calmora",
       title: "Sen trà giao hòa, chuyện Việt ngân nga.",
       text: "Khám phá bộ sưu tập hoặc gửi yêu cầu đặt trước để Senova tư vấn cấu hình phù hợp.",
       primary: { label: "Khám phá bộ sưu tập", href: "/products" },
@@ -356,7 +358,7 @@ export const luxuryLandingCopy: Record<Language, LuxuryLandingCopy> = {
       secondary: { label: "Discuss gifting", href: "/contact?topic=gift-set" },
     },
     finalCta: {
-      eyebrow: "Calmora | Senova",
+      eyebrow: "Senova by Calmora",
       title: "Lotus and tea in dialogue, a Vietnamese story carried forward.",
       text: "Explore the collection or send a preorder request so Senova can advise the right configuration.",
       primary: { label: "Explore collection", href: "/products" },
