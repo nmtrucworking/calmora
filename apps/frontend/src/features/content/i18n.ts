@@ -144,7 +144,7 @@ const productCopy: Record<Language, Record<ProductId, ProductCopy>> = {
         { title: "Giữ một khoảng chậm", text: "Dành thời gian để hương sen và vị trà dần hiện ra trước khi thưởng thức." },
       ],
       seo: {
-        title: "Senova Classic | Calmora",
+        title: "Senova Classic | Senova by Calmora",
         description: "Senova Classic giữ trà hương sen trong một hình thức dễ tiếp cận cho nhịp thưởng trà hằng ngày.",
       },
     },
@@ -198,7 +198,7 @@ const productCopy: Record<Language, Record<ProductId, ProductCopy>> = {
         { title: "Thưởng thức", text: "Quan sát màu nước, cảm nhận hương vị, rồi ghi lại phản hồi về trải nghiệm." },
       ],
       seo: {
-        title: "Senova Petal Pack | Calmora",
+        title: "Senova Petal Pack | Senova by Calmora",
         description:
           "Senova Petal Pack mở trải nghiệm trà hương sen bằng hình dáng búp sen, thao tác cảm nhận và nội dung QR.",
       },
@@ -246,7 +246,7 @@ const productCopy: Record<Language, Record<ProductId, ProductCopy>> = {
         { title: "Tiếp tục câu chuyện", text: "Dùng thẻ hoặc QR để đọc thêm và chia sẻ lại ý nghĩa của món quà." },
       ],
       seo: {
-        title: "Senova Gift Set | Calmora",
+        title: "Senova Gift Set | Senova by Calmora",
         description:
           "Senova Gift Set là phiên bản quà tặng đang hoàn thiện, kết nối trà hương sen, lời nhắn và câu chuyện văn hóa.",
       },
@@ -298,7 +298,7 @@ const productCopy: Record<Language, Record<ProductId, ProductCopy>> = {
         { title: "Hold the pause", text: "Give the lotus aroma and tea body time to unfold before drinking." },
       ],
       seo: {
-        title: "Senova Classic | Calmora",
+        title: "Senova Classic | Senova by Calmora",
         description: "Senova Classic keeps lotus tea in an approachable form for an everyday tea ritual.",
       },
     },
@@ -352,7 +352,7 @@ const productCopy: Record<Language, Record<ProductId, ProductCopy>> = {
         { title: "Taste", text: "Observe the liquor, taste slowly, and leave feedback on the experience." },
       ],
       seo: {
-        title: "Senova Petal Pack | Calmora",
+        title: "Senova Petal Pack | Senova by Calmora",
         description:
           "Senova Petal Pack opens a lotus tea experience through a lotus-bud form, tactile ritual and QR storytelling.",
       },
@@ -395,7 +395,7 @@ const productCopy: Record<Language, Record<ProductId, ProductCopy>> = {
         { title: "Continue the story", text: "Use the card or QR to read more and share the gift's meaning." },
       ],
       seo: {
-        title: "Senova Gift Set | Calmora",
+        title: "Senova Gift Set | Senova by Calmora",
         description:
           "Senova Gift Set is a developing gifting edition that connects lotus tea, message cards and cultural storytelling.",
       },

@@ -13,7 +13,7 @@ export const systemStyles = {
   lead: "leading-[1.75] text-text-muted",
   bodyText: "leading-[1.75] text-text-muted",
   fieldHint: "leading-[1.75] text-text-muted",
-  errorText: "m-0 text-[0.84rem] font-bold leading-[1.75] text-[#9f1f38]",
+  errorText: "m-0 text-[0.84rem] font-bold leading-[1.75] text-[var(--danger)]",
   successText: "m-0 text-[0.9rem] font-extrabold leading-[1.75] text-text",
   heroAside:
     `grid gap-[0.65rem] rounded-lg p-[clamp(1.25rem,3vw,2rem)] ${luxuryMotion.surface} [&_strong]:font-display [&_strong]:text-[1.6rem] [&_strong]:text-[var(--accent)]`,
@@ -27,7 +27,7 @@ export const systemStyles = {
     `mx-auto my-16 grid max-w-[48rem] justify-items-center gap-4 rounded-lg p-[clamp(1.25rem,3vw,2rem)] text-center ${luxuryMotion.surface} [&_h1]:mt-[0.65rem] [&_h1]:mb-0 [&_h1]:font-display [&_h1]:text-[clamp(1.8rem,4vw,3rem)] [&_h1]:leading-[1.08] [&_h1]:text-text`,
   actions: "mt-7 flex flex-wrap gap-[0.8rem] max-[560px]:flex-col",
   primaryButton:
-    `inline-flex min-h-[2.85rem] items-center justify-center gap-[0.55rem] rounded-[var(--radius-sm)] border border-[rgba(138,104,37,0.58)] bg-[linear-gradient(135deg,var(--senova-gold-light),var(--senova-gold)_48%,#c9a94d)] px-[1.15rem] py-3 text-[0.9rem] font-extrabold tracking-normal text-[var(--senova-ink)] no-underline shadow-[0_14px_34px_rgba(37,31,21,0.14),inset_0_1px_0_rgba(255,252,246,0.58)] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 hover:border-[rgba(138,104,37,0.76)] hover:bg-[linear-gradient(135deg,#fff0bb,var(--senova-gold-light)_48%,#d5b65f)] max-[560px]:w-full ${luxuryMotion.button}`,
+    `inline-flex min-h-[2.85rem] items-center justify-center gap-[0.55rem] rounded-[var(--radius-sm)] border border-accent-gold bg-accent-gold px-[1.15rem] py-3 text-[0.9rem] font-extrabold tracking-normal text-[var(--senova-ink)] no-underline shadow-brand-sm disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 hover:border-[var(--senova-gold-400)] hover:bg-[var(--senova-gold-400)] max-[560px]:w-full ${luxuryMotion.button}`,
   secondaryButton:
     `inline-flex min-h-[2.85rem] items-center justify-center gap-[0.55rem] rounded-[var(--radius-sm)] border border-[rgba(138,104,37,0.28)] bg-[rgba(255,253,248,0.44)] px-[1.15rem] py-3 text-[0.9rem] font-extrabold tracking-normal text-text no-underline shadow-[0_12px_28px_rgba(37,31,21,0.08)] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 hover:border-[rgba(138,104,37,0.46)] hover:bg-[var(--surface-strong)] max-[560px]:w-full ${luxuryMotion.button}`,
   iconButton:
@@ -46,7 +46,7 @@ export const systemStyles = {
   productBody:
     "p-4 [&_h3]:mt-[0.4rem] [&_h3]:mb-0 [&_h3]:text-[1.1rem] [&_h3]:text-text",
   inlineLink:
-    "mt-[0.85rem] inline-flex min-h-11 w-fit items-center text-[0.86rem] font-extrabold text-[var(--accent)] no-underline hover:text-[#ffe79e]",
+    "mt-[0.85rem] inline-flex min-h-11 w-fit items-center text-[0.86rem] font-extrabold text-[var(--accent)] no-underline hover:text-[var(--senova-gold-400)]",
   statusBadge:
     "inline-flex w-fit rounded-full border border-[rgba(248,223,147,0.2)] bg-[rgba(248,223,147,0.08)] px-[0.65rem] py-[0.3rem] text-[0.75rem] font-extrabold text-accent-strong",
   formLayout:

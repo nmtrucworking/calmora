@@ -1,0 +1,14 @@
+:root {
+  --page-max: 84rem;
+  --content-max: 72ch;
+  --story-max: 66ch;
+  --header-height: 4.25rem;
+  --z-header: 40;
+  --z-drawer: 50;
+  --z-toast: 60;
+}
+
+.page-container {
+  width: min(100% - (2 * var(--page-gutter)), var(--page-max));
+  margin-inline: auto;
+}

@@ -6,6 +6,8 @@ import content from "@features/content/content.json";
 import { StaggerContainer, StaggerItem } from "@shared/components/ui/ZenMotion";
 import { luxuryMotion } from "@shared/styles/luxuryEffects";
 import { cx } from "@shared/utils/classNames";
+import { imageManifest } from "@features/content/imageManifest";
+import { ResponsiveImage } from "@shared/components/media/ResponsiveImage";
 
 const StoryLotusCanvas = lazy(() =>
   import("@shared/components/story/StoryLotusCanvas").then((module) => ({
@@ -58,12 +60,12 @@ export default function StoryPage() {
           <div className="sticky top-[6.4rem] max-[980px]:relative max-[980px]:top-auto">
             {prefersReducedMotion ? (
               <figure className="m-0 min-h-[30rem] overflow-hidden rounded-[var(--radius-md)] border border-border bg-[var(--surface-paper)]">
-                <img
-                  src="/assets/products/petal-pack-optimized.jpg"
+                <ResponsiveImage
+                  asset={imageManifest["product-petal-pack"]}
                   alt="Senova Petal Pack trong vai trò hình ảnh thay thế cho hoạt cảnh hoa sen"
                   className="h-full min-h-[30rem] w-full object-cover saturate-[0.86]"
                   loading="lazy"
-                  decoding="async"
+                  sizes="(max-width: 980px) 100vw, 50vw"
                 />
               </figure>
             ) : (

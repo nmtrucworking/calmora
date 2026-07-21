@@ -1,0 +1,7 @@
+:root {
+  --ease-luxury: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-luxury-inout: cubic-bezier(0.65, 0, 0.35, 1);
+  --motion-fast: 160ms;
+  --motion-base: 280ms;
+  --motion-slow: 480ms;
+}

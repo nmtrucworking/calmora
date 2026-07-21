@@ -1,0 +1,13 @@
+:root {
+  --radius-xs: 2px;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --shadow-sm: 0 12px 32px rgb(37 31 21 / 8%);
+  --shadow-md: 0 24px 64px rgb(37 31 21 / 12%);
+  --shadow-lg: 0 36px 90px rgb(37 31 21 / 16%);
+  --shadow-luxury-sm: var(--shadow-sm);
+  --shadow-luxury-md: var(--shadow-md);
+  --shadow-luxury-lg: var(--shadow-lg);
+  --shadow-luxury-dark: 0 28px 80px rgb(0 0 0 / 46%);
+}

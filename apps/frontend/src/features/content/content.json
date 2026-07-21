@@ -76,7 +76,7 @@
       { "label": "Mùa sen", "href": "/seasonal" }
     ],
     "hero": {
-      "eyebrow": "Calmora | Senova",
+      "eyebrow": "Senova by Calmora",
       "title": "Senova",
       "description": "Một cánh sen mở ra trà hương sen, trải nghiệm giác quan và câu chuyện Việt trong hành trình Giữ - Mở - Trao.",
       "scrollHint": "Cuộn để mở câu chuyện"
@@ -115,7 +115,7 @@
   "routes": {
     "/about": {
       "eyebrow": "Giới thiệu",
-      "title": "Calmora | Senova - trà sen trải nghiệm trong một câu chuyện Việt thống nhất.",
+      "title": "Senova by Calmora - trà sen trải nghiệm trong một câu chuyện Việt thống nhất.",
       "text": "Senova đưa trà hương sen, thiết kế trải nghiệm và nội dung văn hóa vào một hệ sản phẩm có thể sử dụng, cảm nhận và trao tặng."
     },
     "/products": {
@@ -176,7 +176,7 @@
   "aboutPage": {
     "hero": {
       "eyebrow": "Giới thiệu",
-      "title": "Calmora | Senova - trà sen trải nghiệm trong một câu chuyện Việt thống nhất.",
+      "title": "Senova by Calmora - trà sen trải nghiệm trong một câu chuyện Việt thống nhất.",
       "description": "Senova đưa trà hương sen, thiết kế trải nghiệm và nội dung văn hóa vào một hệ sản phẩm có thể sử dụng, cảm nhận và trao tặng."
     },
     "mission": {
@@ -184,7 +184,7 @@
       "title": "Từ sản phẩm đến trải nghiệm",
       "text": "Senova là dự án trà sen trải nghiệm do Calmora phát triển. Dự án lấy trà hương sen làm sản phẩm lõi và tái thiết kế cách người dùng tiếp xúc với sản phẩm: từ một tách trà hằng ngày, đến thao tác mở cánh sen có chủ đích, rồi trở thành một món quà có câu chuyện.",
       "quote": "Senova bắt đầu từ một hành động nhỏ: rót trà và mời một người khác ngồi lại.",
-      "quoteAuthor": "Calmora | Senova"
+      "quoteAuthor": "Senova by Calmora"
     },
     "tech": {
       "eyebrow": "Mạch kể sản phẩm",

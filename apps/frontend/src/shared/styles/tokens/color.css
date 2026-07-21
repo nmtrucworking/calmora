@@ -1,0 +1,73 @@
+:root {
+  color-scheme: light;
+
+  --senova-forest-950: #07110f;
+  --senova-forest-900: #0b1a15;
+  --senova-forest-800: #1d3329;
+  --senova-forest-700: #274236;
+  --senova-ivory-50: #fffaf0;
+  --senova-paper-100: #f3efe5;
+  --senova-paper-200: #e6decc;
+  --senova-gold-300: #f8df93;
+  --senova-gold-400: #ffeaab;
+  --senova-gold-500: #c9a94d;
+  --senova-bronze-600: #8a6825;
+  --senova-bronze-800: #5f4818;
+  --senova-tea-600: #765846;
+  --senova-lotus-500: #b95672;
+  --senova-ink-900: #101a16;
+  --senova-white: #fffcf6;
+
+  --success: #2f6a4d;
+  --warning: #8a6825;
+  --danger: #9f1f38;
+  --info: #315f75;
+
+  --senova-ivory: var(--senova-ivory-50);
+  --senova-ivory-muted: rgb(255 250 240 / 72%);
+  --senova-paper: var(--senova-paper-100);
+  --senova-paper-muted: var(--senova-paper-200);
+  --senova-forest: var(--senova-forest-800);
+  --senova-forest-deep: var(--senova-forest-900);
+  --senova-forest-black: var(--senova-forest-950);
+  --senova-gold: var(--senova-gold-300);
+  --senova-gold-light: var(--senova-gold-400);
+  --senova-bronze: var(--senova-bronze-600);
+  --senova-bronze-deep: var(--senova-bronze-800);
+  --senova-tea-brown: var(--senova-tea-600);
+  --senova-lotus-dust: var(--senova-lotus-500);
+  --senova-ink: var(--senova-ink-900);
+
+  --page-bg: var(--senova-paper-100);
+  --page-bg-soft: var(--senova-paper-200);
+  --surface: rgb(255 253 248 / 70%);
+  --surface-strong: rgb(255 253 248 / 92%);
+  --surface-tint: rgb(31 114 74 / 7%);
+  --surface-dark: var(--senova-forest-900);
+  --surface-dark-soft: #122821;
+  --surface-paper: rgb(255 253 248 / 82%);
+  --border: rgb(31 95 68 / 16%);
+  --border-strong: rgb(111 85 23 / 28%);
+
+  --text: var(--senova-ink-900);
+  --text-muted: rgb(16 26 22 / 72%);
+  --text-soft: rgb(16 26 22 / 54%);
+  --text-inverse: var(--senova-ivory-50);
+  --text-inverse-muted: rgb(243 239 229 / 76%);
+  --text-inverse-soft: rgb(243 239 229 / 58%);
+
+  --primary: var(--senova-forest-800);
+  --primary-strong: var(--senova-forest-700);
+  --on-primary: var(--senova-ivory-50);
+  --accent: var(--senova-bronze-600);
+  --accent-strong: var(--senova-bronze-800);
+  --accent-soft: rgb(138 104 37 / 14%);
+  --accent-gold: var(--senova-gold-300);
+  --gold-decorative: var(--senova-gold-400);
+  --tea-brown: var(--senova-tea-600);
+  --lotus-mist: var(--senova-lotus-500);
+
+  --focus-ring: var(--senova-gold-500);
+  --header-bg: rgb(255 253 248 / 92%);
+  --footer-bg: #050c0a;
+}

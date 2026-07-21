@@ -6,6 +6,9 @@ import { StaggerContainer, StaggerItem } from "@shared/components/ui/ZenMotion";
 import { productLuxuryCopy, orderedLuxuryProducts, type LuxuryLandingCopy } from "@features/content/luxuryCopy";
 import type { Language } from "@app/providers/LanguageContext";
 import { Link } from "@app/router/RouterContext";
+import { getImageAssetByPath } from "@features/content/imageManifest";
+import { ResponsiveImage } from "@shared/components/media/ResponsiveImage";
+import { ImageStatusLabel } from "@shared/components/media/ImageStatusLabel";
 
 type CollectionShowcaseProps = {
   content: LuxuryLandingCopy["collection"];
@@ -33,6 +36,7 @@ export function CollectionShowcase({ content, language }: CollectionShowcaseProp
           {orderedLuxuryProducts.map((productId) => {
             const product = productLuxuryCopy[language][productId];
             const isSignature = productId === "petal-pack";
+            const asset = getImageAssetByPath(product.image);
 
             return (
               <StaggerItem key={productId}>
@@ -40,14 +44,16 @@ export function CollectionShowcase({ content, language }: CollectionShowcaseProp
                   href={`/products/${productId}`}
                   className="group grid min-h-[30rem] overflow-hidden border border-border bg-[var(--surface-paper)] text-text no-underline shadow-[var(--shadow-luxury-sm)] transition-[border-color,box-shadow,transform] duration-[700ms] ease-[var(--ease-luxury)] hover:-translate-y-1 hover:border-border-strong hover:shadow-[var(--shadow-luxury-md)] motion-reduce:transition-none motion-reduce:hover:translate-y-0"
                 >
-                  <div className={isSignature ? "aspect-[16/11]" : "aspect-[4/3]"}>
-                    <img
-                      src={product.image}
-                      alt={product.heroAlt}
-                      className="h-full w-full object-cover saturate-[0.86] transition duration-[900ms] ease-[var(--ease-luxury)] group-hover:scale-[1.015] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
-                      loading="lazy"
-                      decoding="async"
-                    />
+                  <div className={`relative overflow-hidden ${isSignature ? "aspect-[16/11]" : "aspect-[4/3]"}`}>
+                    {asset ? (
+                      <ResponsiveImage
+                        asset={asset}
+                        alt={product.heroAlt}
+                        className="h-full w-full object-cover saturate-[0.86] transition duration-[var(--motion-slow)] ease-[var(--ease-luxury)] group-hover:scale-[1.012] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                        sizes="(max-width: 960px) 100vw, 34vw"
+                      />
+                    ) : null}
+                    {asset ? <ImageStatusLabel asset={asset} language={language} /> : null}
                   </div>
                   <div className="grid content-between gap-8 p-6">
                     <div>

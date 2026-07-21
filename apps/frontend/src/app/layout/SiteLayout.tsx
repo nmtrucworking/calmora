@@ -1,6 +1,6 @@
-import { useEffect, useLayoutEffect, useState, type ReactNode } from "react";
-import { ArrowRight, Globe2, Mail, MapPin, Menu, Sparkles, X } from "lucide-react";
-import { BrandMark } from "@shared/components/branding/BrandMark";
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import { ArrowRight, Globe2, Mail, MapPin, Menu, X } from "lucide-react";
+import { BrandLockup } from "@shared/components/branding/BrandLockup";
 import type { BrandFooterGroup, BrandNavItem } from "@features/content/brand";
 import { luxuryLayoutCopy } from "@features/content/luxuryCopy";
 import { useLanguage } from "@app/providers/LanguageContext";
@@ -8,7 +8,6 @@ import { Link } from "@app/router/RouterContext";
 import { useRouter } from "@app/router/RouterState";
 import { cx } from "@shared/utils/classNames";
 import styles from "./SiteLayout.module.css";
-import { AmbientSoundButton } from "@features/landing/sections/AmbientSoundButton";
 
 type SiteLayoutProps = {
   children: ReactNode;
@@ -37,6 +36,8 @@ export function SiteLayout({
   const activeFooterGroups = footerGroups ?? copy.footerGroups;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const mobileNavigationRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     if (isLanding && (!window.location.hash || window.location.hash === "#top")) {
@@ -47,8 +48,40 @@ export function SiteLayout({
   useEffect(() => {
     document.body.style.overflow = isMenuOpen ? "hidden" : "";
 
+    if (!isMenuOpen) return () => {
+      document.body.style.overflow = "";
+    };
+
+    const drawer = mobileNavigationRef.current;
+    const focusable = drawer?.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+    );
+    focusable?.[0]?.focus();
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsMenuOpen(false);
+        menuButtonRef.current?.focus();
+        return;
+      }
+
+      if (event.key !== "Tab" || !focusable?.length) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+
     return () => {
       document.body.style.overflow = "";
+      document.removeEventListener("keydown", onKeyDown);
     };
   }, [isMenuOpen]);
 
@@ -64,19 +97,6 @@ export function SiteLayout({
     ? "!text-accent-gold after:!scale-x-100"
     : "!text-primary-strong after:!scale-x-100";
   const mobileActiveNavClass = "!border-l-accent-strong !text-primary-strong";
-  const footerMoments =
-    language === "vi"
-      ? [
-          { label: "Signature", value: "Petal Pack mở đầu nghi thức trà sen" },
-          { label: "Story QR", value: "Hướng dẫn, câu chuyện và phản hồi sau khi chạm sản phẩm" },
-          { label: "Gifting", value: "Cấu hình quà tặng cho đối tác, tasting và mùa lễ" },
-        ]
-      : [
-          { label: "Signature", value: "Petal Pack opens the lotus tea ritual" },
-          { label: "Story QR", value: "Guidance, short story and feedback after the product touchpoint" },
-          { label: "Gifting", value: "Prepared configurations for partners, tasting and seasonal moments" },
-        ];
-
   const renderNavLinks = (variant: "desktop" | "mobile") =>
     activeNavItems.map((item) => {
       const isActive =
@@ -101,13 +121,16 @@ export function SiteLayout({
     });
 
   return (
-    <main
+    <div
       className={cx(
         styles.page,
         isLanding && styles.landingPage,
         "relative min-h-screen overflow-x-hidden text-text isolate",
       )}
     >
+      <a className="skip-link" href="#main-content">
+        {language === "vi" ? "Bỏ qua đến nội dung chính" : "Skip to main content"}
+      </a>
       <header
         className={cx(
           "fixed inset-x-0 top-0 z-40 border-b transition-[background,border-color,box-shadow,color] duration-300",
@@ -117,11 +140,8 @@ export function SiteLayout({
         )}
       >
         <div className="mx-auto grid max-w-[var(--page-max)] grid-cols-[minmax(10rem,0.62fr)_minmax(0,1.32fr)_auto] items-center gap-4 px-6 py-2.5 max-[900px]:grid-cols-[minmax(0,1fr)_auto] max-[900px]:px-4">
-          <Link href="/" className="inline-flex min-h-10 min-w-0 items-center gap-[0.65rem] no-underline">
-            <BrandMark size="md" />
-            <span className="text-[0.68rem] font-[650] uppercase tracking-[0.22em] max-[520px]:text-[0.64rem]">
-              {copy.brand}
-            </span>
+          <Link href="/" className="inline-flex min-h-11 min-w-0 items-center no-underline" aria-label="Senova by Calmora">
+            <BrandLockup inverse={isTransparentHeader} />
           </Link>
 
           <nav
@@ -150,14 +170,6 @@ export function SiteLayout({
               {copy.preorder}
               <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
             </Link>
-            <AmbientSoundButton
-              compact
-              className={cx(
-                isTransparentHeader
-                  ? "border-[rgba(243,239,229,0.3)] bg-[rgba(255,250,240,0.06)] text-text-inverse hover:border-accent-gold hover:text-accent-gold"
-                  : "border-border bg-[rgba(255,253,248,0.48)] text-primary-strong hover:border-border-strong hover:bg-surface-strong",
-              )}
-            />
             <button
               className={cx(
                 "inline-flex h-9 items-center justify-center gap-1.5 border px-2.5 text-[0.7rem] font-[700] uppercase tracking-[0.1em]",
@@ -173,6 +185,7 @@ export function SiteLayout({
               {language === "vi" ? "VI" : "EN"}
             </button>
             <button
+              ref={menuButtonRef}
               className={cx(
                 "hidden h-9 w-9 items-center justify-center border max-[900px]:inline-flex [&_svg]:h-[1.1rem] [&_svg]:w-[1.1rem]",
                 isTransparentHeader
@@ -191,6 +204,7 @@ export function SiteLayout({
         </div>
 
         <div
+          ref={mobileNavigationRef}
           className={cx(
             "fixed inset-x-0 top-[4rem] hidden max-h-[calc(100svh-4rem)] -translate-y-[0.6rem] overflow-y-auto border-t border-border bg-[var(--surface)] p-4 opacity-0 shadow-brand-md transition duration-200 max-[900px]:block",
             isMenuOpen ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none",
@@ -212,7 +226,9 @@ export function SiteLayout({
         </div>
       </header>
 
-      <div
+      <main
+        id="main-content"
+        tabIndex={-1}
         className={
           isLanding
             ? cx("relative z-10", styles.landingContentEffects)
@@ -225,38 +241,22 @@ export function SiteLayout({
         }
       >
         {children}
-      </div>
+      </main>
 
       <footer className="relative z-10 overflow-hidden bg-[var(--footer-bg)] text-text-inverse">
         <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(248,223,147,0.7),transparent)]" />
         <div className="mx-auto grid max-w-[var(--page-max)] grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] gap-x-12 gap-y-10 px-6 pt-14 pb-10 max-[900px]:grid-cols-1 max-[900px]:px-4">
           <div className="grid gap-8">
-            <div className="flex items-start gap-[0.9rem]">
-              <BrandMark size="sm" />
-              <div>
-                <p className="m-0 text-[0.78rem] font-[650] uppercase tracking-[0.24em] text-accent-gold">
-                  {copy.brand}
-                </p>
-                <p className="mt-4 mb-0 max-w-[34rem] leading-[1.78] text-text-inverse-muted">
-                  {copy.summary}
-                </p>
-              </div>
-            </div>
-
-            <div className="grid max-w-[45rem] grid-cols-3 gap-4 max-[760px]:grid-cols-1">
-              {footerMoments.map((moment) => (
-                <article key={moment.label} className="border-t border-[rgba(248,223,147,0.2)] pt-4">
-                  <div className="flex items-center gap-2 text-accent-gold">
-                    <Sparkles aria-hidden="true" className="h-3.5 w-3.5" />
-                    <h2 className="m-0 text-[0.68rem] font-[700] uppercase tracking-[0.2em]">
-                      {moment.label}
-                    </h2>
-                  </div>
-                  <p className="mt-3 mb-0 text-[0.9rem] leading-[1.65] text-text-inverse-muted">
-                    {moment.value}
-                  </p>
-                </article>
-              ))}
+            <div>
+              <BrandLockup size="md" inverse />
+              <p className="mt-5 mb-0 max-w-[34rem] leading-[1.78] text-text-inverse-muted">
+                {copy.summary}
+              </p>
+              <p className="mt-3 mb-0 max-w-[34rem] text-[0.9rem] leading-[1.7] text-text-inverse-soft">
+                {language === "vi"
+                  ? "Senova là dự án trà văn hóa do Calmora phát triển."
+                  : "Senova is a cultural tea project developed by Calmora."}
+              </p>
             </div>
           </div>
 
@@ -290,10 +290,10 @@ export function SiteLayout({
                 Hanoi, Vietnam
               </span>
             </div>
-            <span>© {new Date().getFullYear()} Calmora | Senova</span>
+            <span>© {new Date().getFullYear()} Senova by Calmora</span>
           </div>
         </div>
       </footer>
-    </main>
+    </div>
   );
 }

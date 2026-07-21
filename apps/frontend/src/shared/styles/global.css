@@ -54,7 +54,7 @@
 }
 
 html {
-  font-size: 90%;
+  font-size: 100%;
   scroll-behavior: smooth;
 }
 
@@ -69,6 +69,35 @@ input,
 textarea,
 select {
   font: inherit;
+}
+
+:where(a, button, input, textarea, select, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+:where(p, li) {
+  text-wrap: pretty;
+}
+
+.skip-link {
+  position: fixed;
+  top: var(--space-3);
+  left: var(--space-3);
+  z-index: 100;
+  transform: translateY(-180%);
+  border: 1px solid var(--accent-gold);
+  border-radius: var(--radius-sm);
+  background: var(--surface-dark);
+  color: var(--text-inverse);
+  padding: var(--space-3) var(--space-4);
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform var(--motion-fast) ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
 }
 
 #root {

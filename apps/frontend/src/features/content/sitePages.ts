@@ -30,22 +30,22 @@ export const canonicalBaseUrl = "https://senova.vn";
 
 export const pageSeo: Record<string, SeoContent> = {
   "/": {
-    title: "Senova | Calmora",
+    title: "Senova — Trà sen trải nghiệm | by Calmora",
     description:
       "Senova là dự án trà sen trải nghiệm do Calmora phát triển, kết nối sản phẩm, nghi thức và câu chuyện Việt.",
   },
   "/about": {
-    title: "Giới thiệu Senova | Calmora",
+    title: "Giới thiệu | Senova by Calmora",
     description:
       "Calmora phát triển Senova như một hệ sản phẩm trà sen trải nghiệm trong hành trình Giữ - Mở - Trao.",
   },
   "/story": {
-    title: "Câu chuyện Senova | Calmora",
+    title: "Câu chuyện | Senova by Calmora",
     description:
       "Một cánh sen mở ra câu chuyện Việt qua mạch kể Giữ - Mở - Trao của Senova.",
   },
   "/products": {
-    title: "Bộ sản phẩm Senova | Calmora",
+    title: "Sản phẩm | Senova by Calmora",
     description:
       "Khám phá Senova Classic, Senova Petal Pack và Senova Gift Set trong cùng một hệ trải nghiệm trà sen.",
   },
@@ -65,7 +65,7 @@ export const pageSeo: Record<string, SeoContent> = {
       "Trang QR Senova Gift Set dành cho người nhận quà, kết nối câu chuyện Giữ - Mở - Trao, hướng dẫn bắt đầu và phản hồi follow-up.",
   },
   "/ritual": {
-    title: "Nghi thức thưởng trà Senova | Calmora",
+    title: "Nghi thức thưởng trà | Senova by Calmora",
     description:
       "Chuỗi thao tác mở, cảm nhận, pha, chờ và thưởng thức do Senova thiết kế cho trải nghiệm trà sen.",
   },
@@ -85,22 +85,22 @@ export const pageSeo: Record<string, SeoContent> = {
       "Đăng ký quan tâm mẫu thử và góp phản hồi validation cho Senova Petal Pack, Senova Gift Set.",
   },
   "/order-request": {
-    title: "Yêu cầu đặt trước Senova | Calmora",
+    title: "Yêu cầu đặt trước | Senova by Calmora",
     description:
       "Chọn cấu hình và gửi yêu cầu đặt trước để Senova xác nhận qua email và Zalo trong 1–2 ngày làm việc.",
   },
   "/order-request/success": {
-    title: "Senova đã ghi nhận yêu cầu đặt trước | Calmora",
+    title: "Đã ghi nhận yêu cầu | Senova by Calmora",
     description: "Senova đã ghi nhận yêu cầu và sẽ liên hệ để xác nhận trước khi chuyển khoản.",
     robots: "noindex,follow",
   },
   "/contact": {
-    title: "Liên hệ Senova | Calmora",
+    title: "Liên hệ | Senova by Calmora",
     description:
       "Liên hệ Calmora về sản phẩm Senova, mẫu thử, sự kiện, phân phối hoặc hợp tác thương hiệu.",
   },
   "/partners": {
-    title: "Hợp tác cùng Senova | Calmora",
+    title: "Hợp tác | Senova by Calmora",
     description:
       "Kết nối với Calmora cho hợp tác nguyên liệu, sản xuất, phân phối và trải nghiệm thương hiệu Senova.",
   },
@@ -110,11 +110,11 @@ export const pageSeo: Record<string, SeoContent> = {
     robots: "noindex,follow",
   },
   "/privacy": {
-    title: "Chính sách dữ liệu | Calmora",
+    title: "Chính sách dữ liệu | Senova by Calmora",
     description: "Cách Senova thu thập, sử dụng và lưu trữ dữ liệu biểu mẫu.",
   },
   "/terms": {
-    title: "Điều khoản sử dụng | Calmora",
+    title: "Điều khoản sử dụng | Senova by Calmora",
     description: "Điều khoản sử dụng website giới thiệu và thử nghiệm sản phẩm Senova.",
   },
   "/collections": {
@@ -158,7 +158,7 @@ export const pageSeo: Record<string, SeoContent> = {
     robots: "noindex,follow",
   },
   "/gifting": {
-    title: "Gifting Senova | Calmora",
+    title: "Quà tặng | Senova by Calmora",
     description: "Qua tang tra sen cao cap voi loi nhan, bao bi va lich giao duoc concierge xac nhan.",
   },
   "/corporate-gifting": {
@@ -174,11 +174,11 @@ export const pageSeo: Record<string, SeoContent> = {
     description: "Dat lich tasting rieng cho Senova Classic, Petal Pack va Gift Set.",
   },
   "/shipping": {
-    title: "Giao hang Senova | Calmora",
+    title: "Giao hàng | Senova by Calmora",
     description: "Thong tin giao hang va dieu kien bao quan san pham Senova.",
   },
   "/returns": {
-    title: "Doi tra Senova | Calmora",
+    title: "Đổi trả | Senova by Calmora",
     description: "Chinh sach doi tra mock cho giai doan concierge preorder Senova.",
   },
   "/faq": {
@@ -226,7 +226,7 @@ export const pageSeo: Record<string, SeoContent> = {
     description: "Mua sen nhu mot nguyen tac bien tap cho Senova.",
   },
   "/404": {
-    title: "Không tìm thấy trang | Calmora",
+    title: "Không tìm thấy trang | Senova by Calmora",
     description: "Đường dẫn có thể đã thay đổi hoặc không tồn tại.",
     robots: "noindex,follow",
   },
@@ -353,7 +353,7 @@ export const standardPages: Record<string, StandardPageContent> = {
       },
       {
         title: "Tài sản thương hiệu",
-        text: "Không sao chép logo, hình ảnh, nội dung hoặc tài sản thương hiệu Calmora | Senova khi chưa được chấp thuận.",
+        text: "Không sao chép logo, hình ảnh, nội dung hoặc tài sản thương hiệu Senova by Calmora khi chưa được chấp thuận.",
       },
       {
         title: "Nội dung bên thứ ba",
