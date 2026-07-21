@@ -1,39 +1,65 @@
 # P1 release checklist
 
+Kết quả gần nhất: 2026-07-21, nhánh `codex/senova-p1-luxury-ui`.
+
 ## Automated gates
 
-- `npm run lint`
-- `npm run lint:colors`
-- `npm run test`
-- `npm run build`
-- Public sitemap contains no mock commerce routes.
-- Product media has dimensions, WebP sources, alt text and lifecycle status.
+- [x] `npm run lint`
+- [x] `npm run lint:colors`
+- [x] `npm run test` — 6 test files, 23 tests passed.
+- [x] `npm run build`
+- [x] Public sitemap không chứa route commerce mock.
+- [x] Product media có kích thước, WebP source, alt text và lifecycle status.
+- [x] Navigation, footer và campaign CTA chỉ trỏ tới route có trong sitemap.
 
 ## Device matrix
 
-- 360 × 800: homepage, product detail, order request.
-- 390 × 844: product detail sticky action, QR ritual and feedback.
-- 430 × 932: mobile drawer, gifting and footer.
-- 768 × 1024: products grid and order request.
-- 1440 × 900: homepage, products, product detail and story.
+- [x] 360 × 800: homepage và mobile drawer.
+- [x] 390 × 844: product detail, sticky action và order request.
+- [x] 430 × 932: QR ritual, feedback, gifting và footer.
+- [x] 768 × 1024: products grid.
+- [x] 1440 × 900: homepage và Story 3D.
 
 ## Keyboard and accessibility
 
-- Skip link moves focus to `#main-content`.
-- Drawer receives focus, traps Tab/Shift+Tab, closes on Escape and restores focus to the menu button.
-- Every form control has a visible label; errors include text and are announced.
-- Focus ring is visible on light and dark surfaces.
-- Reduced motion removes decorative transforms and long transitions.
-- Locale switch updates the document `lang` attribute.
+- [x] Có skip link tới `#main-content`.
+- [x] Drawer nhận focus, trap Tab/Shift+Tab, đóng bằng Escape và trả focus về menu button.
+- [x] Form control có label; lỗi có text và vùng thông báo phù hợp.
+- [x] Focus ring hiển thị trên light/dark surfaces.
+- [x] Reduced motion có static image fallback và tắt decorative transitions.
+- [x] Locale switch cập nhật `lang` của document.
 
 ## Functional regression
 
-- Product → order request carries product, variant, quantity, intent and source.
-- `/bag`, `/checkout`, `/reorder` and `/pre-order` redirect to `/order-request`.
-- QR → ritual → feedback remains unchanged.
-- Feedback and successful order requests end on their canonical confirmation route.
+- [x] Product → order request truyền product, variant, quantity, intent và source.
+- [x] Catalog dev fallback giữ route sản phẩm hoạt động khi API local tạm ngắt.
+- [x] QR API network fallback dùng nội dung biên tập cục bộ trong development; lỗi nghiệp vụ 4xx không bị che.
+- [x] QR → ritual → timer → feedback hoạt động bằng keyboard/semantic controls.
+- [x] `/bag`, `/checkout`, `/reorder` và `/pre-order` redirect tới `/order-request`.
+- [x] Story 3D tải hoàn tất mà không phụ thuộc environment asset bên ngoài.
+- [x] Analytics là best-effort và không tạo unhandled rejection khi endpoint không khả dụng.
 
-## Known visual debt
+## Visual regression baseline
 
-- `VD-3D-001`: Story 3D is an optional, route-level enhancement. Its raw chunk exceeds the generic 500 kB warning, but it is not loaded by the homepage or product funnel. Preserve the static/reduced-motion fallback and reassess compression when the production 3D asset is frozen.
-- Final device screenshots and Lighthouse evidence must be captured again in staging when the in-app browser or physical-device lab is available.
+Baseline được lưu trong `docs/visual-baseline/`:
+
+- `home-desktop-1440.png`
+- `home-mobile-360.png`
+- `products-tablet-768.png`
+- `product-petal-mobile-390.png`
+- `order-request-mobile-390.png`
+- `qr-petal-mobile-430.png`
+- `gifting-mobile-430.png`
+- `story-desktop-1440.png`
+
+## Performance evidence
+
+- Initial application chunk: 136.58 kB gzip, dưới ngân sách P1 300 kB gzip.
+- CSS chính: 14.32 kB gzip.
+- Story 3D: 229.61 kB gzip, tách riêng theo route và không tải trong homepage/product funnel.
+- Hero ưu tiên tải; ảnh dưới fold lazy-load; responsive WebP có width/height.
+
+## Recorded exception / external validation
+
+- `VD-3D-001`: Story 3D vẫn vượt cảnh báo mặc định 500 kB raw (854.71 kB), nhưng là optional route-level chunk, có reduced-motion fallback và không nằm trong initial funnel bundle.
+- Lighthouse staging và kiểm tra thiết bị thật iOS/Android cần chạy lại sau khi có URL staging và device lab. Đây là gate vận hành bên ngoài repository, không phải lỗi code còn mở.

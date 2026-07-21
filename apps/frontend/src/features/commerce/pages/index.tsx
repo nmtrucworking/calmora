@@ -357,6 +357,9 @@ export function CheckoutPage() {
   const { text } = useCommerceCopy();
   const params = useMemo(() => new URLSearchParams(search), [search]);
   const intent = params.get("intent") ?? "personal";
+  const localizedIntent = language === "vi"
+    ? ({ personal: "Cá nhân", gifting: "Quà tặng", tasting: "Trải nghiệm thử" }[intent] ?? "Cá nhân")
+    : intent;
   const requestedProduct = params.get("product");
   const requestedVariant = params.get("variant");
   const requestedQuantity = Math.max(1, Number.parseInt(params.get("quantity") ?? "1", 10) || 1);
@@ -444,7 +447,7 @@ export function CheckoutPage() {
         </div>
         <aside className={panelClass}>
           <p className={eyebrowClass}>{text.ui.intent}</p>
-          <p className="m-0 font-display text-[1.6rem] text-primary-strong">{intent}</p>
+          <p className="m-0 font-display text-[1.6rem] text-primary-strong">{localizedIntent}</p>
         </aside>
       </section>
       <section className="grid grid-cols-[minmax(0,1fr)_22rem] items-start gap-5 max-[900px]:grid-cols-1">

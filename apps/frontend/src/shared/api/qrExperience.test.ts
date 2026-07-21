@@ -54,4 +54,15 @@ describe("QR experience API adapter", () => {
       expect.objectContaining({ code: "QR_CONTENT_NOT_FOUND", status: 404, message: "Missing" }),
     );
   });
+
+  it("uses editorial fixture content in development when the API is unreachable", async () => {
+    vi.stubEnv("VITE_API_BASE_URL", "https://api.test");
+    vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new TypeError("Failed to fetch")));
+
+    const result = await fetchQrExperience("petal-pack");
+
+    expect(result.productSlug).toBe("petal-pack");
+    expect(result.contentViewed).toBe("petal-pack-scan");
+    expect(result.guidance.steps).toHaveLength(4);
+  });
 });

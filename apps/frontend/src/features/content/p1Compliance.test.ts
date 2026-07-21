@@ -1,7 +1,11 @@
 import { existsSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { imageManifest } from "@features/content/imageManifest";
-import { luxuryLayoutCopy } from "@features/content/luxuryCopy";
+import {
+  luxuryLandingCopy,
+  luxuryLayoutCopy,
+  productLuxuryCopy,
+} from "@features/content/luxuryCopy";
 import { productTrustItems } from "@features/content/trustContent";
 
 describe("P1 public experience contracts", () => {
@@ -44,6 +48,36 @@ describe("P1 public experience contracts", () => {
     const sitemap = readFileSync("public/sitemap.xml", "utf8");
     for (const route of ["/collections", "/search", "/wishlist", "/bag", "/checkout", "/account", "/order-status"]) {
       expect(sitemap).not.toContain(`<loc>https://senova.vn${route}`);
+    }
+  });
+
+  it("keeps public navigation and campaign calls-to-action on sitemap routes", () => {
+    const sitemap = readFileSync("public/sitemap.xml", "utf8");
+    const sitemapPaths = new Set(
+      [...sitemap.matchAll(/<loc>https:\/\/senova\.vn([^<]*)<\/loc>/g)].map((match) => match[1] || "/"),
+    );
+
+    for (const locale of ["vi", "en"] as const) {
+      const landing = luxuryLandingCopy[locale];
+      const links = [
+        ...luxuryLayoutCopy[locale].navigation,
+        ...luxuryLayoutCopy[locale].footerGroups.flatMap((group) => group.links),
+        landing.hero.primary,
+        landing.hero.secondary,
+        landing.gift.primary,
+        landing.gift.secondary,
+        landing.finalCta.primary,
+        landing.finalCta.secondary,
+        ...Object.values(productLuxuryCopy[locale]).flatMap((product) => [
+          product.primaryAction,
+          product.secondaryAction,
+        ]),
+      ];
+
+      for (const link of links) {
+        const path = new URL(link.href, "https://senova.vn").pathname;
+        expect(sitemapPaths, `${locale}: ${link.href}`).toContain(path);
+      }
     }
   });
 });

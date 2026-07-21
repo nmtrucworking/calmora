@@ -1,4 +1,4 @@
-import { Environment, Float } from "@react-three/drei";
+import { Float } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import * as THREE from "three";
@@ -68,6 +68,7 @@ export function LotusScene({
       {backgroundColor ? <color attach="background" args={[backgroundColor]} /> : null}
       {fogColor ? <fog attach="fog" args={[fogColor, 6.2, 13.5]} /> : null}
       <ambientLight intensity={0.64} />
+      <hemisphereLight color="#F8E8C8" groundColor="#173428" intensity={1.2} />
       <pointLight ref={keyLightRef} position={[2.2, 2.8, 2.7]} color="#F1D7AD" intensity={7.5} distance={8} />
       <pointLight ref={rimLightRef} position={[-3.2, -0.4, -1.8]} color="#77927E" intensity={3.2} distance={9} />
       <spotLight ref={topLightRef} position={[0, 5.2, 2.2]} angle={0.42} penumbra={0.78} intensity={4.5} castShadow />
@@ -80,7 +81,6 @@ export function LotusScene({
           <TeaCore scrollValue={scrollProgressRef} />
         </group>
       </Float>
-      <Environment preset="studio" />
     </>
   );
 }

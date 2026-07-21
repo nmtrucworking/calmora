@@ -209,7 +209,7 @@ export const products: SenovaProduct[] = [
         cancellationPolicyId: "senova-preorder-v1",
       },
       {
-        id: "petal-hosting", label: "Hộp 9 búp", note: "Cho tasting và sự kiện nhỏ",
+        id: "petal-hosting", label: "Hộp 9 búp", note: "Cho buổi thử trà và sự kiện nhỏ",
         preparationTime: { min: 5, max: 7, unit: "BUSINESS_DAY", isAssumption: true },
         deliveryScopes: [{ code: "HCM", label: "TP. Hồ Chí Minh", enabled: true }], available: true,
         cancellationPolicyId: "senova-preorder-v1",
@@ -238,7 +238,7 @@ export const products: SenovaProduct[] = [
     heroAlt: "Senova Petal Pack tạo hình búp sen với phần trà bên trong",
     suitableFor: [
       "Người muốn trải nghiệm một hình thức thưởng trà mới",
-      "Hoạt động giới thiệu sản phẩm tại booth hoặc sự kiện",
+      "Hoạt động giới thiệu sản phẩm tại quầy trải nghiệm hoặc sự kiện",
       "Người quan tâm thiết kế, chất liệu và câu chuyện văn hóa",
       "Quà tặng nhỏ có tính trải nghiệm",
     ],
@@ -247,7 +247,7 @@ export const products: SenovaProduct[] = [
       "Cánh sen tạo hình búp trở thành điểm chạm trực quan của sản phẩm",
       "Thao tác mở gói được thiết kế như bước đầu của trải nghiệm",
       "Nội dung QR tiếp nối câu chuyện sau khi người dùng cầm sản phẩm",
-      "Phù hợp cho hoạt động dùng thử, booth trải nghiệm và quà tặng nhỏ",
+      "Phù hợp cho hoạt động dùng thử, quầy trải nghiệm và quà tặng nhỏ",
     ],
     experienceSteps: [
       {

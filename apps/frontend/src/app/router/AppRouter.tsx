@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef, type ReactNode } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { RouterProvider } from "@app/router/RouterContext";
 import { useRouter } from "@app/router/RouterState";
 import { SiteLayout } from "@app/layout/SiteLayout";
@@ -62,14 +62,20 @@ const hiddenPublicPaths = new Set([
   "/journal",
 ]);
 
-const pageFocusSectionClass = "pageFocusSection";
-const pageFocusActiveClass = "pageFocusActive";
-const pageMotionTargetClass = "pageMotionTarget";
-const pageMotionVisibleClass = "pageMotionVisible";
-const pageMotionSelector = "section, article, aside, form, figure, [data-luxury-motion]";
-
 function RouteFallback() {
-  return <div style={{ minHeight: "60vh" }} />;
+  return (
+    <div
+      className="grid min-h-[60vh] place-items-center bg-[var(--surface)] text-primary-strong"
+      role="status"
+      aria-live="polite"
+    >
+      <div className="flex flex-col items-center gap-3" aria-hidden="true">
+        <span className="font-display text-[1.35rem] tracking-[0.22em]">SENOVA</span>
+        <span className="h-px w-16 origin-left animate-pulse bg-accent-strong" />
+      </div>
+      <span className="sr-only">Đang tải nội dung</span>
+    </div>
+  );
 }
 
 function Redirect({ to }: { to: string }) {
@@ -80,162 +86,6 @@ function Redirect({ to }: { to: string }) {
   }, [navigate, to]);
 
   return <RouteFallback />;
-}
-
-function FocusSections({ children, enabled }: { children: ReactNode; enabled: boolean }) {
-  const rootRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const root = rootRef.current;
-    if (!root || !enabled) return;
-
-    let intersectionObserver: IntersectionObserver | null = null;
-    let motionObserver: IntersectionObserver | null = null;
-    let collectFrame = 0;
-    let sections: HTMLElement[] = [];
-    let motionTargets: HTMLElement[] = [];
-    const ratios = new Map<HTMLElement, number>();
-
-    const cleanupSections = () => {
-      intersectionObserver?.disconnect();
-      intersectionObserver = null;
-      sections.forEach((section) => {
-        section.classList.remove(pageFocusSectionClass, pageFocusActiveClass);
-      });
-      sections = [];
-      ratios.clear();
-    };
-
-    const cleanupMotionTargets = () => {
-      motionObserver?.disconnect();
-      motionObserver = null;
-      motionTargets.forEach((target) => {
-        target.classList.remove(pageMotionTargetClass, pageMotionVisibleClass);
-        target.style.removeProperty("--page-motion-delay");
-      });
-      motionTargets = [];
-    };
-
-    const updateActiveSection = () => {
-      const activeSection = sections.reduce<HTMLElement | null>((current, section) => {
-        if (!current) return section;
-        return (ratios.get(section) ?? 0) > (ratios.get(current) ?? 0) ? section : current;
-      }, null);
-
-      if (!activeSection || (ratios.get(activeSection) ?? 0) < 0.12) return;
-
-      sections.forEach((section) => {
-        section.classList.toggle(pageFocusActiveClass, section === activeSection);
-      });
-    };
-
-    const collectSections = () => {
-      cleanupSections();
-
-      const nextSections = Array.from(root.querySelectorAll("section")).filter(
-        (section): section is HTMLElement => section instanceof HTMLElement,
-      );
-
-      if (nextSections.length < 2) return;
-
-      sections = nextSections;
-      sections.forEach((section) => section.classList.add(pageFocusSectionClass));
-      sections[0]?.classList.add(pageFocusActiveClass);
-
-      intersectionObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            ratios.set(entry.target as HTMLElement, entry.intersectionRatio);
-          });
-          updateActiveSection();
-        },
-        {
-          root: null,
-          rootMargin: "-16% 0px -30% 0px",
-          threshold: [0.12, 0.24, 0.36, 0.5, 0.66, 0.82],
-        },
-      );
-
-      sections.forEach((section) => intersectionObserver?.observe(section));
-    };
-
-    const collectMotionTargets = () => {
-      const nextTargets = Array.from(root.querySelectorAll(pageMotionSelector)).filter(
-        (target): target is HTMLElement =>
-          target instanceof HTMLElement && !target.closest("[data-motion-static='true']"),
-      );
-      const nextTargetSet = new Set(nextTargets);
-
-      motionTargets.forEach((target) => {
-        if (nextTargetSet.has(target)) return;
-
-        target.classList.remove(pageMotionTargetClass, pageMotionVisibleClass);
-        target.style.removeProperty("--page-motion-delay");
-      });
-
-      motionTargets = nextTargets;
-      motionObserver?.disconnect();
-      motionObserver = null;
-
-      if (!motionTargets.length) return;
-
-      motionObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (!entry.isIntersecting && entry.intersectionRatio < 0.08) return;
-
-            entry.target.classList.add(pageMotionVisibleClass);
-            motionObserver?.unobserve(entry.target);
-          });
-        },
-        {
-          root: null,
-          rootMargin: "0px 0px -12% 0px",
-          threshold: [0.08, 0.16, 0.28],
-        },
-      );
-
-      motionTargets.forEach((target) => {
-        const siblingTargets = Array.from(target.parentElement?.children ?? []).filter(
-          (sibling): sibling is HTMLElement =>
-            sibling instanceof HTMLElement && sibling.matches(pageMotionSelector),
-        );
-        const delay = Math.min(Math.max(siblingTargets.indexOf(target), 0), 6) * 70;
-
-        target.classList.add(pageMotionTargetClass);
-        target.style.setProperty("--page-motion-delay", `${delay}ms`);
-
-        if (!target.classList.contains(pageMotionVisibleClass)) {
-          motionObserver?.observe(target);
-        }
-      });
-    };
-
-    const scheduleCollect = () => {
-      window.cancelAnimationFrame(collectFrame);
-      collectFrame = window.requestAnimationFrame(() => {
-        collectSections();
-        collectMotionTargets();
-      });
-    };
-
-    const mutationObserver = new MutationObserver(scheduleCollect);
-    mutationObserver.observe(root, { childList: true, subtree: true });
-    scheduleCollect();
-
-    return () => {
-      window.cancelAnimationFrame(collectFrame);
-      mutationObserver.disconnect();
-      cleanupSections();
-      cleanupMotionTargets();
-    };
-  }, [enabled, children]);
-
-  return (
-    <div ref={rootRef} style={{ display: "contents" }}>
-      {children}
-    </div>
-  );
 }
 
 function upsertMeta(selector: string, attributes: Record<string, string>) {
@@ -420,7 +270,7 @@ function PublicRoutes() {
           variants={pageTransitionVariants}
           style={{ minHeight: "100vh" }}
         >
-          <FocusSections enabled={false}>{pageComponent}</FocusSections>
+          {pageComponent}
         </motion.div>
       </AnimatePresence>
     </Suspense>

@@ -2653,26 +2653,26 @@ Công việc:
 
 P1 chỉ được xem là hoàn thành khi:
 
-- [ ] Brand architecture được áp dụng trên toàn website.
-- [ ] Design token là nguồn duy nhất cho màu, typography, spacing và motion.
-- [ ] Header và footer đã được chuẩn hóa.
-- [ ] Không còn particle cursor trong production.
-- [ ] Không còn global blur/reveal trên form.
-- [ ] Homepage có intent-based navigation.
-- [ ] Petal Pack được nhấn mạnh đúng vai trò signature.
-- [ ] Products Page và Product Detail dùng cùng hệ component.
-- [ ] Có trust layer cho sản phẩm.
-- [ ] Có image manifest và responsive image.
-- [ ] Ảnh concept/prototype/production được phân loại.
-- [ ] Mobile QA pass ở 360–430 px.
-- [ ] Keyboard navigation pass.
-- [ ] Reduced motion pass.
-- [ ] Performance đạt ngân sách đã thống nhất hoặc có exception được ghi nhận.
-- [ ] SEO không chứa route mock và dữ liệu giả.
-- [ ] Visual regression baseline đã được lưu.
-- [ ] Không có claim văn hóa, sức khỏe hoặc kỹ thuật chưa được kiểm soát.
-- [ ] Không có link chết ở navigation và footer.
-- [ ] P0 funnel không bị phá sau refactor.
+- [x] Brand architecture được áp dụng trên toàn website.
+- [x] Design token là nguồn duy nhất cho màu, typography, spacing và motion.
+- [x] Header và footer đã được chuẩn hóa.
+- [x] Không còn particle cursor trong production.
+- [x] Không còn global blur/reveal trên form.
+- [x] Homepage có intent-based navigation.
+- [x] Petal Pack được nhấn mạnh đúng vai trò signature.
+- [x] Products Page và Product Detail dùng cùng hệ component.
+- [x] Có trust layer cho sản phẩm.
+- [x] Có image manifest và responsive image.
+- [x] Ảnh concept/prototype/production được phân loại.
+- [x] Mobile QA pass ở 360–430 px.
+- [x] Keyboard navigation pass.
+- [x] Reduced motion pass.
+- [x] Performance đạt ngân sách đã thống nhất hoặc có exception được ghi nhận.
+- [x] SEO không chứa route mock và dữ liệu giả.
+- [x] Visual regression baseline đã được lưu.
+- [x] Không có claim văn hóa, sức khỏe hoặc kỹ thuật chưa được kiểm soát.
+- [x] Không có link chết ở navigation và footer.
+- [x] P0 funnel không bị phá sau refactor.
 
 ---
 

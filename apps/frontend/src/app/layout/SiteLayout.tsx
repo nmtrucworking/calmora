@@ -206,7 +206,7 @@ export function SiteLayout({
         <div
           ref={mobileNavigationRef}
           className={cx(
-            "fixed inset-x-0 top-[4rem] hidden max-h-[calc(100svh-4rem)] -translate-y-[0.6rem] overflow-y-auto border-t border-border bg-[var(--surface)] p-4 opacity-0 shadow-brand-md transition duration-200 max-[900px]:block",
+            "fixed inset-x-0 top-[4rem] hidden max-h-[calc(100svh-4rem)] -translate-y-[0.6rem] overflow-y-auto border-t border-border bg-[var(--surface-strong)] p-4 opacity-0 shadow-brand-md transition duration-200 max-[900px]:block",
             isMenuOpen ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none",
           )}
           aria-hidden={!isMenuOpen}
