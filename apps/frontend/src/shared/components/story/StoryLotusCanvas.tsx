@@ -1,15 +1,18 @@
 import { Html } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
+import type { MotionValue } from "framer-motion";
 import { Suspense, useEffect, useRef } from "react";
 import * as THREE from "three";
 import { LotusScene } from "@features/landing/three/LotusScene";
 import type { ScrollProgressRef } from "@features/landing/types";
+import { ScrollBinder } from "@features/landing/three/ScrollBinder";
 import styles from "./StoryLotusCanvas.module.css";
 
 type StoryLotusCanvasProps = {
   backgroundColor?: string | null;
   className?: string;
   fogColor?: string | null;
+  scrollProgress?: MotionValue<number>;
   /**
    * Change this number to restart the lotus animation cycle. Bump a counter to trigger a replay.
    */
@@ -21,6 +24,7 @@ export function StoryLotusCanvas({
   backgroundColor = null,
   className,
   fogColor = null,
+  scrollProgress,
   restartSignal = 0,
   showBackdrop = false,
 }: StoryLotusCanvasProps) {
@@ -28,6 +32,8 @@ export function StoryLotusCanvas({
   const animRef = useRef({ frameId: 0, startTime: 0, duration: 14000 });
 
   useEffect(() => {
+    if (scrollProgress) return;
+
     let mounted = true;
     const current = animRef.current;
 
@@ -64,7 +70,7 @@ export function StoryLotusCanvas({
       const toCancel = current.frameId;
       if (toCancel) window.cancelAnimationFrame(toCancel);
     };
-  }, [restartSignal]);
+  }, [restartSignal, scrollProgress]);
 
   return (
     <div className={`${styles.canvasShell} ${className ?? ""}`.trim()}>
@@ -78,6 +84,9 @@ export function StoryLotusCanvas({
           gl.setClearColor(0x000000, 0);
         }}
       >
+        {scrollProgress ? (
+          <ScrollBinder scrollYProgress={scrollProgress} targetRef={progressRef} />
+        ) : null}
         <Suspense
           fallback={
             <Html center>

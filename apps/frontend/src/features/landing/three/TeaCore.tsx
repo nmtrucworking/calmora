@@ -18,13 +18,15 @@ function smoothRange(start: number, end: number, value: number) {
 }
 
 function buildSeedPositions() {
-  return Array.from({ length: 28 }, (_, index) => {
-    const radius = Math.sqrt(index / 28) * 0.3;
+  const seedCount = 19;
+
+  return Array.from({ length: seedCount }, (_, index) => {
+    const radius = Math.sqrt(index / seedCount) * 0.285;
     const angle = index * 2.399963229728653;
 
     return {
-      position: new THREE.Vector3(Math.cos(angle) * radius, 0.065 + Math.sin(index * 0.8) * 0.018, Math.sin(angle) * radius),
-      scale: 0.72 + (1 - radius / 0.3) * 0.34,
+      position: new THREE.Vector3(Math.cos(angle) * radius, 0.145, Math.sin(angle) * radius),
+      scale: 0.78 + (1 - radius / 0.285) * 0.34,
     };
   });
 }
@@ -38,13 +40,13 @@ export function TeaCore({ scrollValue }: TeaCoreProps) {
   const podMaterial = useMemo(
     () =>
       new THREE.MeshPhysicalMaterial({
-        color: "#d9b45f",
-        emissive: "#7a4b12",
-        emissiveIntensity: 0.05,
+        color: "#c9bd55",
+        emissive: "#716814",
+        emissiveIntensity: 0.025,
         metalness: 0,
         opacity: 0,
-        roughness: 0.62,
-        sheen: 0.45,
+        roughness: 0.74,
+        sheen: 0.2,
         transparent: true,
       }),
     [],
@@ -52,9 +54,9 @@ export function TeaCore({ scrollValue }: TeaCoreProps) {
   const seedMaterial = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: "#f8df93",
-        emissive: "#4d2d08",
-        emissiveIntensity: 0.04,
+        color: "#625f2d",
+        emissive: "#26240c",
+        emissiveIntensity: 0.015,
         opacity: 0,
         roughness: 0.7,
         transparent: true,
@@ -95,14 +97,14 @@ export function TeaCore({ scrollValue }: TeaCoreProps) {
 
     if (groupRef.current) {
       groupRef.current.rotation.y = elapsed * 0.16 + progress * 0.38;
-      groupRef.current.position.y = -0.44 - wither * 0.05;
-      groupRef.current.scale.setScalar(0.42 + presence * 0.58);
+      groupRef.current.position.set(0, 0.1 - wither * 0.05, 0.18);
+      groupRef.current.scale.setScalar(0.5 + presence * 0.8);
       groupRef.current.visible = presence > 0.02;
     }
 
     if (podRef.current) {
       podRef.current.material.opacity = presence * 0.96;
-      podRef.current.material.emissiveIntensity = 0.03 + presence * 0.1;
+      podRef.current.material.emissiveIntensity = 0.018 + presence * 0.045;
     }
 
     seedRefs.current.forEach((seed) => {
@@ -110,7 +112,7 @@ export function TeaCore({ scrollValue }: TeaCoreProps) {
 
       const material = seed.material as THREE.MeshStandardMaterial;
       material.opacity = presence * 0.98;
-      material.emissiveIntensity = 0.025 + presence * 0.08;
+      material.emissiveIntensity = 0.012 + presence * 0.035;
     });
 
     if (auraRef.current) {
@@ -125,8 +127,11 @@ export function TeaCore({ scrollValue }: TeaCoreProps) {
 
   return (
     <group ref={groupRef}>
-      <mesh ref={podRef} material={podMaterial} receiveShadow scale={[1, 0.38, 1]}>
-        <sphereGeometry args={[0.36, 36, 18]} />
+      <mesh ref={podRef} material={podMaterial} receiveShadow position={[0, 0.035, 0]}>
+        <cylinderGeometry args={[0.35, 0.26, 0.2, 48, 4]} />
+      </mesh>
+      <mesh material={podMaterial} position={[0, 0.14, 0]} rotation={[Math.PI / 2, 0, 0]}>
+        <torusGeometry args={[0.33, 0.024, 10, 48]} />
       </mesh>
       {seeds.map((seed, index) => (
         <mesh
@@ -136,9 +141,9 @@ export function TeaCore({ scrollValue }: TeaCoreProps) {
           }}
           material={seedMaterial}
           position={seed.position}
-          scale={[seed.scale, seed.scale * 0.58, seed.scale]}
+          scale={[seed.scale, seed.scale * 0.42, seed.scale]}
         >
-          <sphereGeometry args={[0.042, 12, 8]} />
+          <sphereGeometry args={[0.052, 14, 8]} />
         </mesh>
       ))}
       <points ref={auraRef} geometry={auraGeometry}>

@@ -125,7 +125,7 @@ export function SiteLayout({
       className={cx(
         styles.page,
         isLanding && styles.landingPage,
-        "relative min-h-screen overflow-x-hidden text-text isolate",
+        "relative min-h-screen overflow-x-clip text-text isolate",
       )}
     >
       <a className="skip-link" href="#main-content">

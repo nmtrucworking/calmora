@@ -34,11 +34,10 @@ type FallingPetalConfig = {
 
 const BUD_PANEL_COUNT = 10;
 const PETAL_LAYERS = [
-  { count: 7, length: 1.08, width: 0.22, radius: 0.08, bloomTilt: 0.36 },
-  { count: 10, length: 1.28, width: 0.27, radius: 0.14, bloomTilt: 0.56 },
-  { count: 14, length: 1.52, width: 0.34, radius: 0.2, bloomTilt: 0.82 },
-  { count: 18, length: 1.76, width: 0.42, radius: 0.27, bloomTilt: 1.08 },
-  { count: 22, length: 1.96, width: 0.5, radius: 0.34, bloomTilt: 1.28 },
+  { count: 6, length: 1.24, width: 0.34, radius: 0.1, bloomTilt: 0.38 },
+  { count: 7, length: 1.52, width: 0.42, radius: 0.18, bloomTilt: 0.62 },
+  { count: 7, length: 1.84, width: 0.52, radius: 0.27, bloomTilt: 0.9 },
+  { count: 6, length: 2.12, width: 0.64, radius: 0.38, bloomTilt: 1.18 },
 ];
 
 function clamp01(value: number) {
@@ -57,24 +56,23 @@ function hash(value: number) {
 
 function makeLayerPalettes() {
   return [
-    { base: "#ffc3d8", edge: "#ff3f8d", throat: "#ffc23d" },
-    { base: "#ff9fbe", edge: "#e91473", throat: "#f4a51e" },
-    { base: "#ff7daa", edge: "#c90061", throat: "#d98d12" },
-    { base: "#f75c95", edge: "#a9004f", throat: "#bd7309" },
-    { base: "#db3d7e", edge: "#81003e", throat: "#9f5f03" },
+    { base: "#fffaf8", edge: "#f1a0b7" },
+    { base: "#fff7f7", edge: "#e98ca9" },
+    { base: "#fff3f5", edge: "#df7398" },
+    { base: "#ffedf2", edge: "#d45d88" },
   ];
 }
 
-function buildPetalGeometry(layer: number) {
+function buildPetalGeometry(layer: number, asSepal = false) {
   const widthSegments = 16;
   const lengthSegments = 34;
   const positions: number[] = [];
   const colors: number[] = [];
   const indices: number[] = [];
   const palette = makeLayerPalettes()[layer];
-  const base = layer === 0 ? new THREE.Color("#b7d68f") : new THREE.Color(palette.base);
-  const edge = new THREE.Color(palette.edge);
-  const throat = layer === 0 ? new THREE.Color("#2e945a") : new THREE.Color(palette.throat);
+  const base = new THREE.Color(asSepal ? "#8fc478" : palette.base);
+  const edge = new THREE.Color(asSepal ? "#2e945a" : palette.edge);
+  const rootIvory = new THREE.Color("#fffdf9");
 
   for (let yIndex = 0; yIndex <= lengthSegments; yIndex += 1) {
     const u = yIndex / lengthSegments;
@@ -92,15 +90,16 @@ function buildPetalGeometry(layer: number) {
         tipCurl -
         edgeAmount * edgeAmount * Math.sin(Math.PI * u) * 0.045 +
         (1 - edgeAmount) * Math.sin(Math.PI * u) * 0.018;
+      const rootFade = 1 - smoothRange(0.04, 0.46, u);
       const color = base
         .clone()
-        .lerp(edge, Math.pow(edgeAmount, 1.45) * 0.5 + smoothRange(0.72, 1, u) * 0.32)
-        .lerp(throat, smoothRange(0, 0.28, 1 - u) * (1 - edgeAmount) * 0.28);
+        .lerp(edge, Math.pow(edgeAmount, 1.55) * 0.34 + smoothRange(0.62, 1, u) * 0.42)
+        .lerp(rootIvory, asSepal ? 0 : rootFade * 0.94);
 
       // Delicate vertical veins on the petals
       const veinWave = Math.sin(s * Math.PI * 8.0 + u * 2.0);
-      const veinStrength = Math.pow(Math.max(0, veinWave), 3.0) * (0.12 + smoothRange(0.2, 0.9, u) * 0.18) * (1 - smoothRange(0.92, 1, u) * 0.5);
-      const petalVeinColor = edge.clone().lerp(new THREE.Color("#900e42"), 0.35);
+      const veinStrength = Math.pow(Math.max(0, veinWave), 3.0) * (0.045 + smoothRange(0.25, 0.9, u) * 0.1) * (1 - rootFade * 0.82);
+      const petalVeinColor = edge.clone().lerp(new THREE.Color(asSepal ? "#1d6b48" : "#b84e75"), 0.16);
       color.lerp(petalVeinColor, veinStrength);
 
       positions.push(x, y, z);
@@ -242,12 +241,14 @@ function buildPetalConfigs(): PetalConfig[] {
 }
 
 function buildFallingPetalConfigs(): FallingPetalConfig[] {
-  return Array.from({ length: 22 }, (_, index) => {
+  const fallingPetalCount = 8;
+
+  return Array.from({ length: fallingPetalCount }, (_, index) => {
     const seed = index * 19 + 5;
-    const layer = 2 + (index % 3);
+    const layer = 1 + (index % 3);
 
     return {
-      angle: (index / 22) * Math.PI * 2 + (hash(seed) - 0.5) * 0.8,
+      angle: (index / fallingPetalCount) * Math.PI * 2 + (hash(seed) - 0.5) * 0.8,
       delay: index * 0.009 + hash(seed + 1) * 0.028,
       drift: 0.55 + hash(seed + 2) * 0.85,
       layer,
@@ -262,12 +263,12 @@ function buildFallingPetalConfigs(): FallingPetalConfig[] {
 function makePetalMaterial() {
   return new THREE.MeshPhysicalMaterial({
     color: "#ffffff",
-    emissive: "#641234",
-    emissiveIntensity: 0.06,
+    emissive: "#8b5368",
+    emissiveIntensity: 0.025,
     metalness: 0,
     opacity: 0.96,
-    roughness: 0.56,
-    sheen: 0.55,
+    roughness: 0.62,
+    sheen: 0.38,
     side: THREE.DoubleSide,
     transparent: true,
     vertexColors: true,
@@ -281,7 +282,7 @@ export function LotusFlower({ scrollValue }: LotusFlowerProps) {
   const petalRefs = useRef<Array<THREE.Mesh | null>>([]);
   const fallingRefs = useRef<Array<THREE.Mesh | null>>([]);
   const budGeometry = useMemo(() => buildBudGeometry(), []);
-  const sepalGeometry = useMemo(() => buildPetalGeometry(0), []);
+  const sepalGeometry = useMemo(() => buildPetalGeometry(0, true), []);
   const budMaterial = useMemo(
     () =>
       new THREE.MeshPhysicalMaterial({
@@ -335,8 +336,8 @@ export function LotusFlower({ scrollValue }: LotusFlowerProps) {
   );
   const whiteTint = useMemo(() => new THREE.Color("#ffffff"), []);
   const witherTint = useMemo(() => new THREE.Color("#b99591"), []);
-  const bloomGlow = useMemo(() => new THREE.Color("#c40063"), []);
-  const quietGlow = useMemo(() => new THREE.Color("#4a1028"), []);
+  const bloomGlow = useMemo(() => new THREE.Color("#df7a9c"), []);
+  const quietGlow = useMemo(() => new THREE.Color("#8b5368"), []);
   const dummy = useMemo(() => new THREE.Vector3(), []);
 
   useFrame(({ clock }) => {
@@ -385,7 +386,7 @@ export function LotusFlower({ scrollValue }: LotusFlowerProps) {
       const layerWarmth = layer / (PETAL_LAYERS.length - 1);
       material.color.copy(whiteTint).lerp(witherTint, wither * (0.68 + layerWarmth * 0.2));
       material.emissive.copy(quietGlow).lerp(bloomGlow, fullBloom * (0.3 + layerWarmth * 0.34));
-      material.emissiveIntensity = 0.052 + fullBloom * 0.15 - wither * 0.026;
+      material.emissiveIntensity = 0.022 + fullBloom * 0.065 - wither * 0.012;
       material.opacity = (0.95 - wither * 0.18) * petalPresence;
     });
 
