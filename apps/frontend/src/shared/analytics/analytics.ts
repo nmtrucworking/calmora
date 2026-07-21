@@ -45,6 +45,8 @@ export function trackEvent(event: Omit<AnalyticsEvent, "timestamp" | "path"> & {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
         keepalive: true,
+      }).catch(() => {
+        // Analytics is best effort; offline API environments must stay silent.
       });
     } catch {
       // Remote analytics must never block the experience.

@@ -77,10 +77,17 @@ export async function fetchQrExperience(
     locale: options.locale ?? "vi",
   });
   if (options.batch) query.set("batch", options.batch);
-  const response = await fetch(
-    `${getApiBaseUrl()}/api/qr/experience/${encodeURIComponent(productSlug)}?${query}`,
-    { signal },
-  );
+  let response: Response;
+  try {
+    response = await fetch(
+      `${getApiBaseUrl()}/api/qr/experience/${encodeURIComponent(productSlug)}?${query}`,
+      { signal },
+    );
+  } catch (reason) {
+    if (reason instanceof DOMException && reason.name === "AbortError") throw reason;
+    if (import.meta.env.DEV) return developmentFixture(productSlug);
+    throw new QrExperienceApiError("NETWORK_ERROR", "QR experience is unavailable.");
+  }
   const result = (await response.json()) as ApiResponse<QrExperienceContent>;
   if (!response.ok || !result.success || !result.data) {
     throw new QrExperienceApiError(

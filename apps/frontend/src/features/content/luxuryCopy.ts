@@ -190,7 +190,7 @@ export const luxuryLandingCopy: Record<Language, LuxuryLandingCopy> = {
       scrollHint: "Cuộn để mở câu chuyện",
     },
     signature: {
-      eyebrow: "Signature Product",
+      eyebrow: "Sản phẩm biểu tượng",
       title: "Petal Pack là điểm chạm đầu tiên của Senova.",
       text:
         "Một phần trà định lượng cho một lần pha, đặt trong túi lọc và được bao quanh bởi cánh sen thật. Người dùng không chỉ mở gói trà, mà mở một nhịp chậm trước khi rót nước.",
@@ -198,7 +198,7 @@ export const luxuryLandingCopy: Record<Language, LuxuryLandingCopy> = {
       imageAlt: "Cận cảnh Senova Petal Pack như sản phẩm chủ đạo",
     },
     ritual: {
-      eyebrow: "Tea Ritual",
+      eyebrow: "Nghi thức trà",
       title: "Bốn nhịp nhỏ để một tách trà có thời gian hiện ra.",
       text:
         "Nghi thức được giữ ngắn, rõ và có thể lặp lại. Mỗi bước phục vụ trải nghiệm sử dụng, không chỉ là lớp trang trí.",
@@ -230,13 +230,13 @@ export const luxuryLandingCopy: Record<Language, LuxuryLandingCopy> = {
       ],
     },
     collection: {
-      eyebrow: "Senova Collection",
+      eyebrow: "Hệ sản phẩm Senova",
       title: "Ba vai trò, một hệ sản phẩm.",
       text:
         "Petal Pack giữ vị trí biểu tượng; Classic là nhịp dùng hằng ngày; Gift Set đưa câu chuyện vào một món quà có chuẩn bị.",
     },
     culture: {
-      eyebrow: "Cultural Material",
+      eyebrow: "Chất liệu văn hóa",
       title: "Văn hóa nằm trong thao tác và chất liệu.",
       text:
         "Senova không dùng hoa sen như họa tiết trang trí dày đặc. Câu chuyện được kể qua cách mở, cách pha, thẻ QR và cảm giác của giấy, trà, cánh sen.",
@@ -256,7 +256,7 @@ export const luxuryLandingCopy: Record<Language, LuxuryLandingCopy> = {
       ],
     },
     gift: {
-      eyebrow: "Gift Experience",
+      eyebrow: "Trải nghiệm quà tặng",
       title: "Một món quà cần khoảng lặng ở đúng nơi.",
       text:
         "Gift Set kết hợp trà, Petal Pack, thẻ câu chuyện và bao bì vật liệu để người nhận bước vào trải nghiệm theo một trình tự rõ ràng.",
@@ -371,7 +371,7 @@ export const productLuxuryCopy: Record<Language, Record<ProductId, ProductLuxury
   vi: {
     "petal-pack": {
       name: "Senova Petal Pack",
-      role: "Signature",
+      role: "Mở",
       eyebrow: "Mở / Trải nghiệm chủ đạo",
       tagline: "Một búp sen cho một lần pha.",
       description:
@@ -379,14 +379,14 @@ export const productLuxuryCopy: Record<Language, Record<ProductId, ProductLuxury
       shortDescription:
         "Sản phẩm biểu tượng của Senova, biến thao tác pha trà thành một khoảnh khắc mở, chạm hương và thưởng thức.",
       priceLabel: "Liên hệ để nhận giá dự kiến",
-      availability: "Lô trải nghiệm PP-2601-A đang nhận inquiry",
+      availability: "Lô trải nghiệm PP-2601-A đang nhận yêu cầu",
       image: "/assets/products/petal-pack-optimized.jpg",
       heroAlt: "Senova Petal Pack tạo hình búp sen với phần trà bên trong",
       primaryAction: { label: "Bắt đầu trải nghiệm", href: "/experience/petal-pack" },
       secondaryAction: { label: "Đặt trước Petal Pack", href: "/order-request?product=petal-pack" },
       variants: [
         { id: "petal-single", label: "Set 6 Petal Pack", note: "Trải nghiệm cá nhân" },
-        { id: "petal-hosting", label: "Set 18 Petal Pack", note: "Cho tasting và booth" },
+        { id: "petal-hosting", label: "Set 18 Petal Pack", note: "Cho buổi thử trà và quầy trải nghiệm" },
       ],
       includedItems: [
         "Petal Pack tạo hình búp sen",
@@ -425,7 +425,7 @@ export const productLuxuryCopy: Record<Language, Record<ProductId, ProductLuxury
     },
     classic: {
       name: "Senova Classic",
-      role: "Daily Ritual",
+      role: "Giữ",
       eyebrow: "Giữ / Nghi thức hằng ngày",
       tagline: "Giữ hương sen trong nhịp sống mỗi ngày.",
       description:
@@ -466,7 +466,7 @@ export const productLuxuryCopy: Record<Language, Record<ProductId, ProductLuxury
     },
     "gift-set": {
       name: "Senova Gift Set",
-      role: "Cultural Gifting",
+      role: "Trao",
       eyebrow: "Trao / Quà tặng văn hóa",
       tagline: "Trao hương sen, gửi một lời trân trọng.",
       description:

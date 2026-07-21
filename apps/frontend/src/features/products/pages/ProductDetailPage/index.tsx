@@ -51,13 +51,13 @@ const detailCopy: Record<
     ritual: "Nghi thức sử dụng",
     culturalStory: "Câu chuyện văn hóa",
     related: "Sản phẩm liên quan",
-    preorderTitle: "Concierge xác nhận trước khi chốt đơn.",
+    preorderTitle: "Đội ngũ Senova xác nhận trước khi chốt đơn.",
     preorderText:
-      "Senova đang vận hành theo mô hình inquiry và đặt trước. Gửi yêu cầu để được tư vấn cấu hình, lịch giao và ghi chú quà tặng.",
+      "Senova đang tiếp nhận yêu cầu đặt trước. Gửi thông tin để được tư vấn cấu hình, lịch giao và ghi chú quà tặng.",
     preorder: "Gửi yêu cầu đặt trước",
     qrTitle: "QR tiếp nối trải nghiệm vật lý.",
     qrText:
-      "Sau khi mở sản phẩm, QR có thể đưa người dùng tới hướng dẫn, câu chuyện ngắn và form phản hồi.",
+      "Sau khi mở sản phẩm, QR có thể đưa người dùng tới hướng dẫn, câu chuyện ngắn và biểu mẫu phản hồi.",
   },
   en: {
     products: "Collection",
@@ -382,7 +382,12 @@ export default function ProductDetailPage({ product: baseProduct }: ProductDetai
 
       <EditorialSection className="bg-[var(--senova-forest-black)] text-text-inverse">
         <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-8 max-[760px]:grid-cols-1">
-          <ProductStatement eyebrow="Concierge" title={copy.preorderTitle} text={copy.preorderText} dark />
+          <ProductStatement
+            eyebrow={language === "vi" ? "Dịch vụ Senova" : "Concierge"}
+            title={copy.preorderTitle}
+            text={copy.preorderText}
+            dark
+          />
           <LuxuryButton href={`/order-request?product=${baseProduct.id}&source=product-detail-footer`} variant="dark">
             {copy.preorder}
             <ArrowRight aria-hidden="true" className="h-4 w-4" />

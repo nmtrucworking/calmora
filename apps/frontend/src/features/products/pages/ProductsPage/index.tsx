@@ -18,14 +18,14 @@ export default function ProductsPage() {
       eyebrow: "Bộ sưu tập",
       title: "Petal Pack giữ vai trò biểu tượng của Senova.",
       text:
-        "Ba dòng sản phẩm không chia đều như catalogue. Petal Pack là điểm nhận diện chính; Classic giữ nhịp trà hằng ngày; Gift Set đưa câu chuyện vào quà tặng.",
+        "Ba dòng sản phẩm không được dàn đều như một danh mục. Petal Pack là điểm nhận diện chính; Classic giữ nhịp trà hằng ngày; Gift Set đưa câu chuyện vào quà tặng.",
       signature: "Sản phẩm chủ đạo",
       explore: "Khám phá",
       preorder: "Đặt trước",
       compare: "Vai trò trong hệ sản phẩm",
       closingTitle: "Chọn một nhịp trà, hoặc bắt đầu bằng Petal Pack.",
       closingText:
-        "Nếu chưa chắc cấu hình phù hợp, hãy gửi yêu cầu đặt trước để Senova tư vấn theo nhu cầu cá nhân, tasting hoặc quà tặng.",
+        "Nếu chưa chắc cấu hình phù hợp, hãy gửi yêu cầu đặt trước để Senova tư vấn theo nhu cầu cá nhân, buổi thử trà hoặc quà tặng.",
     },
     en: {
       eyebrow: "Collection",
@@ -109,7 +109,7 @@ export default function ProductsPage() {
             title={language === "vi" ? "Một biểu tượng, hai nhịp bổ trợ." : "One signature, two supporting rhythms."}
             text={
               language === "vi"
-                ? "Collection được sắp xếp theo vai trò sử dụng thay vì ba ô thương mại bằng nhau."
+                ? "Hệ sản phẩm được sắp xếp theo vai trò sử dụng thay vì ba ô thương mại bằng nhau."
                 : "The collection is arranged by usage role rather than three equal commerce tiles."
             }
           />
@@ -160,7 +160,11 @@ export default function ProductsPage() {
 
       <EditorialSection>
         <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-8 max-[760px]:grid-cols-1">
-          <ProductStatement eyebrow="Concierge" title={copy.closingTitle} text={copy.closingText} />
+          <ProductStatement
+            eyebrow={language === "vi" ? "Dịch vụ Senova" : "Concierge"}
+            title={copy.closingTitle}
+            text={copy.closingText}
+          />
           <LuxuryButton href="/order-request" variant="primary">
             {copy.preorder}
             <ArrowRight aria-hidden="true" className="h-4 w-4" />

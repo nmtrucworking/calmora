@@ -17,7 +17,10 @@ const ProductCatalogContext = createContext<ProductCatalogContextValue | undefin
 export function ProductCatalogProvider({ children }: { children: ReactNode }) {
   const usesRemoteApi = hasApiBaseUrl();
   const usesFixtures = canUseDevFixtures();
-  const [products, setProducts] = useState<SenovaProduct[]>(usesFixtures ? localProducts : []);
+  const hasDevelopmentFallback = import.meta.env.DEV;
+  const [products, setProducts] = useState<SenovaProduct[]>(
+    usesFixtures || hasDevelopmentFallback ? localProducts : [],
+  );
   const [isLoading, setIsLoading] = useState(usesRemoteApi);
   const [error, setError] = useState<CatalogApiError | undefined>(
     !usesRemoteApi && !usesFixtures
@@ -39,17 +42,20 @@ export function ProductCatalogProvider({ children }: { children: ReactNode }) {
       })
       .catch((reason: unknown) => {
         if (reason instanceof DOMException && reason.name === "AbortError") return;
-        setProducts([]);
         const catalogError =
           reason instanceof CatalogApiError
             ? reason
             : new CatalogApiError("NETWORK_ERROR", "Product catalog is unavailable.");
+        setProducts(hasDevelopmentFallback ? localProducts : []);
         setError(catalogError);
-        trackEvent({ eventName: "catalog_load_failed", source: catalogError.code });
+        trackEvent({
+          eventName: hasDevelopmentFallback ? "catalog_local_fallback" : "catalog_load_failed",
+          source: catalogError.code,
+        });
       })
       .finally(() => setIsLoading(false));
     return () => controller.abort();
-  }, [usesFixtures, usesRemoteApi]);
+  }, [hasDevelopmentFallback, usesFixtures, usesRemoteApi]);
 
   const value = useMemo<ProductCatalogContextValue>(
     () => ({
