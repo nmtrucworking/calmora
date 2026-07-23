@@ -7,6 +7,7 @@ import { LotusScene } from "@features/landing/three/LotusScene";
 import type { ScrollProgressRef } from "@features/landing/types";
 import { ScrollBinder } from "@features/landing/three/ScrollBinder";
 import styles from "./StoryLotusCanvas.module.css";
+import { useLanguage } from "@app/providers/LanguageContext";
 
 type StoryLotusCanvasProps = {
   backgroundColor?: string | null;
@@ -28,6 +29,7 @@ export function StoryLotusCanvas({
   restartSignal = 0,
   showBackdrop = false,
 }: StoryLotusCanvasProps) {
+  const { language } = useLanguage();
   const progressRef = useRef(0) as ScrollProgressRef;
   const animRef = useRef({ frameId: 0, startTime: 0, duration: 14000 });
 
@@ -90,7 +92,9 @@ export function StoryLotusCanvas({
         <Suspense
           fallback={
             <Html center>
-              <span className={styles.loadingText}>Đang dựng bông sen...</span>
+              <span className={styles.loadingText}>
+                {language === "vi" ? "Đang dựng bông sen..." : "Rendering the lotus..."}
+              </span>
             </Html>
           }
         >

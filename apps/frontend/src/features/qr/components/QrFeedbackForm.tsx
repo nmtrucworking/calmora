@@ -5,6 +5,7 @@ import { trackEvent } from "@shared/analytics/analytics";
 import type { SenovaProduct } from "@features/products/data/products";
 import { submitForm } from "@shared/api/submissions";
 import { systemStyles as styles } from "@shared/styles/systemPageClasses";
+import { useLanguage } from "@app/providers/LanguageContext";
 
 type QrFeedbackFormProps = {
   product: SenovaProduct;
@@ -16,22 +17,8 @@ type QrFeedbackFormProps = {
   description?: string;
 };
 
-const priceRanges = [
-  { value: "under-150k", label: "Dưới 150.000đ" },
-  { value: "150k-300k", label: "150.000đ - 300.000đ" },
-  { value: "300k-500k", label: "300.000đ - 500.000đ" },
-  { value: "500k-800k", label: "500.000đ - 800.000đ" },
-  { value: "over-800k", label: "Trên 800.000đ" },
-  { value: "not-sure", label: "Chưa xác định" },
-];
-
-const purchasePurposes = [
-  { value: "daily-use", label: "Dùng hằng ngày" },
-  { value: "personal-gift", label: "Quà tặng cá nhân" },
-  { value: "corporate-event-gift", label: "Quà doanh nghiệp / sự kiện" },
-  { value: "tourism-cultural", label: "Trải nghiệm du lịch / văn hóa" },
-  { value: "undecided", label: "Chưa xác định" },
-];
+const priceRangeValues = ["under-150k", "150k-300k", "300k-500k", "500k-800k", "over-800k", "not-sure"] as const;
+const purchasePurposeValues = ["daily-use", "personal-gift", "corporate-event-gift", "tourism-cultural", "undecided"] as const;
 
 function getFieldValue(formData: FormData, field: string) {
   const value = formData.get(field);
@@ -44,9 +31,15 @@ export function QrFeedbackForm({
   source = "qr",
   contentViewed,
   contentVersion = "v1",
-  title = "Gửi phản hồi nhanh",
-  description = "Phản hồi được lưu theo sản phẩm, mã lô và nội dung đã xem để Senova cải tiến trải nghiệm QR.",
+  title,
+  description,
 }: QrFeedbackFormProps) {
+  const { language } = useLanguage();
+  const copy = language === "vi"
+    ? { title: "Gửi phản hồi nhanh", description: "Phản hồi được lưu theo sản phẩm, mã lô và nội dung đã xem để Senova cải tiến trải nghiệm QR.", required: "Vui lòng điền mã SKU/lô, cảm nhận, khoảng giá, mục đích mua và phần đồng ý phản hồi.", failed: "Phản hồi chưa thể gửi. Vui lòng thử lại.", optional: "Không bắt buộc", name: "Tên của bạn", lot: "SKU hoặc mã lô", source: "Nguồn quét", viewed: "Nội dung đã xem", sensory: "Cảm nhận giác quan", placeholder: "Hương, vị, màu nước, cảm giác mở gói hoặc trải nghiệm nhận quà...", price: "Khoảng giá có thể chấp nhận", choosePrice: "Chọn khoảng giá", prices: ["Dưới 150.000đ", "150.000đ - 300.000đ", "300.000đ - 500.000đ", "500.000đ - 800.000đ", "Trên 800.000đ", "Chưa xác định"], purpose: "Ý định / mục đích mua", choosePurpose: "Chọn mục đích", purposes: ["Dùng hằng ngày", "Quà tặng cá nhân", "Quà doanh nghiệp / sự kiện", "Trải nghiệm du lịch / văn hóa", "Chưa xác định"], consentTitle: "Đồng ý sử dụng phản hồi", consent: "Tôi đồng ý để Senova tổng hợp phản hồi ở dạng ẩn danh cho hoạt động cải tiến sản phẩm, QR follow-up và báo cáo nội bộ.", sending: "Đang gửi...", submit: "Gửi phản hồi" }
+    : { title: "Send quick feedback", description: "Feedback is associated with the product, batch and viewed content to help Senova improve the QR experience.", required: "Please enter the SKU/batch, sensory feedback, price range, purchase purpose and feedback consent.", failed: "Your feedback could not be sent. Please try again.", optional: "Optional", name: "Your name", lot: "SKU or batch code", source: "Scan source", viewed: "Content viewed", sensory: "Sensory feedback", placeholder: "Aroma, taste, tea colour, opening the package or receiving the gift...", price: "Acceptable price range", choosePrice: "Choose a price range", prices: ["Under VND 150,000", "VND 150,000–300,000", "VND 300,000–500,000", "VND 500,000–800,000", "Over VND 800,000", "Not sure"], purpose: "Purchase intent / purpose", choosePurpose: "Choose a purpose", purposes: ["Everyday use", "Personal gift", "Corporate / event gift", "Tourism / cultural experience", "Not sure"], consentTitle: "Consent to use feedback", consent: "I agree that Senova may aggregate my feedback anonymously for product improvement, QR follow-up and internal reporting.", sending: "Sending...", submit: "Send feedback" };
+  const resolvedTitle = title ?? copy.title;
+  const resolvedDescription = description ?? copy.description;
   const { navigate } = useRouter();
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -82,7 +75,7 @@ export function QrFeedbackForm({
       !payload.purchaseIntentPurpose ||
       !payload.optInConsent
     ) {
-      setError("Vui lòng điền mã SKU/lô, cảm nhận, khoảng giá, mục đích mua và phần đồng ý phản hồi.");
+      setError(copy.required);
       setIsSubmitting(false);
       return;
     }
@@ -91,7 +84,7 @@ export function QrFeedbackForm({
     setIsSubmitting(false);
 
     if (!result.success) {
-      setError(result.error?.message ?? "Phản hồi chưa thể gửi. Vui lòng thử lại.");
+      setError(result.error?.message ?? copy.failed);
       return;
     }
 
@@ -109,8 +102,8 @@ export function QrFeedbackForm({
   return (
     <div className={styles.formPanel}>
       <p className={styles.eyebrow}>QR follow-up</p>
-      <h2>{title}</h2>
-      <p className={styles.fieldHint}>{description}</p>
+      <h2>{resolvedTitle}</h2>
+      <p className={styles.fieldHint}>{resolvedDescription}</p>
       <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.hiddenField}>
           <label htmlFor="website">Website</label>
@@ -120,13 +113,13 @@ export function QrFeedbackForm({
         <div className={styles.inlineFields}>
           <div className={styles.fieldGroup}>
             <label htmlFor="name">
-              Tên của bạn <span className="text-text-soft font-normal text-[0.8em]">(Không bắt buộc)</span>
+              {copy.name} <span className="text-text-soft font-normal text-[0.8em]">({copy.optional})</span>
             </label>
             <input id="name" name="name" autoComplete="name" />
           </div>
           <div className={styles.fieldGroup}>
             <label htmlFor="email">
-              Email <span className="text-text-soft font-normal text-[0.8em]">(Không bắt buộc)</span>
+              Email <span className="text-text-soft font-normal text-[0.8em]">({copy.optional})</span>
             </label>
             <input id="email" name="email" type="email" autoComplete="email" />
           </div>
@@ -134,17 +127,17 @@ export function QrFeedbackForm({
 
         <div className={styles.inlineFields}>
           <div className={styles.fieldGroup}>
-            <label htmlFor="skuOrLot">SKU hoặc mã lô</label>
+            <label htmlFor="skuOrLot">{copy.lot}</label>
             <input id="skuOrLot" name="skuOrLot" defaultValue={skuOrLot} required />
           </div>
           <div className={styles.fieldGroup}>
-            <label htmlFor="source">Nguồn quét</label>
+            <label htmlFor="source">{copy.source}</label>
             <input id="source" name="source" defaultValue={source || "qr"} required />
           </div>
         </div>
 
         <div className={styles.fieldGroup}>
-          <label htmlFor="contentViewed">Nội dung đã xem</label>
+          <label htmlFor="contentViewed">{copy.viewed}</label>
           <input id="contentViewed" name="contentViewed" defaultValue={contentViewed} readOnly required />
         </div>
 
@@ -154,38 +147,38 @@ export function QrFeedbackForm({
         </div>
 
         <div className={styles.fieldGroup}>
-          <label htmlFor="sensoryFeedback">Cảm nhận giác quan</label>
+          <label htmlFor="sensoryFeedback">{copy.sensory}</label>
           <textarea
             id="sensoryFeedback"
             name="sensoryFeedback"
             required
-            placeholder="Hương, vị, màu nước, cảm giác mở gói hoặc trải nghiệm nhận quà..."
+            placeholder={copy.placeholder}
           />
         </div>
 
         <div className={styles.inlineFields}>
           <div className={styles.fieldGroup}>
-            <label htmlFor="acceptablePriceRange">Khoảng giá có thể chấp nhận</label>
+            <label htmlFor="acceptablePriceRange">{copy.price}</label>
             <select id="acceptablePriceRange" name="acceptablePriceRange" required defaultValue="">
               <option value="" disabled>
-                Chọn khoảng giá
+                {copy.choosePrice}
               </option>
-              {priceRanges.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
+              {priceRangeValues.map((value, index) => (
+                <option key={value} value={value}>
+                  {copy.prices[index]}
                 </option>
               ))}
             </select>
           </div>
           <div className={styles.fieldGroup}>
-            <label htmlFor="purchaseIntentPurpose">Ý định / mục đích mua</label>
+            <label htmlFor="purchaseIntentPurpose">{copy.purpose}</label>
             <select id="purchaseIntentPurpose" name="purchaseIntentPurpose" required defaultValue="">
               <option value="" disabled>
-                Chọn mục đích
+                {copy.choosePurpose}
               </option>
-              {purchasePurposes.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
+              {purchasePurposeValues.map((value, index) => (
+                <option key={value} value={value}>
+                  {copy.purposes[index]}
                 </option>
               ))}
             </select>
@@ -193,19 +186,18 @@ export function QrFeedbackForm({
         </div>
 
         <fieldset className={styles.choiceGroup}>
-          <legend>Đồng ý sử dụng phản hồi</legend>
+          <legend>{copy.consentTitle}</legend>
           <label>
             <input name="optInConsent" type="checkbox" value="anonymous-follow-up" required />
             <span>
-              Tôi đồng ý để Senova tổng hợp phản hồi ở dạng ẩn danh cho hoạt động cải tiến sản phẩm,
-              QR follow-up và báo cáo nội bộ.
+              {copy.consent}
             </span>
           </label>
         </fieldset>
 
         {error ? <p className={styles.errorText}>{error}</p> : null}
         <button className={styles.primaryButton} type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Đang gửi..." : "Gửi phản hồi"}
+          {isSubmitting ? copy.sending : copy.submit}
           <Send aria-hidden="true" />
         </button>
       </form>

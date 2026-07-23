@@ -4,12 +4,53 @@ import content from "@features/content/content.json";
 import { Link } from "@app/router/RouterContext";
 import { luxuryMotion } from "@shared/styles/luxuryEffects";
 import { cx } from "@shared/utils/classNames";
+import { useLanguage } from "@app/providers/LanguageContext";
+
+const englishAboutData: typeof content.aboutPage = {
+  hero: {
+    eyebrow: "About",
+    title: "Senova by Calmora — experiential lotus tea in one coherent Vietnamese story.",
+    description: "Senova brings lotus tea, experience design and cultural content into products made to be used, sensed and shared.",
+  },
+  mission: {
+    label: "What is Senova?",
+    title: "From product to experience",
+    text: "Senova is an experiential lotus tea project developed by Calmora. Lotus tea is its core product, while every touchpoint is reconsidered: from an everyday cup, through the intentional opening of lotus petals, to a gift that carries a story.",
+    quote: "Senova begins with a small gesture: pouring tea and inviting someone to sit for a while.",
+    quoteAuthor: "Senova by Calmora",
+  },
+  tech: {
+    eyebrow: "Product narrative",
+    title: "One collection, one shared journey",
+    description: "The three products do not represent three regions. They play complementary roles in the shared Keep — Open — Share story.",
+    cards: [
+      { title: "Keep", text: "Senova Classic keeps lotus tea in the rhythm of everyday life as a simple, repeatable pause." },
+      { title: "Open", text: "Senova Petal Pack opens the experience through form, gesture and the senses, bringing attention to the act of brewing." },
+      { title: "Share", text: "Senova Gift Set offers lotus tea as a gift with a message, guidance and a story the recipient can continue." },
+    ],
+  },
+  ritual: {
+    title: "The values Senova chooses to tell",
+    items: [
+      { number: "01 / Lotus", title: "A material of memory", text: "The lotus becomes form, material and gesture that leads into the experience, not merely a decorative symbol." },
+      { number: "02 / Tea", title: "An invitation to stay", text: "A cup of tea creates shared time, opens a conversation and gives attention to the person who is present." },
+      { number: "03 / Gift", title: "Thoughtfulness, prepared", text: "A gift's value lies in its intention, preparation and accompanying story, not only in the object exchanged." },
+    ],
+  },
+  cta: {
+    title: "Begin with a lotus petal",
+    text: "From an everyday cup to a gift with a story, Senova invites you to keep what matters, open a new experience and share it with someone else.",
+    btnText: "Contact Senova",
+    secondaryBtnText: "View products",
+  },
+};
 
 const revealClass =
   luxuryMotion.reveal;
 
 export default function AboutPage() {
-  const aboutData = content.aboutPage;
+  const { language } = useLanguage();
+  const aboutData = language === "vi" ? content.aboutPage : englishAboutData;
   const techIcons: LucideIcon[] = [Eye, ThermometerSnowflake, Award];
 
   return (

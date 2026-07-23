@@ -5,6 +5,7 @@ import { Suspense, useRef } from "react";
 import { cx } from "@shared/utils/classNames";
 import { LotusScene } from "./LotusScene";
 import { ScrollBinder } from "./ScrollBinder";
+import { useLanguage } from "@app/providers/LanguageContext";
 
 type ScrollModelCanvasProps = {
   backgroundColor?: string | null;
@@ -19,6 +20,7 @@ export function ScrollModelCanvas({
   fogColor = null,
   showBackdrop = false,
 }: ScrollModelCanvasProps) {
+  const { language } = useLanguage();
   const { scrollYProgress } = useScroll();
   const progressRef = useRef(0);
 
@@ -37,7 +39,7 @@ export function ScrollModelCanvas({
         <Suspense
           fallback={
             <Html center>
-              <span className="text-sm text-text-muted">Đang tải mô hình...</span>
+              <span className="text-sm text-text-muted">{language === "vi" ? "Đang tải mô hình..." : "Loading model..."}</span>
             </Html>
           }
         >

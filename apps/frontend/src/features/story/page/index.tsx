@@ -6,6 +6,7 @@ import { imageManifest } from "@features/content/imageManifest";
 import { ResponsiveImage } from "@shared/components/media/ResponsiveImage";
 import { SectionHeading } from "@shared/components/ui/SectionHeading";
 import { InfoCard } from "@shared/components/ui/InfoCard";
+import { useLanguage } from "@app/providers/LanguageContext";
 
 const StoryLotusCanvas = lazy(() =>
   import("@shared/components/story/StoryLotusCanvas").then((module) => ({
@@ -13,7 +14,7 @@ const StoryLotusCanvas = lazy(() =>
   })),
 );
 
-const lifeCycle = [
+const lifeCycleVi = [
   {
     label: "01 · Ủ mầm",
     title: "Bắt đầu trong lớp bùn sâu.",
@@ -36,10 +37,35 @@ const lifeCycle = [
   },
 ];
 
+const lifeCycleEn = [
+  { label: "01 · Germinate", title: "Beginning deep in the mud.", text: "The lotus begins where no one can see. Its roots hold the memory of the previous season while preparing for a new cycle." },
+  { label: "02 · Rise", title: "Passing through water in search of light.", text: "The stem rises through the water, carrying old material into a new form — as Senova brings tea culture into contemporary life." },
+  { label: "03 · Bloom", title: "Each layer opens with discovery.", text: "The flower does not bloom by the clock. Each scroll opens another layer, turning viewing into a pause to touch, smell and sense." },
+  { label: "04 · Share seeds", title: "One season closes as another story begins.", text: "Petals fall while seeds remain. Lotus fragrance and story pass from one person to another, continuing the cycle in a new cup of tea." },
+];
+
+const englishStoryData: typeof content.storyPage = {
+  kicker: "Our story / Keep — Open — Share",
+  eyebrow: "A cultural story",
+  title: "A lotus petal opens a Vietnamese story.",
+  description: "From an invitation to tea to the Keep — Open — Share journey, Senova brings lotus culture and tea into a contemporary experience to use and give.",
+  body: "Senova does not attempt to reproduce an ancient ritual in full, nor attach every product to a place simply to appear local. It connects values that can remain alive today: keeping a familiar fragrance, opening a new experience and sharing a meaningful story.",
+  timeline: [
+    { label: "01", title: "Keep", text: "Senova Classic keeps lotus tea as the foundation: an approachable drink for everyday life." },
+    { label: "02", title: "Open", text: "Senova Petal Pack turns one cup into a sequence of opening, sensing, brewing, waiting and enjoying." },
+    { label: "03", title: "Share", text: "Senova Gift Set brings tea, Petal Pack, brewing guidance and story cards into a meaningful gift." },
+  ],
+};
+
 export default function StoryPage() {
+  const { language } = useLanguage();
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const lifeCycleRef = useRef<HTMLElement>(null);
-  const storyData = content.storyPage;
+  const storyData = language === "vi" ? content.storyPage : englishStoryData;
+  const lifeCycle = language === "vi" ? lifeCycleVi : lifeCycleEn;
+  const ui = language === "vi"
+    ? { scroll: "Cuộn để theo dõi vòng đời của sen", aria: "Vòng đời hoa sen", loading: "Đang dựng bông sen...", progress: "Vòng đời sen", fallbackAlt: "Senova Petal Pack thay thế cho hoạt cảnh vòng đời hoa sen" }
+    : { scroll: "Scroll through the lotus life cycle", aria: "Lotus life cycle", loading: "Rendering the lotus...", progress: "Lotus life cycle", fallbackAlt: "Senova Petal Pack as an alternative to the animated lotus life cycle" };
   const { scrollYProgress } = useScroll({
     target: lifeCycleRef,
     offset: ["start start", "end end"],
@@ -71,7 +97,7 @@ export default function StoryPage() {
           </p>
           <p className="mt-9 mb-0 inline-flex items-center gap-3 text-[0.7rem] uppercase tracking-[0.2em] text-text-soft">
             <ArrowDown aria-hidden="true" className="h-4 w-4 animate-bounce motion-reduce:animate-none" />
-            Cuộn để theo dõi vòng đời của sen
+            {ui.scroll}
           </p>
         </div>
       </header>
@@ -83,14 +109,14 @@ export default function StoryPage() {
             ? "grid gap-8 pb-16"
             : "relative grid grid-cols-[minmax(0,0.88fr)_minmax(24rem,1.12fr)] items-start gap-8 max-[900px]:block"
         }
-        aria-label="Vòng đời hoa sen"
+        aria-label={ui.aria}
       >
         {!prefersReducedMotion ? (
           <div className="sticky top-[5.2rem] z-0 col-start-2 row-start-1 h-[calc(100svh-6.4rem)] overflow-hidden rounded-[var(--radius-md)] border border-border bg-[radial-gradient(circle_at_50%_42%,rgba(255,251,242,0.96),rgba(235,230,216,0.72))] max-[900px]:top-[4.2rem] max-[900px]:h-[56svh]">
             <Suspense
               fallback={
                 <div className="grid h-full place-items-center text-text-muted">
-                  Đang dựng bông sen...
+                  {ui.loading}
                 </div>
               }
             >
@@ -112,7 +138,7 @@ export default function StoryPage() {
                 />
               </div>
               <span className="[writing-mode:vertical-rl] text-[0.58rem] uppercase tracking-[0.2em] text-text-soft max-[520px]:hidden">
-                Vòng đời sen
+                {ui.progress}
               </span>
             </div>
           </div>
@@ -120,7 +146,7 @@ export default function StoryPage() {
           <figure className="m-0 overflow-hidden rounded-[var(--radius-md)] border border-border bg-[var(--surface-paper)]">
             <ResponsiveImage
               asset={imageManifest["product-petal-pack"]}
-              alt="Senova Petal Pack thay thế cho hoạt cảnh vòng đời hoa sen"
+              alt={ui.fallbackAlt}
               className="aspect-[4/3] h-full w-full object-cover saturate-[0.86]"
               loading="lazy"
               sizes="(max-width: 980px) 100vw, 50vw"

@@ -16,6 +16,9 @@ const LanguageContext = createContext<LanguageContextValue | null>(null);
 
 function readStoredLanguage(): Language {
   if (typeof window === "undefined") return defaultLanguage;
+  const params = new URLSearchParams(window.location.search);
+  const requested = params.get("lang") ?? params.get("locale");
+  if (requested === "en" || requested === "vi") return requested;
   const stored = window.localStorage.getItem(storageKey);
   return stored === "en" || stored === "vi" ? stored : defaultLanguage;
 }

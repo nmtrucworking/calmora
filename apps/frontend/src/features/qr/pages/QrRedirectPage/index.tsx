@@ -7,41 +7,49 @@ import type { QrResolveResult } from "@features/qr/types/qr";
 import { resolveQr, trackQrScan } from "@shared/api/qr";
 import { trackEvent } from "@shared/analytics/analytics";
 import { systemStyles as styles } from "@shared/styles/systemPageClasses";
+import { useLanguage, type Language } from "@app/providers/LanguageContext";
 
 type QrRedirectPageProps = {
   code: string;
 };
 
-function getStatusCopy(result: QrResolveResult) {
+function getStatusCopy(result: QrResolveResult, language: Language) {
+  if (language === "en") {
+    if (result.status === "expired") return { title: "This QR code has expired.", body: `Code ${result.code} belongs to a batch or campaign that is no longer active. You can still view the products or contact Senova for support.` };
+    if (result.status === "revoked") return { title: "This QR code has been revoked.", body: `Code ${result.code} is no longer available for a public experience. Please contact Senova if this code appears on a product you hold.` };
+    if (result.status === "paused") return { title: "This QR code is temporarily paused.", body: `Code ${result.code} is not redirecting automatically at this time. You can still view the products or contact Senova for support.` };
+    return { title: "This QR code is not recognized.", body: `Code ${result.code || "unknown"} is not in the list of active experiences.` };
+  }
   if (result.status === "expired") {
     return {
-      title: "Ma QR da het han.",
-      body: `Ma ${result.code} thuoc mot lo hoac chien dich khong con mo. Ban van co the xem bo san pham hoac lien he Senova de duoc ho tro.`,
+      title: "Mã QR đã hết hạn.",
+      body: `Mã ${result.code} thuộc một lô hoặc chiến dịch không còn mở. Bạn vẫn có thể xem bộ sản phẩm hoặc liên hệ Senova để được hỗ trợ.`,
     };
   }
 
   if (result.status === "revoked") {
     return {
-      title: "Ma QR da duoc thu hoi.",
-      body: `Ma ${result.code} khong con duoc dung cho trai nghiem cong khai. Vui long lien he Senova neu ban dang cam san pham co ma nay.`,
+      title: "Mã QR đã được thu hồi.",
+      body: `Mã ${result.code} không còn được dùng cho trải nghiệm công khai. Vui lòng liên hệ Senova nếu bạn đang cầm sản phẩm có mã này.`,
     };
   }
 
   if (result.status === "paused") {
     return {
-      title: "Ma QR dang tam ngung hoat dong.",
-      body: `Ma ${result.code} chua chuyen huong tu dong trong giai doan nay. Ban van co the xem bo san pham hoac lien he Senova de duoc ho tro.`,
+      title: "Mã QR đang tạm ngưng hoạt động.",
+      body: `Mã ${result.code} chưa chuyển hướng tự động trong giai đoạn này. Bạn vẫn có thể xem bộ sản phẩm hoặc liên hệ Senova để được hỗ trợ.`,
     };
   }
 
   return {
-    title: "Ma QR chua duoc nhan dien.",
-    body: `Ma ${result.code || "khong xac dinh"} khong co trong danh sach trai nghiem dang mo.`,
+    title: "Mã QR chưa được nhận diện.",
+    body: `Mã ${result.code || "không xác định"} không có trong danh sách trải nghiệm đang mở.`,
   };
 }
 
 function QrStatusPanel({ result }: { result: QrResolveResult }) {
-  const copy = getStatusCopy(result);
+  const { language } = useLanguage();
+  const copy = getStatusCopy(result, language);
 
   return (
     <section className={styles.qrPanel}>
@@ -51,10 +59,10 @@ function QrStatusPanel({ result }: { result: QrResolveResult }) {
       <p className={styles.bodyText}>{copy.body}</p>
       <div className={styles.actions}>
         <Link href="/products" className={styles.primaryButton}>
-          Xem bo san pham
+          {language === "vi" ? "Xem bộ sản phẩm" : "View products"}
         </Link>
         <Link href="/contact" className={styles.secondaryButton}>
-          Lien he ho tro
+          {language === "vi" ? "Liên hệ hỗ trợ" : "Contact support"}
         </Link>
       </div>
     </section>
@@ -62,6 +70,7 @@ function QrStatusPanel({ result }: { result: QrResolveResult }) {
 }
 
 export default function QrRedirectPage({ code }: QrRedirectPageProps) {
+  const { language } = useLanguage();
   const { navigate } = useRouter();
   const normalizedCode = normalizeQrCode(code);
   const [result, setResult] = useState<QrResolveResult | null>(null);
@@ -138,8 +147,8 @@ export default function QrRedirectPage({ code }: QrRedirectPageProps) {
       <section className={styles.qrPanel}>
         <QrCode className={styles.qrIcon} aria-hidden="true" />
         <p className={styles.eyebrow}>QR Senova</p>
-        <h1>Dang kiem tra ma QR.</h1>
-        <p className={styles.bodyText}>Ma {normalizedCode || "khong xac dinh"} dang duoc doi chieu voi registry Senova.</p>
+        <h1>{language === "vi" ? "Đang kiểm tra mã QR." : "Checking the QR code."}</h1>
+        <p className={styles.bodyText}>{language === "vi" ? `Mã ${normalizedCode || "không xác định"} đang được đối chiếu với hệ thống Senova.` : `Code ${normalizedCode || "unknown"} is being checked against the Senova registry.`}</p>
       </section>
     );
   }
@@ -152,9 +161,9 @@ export default function QrRedirectPage({ code }: QrRedirectPageProps) {
     <section className={styles.qrPanel}>
       <QrCode className={styles.qrIcon} aria-hidden="true" />
       <p className={styles.eyebrow}>QR Senova</p>
-      <h1>{result.flowType === "experience" || !result.flowType ? "Dang mo trai nghiem" : "Dang mo ho so truy xuat"} {result.productSlug}.</h1>
-      <p className={styles.bodyText}>Ma lo {result.batchCode ?? result.code} dang duoc ghi nhan.</p>
-      {result.contentVersion ? <span className={styles.statusBadge}>Noi dung {result.contentVersion}</span> : null}
+      <h1>{result.flowType === "experience" || !result.flowType ? (language === "vi" ? "Đang mở trải nghiệm" : "Opening experience") : (language === "vi" ? "Đang mở hồ sơ truy xuất" : "Opening traceability record")} {result.productSlug}.</h1>
+      <p className={styles.bodyText}>{language === "vi" ? `Mã lô ${result.batchCode ?? result.code} đang được ghi nhận.` : `Batch ${result.batchCode ?? result.code} is being recorded.`}</p>
+      {result.contentVersion ? <span className={styles.statusBadge}>{language === "vi" ? "Nội dung" : "Content"} {result.contentVersion}</span> : null}
     </section>
   );
 }

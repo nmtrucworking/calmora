@@ -183,17 +183,17 @@ export default function ProductDetailPage({ product: baseProduct }: ProductDetai
                 </div>
                 <div className="grid gap-2 border-t border-[rgba(243,239,229,0.14)] pt-4 text-[0.88rem] text-text-inverse-muted">
                   <p className="m-0">
-                    Thời gian chuẩn bị: {selectedVariantData?.preparationTime
-                      ? `${selectedVariantData.preparationTime.min}–${selectedVariantData.preparationTime.max} ngày làm việc`
-                      : "Senova sẽ xác nhận sau khi nhận yêu cầu"}
+                    {language === "vi" ? "Thời gian chuẩn bị" : "Preparation time"}: {selectedVariantData?.preparationTime
+                      ? `${selectedVariantData.preparationTime.min}–${selectedVariantData.preparationTime.max} ${language === "vi" ? "ngày làm việc" : "business days"}`
+                      : language === "vi" ? "Senova sẽ xác nhận sau khi nhận yêu cầu" : "Senova will confirm after receiving the request"}
                   </p>
                   <p className="m-0">
-                    Phạm vi giao hàng: {enabledDeliveryScopes.length
-                      ? enabledDeliveryScopes.map((scope) => scope.label).join(", ")
-                      : "Xác nhận theo sản phẩm"}
+                    {language === "vi" ? "Phạm vi giao hàng" : "Delivery scope"}: {enabledDeliveryScopes.length
+                      ? enabledDeliveryScopes.map((scope) => language === "vi" ? scope.label : scope.code === "VN" ? "Nationwide" : scope.code === "HCM" ? "Ho Chi Minh City" : scope.label).join(", ")
+                      : language === "vi" ? "Xác nhận theo sản phẩm" : "Confirmed by product"}
                   </p>
                   {selectedVariantData?.preparationTime?.isAssumption ? (
-                    <p className="m-0 text-[0.78rem] text-accent-gold">Thông tin dự kiến, đang được kiểm chứng.</p>
+                    <p className="m-0 text-[0.78rem] text-accent-gold">{language === "vi" ? "Thông tin dự kiến, đang được kiểm chứng." : "Estimated information, still being validated."}</p>
                   ) : null}
                 </div>
               </div>
@@ -209,7 +209,7 @@ export default function ProductDetailPage({ product: baseProduct }: ProductDetai
                   </LuxuryButton>
                 ) : (
                   <span className="inline-flex min-h-11 items-center border border-[rgba(243,239,229,0.3)] px-5 text-sm text-text-inverse-muted">
-                    Tạm ngừng nhận đặt trước
+                    {language === "vi" ? "Tạm ngừng nhận đặt trước" : "Preorders temporarily paused"}
                   </span>
                 )}
                 <LuxuryButton href={`/experience/${baseProduct.id}`} variant="light">

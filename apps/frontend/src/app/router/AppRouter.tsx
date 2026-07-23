@@ -8,7 +8,8 @@ import { getProductBySlug as getSeedProductBySlug } from "@features/products/dat
 import { useProductCatalog } from "@app/providers/ProductCatalogContext";
 import { commerceText, getLocalizedProduct, getLocalizedSeo } from "@features/content/i18n";
 import { useLanguage, type Language } from "@app/providers/LanguageContext";
-import { canonicalBaseUrl, pageSeo, standardPages, type SeoContent } from "@features/content/sitePages";
+import { canonicalBaseUrl, pageSeo, type SeoContent } from "@features/content/sitePages";
+import { localizedStandardPages, publicSeo } from "@features/content/publicI18n";
 import { trackEvent } from "@shared/analytics/analytics";
 import { publicRoutePaths } from "@app/router/registeredRoutes";
 import { WebsiteEntryExperience } from "@app/entry/WebsiteEntryExperience";
@@ -66,6 +67,7 @@ const hiddenPublicPaths = new Set([
 ]);
 
 function RouteFallback() {
+  const { language } = useLanguage();
   return (
     <div
       className="grid min-h-[60vh] place-items-center bg-[var(--surface)] text-primary-strong"
@@ -76,7 +78,7 @@ function RouteFallback() {
         <span className="font-display text-[1.35rem] tracking-[0.22em]">SENOVA</span>
         <span className="h-px w-16 origin-left animate-pulse bg-accent-strong" />
       </div>
-      <span className="sr-only">Đang tải nội dung</span>
+      <span className="sr-only">{language === "vi" ? "Đang tải nội dung" : "Loading content"}</span>
     </div>
   );
 }
@@ -119,18 +121,22 @@ function updateMetadata(pathname: string, language: Language) {
   const qrSeo: SeoContent | undefined = metadataPath.startsWith("/q/")
     ? {
         title: "QR Senova | Calmora",
-        description: "Trang xu ly ma QR Senova va dieu huong den trai nghiem san pham phu hop.",
+        description: language === "vi"
+          ? "Trang xử lý mã QR Senova và điều hướng đến trải nghiệm sản phẩm phù hợp."
+          : "Resolve a Senova QR code and open the corresponding product experience.",
         robots: "noindex,follow",
       }
     : undefined;
   const traceSeo: SeoContent | undefined = metadataPath.startsWith("/trace/")
     ? {
-        title: "Truy xuất sản phẩm Senova | Calmora",
-        description: "Kiểm tra nguồn gốc lô, trạng thái kích hoạt và bằng chứng dữ liệu của sản phẩm Senova.",
+        title: language === "vi" ? "Truy xuất sản phẩm Senova | Calmora" : "Senova product traceability | Calmora",
+        description: language === "vi"
+          ? "Kiểm tra nguồn gốc lô, trạng thái kích hoạt và bằng chứng dữ liệu của sản phẩm Senova."
+          : "Check a Senova product batch, activation status and data proof.",
         robots: "noindex,follow",
       }
     : undefined;
-  const fallbackSeo: SeoContent = traceSeo ?? qrSeo ?? pageSeo[metadataPath] ?? product?.seo ?? pageSeo["/404"];
+  const fallbackSeo: SeoContent = traceSeo ?? qrSeo ?? publicSeo[language][metadataPath] ?? product?.seo ?? publicSeo[language]["/404"] ?? pageSeo["/404"];
   const seo = getLocalizedSeo(metadataPath, fallbackSeo, language);
   const canonicalPath = traceSeo || qrSeo || pageSeo[metadataPath] || commerceText[language].seo[metadataPath] || product ? metadataPath : "/404";
   const canonical = `${canonicalBaseUrl}${canonicalPath === "/" ? "" : canonicalPath}`;
@@ -247,13 +253,13 @@ function PublicRoutes() {
   } else if (normalizedPath === publicRoutePaths.thankYou) {
     pageComponent = <ThankYouPage />;
   } else if (normalizedPath === publicRoutePaths.ritual) {
-    pageComponent = <StandardPage content={standardPages["/ritual"]} showProducts />;
+    pageComponent = <StandardPage content={localizedStandardPages[language]["/ritual"]} showProducts />;
   } else if (normalizedPath === publicRoutePaths.seasonal) {
-    pageComponent = <StandardPage content={standardPages["/seasonal"]} showProducts />;
+    pageComponent = <StandardPage content={localizedStandardPages[language]["/seasonal"]} showProducts />;
   } else if (normalizedPath === publicRoutePaths.privacy) {
-    pageComponent = <StandardPage content={standardPages["/privacy"]} />;
+    pageComponent = <StandardPage content={localizedStandardPages[language]["/privacy"]} />;
   } else if (normalizedPath === publicRoutePaths.terms) {
-    pageComponent = <StandardPage content={standardPages["/terms"]} />;
+    pageComponent = <StandardPage content={localizedStandardPages[language]["/terms"]} />;
   } else if (qrCode) {
     pageComponent = <QrRedirectPage code={qrCode} />;
   } else if (traceCode) {

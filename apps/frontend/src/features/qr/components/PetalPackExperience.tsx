@@ -6,18 +6,11 @@ import type { SenovaProduct } from "@features/products/data/products";
 import { LotusBrewTimer } from "./LotusBrewTimer";
 import { TraceabilitySheet } from "./TraceabilitySheet";
 import styles from "./PetalPackExperience.module.css";
+import { useLanguage } from "@app/providers/LanguageContext";
+import { getLocalizedProduct } from "@features/content/i18n";
 
 const ASSET_ROOT = "/assets/UX/petal-pack";
 const SCENE_IMAGES = ["FM.png", "touch.png", "open.png", "sense.png", "brew.png", "wait.png", "enjoy.png"];
-const AROMA_OPTIONS = ["Thanh", "Dịu", "Rõ", "Chưa cảm nhận"];
-const MEMORY_OPTIONS = [
-  "Hình dáng búp sen",
-  "Thao tác tách nhẹ",
-  "Hương sen",
-  "Khoảnh khắc chờ",
-  "Vị trà",
-];
-
 type PetalPackExperienceProps = {
   batchCode: string;
   contentVersion: string;
@@ -50,6 +43,7 @@ function RitualScene({
   tone = "dark",
   topBar,
 }: RitualSceneProps) {
+  const { language } = useLanguage();
   return (
     <section className={styles.scene} data-scene={index} data-tone={tone} aria-labelledby={`petal-scene-${index}`}>
       <div className={styles.media} role="img" aria-label={imageAlt}>
@@ -58,7 +52,7 @@ function RitualScene({
             <img className={styles.compareBefore} src={compareImage} alt="" />
             <img className={styles.compareAfter} src={image} alt="" />
             <div className={styles.compareLabel} aria-hidden="true">
-              <span>Trước</span><span>Sau khi tách nhẹ</span>
+              <span>{language === "vi" ? "Trước" : "Before"}</span><span>{language === "vi" ? "Sau khi tách nhẹ" : "After gently opening"}</span>
             </div>
           </>
         ) : (
@@ -97,7 +91,30 @@ export function PetalPackExperience({
   contentViewed,
   product,
 }: PetalPackExperienceProps) {
-  const defaultBatch = product.batchLabel?.match(/PP-[A-Z0-9-]+/)?.[0] ?? "PP-2601-A";
+  const { language } = useLanguage();
+  const localizedProduct = getLocalizedProduct(product, language);
+  const defaultBatch = localizedProduct.batchLabel?.match(/PP-[A-Z0-9-]+/)?.[0] ?? "PP-2601-A";
+  const copy = language === "vi"
+    ? {
+        batch: "Lô", soundOff: "Tắt âm thanh", soundOn: "Bật âm thanh", story: "Câu chuyện", sound: "Âm thanh", enableSound: "Bật âm", progress: "Tiến trình nghi thức",
+        start: "Bắt đầu khoảng trà", heroAlt: "Petal Pack và tách trà sen giữa không gian hồ sen", tagline: "Một búp sen", oneBrew: "Một lần pha",
+        held: "Tôi đã cầm búp sen", touchAlt: "Bàn tay giữ nhẹ búp sen ở phần đáy", touchLabel: "Chạm · 01", touchTitle: "Chạm vào hình hài của sen", touchText: "Lấy búp sen khỏi lớp bao. Giữ nhẹ ở phần đáy, không bóp cánh.",
+        opened: "Tôi đã tách nhẹ", openAlt: "Hai trạng thái trước và sau khi tách nhẹ cánh ngoài của búp sen", openLabel: "Tách nhẹ · 02", openTitle: "Tách nhẹ để hương sen thức giấc", openText: "Mở nhẹ một khoảng giữa các cánh ngoài.", caution: "Không tháo rời cánh sen và không lấy túi trà ra khỏi búp.",
+        senseAlt: "Người thưởng trà đưa búp sen lại gần để cảm nhận hương", senseLabel: "Thưởng hương · 03", senseTitle: "Đưa búp sen lại gần.", senseText: "Chậm một nhịp.", senseNote: "Ghi nhận hương đầu tiên.", aromaAria: "Hương đầu tiên bạn cảm nhận", aromas: ["Thanh", "Dịu", "Rõ", "Chưa cảm nhận"],
+        brewAction: "Bắt đầu 3 phút chờ", brewAlt: "Rót nước chậm quanh nguyên búp sen trong ly", brewLabel: "Pha nguyên búp · 04", brewTitle: "Rót chậm quanh búp sen", experimental: "Hướng dẫn thử nghiệm", teaAmount: "Lượng trà", bud: "búp", waterAmount: "Lượng nước", temperature: "Nhiệt độ", brewText: "Đặt nguyên búp vào ly. Giữ dây túi lọc bên ngoài và rót nước chậm quanh búp.",
+        enjoyAction: "Thưởng tách trà", waitAlt: "Búp sen dần mở trong tách trà nóng", waitLabel: "Chờ trà · 05", waitTitle: "Để cánh sen nở theo thời gian", narrating: "Câu chuyện Petal Pack đang được kể",
+        enjoyAlt: "Khoảnh khắc thưởng tách trà Petal Pack bên khung cửa nhìn ra hồ sen", enjoyLabel: "Thưởng · 06", enjoyTitle: "Hương sen đã mở.", complete: "Khoảng trà bắt đầu.", memorable: "Điều bạn nhớ nhất là gì?", memories: ["Hình dáng búp sen", "Thao tác tách nhẹ", "Hương sen", "Khoảnh khắc chờ", "Vị trà"], preorder: "Đặt trước Petal Pack", trace: "Xem nguồn gốc và lô sản phẩm", feedback: "Gửi phản hồi chi tiết",
+      }
+    : {
+        batch: "Batch", soundOff: "Turn sound off", soundOn: "Turn sound on", story: "Story", sound: "Sound", enableSound: "Sound on", progress: "Ritual progress",
+        start: "Begin your tea pause", heroAlt: "Petal Pack and a cup of lotus tea by a lotus pond", tagline: "One lotus bud", oneBrew: "One brew",
+        held: "I am holding the lotus bud", touchAlt: "A hand gently holding the base of a lotus bud", touchLabel: "Touch · 01", touchTitle: "Touch the form of the lotus", touchText: "Remove the lotus bud from its wrapping. Hold it gently at the base without squeezing the petals.",
+        opened: "I have gently opened it", openAlt: "Before and after gently opening the outer lotus petals", openLabel: "Open gently · 02", openTitle: "Gently open the lotus fragrance", openText: "Create a small opening between the outer petals.", caution: "Do not remove the lotus petals or take the tea bag out of the bud.",
+        senseAlt: "Bringing the lotus bud close to sense its aroma", senseLabel: "Sense the aroma · 03", senseTitle: "Bring the lotus bud closer.", senseText: "Slow down for a moment.", senseNote: "Notice the first aroma.", aromaAria: "The first aroma you notice", aromas: ["Fresh", "Soft", "Distinct", "Not yet"],
+        brewAction: "Begin the 3-minute wait", brewAlt: "Pouring water slowly around the whole lotus bud", brewLabel: "Brew the whole bud · 04", brewTitle: "Pour slowly around the lotus bud", experimental: "Experimental guidance", teaAmount: "Tea amount", bud: "bud", waterAmount: "Water", temperature: "Temperature", brewText: "Place the whole bud in the cup. Keep the tea-bag string outside and pour water slowly around the bud.",
+        enjoyAction: "Enjoy your tea", waitAlt: "The lotus bud gradually opening in hot tea", waitLabel: "Wait · 05", waitTitle: "Let the lotus petals open with time", narrating: "The Petal Pack story is playing",
+        enjoyAlt: "Enjoying Petal Pack tea beside a window overlooking a lotus pond", enjoyLabel: "Enjoy · 06", enjoyTitle: "The lotus fragrance has opened.", complete: "Your tea pause begins.", memorable: "What do you remember most?", memories: ["Lotus bud form", "Gently opening the petals", "Lotus aroma", "The waiting moment", "Tea flavour"], preorder: "Preorder Petal Pack", trace: "View origin and product batch", feedback: "Send detailed feedback",
+      };
   const displayBatch = batchCode.trim().toUpperCase() || defaultBatch;
   const backgroundAudioRef = useRef<HTMLAudioElement>(null);
   const storyAudioRef = useRef<HTMLAudioElement>(null);
@@ -222,7 +239,7 @@ export function PetalPackExperience({
         <div className={styles.ritualIdentity}>
           <span className={styles.ritualIdentityCopy}>
             <strong>SENOVA RITUAL</strong>
-            <small>Petal Pack <i aria-hidden="true">·</i> Lô {displayBatch}</small>
+            <small>Petal Pack <i aria-hidden="true">·</i> {copy.batch} {displayBatch}</small>
           </span>
         </div>
         <div className={styles.ritualControls}>
@@ -230,9 +247,9 @@ export function PetalPackExperience({
             {String(sceneIndex + 1).padStart(2, "0")} <i>/</i> 07
           </span>
           {sceneIndex > 0 ? (
-            <button type="button" onClick={toggleSound} aria-label={soundEnabled ? "Tắt âm thanh" : "Bật âm thanh"}>
+            <button type="button" onClick={toggleSound} aria-label={soundEnabled ? copy.soundOff : copy.soundOn}>
               {soundEnabled ? <Volume2 aria-hidden="true" /> : <VolumeX aria-hidden="true" />}
-              <span>{isNarrating ? "Câu chuyện" : soundEnabled ? "Âm thanh" : "Bật âm"}</span>
+              <span>{isNarrating ? copy.story : soundEnabled ? copy.sound : copy.enableSound}</span>
             </button>
           ) : null}
         </div>
@@ -240,7 +257,7 @@ export function PetalPackExperience({
       <div
         className={styles.ritualProgress}
         role="progressbar"
-        aria-label="Tiến trình nghi thức"
+        aria-label={copy.progress}
         aria-valuemin={1}
         aria-valuemax={7}
         aria-valuenow={sceneIndex + 1}
@@ -248,67 +265,67 @@ export function PetalPackExperience({
         <span style={{ width: `${((sceneIndex + 1) / 7) * 100}%` }} />
       </div>
     </div>
-  ), [displayBatch, isNarrating, sceneIndex, soundEnabled, toggleSound]);
+  ), [copy.batch, copy.enableSound, copy.progress, copy.sound, copy.soundOff, copy.soundOn, copy.story, displayBatch, isNarrating, sceneIndex, soundEnabled, toggleSound]);
 
   let scene: ReactNode;
   if (sceneIndex === 0) {
     scene = (
       <RitualScene
-        action={<PrimaryAction onClick={startRitual}>Bắt đầu khoảng trà</PrimaryAction>}
+        action={<PrimaryAction onClick={startRitual}>{copy.start}</PrimaryAction>}
         image={`${ASSET_ROOT}/FM.png`}
-        imageAlt="Petal Pack và tách trà sen giữa không gian hồ sen"
+        imageAlt={copy.heroAlt}
         index={0}
         label="SENOVA"
         title="Petal Pack"
         topBar={topBar}
       >
-        <p className={styles.revealTagline}>Một búp sen <span>·</span> Một lần pha</p>
-        <p className={styles.batchLine}>Lô {displayBatch}</p>
+        <p className={styles.revealTagline}>{copy.tagline} <span>·</span> {copy.oneBrew}</p>
+        <p className={styles.batchLine}>{copy.batch} {displayBatch}</p>
       </RitualScene>
     );
   } else if (sceneIndex === 1) {
     scene = (
       <RitualScene
-        action={<PrimaryAction onClick={() => completeScene("touch")}>Tôi đã cầm búp sen</PrimaryAction>}
+        action={<PrimaryAction onClick={() => completeScene("touch")}>{copy.held}</PrimaryAction>}
         image={`${ASSET_ROOT}/touch.png`}
-        imageAlt="Bàn tay giữ nhẹ búp sen ở phần đáy"
+        imageAlt={copy.touchAlt}
         index={1}
-        label="Chạm · 01"
-        title="Chạm vào hình hài của sen"
+        label={copy.touchLabel}
+        title={copy.touchTitle}
         topBar={topBar}
       >
-        <p>Lấy búp sen khỏi lớp bao. Giữ nhẹ ở phần đáy, không bóp cánh.</p>
+        <p>{copy.touchText}</p>
       </RitualScene>
     );
   } else if (sceneIndex === 2) {
     scene = (
       <RitualScene
-        action={<PrimaryAction onClick={() => completeScene("open")}>Tôi đã tách nhẹ</PrimaryAction>}
+        action={<PrimaryAction onClick={() => completeScene("open")}>{copy.opened}</PrimaryAction>}
         compareImage={`${ASSET_ROOT}/touch.png`}
         image={`${ASSET_ROOT}/open.png`}
-        imageAlt="Hai trạng thái trước và sau khi tách nhẹ cánh ngoài của búp sen"
+        imageAlt={copy.openAlt}
         index={2}
-        label="Tách nhẹ · 02"
-        title="Tách nhẹ để hương sen thức giấc"
+        label={copy.openLabel}
+        title={copy.openTitle}
         topBar={topBar}
       >
-        <p>Mở nhẹ một khoảng giữa các cánh ngoài.</p>
-        <p className={styles.caution}>Không tháo rời cánh sen và không lấy túi trà ra khỏi búp.</p>
+        <p>{copy.openText}</p>
+        <p className={styles.caution}>{copy.caution}</p>
       </RitualScene>
     );
   } else if (sceneIndex === 3) {
     scene = (
       <RitualScene
         image={`${ASSET_ROOT}/sense.png`}
-        imageAlt="Người thưởng trà đưa búp sen lại gần để cảm nhận hương"
+        imageAlt={copy.senseAlt}
         index={3}
-        label="Thưởng hương · 03"
-        title="Đưa búp sen lại gần."
+        label={copy.senseLabel}
+        title={copy.senseTitle}
         topBar={topBar}
       >
-        <p className={styles.sensoryVerse}>Chậm một nhịp.<br />Ghi nhận hương đầu tiên.</p>
-        <div className={styles.aromaChoices} aria-label="Hương đầu tiên bạn cảm nhận">
-          {AROMA_OPTIONS.map((option) => (
+        <p className={styles.sensoryVerse}>{copy.senseText}<br />{copy.senseNote}</p>
+        <div className={styles.aromaChoices} aria-label={copy.aromaAria}>
+          {copy.aromas.map((option) => (
             <button
               className={aroma === option ? styles.choiceSelected : ""}
               disabled={Boolean(aroma)}
@@ -325,21 +342,21 @@ export function PetalPackExperience({
   } else if (sceneIndex === 4) {
     scene = (
       <RitualScene
-        action={<PrimaryAction onClick={() => completeScene("brew")}>Bắt đầu 3 phút chờ</PrimaryAction>}
+        action={<PrimaryAction onClick={() => completeScene("brew")}>{copy.brewAction}</PrimaryAction>}
         image={`${ASSET_ROOT}/brew.png`}
-        imageAlt="Rót nước chậm quanh nguyên búp sen trong ly"
+        imageAlt={copy.brewAlt}
         index={4}
-        label="Pha nguyên búp · 04"
-        title="Rót chậm quanh búp sen"
+        label={copy.brewLabel}
+        title={copy.brewTitle}
         topBar={topBar}
       >
-        <span className={styles.experimentalLabel}>Hướng dẫn thử nghiệm</span>
+        <span className={styles.experimentalLabel}>{copy.experimental}</span>
         <dl className={styles.brewSpecs}>
-          <div><dt>Lượng trà</dt><dd>01 <span>búp</span></dd></div>
-          <div><dt>Lượng nước</dt><dd>220 <span>ml</span></dd></div>
-          <div><dt>Nhiệt độ</dt><dd>≈ 85<span>°C</span></dd></div>
+          <div><dt>{copy.teaAmount}</dt><dd>01 <span>{copy.bud}</span></dd></div>
+          <div><dt>{copy.waterAmount}</dt><dd>220 <span>ml</span></dd></div>
+          <div><dt>{copy.temperature}</dt><dd>≈ 85<span>°C</span></dd></div>
         </dl>
-        <p>Đặt nguyên búp vào ly. Giữ dây túi lọc bên ngoài và rót nước chậm quanh búp.</p>
+        <p>{copy.brewText}</p>
       </RitualScene>
     );
   } else if (sceneIndex === 5) {
@@ -350,18 +367,18 @@ export function PetalPackExperience({
             completeScene("wait");
             trackEvent({ eventName: "ritual_complete", productSlug: product.slug, batchCode: displayBatch, contentVersion, contentViewed });
           }}>
-            Thưởng tách trà
+            {copy.enjoyAction}
           </PrimaryAction>
         ) : undefined}
         image={`${ASSET_ROOT}/wait.png`}
-        imageAlt="Búp sen dần mở trong tách trà nóng"
+        imageAlt={copy.waitAlt}
         index={5}
-        label="Chờ trà · 05"
-        title="Để cánh sen nở theo thời gian"
+        label={copy.waitLabel}
+        title={copy.waitTitle}
         topBar={topBar}
       >
         <LotusBrewTimer onComplete={() => setWaitComplete(true)} />
-        {isNarrating ? <p className={styles.narrationStatus} role="status">Câu chuyện Petal Pack đang được kể</p> : null}
+        {isNarrating ? <p className={styles.narrationStatus} role="status">{copy.narrating}</p> : null}
       </RitualScene>
     );
   } else {
@@ -369,17 +386,17 @@ export function PetalPackExperience({
     scene = (
       <RitualScene
         image={`${ASSET_ROOT}/enjoy.png`}
-        imageAlt="Khoảnh khắc thưởng tách trà Petal Pack bên khung cửa nhìn ra hồ sen"
+        imageAlt={copy.enjoyAlt}
         index={6}
-        label="Thưởng · 06"
-        title="Hương sen đã mở."
+        label={copy.enjoyLabel}
+        title={copy.enjoyTitle}
         topBar={topBar}
         tone="ivory"
       >
-        <p className={styles.completionLine}>Khoảng trà bắt đầu.</p>
+        <p className={styles.completionLine}>{copy.complete}</p>
         <fieldset className={styles.memoryChoices}>
-          <legend>Điều bạn nhớ nhất là gì?</legend>
-          {MEMORY_OPTIONS.map((option) => (
+          <legend>{copy.memorable}</legend>
+          {copy.memories.map((option) => (
             <label className={memory === option ? styles.memorySelected : ""} key={option}>
               <input
                 type="radio"
@@ -402,10 +419,10 @@ export function PetalPackExperience({
               href={`/order-request?product=${product.slug}&quantity=1&intent=personal&source=qr`}
               onClick={() => trackEvent({ eventName: "order_request_click", productSlug: product.slug, batchCode: displayBatch, contentVersion, contentViewed, source: "qr" })}
             >
-              Đặt trước Petal Pack <ArrowRight aria-hidden="true" />
+              {copy.preorder} <ArrowRight aria-hidden="true" />
             </Link>
-            <button type="button" onClick={() => setIsTraceOpen(true)}>Xem nguồn gốc và lô sản phẩm</button>
-            <Link href={feedbackHref}>Gửi phản hồi chi tiết</Link>
+            <button type="button" onClick={() => setIsTraceOpen(true)}>{copy.trace}</button>
+            <Link href={feedbackHref}>{copy.feedback}</Link>
           </div>
         ) : null}
       </RitualScene>

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Link } from "@app/router/RouterContext";
 import { cx } from "@shared/utils/classNames";
+import { useLanguage } from "@app/providers/LanguageContext";
 
 type LuxuryButtonProps = {
   children: ReactNode;
@@ -37,19 +38,21 @@ export function LuxuryButton({
   loading = false,
   onClick,
 }: LuxuryButtonProps) {
+  const { language } = useLanguage();
+  const loadingLabel = language === "vi" ? "Đang xử lý…" : "Processing…";
   const buttonClass = cx(baseClass, variantClass[variant], className);
 
   if (href) {
     return (
       <Link href={disabled || loading ? "#" : href} className={buttonClass} onClick={disabled || loading ? undefined : onClick} aria-disabled={disabled || loading}>
-        {loading ? "Đang xử lý…" : children}
+        {loading ? loadingLabel : children}
       </Link>
     );
   }
 
   return (
     <button type={type} className={buttonClass} onClick={onClick} disabled={disabled || loading} aria-busy={loading}>
-      {loading ? "Đang xử lý…" : children}
+      {loading ? loadingLabel : children}
     </button>
   );
 }

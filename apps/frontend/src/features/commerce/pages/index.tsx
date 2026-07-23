@@ -61,6 +61,12 @@ function useCommerceCopy() {
   };
 }
 
+function getCheckoutUi(language: "vi" | "en") {
+  return language === "vi"
+    ? { required: "Vui lòng cung cấp số Zalo và đồng ý chính sách trước khi gửi.", eyebrow: "Yêu cầu đặt trước", title: "Gửi yêu cầu, chưa thanh toán trực tuyến.", description: "Senova sẽ liên hệ qua email và Zalo trong 1–2 ngày làm việc để xác nhận sản phẩm, thời gian chuẩn bị, phạm vi giao hàng và thông tin chuyển khoản.", product: "Sản phẩm", configuration: "Cấu hình", quantity: "Số lượng", zaloConfirm: "Zalo xác nhận", usePhone: "Dùng số điện thoại trên cho Zalo", otherZalo: "Số Zalo khác (nếu có)", consent: "Đây là yêu cầu đặt trước, chưa phải giao dịch thanh toán trực tiếp. Tôi đồng ý để Senova xác nhận cấu hình, lịch giao và chính sách hủy trước khi chuyển khoản.", cancellation: "Chính sách hủy và hoàn tiền", refund: "hoàn", noCancellation: "không hỗ trợ hủy", refundFallback: "Mức hoàn tiền phụ thuộc trạng thái chuẩn bị và sẽ được Senova xác nhận trước khi chuyển khoản.", estimatedPrice: "Giá dự kiến", contactPrice: "Liên hệ để nhận giá dự kiến", preparation: "Thời gian chuẩn bị", businessDays: "ngày làm việc", preparationFallback: "Senova sẽ xác nhận sau khi nhận yêu cầu", delivery: "Phạm vi giao hàng", deliveryFallback: "Xác nhận theo sản phẩm", assumption: "Thông tin dự kiến, đang được kiểm chứng." }
+    : { required: "Please provide a Zalo number and accept the policy before sending.", eyebrow: "Preorder request", title: "Send a request, with no online payment.", description: "Senova will contact you by email and Zalo within 1–2 business days to confirm products, preparation time, delivery scope and bank-transfer details.", product: "Product", configuration: "Configuration", quantity: "Quantity", zaloConfirm: "Zalo confirmation", usePhone: "Use the phone number above for Zalo", otherZalo: "Different Zalo number (optional)", consent: "This is a preorder request, not a direct payment transaction. I agree that Senova may confirm the configuration, delivery timing and cancellation policy before a bank transfer.", cancellation: "Cancellation and refund policy", refund: "refund", noCancellation: "cancellation unavailable", refundFallback: "The refund depends on preparation status and will be confirmed by Senova before a bank transfer.", estimatedPrice: "Estimated price", contactPrice: "Contact us for an estimated price", preparation: "Preparation time", businessDays: "business days", preparationFallback: "Senova will confirm after receiving the request", delivery: "Delivery scope", deliveryFallback: "Confirmed by product", assumption: "Estimated information, still being validated." };
+}
+
 function ProductCard({ product, compact = false }: { product: LocalizedProduct; compact?: boolean }) {
   const { addItem } = useInquiryBag();
   const { text } = useCommerceCopy();
@@ -356,6 +362,15 @@ export function CheckoutPage() {
   const { navigate, search } = useRouter();
   const { language } = useLanguage();
   const { text } = useCommerceCopy();
+  const checkoutUi = getCheckoutUi(language);
+  const cancellationStages = language === "vi"
+    ? undefined
+    : {
+        paid: "Paid, before preparation begins",
+        preparing: "Standard product preparation has begun",
+        customized: "Customization has begun",
+        carrier: "Handed to the delivery carrier",
+      };
   const params = useMemo(() => new URLSearchParams(search), [search]);
   const intent = params.get("intent") ?? "personal";
   const localizedIntent = language === "vi"
@@ -408,7 +423,7 @@ export function CheckoutPage() {
     const zaloUsesPhone = form.get("zaloUsesPhone") === "yes";
     const zalo = zaloUsesPhone ? String(form.get("phone") ?? "") : String(form.get("zalo") ?? "");
     if (!zalo || form.get("policyConsent") !== "yes") {
-      setError("Vui lòng cung cấp số Zalo và đồng ý chính sách trước khi gửi.");
+      setError(checkoutUi.required);
       setIsSubmitting(false);
       return;
     }
@@ -442,9 +457,9 @@ export function CheckoutPage() {
     <article className={pageClass}>
       <section className={heroClass}>
         <div>
-          <p className={eyebrowClass}>Yêu cầu đặt trước</p>
-          <h1 className={titleClass}>Gửi yêu cầu, chưa thanh toán trực tuyến.</h1>
-          <p className={bodyClass}>Senova sẽ liên hệ qua email và Zalo trong 1–2 ngày làm việc để xác nhận sản phẩm, thời gian chuẩn bị, phạm vi giao hàng và thông tin chuyển khoản.</p>
+          <p className={eyebrowClass}>{checkoutUi.eyebrow}</p>
+          <h1 className={titleClass}>{checkoutUi.title}</h1>
+          <p className={bodyClass}>{checkoutUi.description}</p>
         </div>
         <aside className={panelClass}>
           <p className={eyebrowClass}>{text.ui.intent}</p>
@@ -455,7 +470,7 @@ export function CheckoutPage() {
         <form className={cx(panelClass, "grid gap-4")} onSubmit={handleSubmit}>
           <div className="grid grid-cols-2 gap-4 max-[680px]:grid-cols-1">
             <label className="grid gap-2">
-              <span className={eyebrowClass}>Sản phẩm</span>
+              <span className={eyebrowClass}>{checkoutUi.product}</span>
               <select
                 className={fieldClass}
                 value={selectedProduct?.id ?? ""}
@@ -468,12 +483,12 @@ export function CheckoutPage() {
                 required
               >
                 {catalogProducts.map((product) => (
-                  <option key={product.id} value={product.id}>{product.name}</option>
+                  <option key={product.id} value={product.id}>{getLocalizedProduct(product, language).name}</option>
                 ))}
               </select>
             </label>
             <label className="grid gap-2">
-              <span className={eyebrowClass}>Cấu hình</span>
+              <span className={eyebrowClass}>{checkoutUi.configuration}</span>
               <select
                 className={fieldClass}
                 value={selectedVariant?.id ?? ""}
@@ -481,13 +496,13 @@ export function CheckoutPage() {
                 required
               >
                 {selectedProduct?.variants.map((variant) => (
-                  <option key={variant.id} value={variant.id}>{variant.label}</option>
+                  <option key={variant.id} value={variant.id}>{getLocalizedProduct(selectedProduct, language).variants.find((value) => value.id === variant.id)?.label ?? variant.label}</option>
                 ))}
               </select>
             </label>
           </div>
           <label className="grid gap-2">
-            <span className={eyebrowClass}>Số lượng</span>
+            <span className={eyebrowClass}>{checkoutUi.quantity}</span>
             <input
               className={fieldClass}
               type="number"
@@ -513,13 +528,13 @@ export function CheckoutPage() {
             <input className={fieldClass} name="email" type="email" required />
           </label>
           <fieldset className="grid gap-3 rounded-lg border border-border-strong p-4">
-            <legend className={eyebrowClass}>Zalo xác nhận</legend>
+            <legend className={eyebrowClass}>{checkoutUi.zaloConfirm}</legend>
             <label className="flex min-h-11 items-center gap-3">
               <input name="zaloUsesPhone" type="checkbox" value="yes" defaultChecked />
-              <span>Dùng số điện thoại trên cho Zalo</span>
+              <span>{checkoutUi.usePhone}</span>
             </label>
             <label className="grid gap-2">
-              <span className={eyebrowClass}>Số Zalo khác (nếu có)</span>
+              <span className={eyebrowClass}>{checkoutUi.otherZalo}</span>
               <input className={fieldClass} name="zalo" type="tel" autoComplete="tel" />
             </label>
           </fieldset>
@@ -529,21 +544,21 @@ export function CheckoutPage() {
           </label>
           <label className="flex items-start gap-3 rounded-lg border border-border-strong p-4 leading-relaxed">
             <input className="mt-1" name="policyConsent" type="checkbox" value="yes" required />
-            <span>Đây là yêu cầu đặt trước, chưa phải giao dịch thanh toán trực tiếp. Tôi đồng ý để Senova xác nhận cấu hình, lịch giao và chính sách hủy trước khi chuyển khoản.</span>
+            <span>{checkoutUi.consent}</span>
           </label>
           {cancellationPolicy ? (
             <details className="rounded-lg border border-border-strong p-4 text-sm leading-relaxed text-text-muted">
-              <summary className="cursor-pointer font-bold text-primary-strong">Chính sách hủy và hoàn tiền</summary>
+              <summary className="cursor-pointer font-bold text-primary-strong">{checkoutUi.cancellation}</summary>
               <ul className="mb-0 grid gap-2 pl-5">
-                <li>{cancellationPolicy.stages.paidBeforePreparation.description}: hoàn {cancellationPolicy.stages.paidBeforePreparation.refundPercent}%.</li>
-                <li>{cancellationPolicy.stages.preparingStandardProduct.description}: hoàn {cancellationPolicy.stages.preparingStandardProduct.refundPercent}%.</li>
-                <li>{cancellationPolicy.stages.customizedProduct.description}: hoàn {cancellationPolicy.stages.customizedProduct.refundPercent}%.</li>
-                <li>{cancellationPolicy.stages.handedToCarrier.description}: không hỗ trợ hủy.</li>
+                <li>{cancellationStages?.paid ?? cancellationPolicy.stages.paidBeforePreparation.description}: {checkoutUi.refund} {cancellationPolicy.stages.paidBeforePreparation.refundPercent}%.</li>
+                <li>{cancellationStages?.preparing ?? cancellationPolicy.stages.preparingStandardProduct.description}: {checkoutUi.refund} {cancellationPolicy.stages.preparingStandardProduct.refundPercent}%.</li>
+                <li>{cancellationStages?.customized ?? cancellationPolicy.stages.customizedProduct.description}: {checkoutUi.refund} {cancellationPolicy.stages.customizedProduct.refundPercent}%.</li>
+                <li>{cancellationStages?.carrier ?? cancellationPolicy.stages.handedToCarrier.description}: {checkoutUi.noCancellation}.</li>
               </ul>
             </details>
           ) : (
             <p className="m-0 text-sm leading-relaxed text-text-muted">
-              Mức hoàn tiền phụ thuộc trạng thái chuẩn bị và sẽ được Senova xác nhận trước khi chuyển khoản.
+              {checkoutUi.refundFallback}
             </p>
           )}
           {error ? (
@@ -565,20 +580,20 @@ export function CheckoutPage() {
               return product ? (
                 <div key={item.productId} className="grid gap-2 border-b border-border pb-4 last:border-0">
                   <p className="m-0 text-[0.95rem] font-bold text-primary-strong">{item.quantity} × {product.name}</p>
-                  {variant ? <p className="m-0 text-sm text-text-muted">{variant.label}</p> : null}
-                  <p className="m-0 text-sm text-text-muted">Giá dự kiến: {baseProduct?.priceLabel || "Liên hệ để nhận giá dự kiến"}</p>
+                  {variant ? <p className="m-0 text-sm text-text-muted">{product.variants.find((value) => value.id === variant.id)?.label ?? variant.label}</p> : null}
+                  <p className="m-0 text-sm text-text-muted">{checkoutUi.estimatedPrice}: {product.priceLabel || checkoutUi.contactPrice}</p>
                   <p className="m-0 text-sm text-text-muted">
-                    Thời gian chuẩn bị: {variant?.preparationTime
-                      ? `${variant.preparationTime.min}–${variant.preparationTime.max} ngày làm việc`
-                      : "Senova sẽ xác nhận sau khi nhận yêu cầu"}
+                    {checkoutUi.preparation}: {variant?.preparationTime
+                      ? `${variant.preparationTime.min}–${variant.preparationTime.max} ${checkoutUi.businessDays}`
+                      : checkoutUi.preparationFallback}
                   </p>
                   <p className="m-0 text-sm text-text-muted">
-                    Phạm vi giao hàng: {variant?.deliveryScopes?.some((scope) => scope.enabled)
-                      ? variant.deliveryScopes.filter((scope) => scope.enabled).map((scope) => scope.label).join(", ")
-                      : "Xác nhận theo sản phẩm"}
+                    {checkoutUi.delivery}: {variant?.deliveryScopes?.some((scope) => scope.enabled)
+                      ? variant.deliveryScopes.filter((scope) => scope.enabled).map((scope) => language === "vi" ? scope.label : scope.code === "VN" ? "Nationwide" : scope.code === "HCM" ? "Ho Chi Minh City" : scope.label).join(", ")
+                      : checkoutUi.deliveryFallback}
                   </p>
                   {variant?.preparationTime?.isAssumption ? (
-                    <p className="m-0 text-xs font-bold text-accent-strong">Thông tin dự kiến, đang được kiểm chứng.</p>
+                    <p className="m-0 text-xs font-bold text-accent-strong">{checkoutUi.assumption}</p>
                   ) : null}
                 </div>
               ) : null;
@@ -594,6 +609,10 @@ export function CheckoutPage() {
 
 export function CheckoutThankYouPage() {
   const { text } = useCommerceCopy();
+  const { language } = useLanguage();
+  const copy = language === "vi"
+    ? { description: "Senova sẽ liên hệ qua email và Zalo trong 1–2 ngày làm việc để xác nhận cấu hình sản phẩm, thời gian chuẩn bị, phạm vi giao hàng và thông tin chuyển khoản.", code: "Mã yêu cầu", note: "Yêu cầu này chưa phải xác nhận giao hàng cuối cùng.", continue: "Tiếp tục xem sản phẩm" }
+    : { description: "Senova will contact you by email and Zalo within 1–2 business days to confirm the product configuration, preparation time, delivery scope and bank-transfer details.", code: "Request code", note: "This request is not a final delivery confirmation.", continue: "Continue viewing products" };
   const { search } = useRouter();
   const requestCode = new URLSearchParams(search).get("request");
 
@@ -602,10 +621,10 @@ export function CheckoutThankYouPage() {
       <CheckCircle2 className="mx-auto h-12 w-12 text-primary" />
       <p className={eyebrowClass}>{text.ui.inquiryReceived}</p>
       <h1 className="font-display text-[clamp(2rem,5vw,4rem)] leading-none text-primary-strong">{text.ui.thankYouTitle}</h1>
-      <p className={bodyClass}>Senova sẽ liên hệ qua email và Zalo trong 1–2 ngày làm việc để xác nhận cấu hình sản phẩm, thời gian chuẩn bị, phạm vi giao hàng và thông tin chuyển khoản.</p>
-      {requestCode ? <p className="font-bold text-primary-strong">Mã yêu cầu: {requestCode}</p> : null}
-      <p className={bodyClass}>Yêu cầu này chưa phải xác nhận giao hàng cuối cùng.</p>
-      <Link href="/products" className={primaryButtonClass}>Tiếp tục xem sản phẩm</Link>
+      <p className={bodyClass}>{copy.description}</p>
+      {requestCode ? <p className="font-bold text-primary-strong">{copy.code}: {requestCode}</p> : null}
+      <p className={bodyClass}>{copy.note}</p>
+      <Link href="/products" className={primaryButtonClass}>{copy.continue}</Link>
     </section>
   );
 }
