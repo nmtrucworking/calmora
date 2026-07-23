@@ -66,9 +66,13 @@ function RitualScene({
         )}
       </div>
       <div className={styles.sceneVeil} aria-hidden="true" />
+      <div className={styles.sceneTexture} aria-hidden="true" />
       <div className={styles.sceneFrame}>
         {topBar}
         <div className={styles.sceneCopy}>
+          <span className={styles.sceneOrdinal} aria-hidden="true">
+            {String(index + 1).padStart(2, "0")}
+          </span>
           <p className={styles.sceneLabel}>{label}</p>
           <h1 id={`petal-scene-${index}`}>{title}</h1>
           {children}
@@ -110,6 +114,15 @@ export function PetalPackExperience({
   useEffect(() => {
     const background = backgroundAudioRef.current;
     const story = storyAudioRef.current;
+    const previousBodyOverflow = document.body.style.overflow;
+    const previousBodyOverscroll = document.body.style.overscrollBehavior;
+    const previousHtmlOverflow = document.documentElement.style.overflow;
+
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    document.body.style.overflow = "hidden";
+    document.body.style.overscrollBehavior = "none";
+    document.documentElement.style.overflow = "hidden";
+
     SCENE_IMAGES.forEach((filename) => {
       const image = new Image();
       image.src = `${ASSET_ROOT}/${filename}`;
@@ -118,6 +131,9 @@ export function PetalPackExperience({
       if (aromaAdvanceRef.current) window.clearTimeout(aromaAdvanceRef.current);
       background?.pause();
       story?.pause();
+      document.body.style.overflow = previousBodyOverflow;
+      document.body.style.overscrollBehavior = previousBodyOverscroll;
+      document.documentElement.style.overflow = previousHtmlOverflow;
     };
   }, []);
 
@@ -201,18 +217,36 @@ export function PetalPackExperience({
   }, [contentVersion, contentViewed, displayBatch, nextScene, product.slug]);
 
   const topBar = useMemo(() => (
-    <div className={styles.identityBar}>
-      <div>
-        <span>Khoảng trà Petal Pack</span>
-        <span aria-hidden="true">·</span>
-        <span>Lô {displayBatch}</span>
+    <div className={styles.ritualHeader}>
+      <div className={styles.identityBar}>
+        <div className={styles.ritualIdentity}>
+          <span className={styles.ritualIdentityCopy}>
+            <strong>SENOVA RITUAL</strong>
+            <small>Petal Pack <i aria-hidden="true">·</i> Lô {displayBatch}</small>
+          </span>
+        </div>
+        <div className={styles.ritualControls}>
+          <span className={styles.stepCount} aria-hidden="true">
+            {String(sceneIndex + 1).padStart(2, "0")} <i>/</i> 07
+          </span>
+          {sceneIndex > 0 ? (
+            <button type="button" onClick={toggleSound} aria-label={soundEnabled ? "Tắt âm thanh" : "Bật âm thanh"}>
+              {soundEnabled ? <Volume2 aria-hidden="true" /> : <VolumeX aria-hidden="true" />}
+              <span>{isNarrating ? "Câu chuyện" : soundEnabled ? "Âm thanh" : "Bật âm"}</span>
+            </button>
+          ) : null}
+        </div>
       </div>
-      {sceneIndex > 0 ? (
-        <button type="button" onClick={toggleSound} aria-label={soundEnabled ? "Tắt âm thanh" : "Bật âm thanh"}>
-          {soundEnabled ? <Volume2 aria-hidden="true" /> : <VolumeX aria-hidden="true" />}
-          <span>{isNarrating ? "Câu chuyện" : soundEnabled ? "Âm thanh" : "Bật âm"}</span>
-        </button>
-      ) : null}
+      <div
+        className={styles.ritualProgress}
+        role="progressbar"
+        aria-label="Tiến trình nghi thức"
+        aria-valuemin={1}
+        aria-valuemax={7}
+        aria-valuenow={sceneIndex + 1}
+      >
+        <span style={{ width: `${((sceneIndex + 1) / 7) * 100}%` }} />
+      </div>
     </div>
   ), [displayBatch, isNarrating, sceneIndex, soundEnabled, toggleSound]);
 

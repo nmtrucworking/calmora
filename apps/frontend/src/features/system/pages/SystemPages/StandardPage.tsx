@@ -5,6 +5,7 @@ import { products } from "@features/products/data/products";
 import { systemStyles as styles } from "@shared/styles/systemPageClasses";
 import { getImageAssetByPath } from "@features/content/imageManifest";
 import { ResponsiveImage } from "@shared/components/media/ResponsiveImage";
+import { LuxuryEditorialPage } from "@shared/components/editorial/LuxuryEditorialPage";
 
 type StandardPageProps = {
   content: StandardPageContent;
@@ -12,6 +13,20 @@ type StandardPageProps = {
 };
 
 export default function StandardPage({ content, showProducts = false }: StandardPageProps) {
+  if (content.path === "/ritual" && content.cta) {
+    return (
+      <LuxuryEditorialPage
+        variant="ritual"
+        blocks={content.blocks}
+        description={content.description}
+        eyebrow={content.eyebrow}
+        title={content.title}
+        primaryAction={content.cta.primary}
+        secondaryAction={content.cta.secondary}
+      />
+    );
+  }
+
   return (
     <article className={styles.page}>
       <section className={styles.hero}>

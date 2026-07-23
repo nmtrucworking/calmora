@@ -11,6 +11,8 @@ import { useLanguage, type Language } from "@app/providers/LanguageContext";
 import { canonicalBaseUrl, pageSeo, standardPages, type SeoContent } from "@features/content/sitePages";
 import { trackEvent } from "@shared/analytics/analytics";
 import { publicRoutePaths } from "@app/router/registeredRoutes";
+import { WebsiteEntryExperience } from "@app/entry/WebsiteEntryExperience";
+import { getQrRecord } from "@features/qr/services/qrRegistry";
 
 const landingPath = publicRoutePaths.home;
 
@@ -280,10 +282,19 @@ function PublicRoutes() {
   const isFullBleedContent =
     normalizedPath === "/products" ||
     (normalizedPath.startsWith("/products/") && Boolean(product)) ||
+    normalizedPath === "/ritual" ||
+    normalizedPath === "/gifting" ||
     normalizedPath === "/experience/petal-pack";
+  const isImmersiveExperience = normalizedPath === "/experience/petal-pack";
+  const hasDarkHero = normalizedPath === "/ritual" || normalizedPath === "/gifting";
 
   return (
-    <SiteLayout isLanding={pathname === landingPath} isFullBleedContent={isFullBleedContent}>
+    <SiteLayout
+      isLanding={pathname === landingPath}
+      hasDarkHero={hasDarkHero}
+      isFullBleedContent={isFullBleedContent}
+      isImmersive={isImmersiveExperience}
+    >
       {routedPage}
     </SiteLayout>
   );
@@ -300,7 +311,18 @@ function AppRoutes() {
     );
   }
 
-  return <PublicRoutes />;
+  const normalizedPath = pathname.length > 1 ? pathname.replace(/\/+$/, "") : pathname;
+  const qrCode = normalizedPath.startsWith("/q/") ? normalizedPath.slice(3) : "";
+  const qrRecord = qrCode ? getQrRecord(qrCode) : undefined;
+  const isProductStoryWithAudio =
+    normalizedPath.startsWith("/experience/") ||
+    Boolean(qrRecord?.destination.startsWith("/experience/"));
+
+  return (
+    <WebsiteEntryExperience suppressAudio={isProductStoryWithAudio}>
+      <PublicRoutes />
+    </WebsiteEntryExperience>
+  );
 }
 
 export default function AppRouter() {

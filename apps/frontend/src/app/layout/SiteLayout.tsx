@@ -12,7 +12,9 @@ import styles from "./SiteLayout.module.css";
 type SiteLayoutProps = {
   children: ReactNode;
   footerGroups?: BrandFooterGroup[];
+  hasDarkHero?: boolean;
   isFullBleedContent?: boolean;
+  isImmersive?: boolean;
   isLanding?: boolean;
   navItems?: BrandNavItem[];
 };
@@ -25,7 +27,9 @@ const mobileNavLinkClass =
 export function SiteLayout({
   children,
   footerGroups,
+  hasDarkHero = false,
   isFullBleedContent = false,
+  isImmersive = false,
   isLanding = false,
   navItems,
 }: SiteLayoutProps) {
@@ -92,7 +96,7 @@ export function SiteLayout({
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const isTransparentHeader = isLanding && !isScrolled && !isMenuOpen;
+  const isTransparentHeader = (isLanding || isImmersive || hasDarkHero) && !isScrolled && !isMenuOpen;
   const desktopActiveNavClass = isTransparentHeader
     ? "!text-accent-gold after:!scale-x-100"
     : "!text-primary-strong after:!scale-x-100";
@@ -124,7 +128,7 @@ export function SiteLayout({
     <div
       className={cx(
         styles.page,
-        isLanding && styles.landingPage,
+        (isLanding || isImmersive) && styles.landingPage,
         "relative min-h-screen overflow-x-clip text-text isolate",
       )}
     >
@@ -139,12 +143,19 @@ export function SiteLayout({
             : "border-border bg-[var(--header-bg)] text-text shadow-[0_10px_30px_rgba(16,26,22,0.06)]",
         )}
       >
-        <div className="mx-auto grid max-w-[var(--page-max)] grid-cols-[minmax(10rem,0.62fr)_minmax(0,1.32fr)_auto] items-center gap-4 px-6 py-2.5 max-[900px]:grid-cols-[minmax(0,1fr)_auto] max-[900px]:px-4">
+        <div
+          className={cx(
+            "mx-auto grid max-w-[var(--page-max)] items-center gap-4 px-6 py-2.5 max-[900px]:grid-cols-[minmax(0,1fr)_auto] max-[900px]:px-4",
+            isImmersive
+              ? "grid-cols-[minmax(10rem,1fr)_auto]"
+              : "grid-cols-[minmax(10rem,0.62fr)_minmax(0,1.32fr)_auto]",
+          )}
+        >
           <Link href="/" className="inline-flex min-h-11 min-w-0 items-center no-underline" aria-label="Senova by Calmora">
             <BrandLockup inverse={isTransparentHeader} />
           </Link>
 
-          <nav
+          {!isImmersive ? <nav
             className={cx(
               "flex min-w-0 items-center justify-center gap-4 border-y px-2 py-1 text-[0.73rem] font-[620] uppercase tracking-[0.13em] max-[900px]:hidden",
               isTransparentHeader
@@ -154,10 +165,10 @@ export function SiteLayout({
             aria-label={copy.navAria}
           >
             {renderNavLinks("desktop")}
-          </nav>
+          </nav> : null}
 
           <div className="flex items-center justify-end gap-2 max-[520px]:gap-2">
-            <Link
+            {!isImmersive ? <Link
               href="/order-request"
               className={cx(
                 "inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap border px-3 text-[0.72rem] font-[650] uppercase tracking-[0.12em] no-underline transition-colors duration-200 max-[1120px]:hidden",
@@ -169,7 +180,7 @@ export function SiteLayout({
             >
               {copy.preorder}
               <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
-            </Link>
+            </Link> : null}
             <button
               className={cx(
                 "inline-flex h-9 items-center justify-center gap-1.5 border px-2.5 text-[0.7rem] font-[700] uppercase tracking-[0.1em]",
@@ -243,7 +254,7 @@ export function SiteLayout({
         {children}
       </main>
 
-      <footer className="relative z-10 overflow-hidden bg-[var(--footer-bg)] text-text-inverse">
+      {!isImmersive ? <footer className="relative z-10 overflow-hidden bg-[var(--footer-bg)] text-text-inverse">
         <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(248,223,147,0.7),transparent)]" />
         <div className="mx-auto grid max-w-[var(--page-max)] grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] gap-x-12 gap-y-10 px-6 pt-14 pb-10 max-[900px]:grid-cols-1 max-[900px]:px-4">
           <div className="grid gap-8">
@@ -283,7 +294,7 @@ export function SiteLayout({
             <div className="flex flex-wrap gap-x-5 gap-y-2">
               <span className="inline-flex items-center gap-2">
                 <Mail aria-hidden="true" className="h-3.5 w-3.5" />
-                hello@senova.vn
+                senova.calmora@gmail.com
               </span>
               <span className="inline-flex items-center gap-2">
                 <Mail aria-hidden="true" className="h-3.5 w-3.5" />
@@ -297,7 +308,7 @@ export function SiteLayout({
             <span>© {new Date().getFullYear()} Senova by Calmora</span>
           </div>
         </div>
-      </footer>
+      </footer> : null}
     </div>
   );
 }

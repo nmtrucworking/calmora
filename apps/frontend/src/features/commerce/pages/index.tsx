@@ -35,6 +35,7 @@ import { fetchCancellationPolicy, type CancellationPolicy } from "@shared/api/pr
 import { hasApiBaseUrl } from "@shared/api/config";
 import { luxuryMotion } from "@shared/styles/luxuryEffects";
 import { cx } from "@shared/utils/classNames";
+import { LuxuryEditorialPage } from "@shared/components/editorial/LuxuryEditorialPage";
 
 const pageClass = "grid gap-[clamp(2rem,5vw,4.5rem)]";
 const eyebrowClass = "m-0 text-[0.78rem] font-extrabold uppercase tracking-[0.16em] text-accent-strong";
@@ -611,6 +612,19 @@ export function CheckoutThankYouPage() {
 
 export function ServicePage({ content }: { content: LocalizedService }) {
   const { text } = useCommerceCopy();
+
+  if (content.path === "/gifting") {
+    return (
+      <LuxuryEditorialPage
+        variant="gifting"
+        blocks={content.blocks}
+        description={content.description}
+        eyebrow={content.eyebrow}
+        title={content.title}
+        primaryAction={{ label: content.ctaLabel, href: content.ctaHref }}
+      />
+    );
+  }
 
   return (
     <article className={pageClass}>
