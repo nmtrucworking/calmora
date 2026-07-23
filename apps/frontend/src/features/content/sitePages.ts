@@ -35,9 +35,14 @@ export const pageSeo: Record<string, SeoContent> = {
       "Senova là dự án trà sen trải nghiệm do Calmora phát triển, kết nối sản phẩm, nghi thức và câu chuyện Việt.",
   },
   "/about": {
-    title: "Giới thiệu | Senova by Calmora",
+    title: "Thương hiệu Calmora | Senova",
     description:
-      "Calmora phát triển Senova như một hệ sản phẩm trà sen trải nghiệm trong hành trình Giữ - Mở - Trao.",
+      "Calmora là thương hiệu khởi tạo Senova, phát triển trà hương sen Việt qua sản phẩm, trải nghiệm và câu chuyện được thiết kế cho đời sống hiện đại.",
+  },
+  "/team": {
+    title: "Đội ngũ Calmora | Senova",
+    description:
+      "Đội ngũ liên ngành phát triển Senova với năng lực công nghệ và dữ liệu, quản trị kinh doanh, dược, văn hóa và phát triển bền vững.",
   },
   "/story": {
     title: "Câu chuyện | Senova by Calmora",

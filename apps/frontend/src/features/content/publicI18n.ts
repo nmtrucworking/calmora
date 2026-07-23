@@ -7,8 +7,12 @@ const englishSeo: Record<string, SeoContent> = {
     description: "Senova is Calmora's experiential lotus tea project, connecting products, rituals and Vietnamese stories.",
   },
   "/about": {
-    title: "About | Senova by Calmora",
-    description: "Discover how Calmora developed Senova as an experiential lotus tea collection shaped by Keep — Open — Share.",
+    title: "The Calmora brand | Senova",
+    description: "Calmora is the brand behind Senova, reframing Vietnamese lotus-scented tea through product, experience and story for contemporary life.",
+  },
+  "/team": {
+    title: "The Calmora team | Senova",
+    description: "Meet the interdisciplinary team developing Senova across technology and data, business administration, pharmacy, culture and sustainability.",
   },
   "/story": {
     title: "Our story | Senova by Calmora",

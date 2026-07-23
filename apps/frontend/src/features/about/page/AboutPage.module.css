@@ -1,0 +1,667 @@
+.page {
+  background: var(--page-bg);
+  color: var(--text);
+}
+
+.hero {
+  min-height: min(58rem, 100svh);
+  background: var(--senova-forest-900);
+  color: var(--text-inverse);
+}
+
+.heroInner,
+.startingSection,
+.idealGrid,
+.principlesSection,
+.methodInner,
+.senovaSection,
+.responsibilitySection,
+.teamBridge {
+  width: min(100% - (2 * var(--page-gutter)), var(--page-max));
+  margin-inline: auto;
+}
+
+.heroInner {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  align-items: stretch;
+  min-height: min(58rem, 100svh);
+  padding-top: 8.5rem;
+}
+
+.heroCopy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4.5rem clamp(2rem, 5vw, 5rem) 5rem 0;
+}
+
+.eyebrow {
+  margin: 0 0 1.15rem;
+  color: var(--accent-strong);
+  font-size: clamp(0.72rem, 1vw, 0.8rem);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.hero .eyebrow,
+.methodSection .eyebrow,
+.finalCta .eyebrow {
+  color: var(--accent-gold);
+}
+
+.hero h1 {
+  max-width: 13ch;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(3.3rem, 5vw, 6rem);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+
+.heroDescription {
+  max-width: 59ch;
+  margin: 2rem 0 0;
+  color: var(--text-inverse-muted);
+  font-size: clamp(1.05rem, 1.25vw, 1.2rem);
+  line-height: 1.75;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  margin-top: 2.25rem;
+}
+
+.primaryButton,
+.secondaryButtonDark {
+  display: inline-flex;
+  min-height: 3.2rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  padding: 0.8rem 1.25rem;
+  border: 1px solid var(--accent-gold);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: background var(--motion-base) var(--ease-luxury), color var(--motion-base) var(--ease-luxury), transform var(--motion-base) var(--ease-luxury);
+}
+
+.primaryButton {
+  background: var(--accent-gold);
+  color: var(--senova-forest-950);
+}
+
+.secondaryButtonDark {
+  color: var(--text-inverse);
+}
+
+.primaryButton:hover,
+.secondaryButtonDark:hover {
+  transform: translateY(-2px);
+}
+
+.secondaryButtonDark:hover {
+  background: var(--accent-gold);
+  color: var(--senova-forest-950);
+}
+
+.primaryButton svg,
+.secondaryButtonDark svg,
+.textLink svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.heroFigure {
+  position: relative;
+  min-height: 38rem;
+  margin: 0;
+  overflow: hidden;
+}
+
+.heroFigure::before {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background: linear-gradient(90deg, var(--senova-forest-900), transparent 30%);
+  content: "";
+  pointer-events: none;
+}
+
+.heroFigure img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.heroFigure figcaption {
+  position: absolute;
+  z-index: 2;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  padding-left: 3.5rem;
+  color: var(--text-inverse-muted);
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.heroFigure figcaption::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 2.6rem;
+  height: 1px;
+  background: var(--accent-gold);
+  content: "";
+}
+
+.startingSection {
+  display: grid;
+  grid-template-columns: 1fr 5fr 5fr;
+  gap: clamp(2rem, 5vw, 5rem);
+  padding-block: clamp(7rem, 12vw, 10.5rem);
+}
+
+.sectionIndex,
+.visionBlock > span,
+.idealSide span {
+  color: var(--accent-strong);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.startingTitle h2,
+.principlesSection h2,
+.methodIntro h2,
+.senovaCopy h2,
+.responsibilitySection h2,
+.teamBridge h2,
+.finalCta h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 4.25vw, 4rem);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+.startingBody > p,
+.methodIntro > p,
+.senovaCopy > p,
+.responsibilitySection > div > p,
+.teamBridge > div > p,
+.finalCta > div > p {
+  max-width: 68ch;
+  margin: 0 0 1.15rem;
+  color: var(--text-muted);
+  font-size: 1.04rem;
+  line-height: 1.78;
+}
+
+.startingBody blockquote {
+  margin: 2rem 0 0;
+  padding: 1.5rem 0 0 1.5rem;
+  border-top: 1px solid var(--border-strong);
+  border-left: 1px solid var(--accent);
+  font-family: var(--font-display);
+  font-size: clamp(1.3rem, 2vw, 1.75rem);
+  line-height: 1.45;
+}
+
+.idealSection {
+  padding-block: clamp(6rem, 10vw, 9rem);
+  background: var(--surface-dark);
+  color: var(--text-inverse);
+}
+
+.idealGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: clamp(3rem, 8vw, 8rem);
+}
+
+.visionBlock h2 {
+  max-width: 17ch;
+  margin: 2rem 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 5.2vw, 5.2rem);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+}
+
+.idealSide {
+  display: grid;
+  align-content: center;
+}
+
+.idealSide article {
+  padding-block: 2rem;
+  border-top: 1px solid rgb(243 239 229 / 18%);
+}
+
+.idealSide article:last-child {
+  border-bottom: 1px solid rgb(243 239 229 / 18%);
+}
+
+.idealSide p {
+  margin: 1rem 0 0;
+  color: var(--text-inverse-muted);
+  font-size: 1.03rem;
+  line-height: 1.75;
+}
+
+.principlesSection {
+  padding-block: clamp(7rem, 12vw, 10rem);
+}
+
+.principlesSection header {
+  max-width: 58rem;
+}
+
+.principleSequence {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: clamp(3.5rem, 6vw, 6rem);
+  border-top: 1px solid var(--border-strong);
+}
+
+.principleSequence article {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.5rem;
+  padding: 2rem clamp(1rem, 2.5vw, 2.5rem) 0 0;
+  border-right: 1px solid var(--border);
+}
+
+.principleSequence article:not(:first-child) {
+  padding-left: clamp(1rem, 2.5vw, 2.5rem);
+}
+
+.principleSequence article:last-child {
+  border-right: 0;
+}
+
+.principleNumber {
+  color: var(--accent-strong);
+  font-family: var(--font-display);
+  font-size: 2rem;
+}
+
+.principleSequence span {
+  color: var(--accent-strong);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.principleSequence h3 {
+  margin: 0.7rem 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.45rem, 2vw, 2rem);
+  font-weight: 550;
+  line-height: 1.2;
+}
+
+.principleSequence p {
+  margin: 1rem 0 0;
+  color: var(--text-muted);
+  line-height: 1.75;
+}
+
+.methodSection {
+  padding-block: clamp(7rem, 11vw, 10rem);
+  background: var(--senova-forest-950);
+  color: var(--text-inverse);
+}
+
+.methodInner {
+  display: grid;
+  grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+  gap: clamp(3rem, 7vw, 7rem);
+}
+
+.methodIntro > p {
+  margin-top: 1.5rem;
+  color: var(--text-inverse-muted);
+}
+
+.methodIntro small {
+  display: block;
+  max-width: 62ch;
+  margin-top: 2rem;
+  padding-left: 1rem;
+  border-left: 1px solid var(--accent-gold);
+  color: var(--text-inverse-soft);
+  line-height: 1.65;
+}
+
+.methodInner figure {
+  min-height: 28rem;
+  margin: 0;
+  overflow: hidden;
+}
+
+.methodInner figure img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.processList {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 1.5rem 0 0;
+  padding: 0;
+  border-top: 1px solid rgb(243 239 229 / 18%);
+  list-style: none;
+}
+
+.processList li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem;
+  padding: 1.5rem 1.5rem 1.5rem 0;
+  border-bottom: 1px solid rgb(243 239 229 / 18%);
+}
+
+.processList li:nth-child(3n+2),
+.processList li:nth-child(3n+3) {
+  padding-left: 1.5rem;
+  border-left: 1px solid rgb(243 239 229 / 18%);
+}
+
+.processList li > span {
+  color: var(--accent-gold);
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+}
+
+.processList strong {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 550;
+}
+
+.processList p {
+  margin: 0.4rem 0 0;
+  color: var(--text-inverse-muted);
+  line-height: 1.6;
+}
+
+.senovaSection {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  gap: clamp(2.5rem, 6vw, 6rem);
+  align-items: center;
+  padding-block: clamp(7rem, 12vw, 11rem);
+}
+
+.senovaCopy > p {
+  margin-top: 1.5rem;
+}
+
+.textLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-top: 1rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--accent);
+  color: var(--primary);
+  font-size: 0.83rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.senovaFigure {
+  margin: 0;
+}
+
+.senovaFigure img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.senovaFigure figcaption {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+}
+
+.senovaFigure figcaption div {
+  padding: 1.25rem;
+}
+
+.senovaFigure figcaption div:not(:last-child) {
+  border-right: 1px solid var(--border);
+}
+
+.senovaFigure strong,
+.senovaFigure span {
+  display: block;
+}
+
+.senovaFigure strong {
+  color: var(--accent-strong);
+  font-size: 0.76rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.senovaFigure span {
+  margin-top: 0.55rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.responsibilitySection {
+  display: grid;
+  grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+  gap: clamp(3rem, 8vw, 8rem);
+  padding-block: clamp(6rem, 10vw, 9rem);
+  border-top: 1px solid var(--border-strong);
+}
+
+.responsibilitySection > div > p {
+  margin-top: 1.5rem;
+}
+
+.responsibilitySection ol {
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--border-strong);
+  list-style: none;
+}
+
+.responsibilitySection li {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr;
+  gap: 1rem;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--border);
+  line-height: 1.6;
+}
+
+.responsibilitySection li span {
+  color: var(--accent-strong);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+}
+
+.teamBridge {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(14rem, 4fr);
+  gap: clamp(3rem, 8vw, 8rem);
+  align-items: end;
+  padding-block: clamp(6rem, 10vw, 9rem);
+  border-top: 1px solid var(--border-strong);
+}
+
+.teamBridge > div:first-child {
+  max-width: 55rem;
+}
+
+.teamBridge > div > p {
+  margin-top: 1.5rem;
+}
+
+.disciplineMark {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: end;
+  height: 14rem;
+  border-bottom: 1px solid var(--accent);
+}
+
+.disciplineMark span {
+  display: grid;
+  place-items: end center;
+  border-left: 1px solid var(--border-strong);
+  color: var(--accent-strong);
+  font-family: var(--font-display);
+  font-size: 2rem;
+}
+
+.disciplineMark span:nth-child(1) { height: 48%; }
+.disciplineMark span:nth-child(2) { height: 72%; }
+.disciplineMark span:nth-child(3) { height: 100%; border-right: 1px solid var(--border-strong); }
+
+.finalCta {
+  padding: clamp(6rem, 10vw, 9rem) var(--page-gutter);
+  background: var(--senova-forest-900);
+  color: var(--text-inverse);
+  text-align: center;
+}
+
+.finalCta > div {
+  max-width: 58rem;
+  margin-inline: auto;
+}
+
+.finalCta > div > p {
+  margin: 1.5rem auto 0;
+  color: var(--text-inverse-muted);
+}
+
+.finalCta .actions {
+  justify-content: center;
+}
+
+@media (max-width: 900px) {
+  .heroInner,
+  .idealGrid,
+  .methodInner,
+  .senovaSection,
+  .responsibilitySection,
+  .teamBridge {
+    grid-template-columns: 1fr;
+  }
+
+  .heroInner {
+    padding-top: 6.5rem;
+  }
+
+  .heroCopy {
+    padding: 4rem 0 3rem;
+  }
+
+  .heroFigure {
+    min-height: min(70vw, 34rem);
+  }
+
+  .heroFigure::before {
+    background: linear-gradient(180deg, var(--senova-forest-900), transparent 28%);
+  }
+
+  .startingSection {
+    grid-template-columns: auto 1fr;
+  }
+
+  .startingBody {
+    grid-column: 2;
+  }
+
+  .principleSequence,
+  .processList,
+  .senovaFigure figcaption {
+    grid-template-columns: 1fr;
+  }
+
+  .principleSequence article,
+  .principleSequence article:not(:first-child) {
+    padding: 1.5rem 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .processList li:nth-child(n) {
+    padding: 1.25rem 0;
+    border-left: 0;
+  }
+
+  .senovaFigure figcaption div:not(:last-child) {
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .disciplineMark {
+    max-width: 28rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero h1 {
+    font-size: clamp(2.9rem, 14vw, 4.4rem);
+  }
+
+  .actions {
+    display: grid;
+  }
+
+  .startingSection {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .startingBody {
+    grid-column: 1;
+  }
+
+  .visionBlock h2 {
+    font-size: 2.65rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .primaryButton,
+  .secondaryButtonDark {
+    transition: none;
+  }
+
+  .primaryButton:hover,
+  .secondaryButtonDark:hover {
+    transform: none;
+  }
+}

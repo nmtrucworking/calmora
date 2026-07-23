@@ -3,7 +3,7 @@ import { localizedStandardPages, localizedThankYouMessages, publicSeo } from "./
 
 const languages = ["vi", "en"] as const;
 const standardPaths = ["/ritual", "/seasonal", "/privacy", "/terms"];
-const publicSeoPaths = ["/", "/about", "/story", "/products", "/ritual", "/seasonal", "/contact", "/partners", "/order-request", "/order-request/success", "/thank-you", "/privacy", "/terms", "/404"];
+const publicSeoPaths = ["/", "/about", "/team", "/story", "/products", "/ritual", "/seasonal", "/contact", "/partners", "/order-request", "/order-request/success", "/thank-you", "/privacy", "/terms", "/404"];
 const thankYouTypes = ["feedback", "pre-order", "sample-interest", "contact", "partners"];
 
 describe("public website translations", () => {

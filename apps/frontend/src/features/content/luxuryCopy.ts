@@ -92,6 +92,7 @@ export type LuxuryLayoutCopy = {
   languageToggle: string;
   preorder: string;
   navigation: LinkCopy[];
+  mobileNavigation: LinkCopy[];
   footerGroups: { title: string; links: LinkCopy[] }[];
 };
 
@@ -110,15 +111,26 @@ export const luxuryLayoutCopy: Record<Language, LuxuryLayoutCopy> = {
       { label: "Sản phẩm", href: "/products" },
       { label: "Nghi thức", href: "/ritual" },
       { label: "Câu chuyện", href: "/story" },
+      { label: "Thương hiệu", href: "/about" },
       { label: "Quà tặng", href: "/gifting" },
     ],
+    mobileNavigation: [{ label: "Đội ngũ", href: "/team" }],
     footerGroups: [
       {
         title: "Senova",
         links: [
           { label: "Bộ sưu tập", href: "/products" },
+          { label: "Nghi thức", href: "/ritual" },
           { label: "Câu chuyện", href: "/story" },
-          { label: "Trải nghiệm", href: "/ritual" },
+          { label: "Mùa sen", href: "/seasonal" },
+        ],
+      },
+      {
+        title: "Về Calmora",
+        links: [
+          { label: "Thương hiệu", href: "/about" },
+          { label: "Đội ngũ", href: "/team" },
+          { label: "Hợp tác", href: "/partners" },
           { label: "Liên hệ", href: "/contact" },
         ],
       },
@@ -149,15 +161,26 @@ export const luxuryLayoutCopy: Record<Language, LuxuryLayoutCopy> = {
       { label: "Products", href: "/products" },
       { label: "Ritual", href: "/ritual" },
       { label: "Story", href: "/story" },
+      { label: "Brand", href: "/about" },
       { label: "Gifting", href: "/gifting" },
     ],
+    mobileNavigation: [{ label: "Team", href: "/team" }],
     footerGroups: [
       {
         title: "Senova",
         links: [
           { label: "Collection", href: "/products" },
+          { label: "Ritual", href: "/ritual" },
           { label: "Story", href: "/story" },
-          { label: "Experience", href: "/ritual" },
+          { label: "Lotus season", href: "/seasonal" },
+        ],
+      },
+      {
+        title: "About Calmora",
+        links: [
+          { label: "Brand", href: "/about" },
+          { label: "Team", href: "/team" },
+          { label: "Partnerships", href: "/partners" },
           { label: "Contact", href: "/contact" },
         ],
       },

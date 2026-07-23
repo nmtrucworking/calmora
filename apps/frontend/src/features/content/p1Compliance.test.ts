@@ -17,6 +17,7 @@ describe("P1 public experience contracts", () => {
         "/products",
         "/ritual",
         "/story",
+        "/about",
         "/gifting",
       ]);
     }
@@ -61,6 +62,7 @@ describe("P1 public experience contracts", () => {
       const landing = luxuryLandingCopy[locale];
       const links = [
         ...luxuryLayoutCopy[locale].navigation,
+        ...luxuryLayoutCopy[locale].mobileNavigation,
         ...luxuryLayoutCopy[locale].footerGroups.flatMap((group) => group.links),
         landing.hero.primary,
         landing.hero.secondary,

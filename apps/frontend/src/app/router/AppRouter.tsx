@@ -20,6 +20,7 @@ const landingPath = publicRoutePaths.home;
 const loadLandingPage = () => import("@features/landing/page");
 const loadStoryPage = () => import("@features/story/page");
 const loadAboutPage = () => import("@features/about/page");
+const loadTeamPage = () => import("@features/team/page");
 const loadProductsPage = () => import("@features/products/pages/ProductsPage");
 const loadProductDetailPage = () => import("@features/products/pages/ProductDetailPage");
 const loadStandardPage = () => import("@features/system/pages/SystemPages/StandardPage");
@@ -37,6 +38,7 @@ const loadAdminApp = () => import("@features/admin/AdminApp");
 const SenovaLandingPage = lazy(loadLandingPage);
 const StoryPage = lazy(loadStoryPage);
 const AboutPage = lazy(loadAboutPage);
+const TeamPage = lazy(loadTeamPage);
 const ProductsPage = lazy(loadProductsPage);
 const ProductDetailPage = lazy(loadProductDetailPage);
 const StandardPage = lazy(loadStandardPage);
@@ -170,6 +172,35 @@ function updateMetadata(pathname: string, language: Language) {
     structuredData.type = "application/ld+json";
     document.head.appendChild(structuredData);
   }
+  const organizationSchema = metadataPath === publicRoutePaths.about
+    ? {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        name: "Calmora",
+        url: `${canonicalBaseUrl}/about`,
+        brand: { "@type": "Brand", name: "Senova" },
+      }
+    : metadataPath === publicRoutePaths.team
+      ? {
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "Calmora",
+          url: `${canonicalBaseUrl}/team`,
+          brand: { "@type": "Brand", name: "Senova" },
+          member: [
+            { "@type": "Person", name: "Nguyễn Minh Trúc", jobTitle: language === "vi" ? "Công nghệ, dữ liệu và trải nghiệm số" : "Technology, Data & Digital Experience" },
+            { "@type": "Person", name: "Trần Quốc Khánh", jobTitle: language === "vi" ? "Mô hình kinh doanh và vận hành" : "Business Model & Operations" },
+            { "@type": "Person", name: "Nguyễn Ngọc Thảo Vy", jobTitle: language === "vi" ? "Sản phẩm, dược và kiểm soát chất lượng" : "Product, Pharmacy & Quality Control" },
+          ],
+        }
+      : {
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "Senova",
+          url: canonicalBaseUrl,
+          parentOrganization: { "@type": "Organization", name: "Calmora" },
+        };
+
   structuredData.textContent = JSON.stringify(
     product
       ? {
@@ -181,13 +212,7 @@ function updateMetadata(pathname: string, language: Language) {
           brand: { "@type": "Brand", name: "Senova" },
           manufacturer: { "@type": "Organization", name: "Calmora" },
         }
-      : {
-          "@context": "https://schema.org",
-          "@type": "Organization",
-          name: "Senova",
-          url: canonicalBaseUrl,
-          parentOrganization: { "@type": "Organization", name: "Calmora" },
-        },
+      : organizationSchema,
   );
 }
 
@@ -220,6 +245,8 @@ function PublicRoutes() {
     pageComponent = <SenovaLandingPage />;
   } else if (normalizedPath === publicRoutePaths.about) {
     pageComponent = <AboutPage />;
+  } else if (normalizedPath === publicRoutePaths.team) {
+    pageComponent = <TeamPage />;
   } else if (normalizedPath === publicRoutePaths.story) {
     pageComponent = <StoryPage />;
   } else if (normalizedPath === publicRoutePaths.products) {
@@ -286,13 +313,19 @@ function PublicRoutes() {
   );
 
   const isFullBleedContent =
+    normalizedPath === publicRoutePaths.about ||
+    normalizedPath === publicRoutePaths.team ||
     normalizedPath === "/products" ||
     (normalizedPath.startsWith("/products/") && Boolean(product)) ||
     normalizedPath === "/ritual" ||
     normalizedPath === "/gifting" ||
     normalizedPath === "/experience/petal-pack";
   const isImmersiveExperience = normalizedPath === "/experience/petal-pack";
-  const hasDarkHero = normalizedPath === "/ritual" || normalizedPath === "/gifting";
+  const hasDarkHero =
+    normalizedPath === publicRoutePaths.about ||
+    normalizedPath === publicRoutePaths.team ||
+    normalizedPath === "/ritual" ||
+    normalizedPath === "/gifting";
 
   return (
     <SiteLayout

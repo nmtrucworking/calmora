@@ -15,6 +15,8 @@ describe("website QR route registry", () => {
 
     expect(paths).toContain("/");
     expect(paths).toContain("/contact");
+    expect(paths).toContain("/about");
+    expect(paths).toContain("/team");
     expect(paths).toContain("/order-request/success");
     expect(paths).toContain("/products/petal-pack");
     expect(paths).toContain("/experience/petal-pack");

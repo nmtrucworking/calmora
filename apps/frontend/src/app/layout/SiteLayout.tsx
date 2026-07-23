@@ -102,7 +102,7 @@ export function SiteLayout({
     : "!text-primary-strong after:!scale-x-100";
   const mobileActiveNavClass = "!border-l-accent-strong !text-primary-strong";
   const renderNavLinks = (variant: "desktop" | "mobile") =>
-    activeNavItems.map((item) => {
+    (variant === "mobile" && !navItems ? [...activeNavItems, ...copy.mobileNavigation] : activeNavItems).map((item) => {
       const isActive =
         (item.href === "/" && (pathname === "/" || pathname === "")) ||
         pathname === item.href ||
@@ -114,6 +114,7 @@ export function SiteLayout({
           href={item.href}
           className={cx(
             variant === "desktop" ? desktopNavLinkClass : mobileNavLinkClass,
+            variant === "desktop" && isTransparentHeader && "!text-text-inverse-muted hover:!text-text-inverse",
             isActive && (variant === "desktop" ? desktopActiveNavClass : mobileActiveNavClass),
           )}
           onClick={() => setIsMenuOpen(false)}
@@ -217,7 +218,7 @@ export function SiteLayout({
         <div
           ref={mobileNavigationRef}
           className={cx(
-            "fixed inset-x-0 top-[4rem] hidden max-h-[calc(100svh-4rem)] -translate-y-[0.6rem] overflow-y-auto border-t border-border bg-[var(--surface-strong)] p-4 opacity-0 shadow-brand-md transition duration-200 max-[900px]:block",
+            "fixed inset-x-0 top-[4rem] hidden max-h-[calc(100svh-4rem)] -translate-y-[0.6rem] overflow-y-auto border-t border-border bg-page-bg p-4 opacity-0 shadow-brand-md transition duration-200 max-[900px]:block",
             isMenuOpen ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none",
           )}
           aria-hidden={!isMenuOpen}
@@ -271,7 +272,7 @@ export function SiteLayout({
             </div>
           </div>
 
-          <nav className="grid grid-cols-2 gap-8 max-[560px]:grid-cols-1" aria-label="Footer">
+          <nav className="grid grid-cols-3 gap-8 max-[760px]:grid-cols-2 max-[560px]:grid-cols-1" aria-label="Footer">
             {activeFooterGroups.map((group) => (
               <div key={group.title} className="grid content-start gap-[0.55rem]">
                 <h2 className="m-0 text-[0.74rem] font-[650] uppercase tracking-[0.22em] text-accent-gold">
@@ -295,10 +296,6 @@ export function SiteLayout({
               <span className="inline-flex items-center gap-2">
                 <Mail aria-hidden="true" className="h-3.5 w-3.5" />
                 senova.calmora@gmail.com
-              </span>
-              <span className="inline-flex items-center gap-2">
-                <Mail aria-hidden="true" className="h-3.5 w-3.5" />
-                nmtruc.work@gmail.com
               </span>
               <span className="inline-flex items-center gap-2">
                 <MapPin aria-hidden="true" className="h-3.5 w-3.5" />

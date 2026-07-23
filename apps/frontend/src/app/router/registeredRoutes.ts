@@ -15,6 +15,7 @@ export type RouteProduct = {
 export const publicRoutePaths = {
   home: "/",
   about: "/about",
+  team: "/team",
   story: "/story",
   products: "/products",
   orderRequest: "/order-request",
@@ -30,7 +31,8 @@ export const publicRoutePaths = {
 
 const staticWebsiteRoutes: RegisteredWebsiteRoute[] = [
   { id: "home", path: publicRoutePaths.home, label: "Trang chủ", group: "Trang chính" },
-  { id: "about", path: publicRoutePaths.about, label: "Giới thiệu", group: "Trang chính" },
+  { id: "about", path: publicRoutePaths.about, label: "Thương hiệu", group: "Trang chính" },
+  { id: "team", path: publicRoutePaths.team, label: "Đội ngũ", group: "Trang chính" },
   { id: "story", path: publicRoutePaths.story, label: "Câu chuyện Senova", group: "Trang chính" },
   { id: "products", path: publicRoutePaths.products, label: "Danh sách sản phẩm", group: "Sản phẩm" },
   { id: "ritual", path: publicRoutePaths.ritual, label: "Nghi thức thưởng trà", group: "Trải nghiệm" },
