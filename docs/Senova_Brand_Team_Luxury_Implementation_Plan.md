@@ -954,7 +954,7 @@ Dùng bảng editorial hoặc các hàng ngang, không dùng năm icon màu sắ
 
 ### Dữ liệu hiện có
 
-1. **Cô Ngân**
+1. **KS. Nguyễn Trịnh Thị Như Hằng**
    - Viện Ứng dụng Phát triển bền vững.
    - Học hàm, học vị và chức vụ: `TBD — cần xác nhận trước khi public`.
 

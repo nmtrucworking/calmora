@@ -99,7 +99,7 @@ export const teamContent = {
       en: "The team receives guidance where decisions require additional perspectives on sustainability, culture and the arts.",
     },
     people: [
-      { name: "Cô Ngân", unit: { vi: "Viện Ứng dụng Phát triển bền vững", en: "Institute of Applied Sustainable Development" } },
+      { name: "KS. Nguyễn Trịnh Thị Như Hằng", unit: { vi: "Viện Ứng dụng Công nghệ và Phát triển bền vững", en: "Institute of Applied Sustainable Development" } },
       { name: "TS. Vũ Huyền Trang", unit: { vi: "Khoa Ngoại ngữ · Định hướng nghệ thuật và văn hóa", en: "Faculty of Foreign Languages · Arts and cultural guidance" } },
     ],
   },
