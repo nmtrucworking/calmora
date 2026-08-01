@@ -169,13 +169,50 @@
   line-height: 1.75;
 }
 
+.actionGroup {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+  margin-top: clamp(1.8rem, 5vh, 2.8rem);
+}
+
+.tvcButton {
+  display: inline-flex;
+  min-height: 3.4rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  border: 1px solid var(--accent-gold);
+  border-radius: 999px;
+  padding: 0.85rem 1.6rem;
+  background: var(--accent-gold);
+  color: var(--senova-forest-black);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgb(201 169 77 / 25%);
+  transition:
+    background var(--motion-base) ease,
+    transform var(--motion-base) var(--ease-luxury),
+    box-shadow var(--motion-base) ease;
+}
+
+.tvcButton:hover {
+  background: #e5be5a;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgb(201 169 77 / 40%);
+}
+
 .enterButton {
   display: inline-flex;
   min-height: 3.4rem;
   align-items: center;
   justify-content: center;
-  gap: 1.6rem;
-  margin-top: clamp(1.8rem, 5vh, 2.8rem);
+  gap: 1.2rem;
   border: 1px solid rgb(248 223 147 / 50%);
   border-radius: 999px;
   padding: 0.85rem 1.15rem 0.85rem 1.75rem;
@@ -210,6 +247,178 @@
 
 .enterButton:disabled {
   cursor: default;
+}
+
+/* TVC Presentation Layer Styles */
+.tvcLayer {
+  position: relative;
+  display: flex;
+  width: min(100%, 58rem);
+  max-height: 85vh;
+  flex-direction: column;
+  gap: 1.2rem;
+  border: 1px solid rgb(248 223 147 / 30%);
+  border-radius: 1rem;
+  padding: clamp(1.2rem, 3vw, 2rem);
+  background: rgb(8 18 15 / 92%);
+  box-shadow: 0 24px 60px rgb(0 0 0 / 65%);
+  backdrop-filter: blur(20px);
+  animation: contentReveal 0.8s var(--ease-luxury) both;
+}
+
+.tvcHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.tvcInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  text-align: left;
+}
+
+.tvcEyebrow {
+  color: var(--accent-gold);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.tvcTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 2.5vw, 1.45rem);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.skipButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  border: 1px solid rgb(248 223 147 / 35%);
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  background: rgb(255 250 240 / 6%);
+  color: var(--text-inverse-muted);
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    color var(--motion-base) ease,
+    border-color var(--motion-base) ease,
+    background var(--motion-base) ease;
+}
+
+.skipButton:hover {
+  border-color: var(--accent-gold);
+  background: rgb(248 223 147 / 15%);
+  color: var(--text-inverse);
+}
+
+.tvcViewport {
+  position: relative;
+  display: grid;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 0.6rem;
+  background: #000;
+  cursor: pointer;
+}
+
+.tvcVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tvcOverlayPlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  width: 4rem;
+  height: 4rem;
+  transform: translate(-50%, -50%);
+  place-items: center;
+  border: 1px solid var(--accent-gold);
+  border-radius: 50%;
+  background: rgb(8 18 15 / 75%);
+  color: var(--accent-gold);
+  box-shadow: 0 0 30px rgb(201 169 77 / 30%);
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: transform var(--motion-base) ease, background var(--motion-base) ease;
+}
+
+.tvcOverlayPlay:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+  background: var(--accent-gold);
+  color: var(--senova-forest-black);
+}
+
+.tvcFooter {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.tvcControls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.tvcControlBtn {
+  display: grid;
+  width: 2.3rem;
+  height: 2.3rem;
+  place-items: center;
+  border: 1px solid rgb(248 223 147 / 25%);
+  border-radius: 50%;
+  background: rgb(255 250 240 / 5%);
+  color: var(--accent-gold);
+  cursor: pointer;
+  transition: border-color var(--motion-base) ease, background var(--motion-base) ease;
+}
+
+.tvcControlBtn:hover {
+  border-color: var(--accent-gold);
+  background: rgb(248 223 147 / 15%);
+}
+
+.tvcTimeDisplay {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--text-inverse-muted);
+  font-family: var(--font-mono, monospace);
+  font-size: 0.74rem;
+  letter-spacing: 0.05em;
+}
+
+.tvcProgressTrack {
+  width: 100%;
+  height: 4px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 12%);
+}
+
+.tvcProgressBar {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent-gold), #fff);
+  transition: width 0.2s linear;
 }
 
 .musicNote {

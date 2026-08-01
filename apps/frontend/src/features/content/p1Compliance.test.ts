@@ -24,7 +24,7 @@ describe("P1 public experience contracts", () => {
   });
 
   it("defines responsive, classified media for every product", () => {
-    expect(Object.keys(imageManifest)).toHaveLength(3);
+    expect(Object.keys(imageManifest).filter((key) => key.startsWith("product-"))).toHaveLength(3);
     for (const asset of Object.values(imageManifest)) {
       expect(asset.width).toBeGreaterThan(0);
       expect(asset.height).toBeGreaterThan(0);

@@ -53,7 +53,7 @@ export type LuxuryLandingCopy = {
     eyebrow: string;
     title: string;
     text: string;
-    steps: { number: string; title: string; text: string; productId: ProductId }[];
+    steps: { number: string; title: string; text: string; productId: ProductId; image?: string }[];
   };
   collection: {
     eyebrow: string;
@@ -231,24 +231,28 @@ export const luxuryLandingCopy: Record<Language, LuxuryLandingCopy> = {
           title: "Tách nhẹ cánh sen",
           text: "Tách nhẹ cánh sen để thưởng hương trước khi pha nguyên búp.",
           productId: "petal-pack",
+          image: "/assets/tea-ritual/step-1.png",
         },
         {
           number: "02",
           title: "Chạm hương",
           text: "Dành một khoảnh khắc cho hương sen và chất liệu khô.",
           productId: "petal-pack",
+          image: "/assets/tea-ritual/step-2.png",
         },
         {
           number: "03",
           title: "Pha cùng cánh sen",
           text: "Đặt phần trà vào chén, rót nước nóng và chờ hương mở.",
           productId: "classic",
+          image: "/assets/tea-ritual/step-3.png",
         },
         {
           number: "04",
           title: "Thưởng thức",
           text: "Quan sát màu nước, nếm chậm và tiếp tục câu chuyện qua QR.",
           productId: "gift-set",
+          image: "/assets/tea-ritual/step-4.png",
         },
       ],
     },
@@ -325,24 +329,28 @@ export const luxuryLandingCopy: Record<Language, LuxuryLandingCopy> = {
           title: "Open the petals",
           text: "Unfold each layer to see the lotus-bud structure before brewing.",
           productId: "petal-pack",
+          image: "/assets/tea-ritual/step-1.png",
         },
         {
           number: "02",
           title: "Notice the aroma",
           text: "Hold a short pause for lotus aroma and dry material detail.",
           productId: "petal-pack",
+          image: "/assets/tea-ritual/step-2.png",
         },
         {
           number: "03",
           title: "Brew with petals",
           text: "Place the tea in a cup, pour hot water and let the aroma open.",
           productId: "classic",
+          image: "/assets/tea-ritual/step-3.png",
         },
         {
           number: "04",
           title: "Taste",
           text: "Observe the liquor, drink slowly and continue the story through QR.",
           productId: "gift-set",
+          image: "/assets/tea-ritual/step-4.png",
         },
       ],
     },

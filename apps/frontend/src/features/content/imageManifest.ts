@@ -53,6 +53,42 @@ export const imageManifest: Record<string, ImageAsset> = {
     status: "prototype",
     statusLabel: { vi: "Hình ảnh nguyên mẫu", en: "Prototype imagery" },
   },
+  "tea-ritual-step-1": {
+    id: "tea-ritual-step-1",
+    fallback: "/assets/tea-ritual/step-1.png",
+    width: 1080,
+    height: 1440,
+    sources: [],
+    status: "production",
+    statusLabel: { vi: "Hình ảnh thực tế", en: "Production imagery" },
+  },
+  "tea-ritual-step-2": {
+    id: "tea-ritual-step-2",
+    fallback: "/assets/tea-ritual/step-2.png",
+    width: 1080,
+    height: 1440,
+    sources: [],
+    status: "production",
+    statusLabel: { vi: "Hình ảnh thực tế", en: "Production imagery" },
+  },
+  "tea-ritual-step-3": {
+    id: "tea-ritual-step-3",
+    fallback: "/assets/tea-ritual/step-3.png",
+    width: 1080,
+    height: 1440,
+    sources: [],
+    status: "production",
+    statusLabel: { vi: "Hình ảnh thực tế", en: "Production imagery" },
+  },
+  "tea-ritual-step-4": {
+    id: "tea-ritual-step-4",
+    fallback: "/assets/tea-ritual/step-4.png",
+    width: 1080,
+    height: 1440,
+    sources: [],
+    status: "production",
+    statusLabel: { vi: "Hình ảnh thực tế", en: "Production imagery" },
+  },
 };
 
 export function getImageAssetByPath(path: string) {

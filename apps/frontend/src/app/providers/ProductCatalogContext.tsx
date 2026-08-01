@@ -17,10 +17,7 @@ const ProductCatalogContext = createContext<ProductCatalogContextValue | undefin
 export function ProductCatalogProvider({ children }: { children: ReactNode }) {
   const usesRemoteApi = hasApiBaseUrl();
   const usesFixtures = canUseDevFixtures();
-  const hasDevelopmentFallback = import.meta.env.DEV;
-  const [products, setProducts] = useState<SenovaProduct[]>(
-    usesFixtures || hasDevelopmentFallback ? localProducts : [],
-  );
+  const [products, setProducts] = useState<SenovaProduct[]>(localProducts);
   const [isLoading, setIsLoading] = useState(usesRemoteApi);
   const [error, setError] = useState<CatalogApiError | undefined>(
     !usesRemoteApi && !usesFixtures
@@ -37,7 +34,9 @@ export function ProductCatalogProvider({ children }: { children: ReactNode }) {
     const controller = new AbortController();
     void fetchProducts(controller.signal)
       .then((catalog) => {
-        setProducts(catalog);
+        if (Array.isArray(catalog) && catalog.length > 0) {
+          setProducts(catalog);
+        }
         setError(undefined);
       })
       .catch((reason: unknown) => {
@@ -46,23 +45,25 @@ export function ProductCatalogProvider({ children }: { children: ReactNode }) {
           reason instanceof CatalogApiError
             ? reason
             : new CatalogApiError("NETWORK_ERROR", "Product catalog is unavailable.");
-        setProducts(hasDevelopmentFallback ? localProducts : []);
+        setProducts((current) => (current.length > 0 ? current : localProducts));
         setError(catalogError);
         trackEvent({
-          eventName: hasDevelopmentFallback ? "catalog_local_fallback" : "catalog_load_failed",
+          eventName: "catalog_local_fallback",
           source: catalogError.code,
         });
       })
       .finally(() => setIsLoading(false));
     return () => controller.abort();
-  }, [hasDevelopmentFallback, usesFixtures, usesRemoteApi]);
+  }, [usesFixtures, usesRemoteApi]);
 
   const value = useMemo<ProductCatalogContextValue>(
     () => ({
       products,
       isLoading,
       error,
-      getProductBySlug: (slug) => products.find((product) => product.slug === slug),
+      getProductBySlug: (slug) =>
+        products.find((product) => product.slug === slug) ??
+        localProducts.find((product) => product.slug === slug),
     }),
     [error, isLoading, products],
   );

@@ -24,8 +24,8 @@ export function TeaRitual({ content, language }: TeaRitualProps) {
           {content.steps.map((step) => (
             <StaggerItem key={step.number} className="grid gap-5">
               <ImageReveal
-                src={productLuxuryCopy[language][step.productId].image}
-                alt={productLuxuryCopy[language][step.productId].heroAlt}
+                src={step.image ?? productLuxuryCopy[language][step.productId].image}
+                alt={`${step.title} - ${productLuxuryCopy[language][step.productId].heroAlt}`}
                 className="aspect-[3/4]"
               />
               <RitualStep number={step.number} title={step.title} text={step.text} />
