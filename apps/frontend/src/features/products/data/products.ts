@@ -1,7 +1,9 @@
 export type ProductId = "classic" | "petal-pack" | "gift-set";
 
 export type SenovaProduct = {
-  id: ProductId;
+  // The catalog record id is an implementation detail and may differ from the
+  // stable public slug after a product has been edited in the admin/API.
+  id: string;
   slug: ProductId;
   name: string;
   line: ProductId;

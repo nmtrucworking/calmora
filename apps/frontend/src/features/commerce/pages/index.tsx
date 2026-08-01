@@ -117,7 +117,7 @@ function ProductCard({ product, compact = false }: { product: LocalizedProduct; 
             <button
               type="button"
               className={cx("inline-flex h-10 items-center rounded-full border border-primary bg-primary px-4 text-[0.78rem] font-extrabold text-on-primary", luxuryMotion.button)}
-              onClick={() => addItem({ productId: product.id, variantId: product.variants[0]?.id })}
+              onClick={() => addItem({ productId: product.slug, variantId: product.variants[0]?.id })}
             >
               {text.ui.addToBag}
             </button>
@@ -134,7 +134,7 @@ function ProductCard({ product, compact = false }: { product: LocalizedProduct; 
 function ProductGrid({ productIds }: { productIds?: ProductId[] }) {
   const { products: localizedProducts } = useCommerceCopy();
   const visibleProducts = productIds
-    ? productIds.map((id) => localizedProducts.find((product) => product.id === id)).filter((product): product is LocalizedProduct => Boolean(product))
+    ? productIds.map((id) => localizedProducts.find((product) => product.slug === id)).filter((product): product is LocalizedProduct => Boolean(product))
     : localizedProducts;
 
   return (
@@ -250,7 +250,7 @@ export function SearchPage() {
           </span>
         </label>
       </section>
-      <ProductGrid productIds={results.map((product) => product.id)} />
+      <ProductGrid productIds={results.map((product) => product.slug)} />
     </article>
   );
 }
@@ -382,10 +382,10 @@ export function CheckoutPage() {
   const queryProduct = catalogProducts.find((product) => product.slug === requestedProduct);
   const bagItem = items[0];
   const [selectedProductId, setSelectedProductId] = useState<ProductId | "">(
-    queryProduct?.id ?? bagItem?.productId ?? "",
+    queryProduct?.slug ?? bagItem?.productId ?? "",
   );
   const selectedProduct =
-    catalogProducts.find((product) => product.id === selectedProductId) ?? catalogProducts[0];
+    catalogProducts.find((product) => product.slug === selectedProductId) ?? catalogProducts[0];
   const [selectedVariantId, setSelectedVariantId] = useState(
     requestedVariant ?? bagItem?.variantId ?? selectedProduct?.variants[0]?.id ?? "",
   );
@@ -473,17 +473,17 @@ export function CheckoutPage() {
               <span className={eyebrowClass}>{checkoutUi.product}</span>
               <select
                 className={fieldClass}
-                value={selectedProduct?.id ?? ""}
+                value={selectedProduct?.slug ?? ""}
                 onChange={(event) => {
                   const productId = event.target.value as ProductId;
-                  const nextProduct = catalogProducts.find((product) => product.id === productId);
+                  const nextProduct = catalogProducts.find((product) => product.slug === productId);
                   setSelectedProductId(productId);
                   setSelectedVariantId(nextProduct?.variants[0]?.id ?? "");
                 }}
                 required
               >
                 {catalogProducts.map((product) => (
-                  <option key={product.id} value={product.id}>{getLocalizedProduct(product, language).name}</option>
+                  <option key={product.id} value={product.slug}>{getLocalizedProduct(product, language).name}</option>
                 ))}
               </select>
             </label>
@@ -574,7 +574,7 @@ export function CheckoutPage() {
           <p className={eyebrowClass}>{text.ui.review}</p>
           {requestItems.length ? (
             requestItems.map((item) => {
-              const baseProduct = catalogProducts.find((product) => product.id === item.productId);
+              const baseProduct = catalogProducts.find((product) => product.slug === item.productId);
               const product = baseProduct ? getLocalizedProduct(baseProduct, language) : undefined;
               const variant = baseProduct?.variants.find((value) => value.id === item.variantId);
               return product ? (

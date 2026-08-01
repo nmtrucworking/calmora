@@ -404,7 +404,7 @@ const productCopy: Record<Language, Record<ProductId, ProductCopy>> = {
 };
 
 export function getLocalizedProduct(product: SenovaProduct, language: Language): LocalizedProduct {
-  return { ...product, ...productCopy[language][product.id] };
+  return { ...product, ...productCopy[language][product.slug] };
 }
 
 export function getLocalizedProducts(products: SenovaProduct[], language: Language): LocalizedProduct[] {

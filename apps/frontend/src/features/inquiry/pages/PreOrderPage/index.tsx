@@ -325,7 +325,7 @@ export default function PreOrderPage() {
       <section className={styles.formLayout}>
         <div className={styles.productStrip}>
           {validationProducts.map((product) => {
-            const displayProduct = productLuxuryCopy[language][product.id];
+            const displayProduct = productLuxuryCopy[language][product.slug];
 
             return (
               <article className={styles.productCard} key={product.slug}>
@@ -391,7 +391,7 @@ export default function PreOrderPage() {
                 <label htmlFor="primaryProduct">{copy.fields.primaryProduct}</label>
                 <select id="primaryProduct" name="primaryProduct" defaultValue={defaultProduct} required>
                   {validationProducts.map((product) => {
-                    const displayProduct = productLuxuryCopy[language][product.id];
+                    const displayProduct = productLuxuryCopy[language][product.slug];
                     return (
                       <option value={product.slug} key={product.slug}>
                         {displayProduct.name}

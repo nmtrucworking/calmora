@@ -104,7 +104,7 @@ function ProductNotFound() {
 export default function ProductDetailPage({ product: baseProduct }: ProductDetailPageProps) {
   const { language } = useLanguage();
   const copy = detailCopy[language];
-  const localizedProduct = baseProduct ? productLuxuryCopy[language][baseProduct.id] : undefined;
+  const localizedProduct = baseProduct ? productLuxuryCopy[language][baseProduct.slug] : undefined;
   const product =
     baseProduct && localizedProduct
       ? {
@@ -127,9 +127,9 @@ export default function ProductDetailPage({ product: baseProduct }: ProductDetai
   const canPreorder =
     selectedVariantData?.available !== false &&
     !unavailableStatuses.includes(baseProduct.commerce?.status ?? "PRE_ORDER");
-  const relatedProducts = orderedLuxuryProducts.filter((productId) => productId !== baseProduct.id);
+  const relatedProducts = orderedLuxuryProducts.filter((productId) => productId !== baseProduct.slug);
   const heroAsset = getImageAssetByPath(product.image);
-  const trustItems = productTrustItems.filter((item) => item.productId === baseProduct.id);
+  const trustItems = productTrustItems.filter((item) => item.productId === baseProduct.slug);
 
   return (
     <article className="bg-[var(--page-bg)]">
@@ -201,7 +201,7 @@ export default function ProductDetailPage({ product: baseProduct }: ProductDetai
               <div className="mt-8 flex flex-wrap gap-4">
                 {canPreorder ? (
                   <LuxuryButton
-                    href={`/order-request?product=${baseProduct.id}&variant=${selectedVariant}&quantity=1&intent=personal&source=product-detail`}
+                    href={`/order-request?product=${baseProduct.slug}&variant=${selectedVariant}&quantity=1&intent=personal&source=product-detail`}
                     variant="dark"
                   >
                     {copy.addToBag}
@@ -212,7 +212,7 @@ export default function ProductDetailPage({ product: baseProduct }: ProductDetai
                     {language === "vi" ? "Tạm ngừng nhận đặt trước" : "Preorders temporarily paused"}
                   </span>
                 )}
-                <LuxuryButton href={`/experience/${baseProduct.id}`} variant="light">
+                <LuxuryButton href={`/experience/${baseProduct.slug}`} variant="light">
                   {language === "vi" ? "Xem nghi thức sử dụng" : "View usage ritual"}
                 </LuxuryButton>
               </div>
@@ -331,7 +331,7 @@ export default function ProductDetailPage({ product: baseProduct }: ProductDetai
             </h2>
             <p className="mt-3 mb-0 leading-[1.75] text-text-muted">{copy.qrText}</p>
           </div>
-          <LuxuryButton href={`/experience/${baseProduct.id}`} variant="primary">
+          <LuxuryButton href={`/experience/${baseProduct.slug}`} variant="primary">
             {product.primaryAction.label}
             <ArrowRight aria-hidden="true" className="h-4 w-4" />
           </LuxuryButton>
@@ -388,7 +388,7 @@ export default function ProductDetailPage({ product: baseProduct }: ProductDetai
             text={copy.preorderText}
             dark
           />
-          <LuxuryButton href={`/order-request?product=${baseProduct.id}&source=product-detail-footer`} variant="dark">
+          <LuxuryButton href={`/order-request?product=${baseProduct.slug}&source=product-detail-footer`} variant="dark">
             {copy.preorder}
             <ArrowRight aria-hidden="true" className="h-4 w-4" />
           </LuxuryButton>
@@ -399,7 +399,7 @@ export default function ProductDetailPage({ product: baseProduct }: ProductDetai
         <div className="fixed inset-x-0 bottom-0 z-30 hidden items-center justify-between gap-3 border-t border-border bg-[var(--surface-strong)] px-4 py-3 shadow-brand-md max-[760px]:flex">
           <span className="min-w-0 truncate text-[0.82rem] font-[650] text-text">{product.name}</span>
           <LuxuryButton
-            href={`/order-request?product=${baseProduct.id}&variant=${selectedVariant}&quantity=1&intent=personal&source=product-detail-sticky`}
+            href={`/order-request?product=${baseProduct.slug}&variant=${selectedVariant}&quantity=1&intent=personal&source=product-detail-sticky`}
             className="min-h-10 shrink-0 px-4 py-2"
           >
             {language === "vi" ? "Gửi yêu cầu" : "Send request"}
